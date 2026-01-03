@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Lady of the Atonement | Liturgical Day System</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --parchment: #FAF7F0;
+      --parchment-warm: #F5EFE3;
+      --ink: #1F1E1A;
+      --ink-soft: #3D3B35;
+      --sepia: #6B5E4C;
+      --stone: #B8B0A3;
+      --crimson: #8B2332;
+      
+      --liturgical-primary: #C9A227;
+      --liturgical-secondary: #E8DFD0;
+      --liturgical-accent: #B8963E;
+      --liturgical-bg: var(--parchment);
+      --liturgical-text: var(--ink);
+      
+      --font-display: 'Cinzel Decorative', serif;
+      --font-heading: 'Cinzel', serif;
+      --font-body: 'Cormorant', serif;
+      
+      --space-xs: 0.5rem;
+      --space-sm: 1rem;
+      --space-md: 2rem;
+      --space-lg: 4rem;
+      --space-xl: 6rem;
+      
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* LITURGICAL THEMES */
+    .theme-advent { --liturgical-primary: #6B3FA0; --liturgical-secondary: #E8E0F0; --liturgical-accent: #8B5FC0; }
+    .theme-christmas { --liturgical-primary: #C9A227; --liturgical-secondary: #F5F0E0; --liturgical-accent: #B8963E; }
+    .theme-lent { --liturgical-primary: #5C3D7A; --liturgical-secondary: #E5DDE8; --liturgical-accent: #7A5A99; }
+    .theme-holyweek { --liturgical-primary: #8B2332; --liturgical-secondary: #F0E0E0; --liturgical-accent: #A33344; }
+    .theme-easter { --liturgical-primary: #D4AF37; --liturgical-secondary: #FFFEF5; --liturgical-accent: #E5C76B; }
+    .theme-pentecost { --liturgical-primary: #C41E3A; --liturgical-secondary: #FFE8E8; --liturgical-accent: #DC143C; }
+    .theme-ordinary { --liturgical-primary: #2D5A4A; --liturgical-secondary: #E0EBE5; --liturgical-accent: #3D7A6A; }
+    .theme-martyr { --liturgical-primary: #9E2A2B; --liturgical-secondary: #F5E0E0; --liturgical-accent: #B83A3B; }
+    .theme-marian { --liturgical-primary: #1E4D8C; --liturgical-secondary: #E8F0FA; --liturgical-accent: #2E6DAC; }
+    .theme-requiem { --liturgical-primary: #2A2A35; --liturgical-secondary: #E0E0E2; --liturgical-accent: #4A4A55; }
+    .theme-rose { --liturgical-primary: #C08497; --liturgical-secondary: #FAF0F2; --liturgical-accent: #D094A7; }
+
+    /* DEV MENU */
+    .dev-menu {
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 10000;
+      background: #1a1a1a;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 12px;
+      max-height: 100vh;
+      overflow-y: auto;
+      box-shadow: -4px 0 20px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease;
+      width: 320px;
+    }
+    .dev-menu.collapsed { transform: translateX(calc(100% - 40px)); }
+    .dev-menu-toggle {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateX(-100%) translateY(-50%);
+      background: #1a1a1a;
+      border: none;
+      color: #fff;
+      padding: 12px 8px;
+      cursor: pointer;
+      font-size: 10px;
+      writing-mode: vertical-rl;
+      letter-spacing: 0.1em;
+    }
+    .dev-menu-toggle:hover { background: #333; }
+    .dev-menu-header {
+      padding: 16px;
+      background: #C9A227;
+      color: #1a1a1a;
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .dev-menu-section {
+      padding: 12px 16px;
+      border-bottom: 1px solid #333;
+    }
+    .dev-menu-section h4 {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 8px;
+    }
+    .dev-menu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+    .dev-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      background: #2a2a2a;
+      border: 1px solid #444;
+      color: #fff;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+    .dev-btn:hover { background: #3a3a3a; border-color: #666; }
+    .dev-btn.active { background: #333; border-color: var(--liturgical-primary); box-shadow: inset 0 0 0 1px var(--liturgical-primary); }
+    .dev-btn-color { width: 12px; height: 12px; border-radius: 2px; flex-shrink: 0; }
+    .dev-btn-text { display: flex; flex-direction: column; gap: 2px; }
+    .dev-btn-label { font-weight: 500; }
+    .dev-btn-date { font-size: 9px; color: #888; }
+    .dev-info { padding: 12px 16px; background: #222; font-size: 10px; color: #888; line-height: 1.5; }
+    .dev-info code { background: #333; padding: 2px 4px; border-radius: 2px; color: #C9A227; }
+
+    /* RESET & BASE */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 18px; }
+    body {
+      font-family: var(--font-body);
+      background: var(--liturgical-bg);
+      color: var(--liturgical-text);
+      line-height: 1.8;
+      overflow-x: hidden;
+      transition: background-color 0.5s ease;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: 0.025;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* HEADER */
+    .site-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: var(--space-sm) var(--space-md);
+      transition: all 0.5s var(--ease-out-expo);
+    }
+    .site-header.scrolled { background: rgba(250, 247, 240, 0.97); backdrop-filter: blur(10px); box-shadow: 0 1px 0 var(--stone); }
+    .header-inner { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-family: var(--font-heading); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink); text-decoration: none; }
+    .primary-nav { display: flex; gap: var(--space-lg); }
+    .primary-nav a { font-family: var(--font-heading); font-size: 0.7rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-soft); text-decoration: none; transition: color 0.3s ease; }
+    .primary-nav a:hover { color: var(--liturgical-primary); }
+    .menu-toggle { display: none; background: none; border: 1px solid var(--stone); padding: 8px 12px; cursor: pointer; }
+    .menu-toggle span { display: block; width: 18px; height: 1.5px; background: var(--ink); margin: 4px 0; }
+
+    /* HERO */
+    .liturgical-hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: var(--space-xl) var(--space-md);
+      position: relative; overflow: hidden;
+    }
+    .liturgical-hero::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0; width: 6px;
+      background: linear-gradient(to bottom, var(--liturgical-primary) 0%, var(--liturgical-accent) 50%, var(--liturgical-primary) 100%);
+      transition: background 0.5s ease;
+    }
+    .liturgical-hero::after {
+      content: '';
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px; height: 800px;
+      background: radial-gradient(circle, rgba(201, 162, 39, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-content { max-width: 900px; margin: 0 auto; text-align: center; position: relative; z-index: 1; }
+    .liturgical-season { font-family: var(--font-heading); font-size: 0.7rem; font-weight: 500; letter-spacing: 0.4em; text-transform: uppercase; color: var(--liturgical-primary); margin-bottom: var(--space-xs); transition: color 0.5s ease; }
+    .feast-name { font-family: var(--font-display); font-size: clamp(1.8rem, 5vw, 3.2rem); font-weight: 400; color: var(--ink); margin-bottom: var(--space-sm); line-height: 1.2; }
+    .feast-name .feast-the { font-family: var(--font-body); font-size: 0.4em; font-style: italic; font-weight: 300; display: block; margin-bottom: 0.3em; letter-spacing: 0.1em; }
+    .liturgical-date { font-family: var(--font-body); font-size: 1rem; font-style: italic; color: var(--sepia); margin-bottom: var(--space-md); }
+    .feast-divider { display: flex; align-items: center; justify-content: center; gap: var(--space-sm); margin-bottom: var(--space-lg); }
+    .feast-divider::before, .feast-divider::after { content: ''; width: 80px; height: 1px; background: var(--liturgical-primary); opacity: 0.5; transition: background 0.5s ease; }
+    .feast-divider svg { width: 24px; height: 24px; fill: var(--liturgical-primary); transition: fill 0.5s ease; }
+    .parish-name { font-family: var(--font-heading); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink); margin-bottom: 4px; }
+    .parish-location { font-family: var(--font-body); font-size: 0.9rem; font-style: italic; color: var(--sepia); }
+
+    /* GUERANGER */
+    .gueranger-section { background: var(--parchment-warm); padding: var(--space-xl) var(--space-md); position: relative; }
+    .gueranger-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--liturgical-primary), transparent); transition: background 0.5s ease; }
+    .gueranger-inner { max-width: 750px; margin: 0 auto; }
+    .gueranger-header { text-align: center; margin-bottom: var(--space-md); }
+    .gueranger-source { font-family: var(--font-heading); font-size: 0.65rem; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: var(--liturgical-primary); margin-bottom: var(--space-xs); transition: color 0.5s ease; }
+    .gueranger-title { font-family: var(--font-body); font-size: 1.1rem; font-style: italic; color: var(--sepia); }
+    .gueranger-text { position: relative; padding-left: var(--space-md); }
+    .gueranger-text::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--liturgical-primary); opacity: 0.3; transition: background 0.5s ease; }
+    .gueranger-text p { font-size: 1.15rem; line-height: 2; color: var(--ink); margin-bottom: var(--space-sm); }
+    .gueranger-text p:last-child { margin-bottom: 0; }
+    .gueranger-initial { float: left; font-family: var(--font-display); font-size: 4rem; line-height: 0.8; padding-right: 0.15em; color: var(--liturgical-primary); transition: color 0.5s ease; }
+    .gueranger-attribution { text-align: right; margin-top: var(--space-md); font-family: var(--font-heading); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.1em; color: var(--sepia); }
+    .read-more-link { display: inline-flex; align-items: center; gap: var(--space-xs); margin-top: var(--space-md); font-family: var(--font-heading); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; color: var(--liturgical-primary); transition: color 0.3s ease; }
+    .read-more-link:hover { color: var(--crimson); }
+    .read-more-link svg { width: 14px; height: 14px; transition: transform 0.3s var(--ease-out-expo); }
+    .read-more-link:hover svg { transform: translateX(4px); }
+
+    /* HOURS */
+    .hours-section { padding: var(--space-xl) var(--space-md); background: var(--parchment); }
+    .hours-inner { max-width: 1000px; margin: 0 auto; }
+    .hours-header { text-align: center; margin-bottom: var(--space-lg); }
+    .hours-label { font-family: var(--font-heading); font-size: 0.65rem; font-weight: 500; letter-spacing: 0.4em; text-transform: uppercase; color: var(--liturgical-primary); margin-bottom: var(--space-xs); transition: color 0.5s ease; }
+    .hours-title { font-family: var(--font-heading); font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 500; color: var(--ink); }
+    .hours-timeline { display: flex; flex-direction: column; gap: var(--space-sm); position: relative; padding-left: var(--space-lg); }
+    .hours-timeline::before { content: ''; position: absolute; left: 10px; top: 0; bottom: 0; width: 1px; background: linear-gradient(to bottom, transparent, var(--liturgical-primary) 10%, var(--liturgical-primary) 90%, transparent); transition: background 0.5s ease; }
+    .hour-item { display: grid; grid-template-columns: 100px 1fr; gap: var(--space-md); padding: var(--space-sm) 0; position: relative; }
+    .hour-item::before { content: ''; position: absolute; left: calc(-1 * var(--space-lg) + 6px); top: 50%; transform: translateY(-50%); width: 9px; height: 9px; background: var(--parchment); border: 2px solid var(--liturgical-primary); border-radius: 50%; transition: border-color 0.5s ease, background 0.5s ease; }
+    .hour-item.highlight::before { background: var(--liturgical-primary); }
+    .hour-time { font-family: var(--font-heading); font-size: 0.85rem; font-weight: 500; letter-spacing: 0.1em; color: var(--ink); }
+    .hour-name { font-family: var(--font-body); font-size: 1.1rem; color: var(--ink); }
+    .hour-name span { color: var(--sepia); font-style: italic; margin-left: 0.5em; }
+    .hour-item.highlight .hour-name { font-weight: 500; color: var(--liturgical-primary); }
+    .hours-note { text-align: center; margin-top: var(--space-md); padding: var(--space-sm) var(--space-md); background: rgba(201, 162, 39, 0.08); border-left: 3px solid var(--liturgical-primary); font-style: italic; color: var(--sepia); }
+
+    /* INFO SECTION */
+    .info-section { padding: var(--space-xl) var(--space-md); background: var(--ink); color: var(--parchment); }
+    .info-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-xl); }
+    .info-block h3 { font-family: var(--font-heading); font-size: 0.7rem; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: var(--liturgical-primary); margin-bottom: var(--space-md); transition: color 0.5s ease; }
+    .confession-times { list-style: none; }
+    .confession-times li { display: flex; justify-content: space-between; padding: var(--space-xs) 0; border-bottom: 1px solid rgba(250, 247, 240, 0.1); font-size: 1rem; }
+    .confession-times .day { color: var(--parchment); }
+    .confession-times .time { color: var(--liturgical-primary); font-style: italic; transition: color 0.5s ease; }
+    .upcoming-feast { padding: var(--space-md); background: rgba(250, 247, 240, 0.05); border-left: 3px solid var(--liturgical-primary); margin-bottom: var(--space-sm); transition: border-color 0.5s ease; }
+    .upcoming-feast .date { font-family: var(--font-heading); font-size: 0.7rem; letter-spacing: 0.15em; color: var(--liturgical-primary); margin-bottom: 4px; transition: color 0.5s ease; }
+    .upcoming-feast .name { font-family: var(--font-body); font-size: 1.1rem; color: var(--parchment); }
+    .upcoming-feast .rank { font-size: 0.85rem; color: var(--stone); font-style: italic; }
+
+    /* FOOTER */
+    .site-footer { background: var(--ink); border-top: 1px solid rgba(250, 247, 240, 0.1); padding: var(--space-lg) var(--space-md); }
+    .footer-main { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: var(--space-lg); }
+    .footer-title { font-family: var(--font-heading); font-size: 0.85rem; font-weight: 500; letter-spacing: 0.1em; color: var(--liturgical-primary); margin-bottom: var(--space-xs); transition: color 0.5s ease; }
+    .footer-ordinariate { font-family: var(--font-body); font-size: 0.85rem; font-style: italic; color: var(--stone); margin-bottom: var(--space-sm); }
+    .footer-address { font-style: normal; font-size: 0.9rem; line-height: 1.8; color: var(--stone); }
+    .footer-contact a { color: var(--liturgical-primary); text-decoration: none; transition: color 0.5s ease; }
+    .footer-nav h4 { font-family: var(--font-heading); font-size: 0.65rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--liturgical-primary); margin-bottom: var(--space-sm); transition: color 0.5s ease; }
+    .footer-nav ul { list-style: none; }
+    .footer-nav li { margin-bottom: 6px; }
+    .footer-nav a { font-family: var(--font-body); font-size: 0.9rem; color: var(--stone); text-decoration: none; transition: color 0.3s ease; }
+    .footer-nav a:hover { color: var(--parchment); }
+    .footer-bottom { max-width: 1100px; margin: var(--space-md) auto 0; padding-top: var(--space-md); border-top: 1px solid rgba(250, 247, 240, 0.1); text-align: center; font-size: 0.8rem; color: var(--sepia); }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .info-inner { grid-template-columns: 1fr; }
+      .footer-main { grid-template-columns: 1fr; text-align: center; }
+      .dev-menu { width: 280px; }
+    }
+    @media (max-width: 768px) {
+      html { font-size: 16px; }
+      .primary-nav { display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--parchment); flex-direction: column; padding: var(--space-md); gap: var(--space-sm); text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+      .primary-nav.active { display: flex; }
+      .menu-toggle { display: block; }
+      .liturgical-hero::before { width: 4px; }
+      .hours-timeline { padding-left: var(--space-md); }
+      .hour-item { grid-template-columns: 80px 1fr; }
+      .hour-item::before { left: calc(-1 * var(--space-md) + 4px); width: 7px; height: 7px; }
+      .gueranger-initial { font-size: 3rem; }
+      .dev-menu { width: 260px; font-size: 11px; }
+      .dev-menu-grid { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+    .skip-link { position: absolute; top: -100%; left: 50%; transform: translateX(-50%); background: var(--crimson); color: var(--parchment); padding: var(--space-sm) var(--space-md); font-family: var(--font-heading); font-size: 0.8rem; text-decoration: none; z-index: 9999; }
+    .skip-link:focus { top: var(--space-sm); }
+  </style>
+</head>
+<body class="theme-christmas">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- DEV MENU -->
+  <aside class="dev-menu" id="devMenu">
+    <button class="dev-menu-toggle" id="devMenuToggle">DEV MENU</button>
+    <div class="dev-menu-header">Liturgical Calendar System</div>
+    
+    <div class="dev-menu-section">
+      <h4>Advent &amp; Christmas</h4>
+      <div class="dev-menu-grid">
+        <button class="dev-btn" data-feast="first-advent">
+          <span class="dev-btn-color" style="background: #6B3FA0"></span>
+          <span class="dev-btn-text">
+            <span class="dev-btn-label">First Sunday of Advent</span>
+            <span class="dev-btn-date">Dec 1</span>
+          </span>
+        </button>
+        <button class="dev-btn" data-feast="gaudete">
+          <span class="dev-btn-color" style="background: #C08497"></span>
+          <span class="dev-btn-text">
+            <span class="dev-btn-label">Gaudete Sunday</span>
+            <span class="dev-btn-date">Dec 15</span>
+          </span>
+        </button>
+        <button class="dev-btn active" data-feast="holy-family">
+          <span class="dev-btn-color" style="background: #C9A227"></span>
+          <span class="dev-btn-text">
+            <span class="dev-btn-label">Holy Family</span>
+            <span class="dev-btn-date">Dec 28</span>
+          </span>
+        </button>
+        <button class="dev-btn" data-feast="epiphany">
+          <span class="dev-btn-color" style="background: #C9A227"></span>
+          <span class="dev-btn-text">
+            <span class="dev-btn-label">Epiphany</span>
+            <span class="dev-btn-date">Jan 6</span>
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <div class="dev-menu-section">
+      <h4>Lent &amp; Holy Week</h4>
+      <div class="dev-menu-grid">
+        <button class="dev-btn" data-feast="ash-wednesday">
+          <span class="dev-btn-color" style="background: #5C3D7A"></span>
+          <span class="dev-btn-text">
+            <span class="dev-btn-label">Ash Wednesday</span>
+            <span class="dev-btn-date">Mar 5</span>
+          </span>
+        </button>
+        <button class="dev-btn" data-feast="laetare">
+          <span class="dev-btn-color" style="background: #C08497"></span>
+          <span class="dev-btn-text">
+            <span class="dev-btn-label">Laetare Sunday</span>
+            <span class="dev-btn-date">Mar 30</span>
+          </span>
+        </button>
+        <button class="dev-btn" data-feast="palm-sunday">
+          <span class="dev-btn-color" style="background: #8B2332"></span>
+          <span class="dev-btn-text">
+            <span class="dev-btn-label">Palm Sunday</span>
+            <span class="dev-btn-date">Apr 13</span>
+          </span>
+        </button>
+        <button class="dev-btn" data-feast="good-friday">
+          <span class="dev-btn-color" style="background: #2A2A35"></span>
+          <span class="dev-btn-text">
+            <span class="dev-btn-label">Good Friday</span>
+            <span class="dev-btn-date">Apr 18</span>
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <div class="dev-menu-section">
+      <h4>Easter Season</h4>
+      <div class="dev-menu-grid">
+        <button class="dev-btn" data-feast="easter">
+          <span class="dev-btn-color" style="background: #D4AF37"></span>
+          <span class="dev-btn-text">
+            <span class="dev-btn-label">Easter Sunday</span>
+            <span class="dev-btn-date">Apr 20</span>
+          </span>
+        </button>
+        <button class="dev-btn" data-feast="pentecost">
+          <span class="dev-btn-color" style="background: #C41E3A"></span>
+          <span class="dev-btn-text">
+            <span class="dev-btn-label">Pentecost</span>
+            <span class="dev-btn-date">Jun 8</span>
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <div class="dev-menu-section">
+      <h4>Ordinary Time &amp; Saints</h4>
+      <div class="dev-menu-grid">
+        <button class="dev-btn" data-feast="ordinary-sunday">
+          <span class="dev-btn-color" style="background: #2D5A4A"></span>
+          <span class="dev-btn-text">
+            <span class="dev-btn-label">Ordinary Sunday</span>
+            <span class="dev-btn-date">Jul 13</span>
+          </span>
+        </button>
+        <button class="dev-btn" data-feast="assumption">
+          <span class="dev-btn-color" style="background: #1E4D8C"></span>
+          <span class="dev-btn-text">
+            <span class="dev-btn-label">Assumption</span>
+            <span class="dev-btn-date">Aug 15</span>
+          </span>
+        </button>
+        <button class="dev-btn" data-feast="st-lawrence">
+          <span class="dev-btn-color" style="background: #9E2A2B"></span>
+          <span class="dev-btn-text">
+            <span class="dev-btn-label">St. Lawrence</span>
+            <span class="dev-btn-date">Aug 10</span>
+          </span>
+        </button>
+        <button class="dev-btn" data-feast="all-souls">
+          <span class="dev-btn-color" style="background: #2A2A35"></span>
+          <span class="dev-btn-text">
+            <span class="dev-btn-label">All Souls Day</span>
+            <span class="dev-btn-date">Nov 2</span>
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <div class="dev-info">
+      <p>Click any feast to see the full site update: colors, texts, schedules, and upcoming feasts all change dynamically.</p>
+    </div>
+  </aside>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="logo">Our Lady of the Atonement</a>
+      <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="primary-nav" role="navigation" aria-label="Primary">
+        <a href="/sacraments">Sacraments</a>
+        <a href="/ministries">Ministries</a>
+        <a href="/education">Education</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <!-- HERO -->
+    <section class="liturgical-hero">
+      <div class="hero-content">
+        <p class="liturgical-season" id="seasonName">Christmastide</p>
+        <h1 class="feast-name">
+          <span class="feast-the" id="feastPrefix">The Feast of the</span>
+          <span id="feastName">Holy Family</span>
+        </h1>
+        <p class="liturgical-date" id="liturgicalDate">Sunday within the Octave of Christmas · December XXVIII</p>
+        <div class="feast-divider" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 2L12 22M7 7L17 7"/></svg>
+        </div>
+        <div class="parish-identity">
+          <p class="parish-name">Our Lady of the Atonement</p>
+          <p class="parish-location">A Parish of the Ordinariate of the Chair of St. Peter · San Antonio, Texas</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- GUERANGER -->
+    <section class="gueranger-section">
+      <div class="gueranger-inner">
+        <header class="gueranger-header">
+          <p class="gueranger-source">From The Liturgical Year</p>
+          <p class="gueranger-title">by Dom Prosper Guéranger, O.S.B.</p>
+        </header>
+        <div class="gueranger-text" id="guerangerText">
+          <p><span class="gueranger-initial">T</span>his Sunday has been chosen by the Church for the celebration of the Feast of the Holy Family; the liturgy of the day, as expressed in the Gospel, harmonizes well with the mystery of the new Feast, for it already carries us forward to the childhood of our Emmanuel.</p>
+          <p>The Feast was welcomed by succeeding Pontiffs as an efficacious means for bringing home to the Christian people the example of the Holy Family at Nazareth, and by the restoration of the true spirit of family life.</p>
+        </div>
+        <p class="gueranger-attribution">— Abbot of Solesmes, 1805–1875</p>
+        <a href="#" class="read-more-link">
+          Continue Reading
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- HOURS -->
+    <section class="hours-section">
+      <div class="hours-inner">
+        <header class="hours-header">
+          <p class="hours-label">The Day's Prayer</p>
+          <h2 class="hours-title">Mass &amp; Divine Office</h2>
+        </header>
+        <div class="hours-timeline" id="hoursTimeline">
+          <div class="hour-item"><div class="hour-time">6:30 AM</div><div class="hour-name">Morning Prayer <span>Lauds</span></div></div>
+          <div class="hour-item"><div class="hour-time">7:00 AM</div><div class="hour-name">Low Mass <span>Said</span></div></div>
+          <div class="hour-item highlight"><div class="hour-time">9:00 AM</div><div class="hour-name">Solemn Mass <span>Sung</span></div></div>
+          <div class="hour-item highlight"><div class="hour-time">11:00 AM</div><div class="hour-name">Solemn Mass <span>Sung</span></div></div>
+          <div class="hour-item"><div class="hour-time">4:30 PM</div><div class="hour-name">Evening Prayer <span>Vespers</span></div></div>
+          <div class="hour-item"><div class="hour-time">5:00 PM</div><div class="hour-name">Low Mass <span>Said</span></div></div>
+        </div>
+        <p class="hours-note" id="hoursNote" style="display: none;"></p>
+      </div>
+    </section>
+
+    <!-- INFO -->
+    <section class="info-section">
+      <div class="info-inner">
+        <div class="info-block">
+          <h3>Confessions</h3>
+          <ul class="confession-times">
+            <li><span class="day">Sunday</span><span class="time">7:50–8:50 AM &amp; 3:30–4:30 PM</span></li>
+            <li><span class="day">Wednesday</span><span class="time">3:30–4:30 PM</span></li>
+            <li><span class="day">Friday</span><span class="time">7:50–8:50 AM</span></li>
+            <li><span class="day">Saturday</span><span class="time">3:30–4:30 PM</span></li>
+          </ul>
+        </div>
+        <div class="info-block">
+          <h3>Upcoming in the Calendar</h3>
+          <div id="upcomingFeasts">
+            <div class="upcoming-feast"><p class="date">December 31 · Tuesday</p><p class="name">St. Sylvester I, Pope</p><p class="rank">Optional Memorial</p></div>
+            <div class="upcoming-feast"><p class="date">January 1 · Wednesday</p><p class="name">Mary, the Holy Mother of God</p><p class="rank">Solemnity · Holy Day of Obligation</p></div>
+            <div class="upcoming-feast"><p class="date">January 6 · Monday</p><p class="name">The Epiphany of the Lord</p><p class="rank">Solemnity</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <p class="footer-title">Our Lady of the Atonement</p>
+        <p class="footer-ordinariate">A Parish of the Ordinariate of the Chair of St. Peter</p>
+        <address class="footer-address">
+          15415 Red Robin Road<br>San Antonio, TX 78255<br><br>
+          <span class="footer-contact">
+            <a href="tel:+12106952944">(210) 695-2944</a><br>
+            <a href="mailto:parish@ourladyoftheatonement.org">parish@ourladyoftheatonement.org</a>
+          </span>
+        </address>
+      </div>
+      <nav class="footer-nav">
+        <h4>Parish</h4>
+        <ul>
+          <li><a href="/about-us">About Us</a></li>
+          <li><a href="/join-us">Join Us</a></li>
+          <li><a href="/emergency-pastoral-care">Emergency Pastoral Care</a></li>
+          <li><a href="https://formed.org/">Formed</a></li>
+        </ul>
+      </nav>
+      <nav class="footer-nav">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="/giving">Giving</a></li>
+          <li><a href="/sunday-bulletin">Sunday Bulletin</a></li>
+          <li><a href="/business-directory">Parishioner Business Directory</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="footer-bottom"><p>© 2024 Our Lady of the Atonement Catholic Church</p></div>
+  </footer>
+
+  <script>
+    (function() {
+      // LITURGICAL DATA
+      var defined = {
+        "first-advent": {
+          theme: "advent",
+          season: "Advent",
+          prefix: "The",
+          name: "First Sunday of Advent",
+          date: "The beginning of the Liturgical Year · December I",
+          guerangerInitial: "T",
+          guerangerText: "he season of Advent is a period of preparation which the Church, in her tender solicitude for our souls, has instituted as a means whereby we might be in readiness to celebrate the great feast of Christmas. The mystery of that feast is the Birth of Jesus, the Son of God, in Bethlehem.</p><p>The world had been expecting Him four thousand years; and the last weeks of Advent remind us how earnest was the desire of the patriarchs and prophets.",
+          hours: [
+            {time: "6:30 AM", name: "Morning Prayer", note: "Lauds", highlight: false},
+            {time: "7:00 AM", name: "Low Mass", note: "Said", highlight: false},
+            {time: "9:00 AM", name: "Solemn Mass", note: "Sung", highlight: true},
+            {time: "11:00 AM", name: "Solemn Mass", note: "Sung", highlight: true},
+            {time: "4:30 PM", name: "Evening Prayer", note: "First Vespers of Advent", highlight: false},
+            {time: "5:00 PM", name: "Low Mass", note: "Said", highlight: false}
+          ],
+          hoursNote: "The Advent wreath is blessed before the principal Mass.",
+          upcoming: [
+            {date: "December 6 · Saturday", name: "St. Nicholas, Bishop", rank: "Optional Memorial"},
+            {date: "December 8 · Monday", name: "Immaculate Conception of Mary", rank: "Solemnity · Holy Day of Obligation"},
+            {date: "December 12 · Friday", name: "Our Lady of Guadalupe", rank: "Feast"}
+          ]
+        },
+        "gaudete": {
+          theme: "rose",
+          season: "Advent",
+          prefix: "",
+          name: "Gaudete Sunday",
+          date: "Third Sunday of Advent · December XV",
+          guerangerInitial: "R",
+          guerangerText: "ejoice! The Church interrupts the solemn purple of Advent to clothe herself in Rose. Today is Gaudete Sunday—named for the first word of the Introit: Gaudete in Domino semper—Rejoice in the Lord always!</p><p>We have now passed the middle of Advent. The great Day is drawing near, and the Church would have us experience a foretaste of that holy joy which filled the hearts of the shepherds.",
+          hours: [
+            {time: "6:30 AM", name: "Morning Prayer", note: "Lauds", highlight: false},
+            {time: "7:00 AM", name: "Low Mass", note: "Said", highlight: false},
+            {time: "9:00 AM", name: "Solemn Mass", note: "Sung · Rose Vestments", highlight: true},
+            {time: "11:00 AM", name: "Solemn Mass", note: "Sung · Rose Vestments", highlight: true},
+            {time: "4:30 PM", name: "Evening Prayer", note: "Vespers", highlight: false},
+            {time: "5:00 PM", name: "Low Mass", note: "Said", highlight: false}
+          ],
+          hoursNote: "The rose candle of the Advent wreath is lit today.",
+          upcoming: [
+            {date: "December 17–23", name: "O Antiphons", rank: "Ancient Vespers Antiphons"},
+            {date: "December 24 · Wednesday", name: "Christmas Eve", rank: "Vigil"},
+            {date: "December 25 · Thursday", name: "The Nativity of the Lord", rank: "Solemnity"}
+          ]
+        },
+        "holy-family": {
+          theme: "christmas",
+          season: "Christmastide",
+          prefix: "The Feast of the",
+          name: "Holy Family",
+          date: "Sunday within the Octave of Christmas · December XXVIII",
+          guerangerInitial: "T",
+          guerangerText: "his Sunday has been chosen by the Church for the celebration of the Feast of the Holy Family; the liturgy of the day, as expressed in the Gospel, harmonizes well with the mystery of the new Feast, for it already carries us forward to the childhood of our Emmanuel.</p><p>The Feast was welcomed by succeeding Pontiffs as an efficacious means for bringing home to the Christian people the example of the Holy Family at Nazareth, and by the restoration of the true spirit of family life.",
+          hours: [
+            {time: "6:30 AM", name: "Morning Prayer", note: "Lauds", highlight: false},
+            {time: "7:00 AM", name: "Low Mass", note: "Said", highlight: false},
+            {time: "9:00 AM", name: "Solemn Mass", note: "Sung", highlight: true},
+            {time: "11:00 AM", name: "Solemn Mass", note: "Sung", highlight: true},
+            {time: "4:30 PM", name: "Evening Prayer", note: "Vespers", highlight: false},
+            {time: "5:00 PM", name: "Low Mass", note: "Said", highlight: false}
+          ],
+          hoursNote: null,
+          upcoming: [
+            {date: "December 31 · Tuesday", name: "St. Sylvester I, Pope", rank: "Optional Memorial"},
+            {date: "January 1 · Wednesday", name: "Mary, the Holy Mother of God", rank: "Solemnity · Holy Day of Obligation"},
+            {date: "January 6 · Monday", name: "The Epiphany of the Lord", rank: "Solemnity"}
+          ]
+        },
+        "epiphany": {
+          theme: "christmas",
+          season: "Christmastide",
+          prefix: "The",
+          name: "Epiphany of the Lord",
+          date: "The Manifestation of Christ to the Nations · January VI",
+          guerangerInitial: "T",
+          guerangerText: "he Epiphany is the complement of the mystery of Christmas. On that blessed night, the angels announced the great tidings to the shepherds of Bethlehem; now the star summons the Magi from the East.</p><p>The Church has ever considered the Epiphany as one of her greatest feasts. It is the day on which the divine light shone upon the Gentile world; it is the birthday of our vocation to the true Faith.",
+          hours: [
+            {time: "6:30 AM", name: "Morning Prayer", note: "Lauds of the Epiphany", highlight: false},
+            {time: "7:00 AM", name: "Low Mass", note: "Said", highlight: false},
+            {time: "9:00 AM", name: "Solemn Mass", note: "Sung · Proclamation of Feasts", highlight: true},
+            {time: "11:00 AM", name: "Solemn Mass", note: "Sung", highlight: true},
+            {time: "4:30 PM", name: "Second Vespers", note: "of the Epiphany", highlight: false},
+            {time: "5:00 PM", name: "Low Mass", note: "Said", highlight: false}
+          ],
+          hoursNote: "Epiphany water and chalk are blessed today.",
+          upcoming: [
+            {date: "January 12 · Sunday", name: "Baptism of the Lord", rank: "Feast"},
+            {date: "January 17 · Friday", name: "St. Anthony, Abbot", rank: "Memorial"},
+            {date: "January 25 · Saturday", name: "Conversion of St. Paul", rank: "Feast"}
+          ]
+        },
+        "ash-wednesday": {
+          theme: "lent",
+          season: "Lent",
+          prefix: "",
+          name: "Ash Wednesday",
+          date: "The Beginning of the Lenten Fast · March V",
+          guerangerInitial: "T",
+          guerangerText: "oday begins the holy season of Lent—those forty days which the Church has set apart for penance and preparation for Easter. The ashes placed upon our foreheads are made from the palms blessed on the previous Palm Sunday.</p><p>The words pronounced—Remember, man, that thou art dust, and unto dust thou shalt return—are meant to humble us and to remind us of death, which is the consequence of sin.",
+          hours: [
+            {time: "6:30 AM", name: "Morning Prayer", note: "Lauds", highlight: false},
+            {time: "7:00 AM", name: "Low Mass", note: "with Ashes", highlight: true},
+            {time: "12:00 PM", name: "Midday Mass", note: "with Ashes", highlight: true},
+            {time: "4:30 PM", name: "Evening Prayer", note: "Vespers", highlight: false},
+            {time: "6:30 PM", name: "Low Mass", note: "with Ashes", highlight: true}
+          ],
+          hoursNote: "Today is a day of fast and abstinence.",
+          upcoming: [
+            {date: "March 9 · Sunday", name: "First Sunday of Lent", rank: "Lenten Sunday"},
+            {date: "March 19 · Wednesday", name: "St. Joseph", rank: "Solemnity"},
+            {date: "March 25 · Tuesday", name: "The Annunciation", rank: "Solemnity"}
+          ]
+        },
+        "laetare": {
+          theme: "rose",
+          season: "Lent",
+          prefix: "",
+          name: "Laetare Sunday",
+          date: "Fourth Sunday of Lent · March XXX",
+          guerangerInitial: "L",
+          guerangerText: "aetare Jerusalem!—Rejoice, O Jerusalem! With these words the Church begins today's Mass. We have reached the middle of Lent.</p><p>The Church relaxes somewhat the severity of Lent, permitting flowers on the altar and the rose-colored vestments. It is as though a ray of Easter joy breaks through the penitential purple.",
+          hours: [
+            {time: "6:30 AM", name: "Morning Prayer", note: "Lauds", highlight: false},
+            {time: "7:00 AM", name: "Low Mass", note: "Said", highlight: false},
+            {time: "9:00 AM", name: "Solemn Mass", note: "Sung · Rose Vestments", highlight: true},
+            {time: "11:00 AM", name: "Solemn Mass", note: "Sung · Rose Vestments", highlight: true},
+            {time: "4:30 PM", name: "Evening Prayer", note: "Vespers", highlight: false},
+            {time: "5:00 PM", name: "Stations of the Cross", note: "", highlight: false}
+          ],
+          hoursNote: "The Golden Rose is traditionally blessed on this day.",
+          upcoming: [
+            {date: "April 6 · Sunday", name: "Fifth Sunday of Lent", rank: "Passion Sunday"},
+            {date: "April 13 · Sunday", name: "Palm Sunday", rank: "Holy Week begins"},
+            {date: "April 17 · Thursday", name: "Holy Thursday", rank: "Sacred Triduum"}
+          ]
+        },
+        "palm-sunday": {
+          theme: "holyweek",
+          season: "Holy Week",
+          prefix: "",
+          name: "Palm Sunday of the Passion",
+          date: "The Beginning of Holy Week · April XIII",
+          guerangerInitial: "T",
+          guerangerText: "his week, called Holy Week, is the most sacred of the whole year. Today we commemorate our Lord's triumphant entry into Jerusalem, when the multitude spread their garments and palm branches before Him, crying: Hosanna to the Son of David!</p><p>Yet even as we wave our palms in triumph, the shadow of the Cross falls over us. This week we walk with Christ through His suffering and death.",
+          hours: [
+            {time: "8:30 AM", name: "Blessing of Palms", note: "Procession follows", highlight: false},
+            {time: "9:00 AM", name: "Solemn Mass", note: "with Passion", highlight: true},
+            {time: "11:00 AM", name: "Solemn Mass", note: "with Passion", highlight: true},
+            {time: "4:30 PM", name: "Tenebrae", note: "Office of Matins", highlight: true},
+            {time: "5:00 PM", name: "Low Mass", note: "Said", highlight: false}
+          ],
+          hoursNote: "The Sacred Triduum begins Thursday evening.",
+          upcoming: [
+            {date: "April 17 · Thursday", name: "Holy Thursday", rank: "Mass of the Lord's Supper"},
+            {date: "April 18 · Friday", name: "Good Friday", rank: "The Passion of the Lord"},
+            {date: "April 19 · Saturday", name: "Holy Saturday", rank: "The Easter Vigil"}
+          ]
+        },
+        "good-friday": {
+          theme: "requiem",
+          season: "The Sacred Triduum",
+          prefix: "",
+          name: "Good Friday",
+          date: "The Passion of the Lord · April XVIII",
+          guerangerInitial: "T",
+          guerangerText: "his is the most solemn day of the entire year—the day on which our Savior died for us on the Cross. The altars are stripped bare; the tabernacle stands empty; the Church kneels in profound mourning.</p><p>There is no Mass today. The Holy Sacrifice gives place to the commemoration of the bloody Sacrifice itself. Yet from this day of apparent defeat springs eternal victory.",
+          hours: [
+            {time: "9:00 AM", name: "Morning Prayer", note: "Office of the Passion", highlight: false},
+            {time: "12:00 PM", name: "Stations of the Cross", note: "", highlight: false},
+            {time: "3:00 PM", name: "Solemn Liturgy", note: "Veneration of the Cross", highlight: true},
+            {time: "7:00 PM", name: "Tenebrae", note: "Office of Holy Saturday", highlight: true}
+          ],
+          hoursNote: "Day of fast and abstinence. No Mass is celebrated.",
+          upcoming: [
+            {date: "April 19 · Saturday", name: "Holy Saturday", rank: "The Easter Vigil"},
+            {date: "April 20 · Sunday", name: "Easter Sunday", rank: "The Resurrection"},
+            {date: "April 27 · Sunday", name: "Divine Mercy Sunday", rank: "Second Sunday of Easter"}
+          ]
+        },
+        "easter": {
+          theme: "easter",
+          season: "Eastertide",
+          prefix: "",
+          name: "Easter Sunday",
+          date: "The Resurrection of the Lord · April XX",
+          guerangerInitial: "T",
+          guerangerText: "his is the Day which the Lord hath made: let us be glad and rejoice therein! Christ is risen! Alleluia! The Paschal Feast has begun, and for fifty days the Church will celebrate the triumph of her Risen Lord.</p><p>All the preparation of Lent, all the sorrows of Holy Week, have led to this glorious morning. The stone is rolled away; the tomb is empty; the Lord is truly risen!",
+          hours: [
+            {time: "6:30 AM", name: "Morning Prayer", note: "Lauds of Easter", highlight: false},
+            {time: "7:00 AM", name: "Low Mass", note: "Said", highlight: false},
+            {time: "9:00 AM", name: "Solemn Mass", note: "Sung · Victimae Paschali", highlight: true},
+            {time: "11:00 AM", name: "Solemn Mass", note: "Sung", highlight: true},
+            {time: "4:30 PM", name: "Second Vespers", note: "of Easter", highlight: false},
+            {time: "5:00 PM", name: "Low Mass", note: "Said", highlight: false}
+          ],
+          hoursNote: "The Alleluia returns! Easter food is blessed.",
+          upcoming: [
+            {date: "April 21–26", name: "Easter Octave", rank: "Solemnities"},
+            {date: "April 27 · Sunday", name: "Divine Mercy Sunday", rank: "Second Sunday of Easter"},
+            {date: "May 29 · Thursday", name: "Ascension of the Lord", rank: "Solemnity"}
+          ]
+        },
+        "pentecost": {
+          theme: "pentecost",
+          season: "Eastertide",
+          prefix: "",
+          name: "Pentecost Sunday",
+          date: "The Descent of the Holy Spirit · June VIII",
+          guerangerInitial: "T",
+          guerangerText: "oday the Church celebrates the coming of the Holy Ghost upon the Apostles, fifty days after Easter. This feast concludes the Paschal season and marks the birthday of the Church.</p><p>The fire of divine love descended upon the Cenacle; the Apostles spoke in tongues; three thousand souls were converted. The promise of Christ was fulfilled.",
+          hours: [
+            {time: "6:30 AM", name: "Morning Prayer", note: "Lauds of Pentecost", highlight: false},
+            {time: "7:00 AM", name: "Low Mass", note: "Said", highlight: false},
+            {time: "9:00 AM", name: "Solemn Mass", note: "Sung · Veni Sancte Spiritus", highlight: true},
+            {time: "11:00 AM", name: "Solemn Mass", note: "Sung", highlight: true},
+            {time: "4:30 PM", name: "Second Vespers", note: "of Pentecost", highlight: false},
+            {time: "5:00 PM", name: "Low Mass", note: "Said", highlight: false}
+          ],
+          hoursNote: "Red vestments. Red flowers decorate the church.",
+          upcoming: [
+            {date: "June 15 · Sunday", name: "Most Holy Trinity", rank: "Solemnity"},
+            {date: "June 22 · Sunday", name: "Corpus Christi", rank: "Solemnity"},
+            {date: "June 27 · Friday", name: "Sacred Heart of Jesus", rank: "Solemnity"}
+          ]
+        },
+        "ordinary-sunday": {
+          theme: "ordinary",
+          season: "Ordinary Time",
+          prefix: "The",
+          name: "Fifteenth Sunday in Ordinary Time",
+          date: "Per Annum · July XIII",
+          guerangerInitial: "T",
+          guerangerText: "he weeks of Ordinary Time—tempus per annum—stretch before us as a sacred opportunity for growth in holiness. Though without the high drama of the great seasons, these green weeks are no less important.</p><p>The Church continues to unfold the mystery of Christ throughout the year. In Ordinary Time, we deepen our understanding of the Incarnation and Redemption.",
+          hours: [
+            {time: "6:30 AM", name: "Morning Prayer", note: "Lauds", highlight: false},
+            {time: "7:00 AM", name: "Low Mass", note: "Said", highlight: false},
+            {time: "9:00 AM", name: "Solemn Mass", note: "Sung", highlight: true},
+            {time: "11:00 AM", name: "Solemn Mass", note: "Sung", highlight: true},
+            {time: "4:30 PM", name: "Evening Prayer", note: "Vespers", highlight: false},
+            {time: "5:00 PM", name: "Low Mass", note: "Said", highlight: false}
+          ],
+          hoursNote: null,
+          upcoming: [
+            {date: "July 22 · Tuesday", name: "St. Mary Magdalene", rank: "Feast"},
+            {date: "July 25 · Friday", name: "St. James, Apostle", rank: "Feast"},
+            {date: "August 6 · Wednesday", name: "Transfiguration", rank: "Feast"}
+          ]
+        },
+        "assumption": {
+          theme: "marian",
+          season: "Ordinary Time",
+          prefix: "The",
+          name: "Assumption of the Blessed Virgin Mary",
+          date: "Solemnity · August XV",
+          guerangerInitial: "T",
+          guerangerText: "oday we celebrate the greatest of all Marian feasts: the Assumption of the Blessed Virgin Mary, body and soul, into heavenly glory.</p><p>This is the crowning privilege granted to the Mother of God. She who bore Christ in her womb, she who stood at the foot of the Cross—she alone has already received the resurrection of the body.",
+          hours: [
+            {time: "6:30 AM", name: "Morning Prayer", note: "Lauds of the Assumption", highlight: false},
+            {time: "7:00 AM", name: "Low Mass", note: "Said", highlight: false},
+            {time: "9:00 AM", name: "Solemn Mass", note: "Sung", highlight: true},
+            {time: "11:00 AM", name: "Solemn Mass", note: "Sung", highlight: true},
+            {time: "4:30 PM", name: "Second Vespers", note: "Procession", highlight: false},
+            {time: "5:00 PM", name: "Low Mass", note: "Said", highlight: false}
+          ],
+          hoursNote: "Holy Day of Obligation. Herbs are traditionally blessed.",
+          upcoming: [
+            {date: "August 22 · Friday", name: "Queenship of Mary", rank: "Memorial"},
+            {date: "August 24 · Sunday", name: "St. Bartholomew", rank: "Feast"},
+            {date: "August 28 · Thursday", name: "St. Augustine", rank: "Memorial"}
+          ]
+        },
+        "st-lawrence": {
+          theme: "martyr",
+          season: "Ordinary Time",
+          prefix: "",
+          name: "St. Lawrence, Deacon and Martyr",
+          date: "Feast · August X",
+          guerangerInitial: "L",
+          guerangerText: "awrence was one of the seven deacons of Rome, martyred in 258. When the prefect demanded the treasures of the Church, Lawrence gathered the poor, the blind, and the lame: These are the treasures of the Church.</p><p>Condemned to death, he was roasted on a gridiron. In the midst of his torment, he said: Turn me over; I am done on this side.",
+          hours: [
+            {time: "6:30 AM", name: "Morning Prayer", note: "Lauds", highlight: false},
+            {time: "7:00 AM", name: "Low Mass", note: "Feast of St. Lawrence", highlight: true},
+            {time: "4:30 PM", name: "Evening Prayer", note: "Vespers", highlight: false}
+          ],
+          hoursNote: "Red vestments for the martyr.",
+          upcoming: [
+            {date: "August 11 · Monday", name: "St. Clare", rank: "Memorial"},
+            {date: "August 14 · Thursday", name: "St. Maximilian Kolbe", rank: "Memorial"},
+            {date: "August 15 · Friday", name: "Assumption of Mary", rank: "Solemnity"}
+          ]
+        },
+        "all-souls": {
+          theme: "requiem",
+          season: "Ordinary Time",
+          prefix: "The",
+          name: "Commemoration of All the Faithful Departed",
+          date: "All Souls Day · November II",
+          guerangerInitial: "T",
+          guerangerText: "oday the Church turns her maternal care to all the faithful departed who are being purified in Purgatory. Yesterday we celebrated the Saints in heaven; today we pray for those who have not yet attained that beatitude.</p><p>The souls in Purgatory cannot help themselves, but we can help them by our prayers and sacrifices, and especially by the Holy Sacrifice of the Mass.",
+          hours: [
+            {time: "6:30 AM", name: "Office of the Dead", note: "Matins and Lauds", highlight: false},
+            {time: "7:00 AM", name: "Requiem Mass", note: "First Mass", highlight: true},
+            {time: "9:00 AM", name: "Requiem Mass", note: "Second Mass", highlight: true},
+            {time: "11:00 AM", name: "Requiem Mass", note: "Third Mass", highlight: true},
+            {time: "4:30 PM", name: "Evening Prayer", note: "Vespers of the Dead", highlight: false}
+          ],
+          hoursNote: "Black or violet vestments. Prayers at the cemetery.",
+          upcoming: [
+            {date: "November 9 · Sunday", name: "Dedication of the Lateran", rank: "Feast"},
+            {date: "November 11 · Tuesday", name: "St. Martin of Tours", rank: "Memorial"},
+            {date: "November 30 · Sunday", name: "First Sunday of Advent", rank: "New Year begins"}
+          ]
+        }
+      };
+
+      // UPDATE PAGE FUNCTION
+      function updatePage(feastKey) {
+        var data = defined[feastKey];
+        if (!data) {
+          console.error("No data for feast:", feastKey);
+          return;
+        }
+
+        // Update theme
+        document.body.className = "theme-" + data.theme;
+
+        // Update hero
+        document.getElementById("seasonName").textContent = data.season;
+        document.getElementById("feastPrefix").textContent = data.prefix;
+        document.getElementById("feastName").textContent = data.name;
+        document.getElementById("liturgicalDate").textContent = data.date;
+
+        // Update Gueranger
+        var guerangerHTML = '<p><span class="gueranger-initial">' + data.guerangerInitial + '</span>' + data.guerangerText + '</p>';
+        document.getElementById("guerangerText").innerHTML = guerangerHTML;
+
+        // Update hours
+        var hoursHTML = "";
+        for (var i = 0; i < data.hours.length; i++) {
+          var h = data.hours[i];
+          var cls = h.highlight ? "hour-item highlight" : "hour-item";
+          var noteSpan = h.note ? "<span>" + h.note + "</span>" : "";
+          hoursHTML += '<div class="' + cls + '"><div class="hour-time">' + h.time + '</div><div class="hour-name">' + h.name + ' ' + noteSpan + '</div></div>';
+        }
+        document.getElementById("hoursTimeline").innerHTML = hoursHTML;
+
+        // Hours note
+        var hoursNoteEl = document.getElementById("hoursNote");
+        if (data.hoursNote) {
+          hoursNoteEl.textContent = data.hoursNote;
+          hoursNoteEl.style.display = "block";
+        } else {
+          hoursNoteEl.style.display = "none";
+        }
+
+        // Upcoming
+        var upcomingHTML = "";
+        for (var j = 0; j < data.upcoming.length; j++) {
+          var u = data.upcoming[j];
+          upcomingHTML += '<div class="upcoming-feast"><p class="date">' + u.date + '</p><p class="name">' + u.name + '</p><p class="rank">' + u.rank + '</p></div>';
+        }
+        document.getElementById("upcomingFeasts").innerHTML = upcomingHTML;
+
+        // Update active button
+        var btns = document.querySelectorAll(".dev-btn");
+        for (var k = 0; k < btns.length; k++) {
+          if (btns[k].getAttribute("data-feast") === feastKey) {
+            btns[k].classList.add("active");
+          } else {
+            btns[k].classList.remove("active");
+          }
+        }
+
+        window.scrollTo({top: 0, behavior: "smooth"});
+      }
+
+      // EVENT LISTENERS
+      document.getElementById("devMenuToggle").addEventListener("click", function() {
+        document.getElementById("devMenu").classList.toggle("collapsed");
+      });
+
+      var devBtns = document.querySelectorAll(".dev-btn");
+      for (var i = 0; i < devBtns.length; i++) {
+        devBtns[i].addEventListener("click", function(e) {
+          var feast = this.getAttribute("data-feast");
+          updatePage(feast);
+        });
+      }
+
+      // Header scroll
+      window.addEventListener("scroll", function() {
+        var header = document.querySelector(".site-header");
+        if (window.pageYOffset > 50) {
+          header.classList.add("scrolled");
+        } else {
+          header.classList.remove("scrolled");
+        }
+      });
+
+      // Mobile menu
+      document.querySelector(".menu-toggle").addEventListener("click", function() {
+        var nav = document.querySelector(".primary-nav");
+        var expanded = this.getAttribute("aria-expanded") === "true";
+        this.setAttribute("aria-expanded", !expanded);
+        nav.classList.toggle("active");
+      });
+    })();
+  </script>
+</body>
+</html>
