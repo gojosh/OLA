@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plate flattener</title>
+<style>
+:root{--bg:#1b1b1d;--panel:#232326;--line:#3a3a3f;--text:#e8e6e1;--muted:#9a978f;--accent:#e0a53c;--grid:#38d0ff;--page:#ff5a3c;--frame:#9cff6a;--feat:#ffe14d}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font:13px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
+#app{display:grid;grid-template-columns:1fr 340px;grid-template-rows:auto 1fr auto;height:100%}
+header{grid-column:1/-1;display:flex;gap:10px;align-items:center;padding:8px 12px;border-bottom:1px solid var(--line);background:var(--panel);flex-wrap:wrap}
+header h1{font-size:14px;margin:0 8px 0 0;font-weight:600}
+select,input,button{font:inherit;color:var(--text);background:#2d2d31;border:1px solid var(--line);border-radius:6px;padding:4px 8px}
+button{cursor:pointer}button:hover{border-color:#5a5a62}
+button.primary{background:var(--accent);color:#1b1b1d;border-color:var(--accent);font-weight:600}
+button:disabled{opacity:.5;cursor:default}
+label{display:inline-flex;gap:5px;align-items:center;color:var(--muted)}
+#stage{position:relative;overflow:hidden;background:#111;cursor:grab}
+#stage.dragging{cursor:grabbing}
+#stage.edge{cursor:move}
+canvas#view{position:absolute;inset:0;width:100%;height:100%}
+#readout{position:absolute;left:10px;bottom:10px;background:rgba(0,0,0,.65);padding:5px 9px;border-radius:6px;font-variant-numeric:tabular-nums;pointer-events:none}
+aside{border-left:1px solid var(--line);background:var(--panel);overflow:auto;padding:10px 12px 40px}
+aside h2{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:16px 0 8px;font-weight:600}
+.row{display:grid;grid-template-columns:62px 1fr 74px;gap:6px;align-items:center;margin:4px 0}
+.row span{color:var(--muted)}
+.row input[type=range]{width:100%}
+.row input[type=number]{width:74px;padding:3px 5px}
+.grid4{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+.grid4 label{display:grid;grid-template-columns:24px 1fr;gap:4px}
+.grid4 input{width:100%}
+#shadeplot{width:100%;height:110px;background:#1a1a1c;border:1px solid var(--line);border-radius:6px;display:block}
+#profile{width:100%;height:170px;background:#1a1a1c;border:1px solid var(--line);border-radius:6px;display:block;cursor:ns-resize}
+.stat{font-variant-numeric:tabular-nums;color:var(--muted)}
+.stat b{color:var(--text);font-weight:600}
+.feat{display:flex;justify-content:space-between;gap:6px;padding:3px 0;border-bottom:1px solid #2c2c30}
+.feat small{color:var(--muted)}
+.actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+footer{grid-column:1/-1;padding:6px 12px;border-top:1px solid var(--line);color:var(--muted);background:var(--panel);display:flex;gap:16px}
+#dirty{color:var(--accent)}
+.note{color:var(--muted);font-size:12px;margin:6px 0}
+#flatwrap{position:absolute;inset:0;background:#111;display:none;overflow:auto}
+#flatwrap img{display:block;margin:20px auto;max-width:calc(100% - 40px);height:auto;box-shadow:0 0 0 1px #333}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>Plate flattener</h1>
+    <select id="plate"></select>
+    <button id="fitview" title="Fit the photograph to the window (F)">Fit view</button>
+    <label><input type="checkbox" id="showGrid" checked> grid</label>
+    <label>every <select id="spacing"><option>50</option><option selected>100</option><option>200</option><option>400</option></select> px</label>
+    <label><input type="checkbox" id="showFeat" checked> detected rules</label>
+    <label><input type="checkbox" id="showFrame" checked> fitted frame</label>
+    <label><input type="checkbox" id="showPage" checked> page</label>
+    <label>image <input type="range" id="dim" min="0.15" max="1" step="0.05" value="0.75"></label>
+    <span style="flex:1"></span>
+    <button id="toggleFlat" title="Switch between the photograph and the flattened preview (V)">Show flattened</button>
+  </header>
+
+  <div id="stage">
+    <canvas id="view"></canvas>
+    <div id="readout"></div>
+    <div id="flatwrap"><img id="flat" alt="Flattened preview"></div>
+  </div>
+
+  <aside>
+    <h2>Fit</h2>
+    <div id="fitstats" class="stat">–</div>
+    <div class="actions">
+      <button class="primary" id="btnFit" title="Fit pose and surface to the rules, starting from the current values">Auto-fit</button>
+      <label title="Also fit the lens (f, k1). Normally the lens comes from the shared calibration."><input type="checkbox" id="fitLens"> fit lens too</label>
+      <button id="btnDetect" title="Find the frame rules again">Re-detect rules</button>
+    </div>
+
+    <h2>Camera</h2>
+    <div class="row"><span>f (px)</span><input type="range" id="r_f" min="4000" max="20000" step="1"><input type="number" id="n_f" step="10"></div>
+    <div class="row"><span>k1</span><input type="range" id="r_k1" min="-0.3" max="0.1" step="0.0005"><input type="number" id="n_k1" step="0.001"></div>
+    <div class="row"><span>tilt x °</span><input type="range" id="r_rx" min="-5" max="5" step="0.005"><input type="number" id="n_rx" step="0.01"></div>
+    <div class="row"><span>tilt y °</span><input type="range" id="r_ry" min="-5" max="5" step="0.005"><input type="number" id="n_ry" step="0.01"></div>
+    <div class="row"><span>turn °</span><input type="range" id="r_rz" min="-5" max="5" step="0.005"><input type="number" id="n_rz" step="0.01"></div>
+    <p class="note" id="camnote"></p>
+
+    <h2>Surface: depth across the page</h2>
+    <canvas id="profile" width="640" height="340"></canvas>
+    <p class="note">Drag a knot up or down. Up is deeper, away from the camera. Square knots are anchors fixed at zero; they define the flat plane. The dashed lines mark the frame's left and right rules.</p>
+
+    <h2>Page rectangle (flat coordinates)</h2>
+    <div class="grid4">
+      <label>u0<input type="number" id="p_u0" step="1"></label><label>u1<input type="number" id="p_u1" step="1"></label>
+      <label>y0<input type="number" id="p_y0" step="1"></label><label>y1<input type="number" id="p_y1" step="1"></label>
+    </div>
+    <p class="note">You can also drag the red page edges on the photograph.</p>
+    <div class="actions"><button id="btnPage">Find page edges</button></div>
+
+    <h2>Rules used in the fit</h2>
+    <div id="features"></div>
+
+    <h2>Gutter shading</h2>
+    <canvas id="shadeplot" width="640" height="220"></canvas>
+    <p class="note">The light falling on the paper across the page, measured from the bare paper in each column, one line per color channel. Removing it divides it out, under the letters too.</p>
+    <div class="row"><span>strength</span><input type="range" id="r_strength" min="0" max="1.5" step="0.01"><input type="number" id="n_strength" step="0.05" min="0" max="1.5"></div>
+    <div class="actions"><button id="btnShade" title="Measure the shading again from the current flattening">Fit shading</button><label><input type="checkbox" id="deshade" checked> remove it in previews</label></div>
+    <div id="shadestats" class="stat"></div>
+
+    <h2>Output</h2>
+    <div class="actions">
+      <button id="btnPreview">Preview flat (¼ size)</button>
+      <button id="btnFull">Render full size</button>
+    </div>
+    <div id="check" class="stat"></div>
+
+    <h2>Save</h2>
+    <div class="actions">
+      <button class="primary" id="btnSave">Save (⌘S)</button>
+      <button id="btnRevert">Revert to saved</button>
+    </div>
+    <p class="note">Saves everything to <code id="savepath"></code>.</p>
+  </aside>
+
+  <footer><span id="status">Loading…</span><span id="dirty"></span></footer>
+</div>
+
+<script>
+/* ── The model: identical to tools/flatten/flatten.py (Model, Spline, rotation) ── */
+const D2R=Math.PI/180;
+function rotation(rx,ry,rz){
+  const a=rx*D2R,b=ry*D2R,c=rz*D2R;
+  const Rx=[[1,0,0],[0,Math.cos(a),-Math.sin(a)],[0,Math.sin(a),Math.cos(a)]];
+  const Ry=[[Math.cos(b),0,Math.sin(b)],[0,1,0],[-Math.sin(b),0,Math.cos(b)]];
+  const Rz=[[Math.cos(c),-Math.sin(c),0],[Math.sin(c),Math.cos(c),0],[0,0,1]];
+  return mul(Rz,mul(Ry,Rx));
+}
+function mul(A,B){return A.map((r,i)=>B[0].map((_,j)=>r.reduce((s,_,k)=>s+A[i][k]*B[k][j],0)))}
+class Spline{
+  constructor(xk,zk){
+    const n=xk.length,h=[];for(let i=0;i<n-1;i++)h.push(xk[i+1]-xk[i]);
+    const M=new Array(n).fill(0);
+    if(n>2){ // tridiagonal solve for the interior second derivatives
+      const m=n-2,a=new Array(m).fill(0),b=new Array(m).fill(0),c=new Array(m).fill(0),d=new Array(m).fill(0);
+      for(let i=1;i<n-1;i++){const k=i-1;a[k]=h[i-1];b[k]=2*(h[i-1]+h[i]);c[k]=h[i];d[k]=6*((zk[i+1]-zk[i])/h[i]-(zk[i]-zk[i-1])/h[i-1])}
+      for(let k=1;k<m;k++){const w=a[k]/b[k-1];b[k]-=w*c[k-1];d[k]-=w*d[k-1]}
+      const x=new Array(m);x[m-1]=d[m-1]/b[m-1];for(let k=m-2;k>=0;k--)x[k]=(d[k]-c[k]*x[k+1])/b[k];
+      for(let k=0;k<m;k++)M[k+1]=x[k];
+    }
+    this.x=xk;this.z=zk;this.M=M;this.h=h;
+    this.b=h.map((hi,i)=>(zk[i+1]-zk[i])/hi-hi*(2*M[i]+M[i+1])/6);
+    this.s0=this.b[0];const hl=h[n-2];this.s1=this.b[n-2]+M[n-2]*hl+(M[n-1]-M[n-2])*hl/2;
+  }
+  at(X){
+    const x=this.x,n=x.length;
+    if(X<x[0])return this.z[0]+this.s0*(X-x[0]);
+    if(X>x[n-1])return this.z[n-1]+this.s1*(X-x[n-1]);
+    let i=0;while(i<n-2&&X>=x[i+1])i++;
+    const t=X-x[i];return this.z[i]+this.b[i]*t+this.M[i]/2*t*t+(this.M[i+1]-this.M[i])/(6*this.h[i])*t*t*t;
+  }
+}
+class Model{
+  constructor(p){
+    const c=p.camera;this.f=c.f;this.k1=c.k1||0;this.k2=c.k2||0;
+    this.cx=c.cx??p.image.width/2;this.cy=c.cy??p.image.height/2;
+    this.R=rotation(...c.rot_deg);this.sp=new Spline(p.surface.x_knots,p.surface.z_knots);
+    // arc length across the sheet, from the first knot (as in Python, but on a 1-unit grid)
+    const X0=-9000,X1=9000,N=X1-X0+1;this.ax=new Float64Array(N);this.as=new Float64Array(N);
+    let z0=this.sp.at(X0),s=0;this.ax[0]=X0;
+    for(let i=1;i<N;i++){const X=X0+i,z=this.sp.at(X);s+=Math.hypot(1,z-z0);z0=z;this.ax[i]=X;this.as[i]=s}
+    const ref=this.interp(p.surface.x_knots[0],this.ax,this.as);for(let i=0;i<N;i++)this.as[i]-=ref;
+  }
+  interp(v,xs,ys){let lo=0,hi=xs.length-1;if(v<=xs[lo])return ys[lo];if(v>=xs[hi])return ys[hi];
+    while(hi-lo>1){const m=(lo+hi)>>1;if(xs[m]<=v)lo=m;else hi=m}const t=(v-xs[lo])/(xs[hi]-xs[lo]);return ys[lo]+t*(ys[hi]-ys[lo])}
+  uOfX(X){return this.interp(X,this.ax,this.as)}
+  xOfU(u){return this.interp(u,this.as,this.ax)}
+  project(X,Y){
+    const Z=this.sp.at(X),R=this.R;
+    const px=R[0][0]*X+R[0][1]*Y+R[0][2]*Z,py=R[1][0]*X+R[1][1]*Y+R[1][2]*Z,pz=R[2][0]*X+R[2][1]*Y+R[2][2]*Z+this.f;
+    const xn=px/pz,yn=py/pz,r2=xn*xn+yn*yn,d=1+this.k1*r2+this.k2*r2*r2;
+    return [this.f*xn*d+this.cx,this.f*yn*d+this.cy];
+  }
+  // image point → page point (X, Y) by following the camera ray to the sheet
+  back(ix,iy){
+    let xd=(ix-this.cx)/this.f,yd=(iy-this.cy)/this.f,xn=xd,yn=yd;
+    for(let k=0;k<12;k++){const r2=xn*xn+yn*yn,d=1+this.k1*r2+this.k2*r2*r2;xn=xd/d;yn=yd/d}
+    const R=this.R,dir=[xn,yn,1],T=[0,0,this.f];
+    const Rt=v=>[R[0][0]*v[0]+R[1][0]*v[1]+R[2][0]*v[2],R[0][1]*v[0]+R[1][1]*v[1]+R[2][1]*v[2],R[0][2]*v[0]+R[1][2]*v[1]+R[2][2]*v[2]];
+    const a=Rt(dir),b=Rt(T),P=t=>[t*a[0]-b[0],t*a[1]-b[1],t*a[2]-b[2]];
+    let t=b[2]/a[2];
+    for(let k=0;k<20;k++){const p=P(t),g=p[2]-this.sp.at(p[0]),e=1e-3,p2=P(t+e),g2=p2[2]-this.sp.at(p2[0]);const dt=g/((g2-g)/e);t-=dt;if(Math.abs(dt)<1e-6)break}
+    const p=P(t);return [p[0],p[1]];
+  }
+}
+
+/* ── State ── */
+const $=id=>document.getElementById(id);
+let plate=null, P=null, saved=null, model=null, img=new Image(), view={s:0.15,x:0,y:0}, showFlat=false, camera=null;
+const cv=$("view"),ctx=cv.getContext("2d");
+const dirty=v=>{$("dirty").textContent=v?"● unsaved changes":"";};
+const status=t=>{$("status").textContent=t;};
+function rebuild(){model=new Model(P);draw();drawProfile();syncInputs();if(typeof drawShade==="function")drawShade();}
+
+async function api(path,opts={}){
+  const r=await fetch(path,{headers:{"Content-Type":"application/json"},...opts});
+  const j=await r.json();if(!r.ok||j.error)throw new Error(j.error||r.statusText);return j;
+}
+async function loadPlates(){
+  const list=await api("/api/plates");
+  $("plate").innerHTML=list.map(p=>`<option value="${p.id}">${p.id}${p.fitted?` · ${p.rms} px`:""}</option>`).join("");
+  const want=new URLSearchParams(location.hash.slice(1)).get("plate")||list.find(p=>p.fitted)?.id||list[0].id;
+  $("plate").value=want;await openPlate(want);
+}
+async function openPlate(id){
+  plate=id;location.hash="plate="+id;status("Loading "+id+"…");
+  try{P=await api("/api/plate/"+id)}catch(e){
+    status("No saved fit for "+id+": detecting the frame and fitting…");
+    P=await api(`/api/plate/${id}/fit`,{method:"POST",body:JSON.stringify({params:null,lock:["f","k1","k2","pp"]})});
+  }
+  saved=JSON.stringify(P);dirty(false);
+  try{camera=await api("/api/camera")}catch{camera=null}
+  $("savepath").textContent=`reference/pugin-glossary/flatten/${id}.json`;
+  await new Promise(res=>{img.onload=res;img.src="/img/"+id+".jpg"});
+  fitView();rebuild();renderFeatures();showStats();status(id+" ready. Drag to pan, scroll to zoom.");
+  showFlat=false;$("flatwrap").style.display="none";$("toggleFlat").textContent="Show flattened";$("check").textContent="";
+}
+
+/* ── Drawing ── */
+function fitView(){
+  const r=$("stage").getBoundingClientRect();cv.width=r.width*devicePixelRatio;cv.height=r.height*devicePixelRatio;
+  const s=Math.min(cv.width/img.width,cv.height/img.height)*0.96;view={s,x:(cv.width-img.width*s)/2,y:(cv.height-img.height*s)/2};draw();
+}
+const toScreen=([x,y])=>[x*view.s+view.x,y*view.s+view.y];
+function path(pts){ctx.beginPath();pts.forEach((p,i)=>{const [x,y]=toScreen(p);i?ctx.lineTo(x,y):ctx.moveTo(x,y)})}
+function hline(Y,u0,u1,step=20){const pts=[];for(let u=u0;u<=u1+1e-6;u+=step)pts.push(model.project(model.xOfU(Math.min(u,u1)),Y));return pts}
+function vline(u,y0,y1,step=60){const X=model.xOfU(u),pts=[];for(let y=y0;y<=y1+1e-6;y+=step)pts.push(model.project(X,Math.min(y,y1)));return pts}
+function draw(){
+  if(!P||!model||!img.complete)return;
+  ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,cv.width,cv.height);
+  ctx.globalAlpha=+$("dim").value;ctx.drawImage(img,view.x,view.y,img.width*view.s,img.height*view.s);ctx.globalAlpha=1;
+  const pg=P.page||{u0:0,u1:3000,y0:-2000,y1:2000},lw=devicePixelRatio;
+  if($("showGrid").checked){
+    const d=+$("spacing").value;ctx.strokeStyle="rgba(56,208,255,.55)";ctx.lineWidth=lw;
+    for(let u=Math.ceil(pg.u0/d)*d;u<=pg.u1;u+=d){path(vline(u,pg.y0,pg.y1));ctx.stroke()}
+    for(let y=Math.ceil(pg.y0/d)*d;y<=pg.y1;y+=d){path(hline(y,pg.u0,pg.u1));ctx.stroke()}
+  }
+  if($("showFrame").checked&&P.frame){
+    const f=P.frame;ctx.strokeStyle="rgba(156,255,106,.95)";ctx.lineWidth=1.5*lw;ctx.setLineDash([6*lw,5*lw]);
+    path([...hline(f.y0,f.u0,f.u1),...vline(f.u1,f.y0,f.y1),...hline(f.y1,f.u0,f.u1).reverse(),...vline(f.u0,f.y0,f.y1).reverse()]);ctx.closePath();ctx.stroke();ctx.setLineDash([]);
+  }
+  if($("showFeat").checked){
+    for(const ft of P.features){ctx.fillStyle=(ft.weight??1)>0?"rgba(255,225,77,.95)":"rgba(160,160,160,.7)";
+      const r=Math.max(1.2,1.6*lw);for(const p of ft.pts){const [x,y]=toScreen(p);ctx.fillRect(x-r,y-r,2*r,2*r)}}
+  }
+  if($("showPage").checked&&P.page){
+    ctx.strokeStyle="rgba(255,90,60,1)";ctx.lineWidth=2.2*lw;
+    path([...hline(pg.y0,pg.u0,pg.u1),...vline(pg.u1,pg.y0,pg.y1),...hline(pg.y1,pg.u0,pg.u1).reverse(),...vline(pg.u0,pg.y0,pg.y1).reverse()]);ctx.closePath();ctx.stroke();
+  }
+}
+
+/* ── The profile editor ── */
+const pc=$("profile"),pctx=pc.getContext("2d");let profDrag=-1;
+function profGeom(){
+  const xk=P.surface.x_knots,zk=P.surface.z_knots,zmax=Math.max(40,...zk.map(Math.abs))*1.25;
+  const L=36,Rr=pc.width-10,T=14,B=pc.height-26;
+  return {xk,zk,zmax,sx:X=>L+(X-xk[0])/(xk.at(-1)-xk[0])*(Rr-L),sy:z=>T+(z/zmax)*(B-T)*0.5+(B-T)*0.5*0,
+    yz:z=>B-(z+zmax*0.15)/(zmax*1.15)*(B-T),zy:y=>(B-y)/(B-T)*zmax*1.15-zmax*0.15,L,Rr,T,B};
+}
+function drawProfile(){
+  const g=profGeom(),c=pctx;c.clearRect(0,0,pc.width,pc.height);
+  c.strokeStyle="#333";c.lineWidth=1;c.beginPath();c.moveTo(g.L,g.yz(0));c.lineTo(g.Rr,g.yz(0));c.stroke();
+  c.fillStyle="#8a877f";c.font="20px system-ui";c.fillText("0",8,g.yz(0)+6);c.fillText(Math.round(g.zmax),4,g.yz(g.zmax)+6);
+  c.fillText("gutter",g.L,pc.height-4);c.textAlign="right";c.fillText("fore-edge",g.Rr,pc.height-4);c.textAlign="left";
+  if(P.frame){c.setLineDash([6,5]);c.strokeStyle="#6a9f4a";for(const u of [P.frame.u0,P.frame.u1]){const x=g.sx(model.xOfU(u));c.beginPath();c.moveTo(x,g.T);c.lineTo(x,g.B);c.stroke()}c.setLineDash([])}
+  c.strokeStyle="#e0a53c";c.lineWidth=3;c.beginPath();
+  for(let i=0;i<=200;i++){const X=g.xk[0]+(g.xk.at(-1)-g.xk[0])*i/200,x=g.sx(X),y=g.yz(model.sp.at(X));i?c.lineTo(x,y):c.moveTo(x,y)}c.stroke();
+  const anc=new Set(P.surface.anchors??[g.xk.length-3,g.xk.length-2]);
+  g.xk.forEach((X,i)=>{const x=g.sx(X),y=g.yz(g.zk[i]);c.fillStyle=anc.has(i)?"#777":"#ffd27a";
+    if(anc.has(i))c.fillRect(x-7,y-7,14,14);else{c.beginPath();c.arc(x,y,8,0,7);c.fill()}});
+}
+pc.addEventListener("pointerdown",e=>{
+  const g=profGeom(),r=pc.getBoundingClientRect(),mx=(e.clientX-r.left)*pc.width/r.width,my=(e.clientY-r.top)*pc.height/r.height;
+  const anc=new Set(P.surface.anchors??[g.xk.length-3,g.xk.length-2]);
+  let best=-1,bd=24;g.xk.forEach((X,i)=>{const d=Math.hypot(g.sx(X)-mx,g.yz(g.zk[i])-my);if(d<bd&&!anc.has(i)){bd=d;best=i}});
+  if(best>=0){profDrag=best;pc.setPointerCapture(e.pointerId)}
+});
+pc.addEventListener("pointermove",e=>{
+  if(profDrag<0)return;const g=profGeom(),r=pc.getBoundingClientRect(),my=(e.clientY-r.top)*pc.height/r.height;
+  P.surface.z_knots[profDrag]=Math.round(Math.max(-50,g.zy(my))*10)/10;dirty(true);rebuild();
+});
+pc.addEventListener("pointerup",()=>profDrag=-1);
+
+/* ── Shading (see fit_shading in flatten.py: log L = c + g0(u) + y·g1(u) + p(y), per channel) ── */
+function hats(x,k){x=Math.min(Math.max(x,k[0]),k.at(-1));let i=0;while(i<k.length-2&&x>=k[i+1])i++;const t=(x-k[i])/(k[i+1]-k[i]);const w=new Array(k.length).fill(0);w[i]=1-t;w[i+1]=t;return w}
+function lightAt(sh,ch,u,y){
+  const c=sh.coef[ch],ku=sh.u_knots,ku1=sh.u1_knots,ky=sh.y_knots,n0=ku.length-1,n1=ku1.length-1;
+  const a=hats(u,ku),b=hats(u,ku1),d=hats(y,ky),yn=(y-sh.yc)/sh.yh;let v=0;
+  for(let i=0;i<n0;i++)v+=a[i]*c[1+i];for(let i=0;i<n1;i++)v+=yn*b[i]*c[1+n0+i];for(let i=1;i<ky.length;i++)v+=d[i]*c[n0+n1+i];
+  return Math.exp(v-(sh.ref_log?.[ch]??0));
+}
+const sp=$("shadeplot"),sctx=sp.getContext("2d");
+function drawShade(){
+  sctx.clearRect(0,0,sp.width,sp.height);const sh=P.shading;
+  if(!sh){sctx.fillStyle="#8a877f";sctx.font="22px system-ui";sctx.fillText("Not fitted yet: press Fit shading.",16,40);$("shadestats").textContent="";return}
+  const pg=P.page,L=40,R=sp.width-10,T=12,B=sp.height-26,lo=0.75,hi=1.05,ymid=(pg.y0+pg.y1)/2;
+  const sx=u=>L+(u-pg.u0)/(pg.u1-pg.u0)*(R-L),sy=v=>B-(v-lo)/(hi-lo)*(B-T);
+  sctx.strokeStyle="#333";sctx.lineWidth=1;for(const v of [0.8,0.9,1.0]){sctx.beginPath();sctx.moveTo(L,sy(v));sctx.lineTo(R,sy(v));sctx.stroke()}
+  sctx.fillStyle="#8a877f";sctx.font="18px system-ui";for(const v of [0.8,0.9,1.0])sctx.fillText(v.toFixed(1),4,sy(v)+6);
+  sctx.fillText("gutter",L,sp.height-4);sctx.textAlign="right";sctx.fillText("fore-edge",R,sp.height-4);sctx.textAlign="left";
+  if(P.frame){sctx.setLineDash([6,5]);sctx.strokeStyle="#6a9f4a";for(const u of [P.frame.u0,P.frame.u1]){sctx.beginPath();sctx.moveTo(sx(u),T);sctx.lineTo(sx(u),B);sctx.stroke()}sctx.setLineDash([])}
+  for(const [ch,col] of [["b","#5b8cff"],["g","#5fd17a"],["r","#ff6b5b"]]){sctx.strokeStyle=col;sctx.lineWidth=2.5;sctx.beginPath();
+    for(let i=0;i<=300;i++){const u=pg.u0+(pg.u1-pg.u0)*i/300,v=lightAt(sh,ch,u,ymid);i?sctx.lineTo(sx(u),sy(v)):sctx.moveTo(sx(u),sy(v))}sctx.stroke()}
+  const c=sh.check;$("shadestats").innerHTML=c?`Paper across the page varies ${c.before.spread_pct}% before, <b>${c.after.spread_pct}%</b> after.<br>Gutter-side quarter: ${(c.before.gutter_quarter*100).toFixed(1)}% → <b>${(c.after.gutter_quarter*100).toFixed(1)}%</b> of the open page.`:"";
+  $("r_strength").value=sh.strength??1;if(document.activeElement!==$("n_strength"))$("n_strength").value=sh.strength??1;
+}
+for(const id of ["r_strength","n_strength"])$(id).addEventListener("input",e=>{if(!P.shading)return;P.shading.strength=+e.target.value;dirty(true);drawShade()});
+$("btnShade").onclick=()=>busy("Measuring the shading (renders at half size)",async()=>{const r=await api(`/api/plate/${plate}/shade`,{method:"POST",body:JSON.stringify(P)});P=r.params;dirty(true);drawShade();showFlatImg(r.url,null);status("Shading fitted and removed in the preview. Not saved yet.")});
+
+/* ── Inputs ── */
+const camFields=[["f",v=>P.camera.f=v,()=>P.camera.f],["k1",v=>P.camera.k1=v,()=>P.camera.k1],
+  ["rx",v=>P.camera.rot_deg[0]=v,()=>P.camera.rot_deg[0]],["ry",v=>P.camera.rot_deg[1]=v,()=>P.camera.rot_deg[1]],["rz",v=>P.camera.rot_deg[2]=v,()=>P.camera.rot_deg[2]]];
+for(const [k,set] of camFields){
+  for(const id of ["r_"+k,"n_"+k])$(id).addEventListener("input",e=>{set(+e.target.value);dirty(true);rebuild()});
+}
+for(const k of ["u0","u1","y0","y1"])$("p_"+k).addEventListener("input",e=>{P.page[k]=+e.target.value;P.page.auto=false;dirty(true);draw()});
+function syncInputs(){
+  for(const [k,,get] of camFields){const v=get();if(document.activeElement!==$("n_"+k))$("n_"+k).value=+(+v).toFixed(k==="f"?1:k==="k1"?5:4);$("r_"+k).value=v}
+  if(P.page)for(const k of ["u0","u1","y0","y1"])if(document.activeElement!==$("p_"+k))$("p_"+k).value=Math.round(P.page[k]);
+  const shared=camera&&Math.abs(camera.f-P.camera.f)<0.5&&Math.abs(camera.k1-P.camera.k1)<1e-6;
+  $("camnote").textContent=camera?(shared?`Lens from the shared calibration (${camera.plates.length} plates): f ${camera.f.toFixed(0)} px, k1 ${camera.k1.toFixed(4)}.`:`Lens differs from the shared calibration (f ${camera.f.toFixed(0)}, k1 ${camera.k1.toFixed(4)}).`):"";
+}
+["showGrid","showFeat","showFrame","showPage","spacing","dim"].forEach(id=>$(id).addEventListener("input",draw));
+function renderFeatures(){
+  $("features").innerHTML=P.features.map((f,i)=>{const st=P.fit?.per_feature?.[f.name];
+    return `<div class="feat"><label><input type="checkbox" data-i="${i}" ${(f.weight??1)>0?"checked":""}> ${f.name}</label><small>${f.pts.length} pts${st?` · ${st.rms_px} px`:""}</small></div>`+(f.note?`<p class="note">${f.note}</p>`:"")}).join("");
+  $("features").querySelectorAll("input").forEach(cb=>cb.onchange=()=>{P.features[+cb.dataset.i].weight=cb.checked?1:0;dirty(true);draw()});
+}
+function showStats(){
+  const f=P.fit;if(!f){$("fitstats").textContent="Not fitted yet.";return}
+  $("fitstats").innerHTML=`RMS <b>${f.rms_px} px</b> · max ${f.max_px} px<br>${f.locked?.length?"held: "+f.locked.join(", ")+" · ":""}${f.when?.replace("T"," ")||""}${P.edited?`<br>edited ${P.edited.replace("T"," ")}`:""}`;
+}
+
+/* ── Pan, zoom, drag page edges ── */
+let drag=null;
+function imgPt(e){const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)*devicePixelRatio,y=(e.clientY-r.top)*devicePixelRatio;return [(x-view.x)/view.s,(y-view.y)/view.s,x,y]}
+function nearEdge(e){
+  if(!P.page||!$("showPage").checked)return null;const [ix,iy]=imgPt(e),[X,Y]=model.back(ix,iy),u=model.uOfX(X),pg=P.page,tol=10/view.s;
+  const c=[["u0",Math.abs(u-pg.u0),Y>pg.y0-tol&&Y<pg.y1+tol],["u1",Math.abs(u-pg.u1),Y>pg.y0-tol&&Y<pg.y1+tol],["y0",Math.abs(Y-pg.y0),u>pg.u0-tol&&u<pg.u1+tol],["y1",Math.abs(Y-pg.y1),u>pg.u0-tol&&u<pg.u1+tol]]
+    .filter(c=>c[2]&&c[1]<tol).sort((a,b)=>a[1]-b[1]);return c[0]?.[0]||null;
+}
+cv.addEventListener("pointerdown",e=>{const edge=nearEdge(e),[,,sx,sy]=imgPt(e);drag={edge,sx,sy,vx:view.x,vy:view.y};cv.setPointerCapture(e.pointerId);$("stage").classList.add(edge?"edge":"dragging")});
+cv.addEventListener("pointermove",e=>{
+  const [ix,iy,sx,sy]=imgPt(e);
+  if(model){const [X,Y]=model.back(ix,iy);$("readout").textContent=`image ${ix.toFixed(0)}, ${iy.toFixed(0)}   page u ${model.uOfX(X).toFixed(1)}, y ${Y.toFixed(1)}   depth ${model.sp.at(X).toFixed(1)}`}
+  if(!drag){$("stage").classList.toggle("edge",!!nearEdge(e));return}
+  if(drag.edge){const [X,Y]=model.back(ix,iy);P.page[drag.edge]=Math.round(drag.edge[0]==="u"?model.uOfX(X):Y);P.page.auto=false;dirty(true);syncInputs();draw()}
+  else{view.x=drag.vx+(sx-drag.sx);view.y=drag.vy+(sy-drag.sy);draw()}
+});
+cv.addEventListener("pointerup",()=>{drag=null;$("stage").classList.remove("dragging","edge")});
+cv.addEventListener("wheel",e=>{e.preventDefault();const [,,sx,sy]=imgPt(e),k=Math.exp(-e.deltaY*0.0015),s=Math.min(8,Math.max(0.03,view.s*k));
+  view.x=sx-(sx-view.x)*s/view.s;view.y=sy-(sy-view.y)*s/view.s;view.s=s;draw()},{passive:false});
+addEventListener("resize",()=>{const r=$("stage").getBoundingClientRect();const ox=cv.width,oy=cv.height;cv.width=r.width*devicePixelRatio;cv.height=r.height*devicePixelRatio;view.x+=(cv.width-ox)/2;view.y+=(cv.height-oy)/2;draw()});
+
+/* ── Actions ── */
+async function busy(label,fn){status(label+"…");document.querySelectorAll("aside button").forEach(b=>b.disabled=true);
+  try{await fn()}catch(e){status("Error: "+e.message);console.error(e);return}finally{document.querySelectorAll("aside button").forEach(b=>b.disabled=false)}}
+$("btnFit").onclick=()=>busy("Fitting",async()=>{
+  const lock=$("fitLens").checked?[]:["f","k1","k2","pp"];
+  const page=P.page;P=await api(`/api/plate/${plate}/fit`,{method:"POST",body:JSON.stringify({params:P,lock})});
+  if(page&&page.auto===false)P.page=page;dirty(true);rebuild();renderFeatures();showStats();status(`Fitted: ${P.fit.rms_px} px RMS. Not saved yet.`);
+});
+$("btnDetect").onclick=()=>busy("Detecting the frame rules",async()=>{P=await api(`/api/plate/${plate}/detect`,{method:"POST",body:JSON.stringify(P)});dirty(true);rebuild();renderFeatures();status("Rules re-detected. Run Auto-fit to use them.")});
+$("btnPage").onclick=()=>busy("Finding the page edges",async()=>{const r=await api(`/api/plate/${plate}/render?scale=0.25&page=1`,{method:"POST",body:JSON.stringify(P)});P.page=r.page;dirty(true);rebuild();showFlatImg(r.url,r.check)});
+$("btnPreview").onclick=()=>busy("Rendering a preview",async()=>{const ds=$("deshade").checked&&P.shading?1:0;const r=await api(`/api/plate/${plate}/render?scale=0.25&deshade=${ds}`,{method:"POST",body:JSON.stringify(P)});showFlatImg(r.url,r.check);status(`Preview rendered (¼ size)${ds?", shading removed":""}.`)});
+$("btnFull").onclick=()=>busy("Rendering at full size (saves the plate's settings too)",async()=>{const r=await api(`/api/plate/${plate}/render?scale=1`,{method:"POST",body:JSON.stringify(P)});P=r.params;saved=JSON.stringify(P);dirty(false);showFlatImg(r.url,P.render.check);drawShade();status(`Wrote ${P.render.file}${P.render.deshaded_file?" and "+P.render.deshaded_file:""}.`)});
+function showFlatImg(url,check){$("flat").src=url;showFlat=true;$("flatwrap").style.display="block";$("toggleFlat").textContent="Show photograph";
+  if(check&&!check.error){const rows=Object.entries(check).filter(([k,v])=>k.startsWith("frame-")&&v.straightness_max_px!=null).map(([k,v])=>`${k.slice(6)}: straight to ${v.straightness_max_px} px, tilt ${v.tilt_deg}°`);$("check").innerHTML=rows.join("<br>")}}
+$("toggleFlat").onclick=()=>{showFlat=!showFlat&&!!$("flat").src;$("flatwrap").style.display=showFlat?"block":"none";$("toggleFlat").textContent=showFlat?"Show photograph":"Show flattened"};
+async function save(){await busy("Saving",async()=>{const r=await api("/api/plate/"+plate,{method:"PUT",body:JSON.stringify(P)});P.edited=r.edited;saved=JSON.stringify(P);dirty(false);showStats();status("Saved.")})}
+$("btnSave").onclick=save;
+$("btnRevert").onclick=()=>{P=JSON.parse(saved);dirty(false);rebuild();renderFeatures();showStats();status("Reverted to the saved version.")};
+$("plate").onchange=async e=>{if($("dirty").textContent&&!confirm("Discard unsaved changes?")){e.target.value=plate;return}await openPlate(e.target.value)};
+$("fitview").onclick=fitView;
+addEventListener("keydown",e=>{if((e.metaKey||e.ctrlKey)&&e.key==="s"){e.preventDefault();save()}
+  if(e.target.matches("input,select"))return;if(e.key==="f")fitView();if(e.key==="v")$("toggleFlat").click()});
+addEventListener("beforeunload",e=>{if($("dirty").textContent){e.preventDefault();e.returnValue=""}});
+loadPlates().catch(e=>status("Error: "+e.message));
+</script>
+</body>
+</html>

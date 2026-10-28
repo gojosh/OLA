@@ -11,6 +11,8 @@ These are **photographs of a physical copy** (the book is visible in its cradle)
 | `plates/` | Originals: 74 × JPEG 2000 (`.jp2`) + 1 × HEIC, 3744×5616 px. Most tools and browsers can't open these. |
 | `previews/` | The same plates as 1200 px JPEGs (~200 KB each). **Agents: look at these.** |
 | `contact-sheet.jpg` | All 75 plates on one numbered sheet. Fastest way to see the whole set. |
+| `flatten/` | Per-plate 3D flattening data (camera, surface, page, detected rules) and the shared lens calibration. Made and edited with [`tools/flatten`](../../tools/flatten/README.md). |
+| `flattened/` | Plates unrolled onto true rectangles. Full-resolution PNGs are not in git (regenerate them); 1200 px previews are. So far: plates 09–12. |
 
 Regenerate previews (macOS):
 ```bash

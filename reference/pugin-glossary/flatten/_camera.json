@@ -1,0 +1,62 @@
+{
+  "f": 9233.501,
+  "k1": -0.05955762,
+  "k2": 0.0,
+  "cx": 1872.0,
+  "cy": 2808.0,
+  "plates": [
+    "09-alphabets-no-1",
+    "11-alphabets-no-3",
+    "12-alphabets-no-4"
+  ],
+  "rms_px": 0.7479,
+  "when": "2026-10-28T09:35:23",
+  "note": "One lens photographed every plate, so f and k1 are shared. A single plate cannot separate the focal length from the depth of the gutter; fitting several plates together can. The fit is shallow around the minimum (see sweep), so treat f as known to roughly \u00b115%.",
+  "sweep": [
+    {
+      "f": 6000,
+      "rms_px": 0.7575,
+      "k1": -0.02515925
+    },
+    {
+      "f": 7000,
+      "rms_px": 0.7533,
+      "k1": -0.03420985
+    },
+    {
+      "f": 8000,
+      "rms_px": 0.7509,
+      "k1": -0.04465637
+    },
+    {
+      "f": 9000,
+      "rms_px": 0.7489,
+      "k1": -0.05655725
+    },
+    {
+      "f": 10000,
+      "rms_px": 0.7481,
+      "k1": -0.06996513
+    },
+    {
+      "f": 11000,
+      "rms_px": 0.7492,
+      "k1": -0.08493088
+    },
+    {
+      "f": 12500,
+      "rms_px": 0.7546,
+      "k1": -0.11040134
+    },
+    {
+      "f": 14000,
+      "rms_px": 0.768,
+      "k1": -0.13958633
+    },
+    {
+      "f": 17000,
+      "rms_px": 0.833,
+      "k1": -0.20917156
+    }
+  ]
+}

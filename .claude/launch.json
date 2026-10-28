@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "plate-flattener",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": ["run", "--quiet", "tools/flatten/flatten.py", "serve", "--port", "8765"],
+      "port": 8765
+    }
+  ]
+}

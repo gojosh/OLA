@@ -19,5 +19,8 @@ build/
 .cache/
 *.log
 
+# Full-resolution flattened plates (about 10 MB each; regenerate with tools/flatten, see Q18)
+reference/pugin-glossary/flattened/*.png
+
 # Claude Code local settings
 .claude/settings.local.json

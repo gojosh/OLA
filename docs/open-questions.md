@@ -35,8 +35,8 @@ Questions that need Josh, the parish, or research. Agents: add questions here in
 - **Q30. Lenten array:** does OLA veil the church in unbleached linen (Lenten array) in Lent, or use violet? The home page concepts propose that the site keep array in Lent; that only makes sense if the parish does, or wants the site to teach the custom.
 
 ### Repository
-- **Q18. Large files:** the Pugin plates (~258 MB) are in Git history and already on GitHub. Options: leave as is; move future large binaries to Git LFS; or migrate history to LFS (rewrites history and needs a force-push).
-- **Q19. Pugin plates provenance:** they look like photographs of a physical copy. Whose copy, which edition, and are there any rights or attribution to respect?
+- **Q18. Large files:** the Pugin plates (~258 MB) are in Git history and already on GitHub. Options: leave as is; move future large binaries to Git LFS; or migrate history to LFS (rewrites history and needs a force-push). *Also:* flattened plates are about 10 MB each at full resolution. They are ignored by git for now (regenerable from the saved parameters); decide whether they belong in LFS.
+- **Q19. Pugin plates provenance:** they look like photographs of a physical copy. Whose copy, which edition, and are there any rights or attribution to respect? *Evidence (2026-10-28):* the JPEG 2000 files were encoded with Kakadu v5.2.1, and the photographs show a glass platen with its edge at the gutter, a book cradle, and a 5616 × 3744 camera. That combination matches the Internet Archive's book-scanning pipeline, so the source is probably an archive.org scan. Finding the item would give the edition and its rights statement.
 
 ## Answered
 
