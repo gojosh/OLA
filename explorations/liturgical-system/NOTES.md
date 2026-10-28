@@ -4,11 +4,16 @@
 
 ## Verdict
 
-**Josh (2026-10-27):** "has elements about it which were in the ballpark."
+**Josh (2026-10-27):** "has elements about it which were in the ballpark." Asked which: "Probably just having the seasons integrated, and clean typography, and use of color."
 
-**Agent assessment** ⚑ Josh: confirm which elements you meant.
+**Keep: confirmed by Josh**
+- Seasons integrated into the site.
+- Clean typography.
+- Use of color (season-driven).
 
-**Keep**
+**Agent assessment**
+
+**Also possibly worth keeping** (agent's reading, not confirmed)
 - The calendar drives the site: the day's feast is the hero, and the season sets the color.
 - Restraint: generous space, a light ground, hierarchy carried by type.
 - Real content from the tradition (Guéranger's *The Liturgical Year*) as the day's reading.

@@ -62,6 +62,8 @@ Proposed floors, to be confirmed when the stack is chosen:
 
 If the site keeps liturgical time (vision principle 6), the calendar engine sits at the center of the build. It has to be the **Ordinariate's calendar** (Divine Worship), which differs from the general Roman calendar: Sundays after Epiphany and after Trinity, Pre-Lent ("Gesimatide"), Ember and Rogation days, English and Ordinariate observances ⚑ verify specifics, plus OLA's own parish observances. Off-the-shelf Roman-calendar libraries probably won't get this right. Expect to build or extend one, and treat its correctness as a liturgical matter, reviewed by clergy.
 
+**Existing source:** the current site's "Today's Mass Readings" block already pulls from **Universalis**, set to the Ordinariate calendar (it showed "Tuesday after the Twenty-first Sunday after Trinity" on 2026-10-27). Universalis is a candidate data source, or at least a reference to check our own engine against ⚑ verify its terms for website use and how complete its Ordinariate data is (ranks, colors, Ember/Rogation days).
+
 Outputs it should drive: the day's feast, season, rank, and color; the day's schedule (including exceptions); upcoming observances; calendar feeds (ICS); structured data.
 
 ### 5. Content operations are a technical requirement
@@ -70,7 +72,7 @@ Whatever is chosen must let staff update schedules, notices, events, and the bul
 
 ### 6. Integrate, don't rebuild
 
-Giving, parish-management records, formation streaming (Formed), email and text communications, and possibly livestreaming are probably already served by outside systems ⚑ Josh: which, and are they contractually fixed? The site should present these beautifully and hand off cleanly, not rebuild them.
+The parish already relies on outside systems. Known so far: **Tithely** (giving), **Flocknote** (email/text updates), **LPi / Parishes Online** (bulletin), **Formed** (formation streaming), **Universalis** (readings), **YouTube**, **Vimeo**, **Facebook**. Full list with evidence: [`docs/research/current-site-audit.md`](../research/current-site-audit.md) §2. The site should present these well and hand off cleanly, not rebuild them. Still unknown: parish-management/records system, and any contract terms (Q21).
 
 ### 7. Machines are an audience
 

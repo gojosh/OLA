@@ -4,14 +4,15 @@ Terms agents will meet on this project. Use them precisely. Entries marked **⚑
 
 ## The parish and the Ordinariate
 
-- **Our Lady of the Atonement (OLA):** the parish. San Antonio, Texas. A parish of the Personal Ordinariate of the Chair of St. Peter (since 2017 ⚑ verify); founded in 1983 under the Pastoral Provision ⚑ verify.
-- **The Atonement Academy:** a school associated with the parish ⚑ verify relationship and scope.
+- **Our Lady of the Atonement (OLA):** the parish. San Antonio, Texas. A parish of the Personal Ordinariate of the Chair of St. Peter since 2017. Founded 15 August 1983 under the Pastoral Provision by Fr. Christopher G. Phillips; per the parish's history page, "the first parish ever to be established" for the Anglican usage. See `research/current-site-audit.md` §6.
+- **The Atonement Academy:** the parish's former school. It no longer exists (Josh, 2026-10-27).
+- **Valor:** a charter school that operates on the parish campus. It is **not** associated with the parish (Josh, 2026-10-27).
 - **Pastoral Provision (1980):** an arrangement under Pope John Paul II that let former Episcopal clergy and communities in the US enter the Catholic Church, keeping elements of their Anglican heritage.
 - ***Anglicanorum coetibus* (2009):** Pope Benedict XVI's apostolic constitution creating **Personal Ordinariates**: diocese-like structures for former Anglicans who enter full communion with the Catholic Church while keeping their liturgical, spiritual, and pastoral heritage.
 - **Personal Ordinariate of the Chair of St. Peter:** the Ordinariate for the United States and Canada, established January 1, 2012, with its seat in Houston ⚑ verify.
 - **Anglican patrimony:** the liturgical, musical, spiritual, and literary inheritance of Anglicanism that the Ordinariates preserve within the Catholic Church: Prayer Book English, choral music, hymnody, Evensong, and more.
 - **Divine Worship:** the Ordinariate's liturgical books. *Divine Worship: The Missal* (2015) is the Mass; there are also books for the Office and the occasional services ⚑ verify current set. Not the same as the Roman Missal used in most US parishes.
-- **Graymoor / Society of the Atonement:** an Episcopal religious community founded by Fr. Paul Wattson and Mother Lurana White and received into the Catholic Church in 1909. It promoted the Marian title "Our Lady of the Atonement" and founded the Chair of Unity Octave ⚑ verify connection to OLA's name.
+- **Graymoor / Society of the Atonement:** an Episcopal religious community founded by Fr. Paul Wattson and Mother Lurana White and received into the Catholic Church in 1909. It promoted the Marian title "Our Lady of the Atonement" and founded the Chair of Unity Octave. OLA's name comes from this tradition (parish history page; Q12).
 
 ## Liturgy and the calendar
 
@@ -23,7 +24,7 @@ Terms agents will meet on this project. Use them precisely. Entries marked **⚑
 - **Lenten array:** a medieval English custom: during Lent, unbleached linen hangings and vestments, often stencilled with Passion emblems in red and black.
 - **Sarum Use:** the liturgical use of Salisbury Cathedral, dominant in pre-Reformation England. Different from the Roman rite in ceremonial and calendar details.
 - **English Use:** an early-20th-century Anglican movement (Percy Dearmer and others) to revive pre-Reformation English ceremonial and design.
-- **Low Mass / Sung Mass / Solemn Mass:** increasing degrees of ceremonial: said; sung; sung with deacon and subdeacon (or their equivalents) ⚑ verify which terms OLA uses.
+- **Said Mass / Sung Mass:** the terms OLA's current site uses for its schedule (a Mass spoken without music vs. a Mass with the people's parts and propers sung). Elsewhere you'll also see **Low Mass** (≈ said) and **Solemn Mass** (sung, with deacon and subdeacon or their equivalents). Use OLA's terms in parish content.
 - **Divine Office:** the Church's daily prayer at fixed hours. In the Anglican patrimony, chiefly **Mattins** (Morning Prayer) and **Evensong** (Evening Prayer).
 - **OCIA:** Order of Christian Initiation of Adults (formerly RCIA): how adults become Catholic.
 - **Reception into full communion:** how a baptized Christian of another tradition becomes Catholic.

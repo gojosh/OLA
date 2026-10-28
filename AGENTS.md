@@ -26,6 +26,7 @@ Then read the most recent entry in [`docs/log/`](docs/log/) to see what the last
 | 6 | [`docs/foundations/05-information-architecture.md`](docs/foundations/05-information-architecture.md) | Navigation and structure (in progress). |
 | 7 | [`docs/decisions/`](docs/decisions/) | What has been decided. Don't re-argue these (see §4). |
 | 8 | [`docs/open-questions.md`](docs/open-questions.md) | What's still unknown. Check before you guess. |
+| — | [`docs/research/`](docs/research/) | Discovery findings, starting with the audit of the current site. Its §6 holds parish facts as published: use them instead of inventing placeholders. |
 | — | [`docs/glossary.md`](docs/glossary.md) | Liturgical, architectural, and Ordinariate terms. Look things up here before writing about them. |
 
 ## 3. Repository map
@@ -42,6 +43,7 @@ docs/
   roadmap.md         ← phases; what's happening now and next
   open-questions.md  ← questions waiting on Josh or on research
   glossary.md        ← domain vocabulary
+  research/          ← discovery findings (e.g. the current-site audit)
 reference/           ← outside source material (inspiration, not templates)
   pugin-glossary/    ← Pugin's 1844 Glossary plates + viewable previews
 explorations/        ← concept work made for this project, each with a verdict

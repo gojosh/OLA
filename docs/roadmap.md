@@ -2,9 +2,9 @@
 
 ## Now / Next
 
-- **Now:** Phase 0 — Foundations. Repository structure, onboarding, first drafts of the foundation docs.
-- **Next:** Phase 1 — the information architecture working session.
-- **Waiting on Josh:** see `docs/open-questions.md`, especially Q1, Q6, Q7, Q10.
+- **Now:** Phase 0 wrapping up; Phase 1 discovery has started. The current-site audit and content inventory are done (`docs/research/current-site-audit.md`).
+- **Next:** the information architecture working session.
+- **Waiting on Josh:** see `docs/open-questions.md`, especially Q20 (analytics access), Q22 (ParishSOFT), Q23 (after-hours emergencies).
 
 *(Agents: update this section at the end of any session that moves the phase or the focus.)*
 

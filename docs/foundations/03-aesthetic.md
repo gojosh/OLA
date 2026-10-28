@@ -35,7 +35,14 @@ Agent diagnosis of the AI-image concepts. ⚑ Josh: confirm or correct.
 
 ### 2. What `liturgical-system` got right
 
-Agent reading. ⚑ Josh: which of these did you mean by "in the ballpark"?
+**Josh (2026-10-27, Q10):** "Probably just having the seasons integrated, and clean typography, and use of color."
+
+So, confirmed by Josh:
+- **Seasons integrated.** The liturgical season shapes the site.
+- **Clean typography.** Restraint, space, hierarchy carried by type. (Josh liked the *cleanliness*. The agent's critique of the specific faces, below, still stands as a proposal.)
+- **Use of color.** Color carries meaning (the season) rather than decoration.
+
+Further possibilities noticed by the agent. Josh didn't name these, so they're proposals only:
 
 1. **The calendar drives the site.** The day's feast is the hero; the season sets the color. The site keeps liturgical time.
 2. **Restraint.** Generous space, a light ground, hierarchy carried by type rather than decoration.
@@ -102,7 +109,7 @@ Not answers. Threads.
 - **Richard Upjohn** (Trinity Church, Wall Street, 1846) brought Pugin's ideas to America.
 - **Ralph Adams Cram**, America's great Gothicist and an Anglo-Catholic, argued Gothic was an *unfinished* tradition to be continued, not copied. That is continuity as a design philosophy.
 - **Bertram Goodhue**, Cram's partner, was also a type and book designer. With printer **D. B. Updike** (Merrymount Press) he produced *The Altar Book* (1896), a high point of American liturgical book design ⚑ verify details. American blackletters (Goudy Text, Cloister Black) belong to the same lineage.
-- **Fr. Paul Wattson and Graymoor.** The Society of the Atonement was an Episcopal community received into the Catholic Church in 1909. It promoted the title **Our Lady of the Atonement** and founded the Chair of Unity Octave, which runs from the old feast of the Chair of St. Peter. An American Anglican-to-Catholic story nearly a century before the Ordinariate. ⚑ verify, and ⚑ Josh: does OLA's name trace to Graymoor?
+- **Fr. Paul Wattson and Graymoor.** The Society of the Atonement was an Episcopal community received into the Catholic Church in 1909. It promoted the title **Our Lady of the Atonement** and founded the Chair of Unity Octave, which runs from the old feast of the Chair of St. Peter. An American Anglican-to-Catholic story nearly a century before the Ordinariate. **This is where OLA's name comes from:** the parish history says the title "originated in the Episcopal Church in the 19th century" and came into the Catholic Church with the Graymoor Friars and Sisters in 1909. The parish's Knights of Columbus council is named for Fr. Paul of Graymoor. The name itself is a thread of continuity, and an American one.
 - **Place.** Texas limestone, South Texas light, live oaks; San Antonio's Spanish missions as the region's older Catholic layer. ⚑ Josh: how much should place show?
 
 **Working hypothesis (proposed):** *American Gothic is the Gothic grammar (geometry, light, rank, the calendar, the ornament system) built honestly in local materials by local hands, with a democratic openness to whoever walks in.*

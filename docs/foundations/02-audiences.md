@@ -43,7 +43,7 @@ In rough order of importance:
 | **Pilgrims and admirers (the wider Church)** | OLA's liturgy, music, and Ordinariate story draw interest far beyond San Antonio ⚑ verify. These people watch, share, visit once, sometimes give. They help the parish's mission even though they'll never register. | "What is the liturgy like there, and can I see it?" |
 | **The people who run the site:** clergy and staff as editors | If updating Mass times needs a developer, the site rots, and then it fails every other audience. Their workflow is a design requirement, not an afterthought. | "Can I change this in two minutes, correctly?" |
 | **Machines:** search engines, maps, AI assistants, Mass-time directories, calendar apps, screen readers | More and more, people find Mass times by asking Google, Apple Maps, or an AI assistant, which read structured data and never see the design. Screen readers depend on the same structure. | (Needs: accurate structured data, feeds, clean semantics) |
-| **School families:** The Atonement Academy ⚑ verify scope | If the Academy is part of the parish's web presence, current and prospective school families are a large audience in their own right, and many may not be parishioners. | ⚑ Josh: is the Academy in scope? |
+**Not an audience:** school families. The Atonement Academy no longer exists. Valor, a charter school, operates on the campus but isn't associated with the parish (Josh, 2026-10-27, Q1). At most, the site might need a line telling visitors who arrive looking for Valor that it's a separate school.
 
 **Cross-cutting needs** (not audiences, but constraints on every audience): older eyes and low tech confidence; mobile first; slow connections; possibly language ⚑ Josh (is there a Spanish-speaking community to serve?).
 

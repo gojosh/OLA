@@ -14,7 +14,7 @@ updated: 2026-10-27
 
 > "My first stab at simplifying from today's navigation was in pursuit of a much easier-to-understand navigation at first glance. This doesn't take too much into account in terms of audience segmentation, FYI."
 
-### Current navigation (19 items)
+### Current navigation (19 items, top level only; the full menu is ~70 links, see the audit)
 
 - **Quick:** Home, Emergency Pastoral Care, Sunday Bulletin, Formed, Donations and Gifts, Join Us, Events
 - **Primary:** Liturgy, Sacraments, Ministries, Education, Becoming Catholic, About Us, Giving
@@ -47,6 +47,7 @@ Source: [`docs/brief/2026-10-27-kickoff.md`](../brief/2026-10-27-kickoff.md)
 
 ## Suggested inputs for the IA session
 
-- A content inventory of the current site ⚑ Josh: URL, and any analytics access?
+- **The current-site audit:** [`docs/research/current-site-audit.md`](../research/current-site-audit.md). It has the full menu as built (~70 links), an 83-page inventory, content-health problems, and IA implications (§7).
+- Analytics data, if access is granted (Q20).
 - The audience × needs table in `02-audiences.md` §E.
 - Later: card sorting and tree testing with real parishioners and real newcomers.
