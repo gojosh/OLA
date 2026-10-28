@@ -73,3 +73,6 @@ The site is fully usable without any advanced effects: fast on an old phone, leg
 
 #### 9. Stewardship (Proposed)
 The site has to outlive its builders. "Timeless" includes operations: parish staff can keep the content true without a developer, and the code is plain enough that a future maintainer can understand it.
+
+#### 10. Say what only we can say (Proposed, from Josh's question)
+Josh: "Because AI exists, and people can just ask questions and get decent answers… what matters for *us* to say?" General explanations of the faith are now one question away. The site's words should go where no one else can: the facts of this parish, how things are done here and in this tradition, the people who will help, the witness of this community, and a short account of why it matters in our own voice, pointing to authoritative sources for the rest. Test for any sentence: could only Our Lady of the Atonement say this? Worked out first for the sacraments in [`docs/sections/sacraments.md`](../sections/sacraments.md), where Josh accepted it with witness deferred (decision [0006](../decisions/0006-sacraments-say-what-only-we-can-say.md)). As a site-wide principle it is still a proposal.

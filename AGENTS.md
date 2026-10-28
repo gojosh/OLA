@@ -10,7 +10,7 @@ This file is tool-agnostic. `CLAUDE.md` imports it; other tools (Codex, Cursor, 
 
 ## 1. Where we are
 
-See [`docs/roadmap.md`](docs/roadmap.md) for the current phase and what's next. As of the last update, we are in **Phase 0 — Foundations**: no stack chosen, no code written, information architecture is the next working session.
+See [`docs/roadmap.md`](docs/roadmap.md) for the current phase and what's next. As of the last update, the foundations are drafted, the IA direction is accepted (a *Today* home page and five sections, decision 0004), and sections are being designed one at a time. No stack has been chosen and no code written.
 
 Then read the most recent entry in [`docs/log/`](docs/log/) to see what the last session did and left open.
 
@@ -26,8 +26,9 @@ Then read the most recent entry in [`docs/log/`](docs/log/) to see what the last
 | 6 | [`docs/foundations/05-information-architecture.md`](docs/foundations/05-information-architecture.md) | Navigation and structure (in progress). |
 | 7 | [`docs/decisions/`](docs/decisions/) | What has been decided. Don't re-argue these (see §4). |
 | 8 | [`docs/open-questions.md`](docs/open-questions.md) | What's still unknown. Check before you guess. |
+| — | [`docs/sections/`](docs/sections/) | Detailed design for each site section (e.g. Sacraments). Read the one for any section you're working on. |
 | — | [`docs/research/`](docs/research/) | Discovery findings, starting with the audit of the current site. Its §6 holds parish facts as published: use them instead of inventing placeholders. |
-| — | [`docs/glossary.md`](docs/glossary.md) | Liturgical, architectural, and Ordinariate terms. Look things up here before writing about them. |
+| — | [`docs/glossary.md`](docs/glossary.md) | Liturgical, architectural, and Ordinariate terms, and the **usage list** of which term we use. Look things up here before writing about them. |
 
 ## 3. Repository map
 
@@ -44,6 +45,7 @@ docs/
   open-questions.md  ← questions waiting on Josh or on research
   glossary.md        ← domain vocabulary
   research/          ← discovery findings (e.g. the current-site audit)
+  sections/          ← one design doc per site section, written before its pages
 reference/           ← outside source material (inspiration, not templates)
   pugin-glossary/    ← Pugin's 1844 Glossary plates + viewable previews
 explorations/        ← concept work made for this project, each with a verdict
@@ -100,3 +102,4 @@ At the end of a working session:
 - **Markers:** **⚑ verify** = unconfirmed fact. **⚑ Josh** = needs Josh's call (also list it in open-questions).
 - **Images for agents:** most tools can't open `.jp2` or `.heic`. Use the JPEG previews in `reference/pugin-glossary/previews/`, or the contact sheet, and keep originals alongside. Do the same for any new reference material: originals plus web-viewable previews.
 - **Writing style:** plain, specific, no marketing voice. Short sentences. Precise terms. If a sentence would fit on any church's website, it's not good enough for this one.
+- **Traditional terms:** the parish is traditional. For technical things (rites, sacraments, seasons, objects, places), use the traditional term that is still in living use; when in doubt, the high-church one: "Holy Communion," not "the Eucharist." Traditional is not antiquated: don't revive names the Church has retired ("Holy Unction"). Check the usage list at the top of [`docs/glossary.md`](docs/glossary.md) before writing copy or docs (decision 0005).

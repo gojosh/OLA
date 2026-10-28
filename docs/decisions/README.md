@@ -10,6 +10,10 @@ Only Josh can accept a decision. An agent may draft a record with status `propos
 |---|----------|--------|
 | [0001](0001-project-knowledge-lives-in-the-repo.md) | Project knowledge lives in the repo, in a fixed structure | Accepted |
 | [0002](0002-existing-concepts-are-reference-not-foundation.md) | Existing concepts are reference, not a foundation | Accepted |
+| [0003](0003-start-fresh-content-earns-its-way-in.md) | Start fresh: existing content earns its way in | Accepted |
+| [0004](0004-ia-direction-today-and-five-sections.md) | IA direction: a *Today* home page and five sections | Accepted (direction) |
+| [0005](0005-traditional-terms.md) | Traditional terms, and the high-church term when in doubt | Accepted |
+| [0006](0006-sacraments-say-what-only-we-can-say.md) | Sacraments: say what only we can say | Accepted |
 
 ## Template
 

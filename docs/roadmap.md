@@ -3,8 +3,8 @@
 ## Now / Next
 
 - **Now:** Phase 0 wrapping up; Phase 1 discovery has started. The current-site audit and content inventory are done (`docs/research/current-site-audit.md`).
-- **Next:** the information architecture working session.
-- **Waiting on Josh:** see `docs/open-questions.md`, especially Q20 (analytics access), Q22 (ParishSOFT), Q23 (after-hours emergencies).
+- **Next:** section design, one section at a time (`docs/sections/`). Sacraments: framework accepted (decision 0006); next is gathering the *Here* facts and Father's emphasis. Then Today (home) and Visit. IA direction accepted (decision 0004); traditional terms throughout (decision 0005).
+- **Waiting on Josh:** see `docs/open-questions.md`, especially Q26 (what OLA wants to say about each sacrament), Q20 (analytics access), Q23 (after-hours emergencies).
 
 *(Agents: update this section at the end of any session that moves the phase or the focus.)*
 
