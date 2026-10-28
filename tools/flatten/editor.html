@@ -95,7 +95,7 @@ footer{grid-column:1/-1;padding:6px 12px;border-top:1px solid var(--line);color:
     <p class="note">You can also drag the red page edges on the photograph.</p>
     <div class="actions"><button id="btnPage">Find page edges</button></div>
 
-    <h2>Rules used in the fit</h2>
+    <h2>Rules and figures used in the fit</h2>
     <div id="features"></div>
 
     <h2>Gutter shading</h2>
@@ -250,6 +250,11 @@ function draw(){
     for(const ft of P.features){ctx.fillStyle=(ft.weight??1)>0?"rgba(255,225,77,.95)":"rgba(160,160,160,.7)";
       const r=Math.max(1.2,1.6*lw);for(const p of ft.pts){const [x,y]=toScreen(p);ctx.fillRect(x-r,y-r,2*r,2*r)}}
   }
+  if($("showFeat").checked&&P.shapes){ // figures used to check width: their four extreme points, joined
+    ctx.strokeStyle="rgba(255,80,220,.95)";ctx.fillStyle="rgba(255,80,220,1)";ctx.lineWidth=1.5*lw;
+    for(const sh of P.shapes){const q=sh.pts;path([q.left,q.right]);ctx.stroke();path([q.top,q.bottom]);ctx.stroke();
+      for(const k of ["left","right","top","bottom"]){const [x,y]=toScreen(q[k]);ctx.beginPath();ctx.arc(x,y,3.5*lw,0,7);ctx.fill()}}
+  }
   if($("showPage").checked&&P.page){
     ctx.strokeStyle="rgba(255,90,60,1)";ctx.lineWidth=2.2*lw;
     path([...hline(pg.y0,pg.u0,pg.u1),...vline(pg.u1,pg.y0,pg.y1),...hline(pg.y1,pg.u0,pg.u1).reverse(),...vline(pg.u0,pg.y0,pg.y1).reverse()]);ctx.closePath();ctx.stroke();
@@ -330,8 +335,11 @@ function syncInputs(){
 ["showGrid","showFeat","showFrame","showPage","spacing","dim"].forEach(id=>$(id).addEventListener("input",draw));
 function renderFeatures(){
   $("features").innerHTML=P.features.map((f,i)=>{const st=P.fit?.per_feature?.[f.name];
-    return `<div class="feat"><label><input type="checkbox" data-i="${i}" ${(f.weight??1)>0?"checked":""}> ${f.name}</label><small>${f.pts.length} pts${st?` · ${st.rms_px} px`:""}</small></div>`+(f.note?`<p class="note">${f.note}</p>`:"")}).join("");
-  $("features").querySelectorAll("input").forEach(cb=>cb.onchange=()=>{P.features[+cb.dataset.i].weight=cb.checked?1:0;dirty(true);draw()});
+    return `<div class="feat"><label><input type="checkbox" data-i="${i}" ${(f.weight??1)>0?"checked":""}> ${f.name}</label><small>${f.pts.length} pts${st?` · ${st.rms_px} px`:""}</small></div>`+(f.note?`<p class="note">${f.note}</p>`:"")}).join("")
+    +(P.shapes||[]).map((sh,i)=>{const r=P.fit?.shapes?.shapes?.[sh.name];
+      return `<div class="feat"><label><input type="checkbox" data-s="${i}" ${(sh.weight??1)>0?"checked":""}> ${sh.name}</label><small>±${sh.sigma_px??2.5} px${r?` · w/h ${r.ratio} (${r.off_px>0?"+":""}${r.off_px} px)`:""}</small></div>`}).join("");
+  $("features").querySelectorAll("input[data-i]").forEach(cb=>cb.onchange=()=>{P.features[+cb.dataset.i].weight=cb.checked?1:0;dirty(true);draw()});
+  $("features").querySelectorAll("input[data-s]").forEach(cb=>cb.onchange=()=>{P.shapes[+cb.dataset.s].weight=cb.checked?1:0;dirty(true);draw()});
 }
 function showStats(){
   const f=P.fit;if(!f){$("fitstats").textContent="Not fitted yet.";return}

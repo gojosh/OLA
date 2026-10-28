@@ -133,7 +133,7 @@ def redness(img: np.ndarray) -> np.ndarray:
     return cv2.GaussianBlur(red, (0, 0), 1.0)
 
 
-def _trace(R: np.ndarray, axis: str, pos0: float, start: int, stop: int, step=4, win=10, minmass=150.0):
+def _trace(R: np.ndarray, axis: str, pos0: float, start: int, stop: int, step=4, win=10, minmass=150.0, maxmiss=6, maxjump=2.0):
     """Follow a thin line from a seed, taking the weighted centroid across it at each step."""
     pts, p, miss = [], float(pos0), 0
     rng = range(start, stop, step) if stop > start else range(start, stop, -step)
@@ -146,13 +146,18 @@ def _trace(R: np.ndarray, axis: str, pos0: float, start: int, stop: int, step=4,
         m = float(s.sum())
         if m < minmass:
             miss += 1
-            if miss > 6:
+            if miss > maxmiss:
                 break
             continue
         miss = 0
         idx = np.arange(lo, hi)
         c = float((s * idx).sum() / m)
         if math.sqrt(float((s * (idx - c) ** 2).sum() / m)) > 5.5:  # a blob, not a rule
+            continue
+        if pts and abs(c - p) > maxjump:  # a rule bends gently; a sudden jump is ink touching it
+            miss += 1
+            if miss > maxmiss:
+                break
             continue
         pts.append((t, c) if axis == "h" else (c, t))
         p = c
@@ -171,9 +176,54 @@ def _clean(pts: list, axis: str, tol=2.5) -> np.ndarray:
     return a[np.abs(v - med) < tol]
 
 
-def detect_frame(img: np.ndarray) -> list[dict]:
-    R = redness(img)
+def darkness(img: np.ndarray) -> np.ndarray:
+    """Dark ink (a hairline rule, an engraved line): how far below the local paper level a pixel is.
+    Measuring against the paper nearby keeps the shaded gutter from reading as ink."""
+    gray = img.astype(np.float32).mean(2)
+    paper = cv2.dilate(cv2.GaussianBlur(gray, (0, 0), 1.0), np.ones((15, 15), np.uint8))
+    return cv2.GaussianBlur(np.clip(paper - gray - 18.0, 0, None) * 1.6, (0, 0), 1.0)
+
+
+INKS = {"red": redness, "dark": darkness}
+# how strong a rule is in each ink map, and how long a gap a trace may jump (in 4 px steps)
+TRACE = {"red": {"minmass": 150.0, "maxmiss": 6}, "dark": {"minmass": 35.0, "maxmiss": 15}}
+
+
+def _plain_paper_both_sides(gray: np.ndarray, tex: np.ndarray, paper: float, x1, y1, x2, y2, off=28) -> bool:
+    """A printed rule has plain paper on both sides. A page edge has the dark board on one side; the
+    stack of leaves at the fore-edge is striped."""
+    n = np.array([-(y2 - y1), x2 - x1], float)
+    n /= np.linalg.norm(n) + 1e-9
+    t = np.linspace(0.1, 0.9, 24)
+    xs, ys = x1 + t * (x2 - x1), y1 + t * (y2 - y1)
+    H, W = gray.shape
+    for sgn in (-1, 1):
+        px = np.clip((xs + sgn * off * n[0]).astype(int), 0, W - 1)
+        py = np.clip((ys + sgn * off * n[1]).astype(int), 0, H - 1)
+        if np.median(gray[py, px]) < 0.72 * paper or np.median(tex[py, px]) > 6.0:
+            return False
+    return True
+
+
+def detect_frame(img: np.ndarray, ink: str = "auto", expect: dict | None = None) -> list[dict]:
+    """The printed frame's four rules. ink is "red" (plates 9–12), "dark" (hairline frames such as
+    plate 8), or "auto" (try red, then dark). Without `expect`, the outermost long rules are taken;
+    with it ({"top", "bottom", "left", "right"} in image pixels), the rules nearest those positions,
+    so a stray line such as the glass platen's edge can't be mistaken for the frame."""
+    if ink == "auto":
+        err = None
+        for kind in INKS:
+            try:
+                return detect_frame(img, kind, expect)
+            except RuntimeError as e:
+                err = e
+        raise err
+    R = INKS[ink](img)
+    tr = TRACE[ink]
     H, W = R.shape
+    gray = cv2.GaussianBlur(img.astype(np.float32).mean(2), (0, 0), 2.0)
+    tex = cv2.GaussianBlur(np.abs(cv2.Sobel(gray, cv2.CV_32F, 1, 0)) + np.abs(cv2.Sobel(gray, cv2.CV_32F, 0, 1)), (0, 0), 6.0)
+    paper = float(np.percentile(gray, 85))
     k = 4
     small = cv2.resize(np.clip(R * 2, 0, 255).astype(np.uint8), (W // k, H // k), interpolation=cv2.INTER_AREA)
     segs = cv2.createLineSegmentDetector(0).detect(small)[0]
@@ -182,21 +232,30 @@ def detect_frame(img: np.ndarray) -> list[dict]:
     for x1, y1, x2, y2 in segs:
         dx, dy = x2 - x1, y2 - y1
         L = math.hypot(dx, dy)
-        if abs(dy) < abs(dx) * 0.05 and L > W * 0.15:
+        long_h, long_v = abs(dy) < abs(dx) * 0.05 and L > W * 0.15, abs(dx) < abs(dy) * 0.05 and L > H * 0.10
+        if (long_h or long_v) and not _plain_paper_both_sides(gray, tex, paper, x1, y1, x2, y2):
+            continue
+        if long_h:
             hs.append(((y1 + y2) / 2, (x1 + x2) / 2))
-        if abs(dx) < abs(dy) * 0.05 and L > H * 0.10:
+        if long_v:
             vs.append(((x1 + x2) / 2, (y1 + y2) / 2))
     if len(hs) < 2 or len(vs) < 2:
         raise RuntimeError("Could not find a ruled frame; add features by hand in the editor.")
     hs.sort()
     vs.sort()
+    if expect:
+        near = lambda segs, v: min(segs, key=lambda sg: abs(sg[0] - v))
+        top, bottom = near(hs, expect["top"]), near(hs, expect["bottom"])
+        left, right = near(vs, expect["left"]), near(vs, expect["right"])
+    else:
+        top, bottom, left, right = hs[0], hs[-1], vs[0], vs[-1]
     found = {}
-    for name, (y, xm) in (("frame-top", hs[0]), ("frame-bottom", hs[-1])):
+    for name, (y, xm) in (("frame-top", top), ("frame-bottom", bottom)):
         xm = int(xm)
-        found[name] = ("h", _trace(R, "h", y, xm, 0)[::-1] + _trace(R, "h", y, xm + 4, W))
-    for name, (x, ym) in (("frame-left", vs[0]), ("frame-right", vs[-1])):
+        found[name] = ("h", _trace(R, "h", y, xm, 0, **tr)[::-1] + _trace(R, "h", y, xm + 4, W, **tr))
+    for name, (x, ym) in (("frame-left", left), ("frame-right", right)):
         ym = int(ym)
-        found[name] = ("v", _trace(R, "v", x, ym, 0)[::-1] + _trace(R, "v", x, ym + 4, H))
+        found[name] = ("v", _trace(R, "v", x, ym, 0, **tr)[::-1] + _trace(R, "v", x, ym + 4, H, **tr))
     found = {n: v for n, v in found.items() if len(v[1]) >= 10}
     if len([1 for d, _ in found.values() if d == "h"]) < 2 or len([1 for d, _ in found.values() if d == "v"]) < 2:
         raise RuntimeError("Found the frame but could not trace all four rules.")
@@ -211,8 +270,43 @@ def detect_frame(img: np.ndarray) -> list[dict]:
         else:
             a = a[(a[:, 1] > min(hy.values()) + 24) & (a[:, 1] < max(hy.values()) - 24)]
         a = a[::2]  # 8 px spacing is plenty
-        out.append({"name": name, "dir": d, "source": "auto", "pts": [[round(float(x), 2), round(float(y), 2)] for x, y in a]})
+        out.append({"name": name, "dir": d, "source": "auto", "ink": ink, "pts": [[round(float(x), 2), round(float(y), 2)] for x, y in a]})
     return out
+
+
+# ── Shapes: figures whose proportions are known (plate 8's squares and circles) ─
+
+def _outer_peak(profile: np.ndarray, from_start: bool, frac=0.45, halfwin=4) -> float | None:
+    """The outermost strong peak of an ink profile, to sub-pixel accuracy."""
+    if profile.max() <= 0:
+        return None
+    idx = np.nonzero(profile > frac * profile.max())[0]
+    i, step = (idx[0], 1) if from_start else (idx[-1], -1)
+    while 0 <= i + step < len(profile) and profile[i + step] >= profile[i]:
+        i += step
+    lo, hi = max(0, i - halfwin), min(len(profile), i + halfwin + 1)
+    w = profile[lo:hi]
+    return float((w * np.arange(lo, hi)).sum() / w.sum())
+
+
+def measure_shape(img: np.ndarray, box, kind: str, ink="dark", pad=40) -> dict:
+    """Four extreme points of a ruled square or a compass circle that fills box = (x0, y0, x1, y1) less a
+    margin of `pad`: left and right on its middle row, top and bottom on its middle column, in image
+    pixels. Each side is searched inward from the box edge, in its own half, so a side made faint by
+    the gutter's shading is still found."""
+    x0, y0, x1, y1 = (int(round(v)) for v in box)
+    D = INKS[ink](img[y0:y1, x0:x1])
+    h, w = D.shape
+    cx, cy = w / 2, h / 2
+    bw, bh = w - 2 * pad, h - 2 * pad
+    band = 0.35 if kind == "square" else 0.05  # squares: most of a side; circles: close to the tangent
+    col = D[int(cy - band * bh):int(cy + band * bh) + 1].mean(0)
+    row = D[:, int(cx - band * bw):int(cx + band * bw) + 1].mean(1)
+    mx, my = int(round(cx)), int(round(cy))
+    L, R = _outer_peak(col[:mx], True), mx + _outer_peak(col[mx:], False)
+    T, B = _outer_peak(row[:my], True), my + _outer_peak(row[my:], False)
+    return {"left": [round(x0 + L, 2), round(y0 + cy, 2)], "right": [round(x0 + R, 2), round(y0 + cy, 2)],
+            "top": [round(x0 + cx, 2), round(y0 + T, 2)], "bottom": [round(x0 + cx, 2), round(y0 + B, 2)]}
 
 
 # ── The model ─────────────────────────────────────────────────────────────────
@@ -346,13 +440,59 @@ def fit(params: dict, lock: set[str] | None = None, smooth=0.02, verbose=True, b
     return fit_many([params], lock, smooth, verbose, behind_glass)[0]
 
 
+SHAPE_SIGMA = 2.5  # px: how closely Pugin's figures in one family agree in proportion (about 0.7% of a 350 px square)
+FRAME_SIGMA = 0.75  # px: the frame rules' typical residual
+
+
+def backproject(f, k1, k2, cx, cy, R, spline, pts):
+    """Image points → page points (X, Y): undo the lens, then follow each camera ray to the sheet."""
+    pts = np.asarray(pts, float)
+    xd, yd = (pts[:, 0] - cx) / f, (pts[:, 1] - cy) / f
+    xn, yn = xd.copy(), yd.copy()
+    for _ in range(15):
+        r2 = xn * xn + yn * yn
+        d = 1 + k1 * r2 + k2 * r2 * r2
+        xn, yn = xd / d, yd / d
+    a = np.stack([xn, yn, np.ones_like(xn)], -1) @ R  # Rᵀ·dir, row-wise
+    bvec = np.array([0.0, 0.0, f]) @ R               # Rᵀ·T
+    t = bvec[2] / a[:, 2]
+    for _ in range(8):
+        Px = t * a[:, 0] - bvec[0]
+        g = (t * a[:, 2] - bvec[2]) - spline(Px)
+        dz = (spline(Px + 0.5) - spline(Px - 0.5))
+        t -= g / (a[:, 2] - dz * a[:, 0])
+    return t * a[:, 0] - bvec[0], t * a[:, 1] - bvec[1]
+
+
+def arc_between(spline, Xa, Xb, n=64):
+    """Signed length along the sheet from Xa to Xb."""
+    t = np.linspace(0, 1, n)[None, :]
+    X = Xa[:, None] + (Xb - Xa)[:, None] * t
+    Z = spline(X.ravel()).reshape(X.shape)
+    return np.sign(Xb - Xa) * np.hypot(np.diff(X, axis=1), np.diff(Z, axis=1)).sum(1)
+
+
+def shape_sizes(f, k1, k2, cx, cy, R, spline, shapes):
+    """Width and height of each shape on the flattened sheet, from its four extreme points."""
+    P = np.array([s["pts"][k] for s in shapes for k in ("left", "right", "top", "bottom")], float)
+    X, Y = backproject(f, k1, k2, cx, cy, R, spline, P)
+    X, Y = X.reshape(-1, 4), Y.reshape(-1, 4)
+    W = np.hypot(arc_between(spline, X[:, 0], X[:, 1]), Y[:, 1] - Y[:, 0])
+    H = np.hypot(arc_between(spline, X[:, 2], X[:, 3]), Y[:, 3] - Y[:, 2])
+    return W, H
+
+
 def fit_many(plist: list[dict], lock: set[str] | None = None, smooth=0.02, verbose=True, behind_glass=True) -> list[dict]:
     """Least squares over the camera and each plate's pose and surface.
 
     The focal length f and lens distortion k1 are shared by every plate in the list: one lens
     photographed them all, and a single plate can't separate f from the depth of the gutter.
     Each observed point also gets its own position along its line, so a residual is the
-    point's distance from the model's line, in pixels."""
+    point's distance from the model's line, in pixels.
+
+    Plates may also carry `shapes`: figures drawn alike (plate 8's row of squares, its circles). Each
+    family shares one width-to-height proportion, solved for here, and every member must match it.
+    Unlike straight lines, that measures width, so it pins down how much the gutter is widened."""
     lock = lock or set()
     t0 = time.time()
     cam0 = plist[0]["camera"]
@@ -394,7 +534,7 @@ def fit_many(plist: list[dict], lock: set[str] | None = None, smooth=0.02, verbo
             owner += [li] * len(a)
             kinds.append(ft["dir"])
         b.update(nl=len(lines), npt=len(pts), obs=np.concatenate(obs), owner=np.array(owner),
-                 wt=np.sqrt(np.array([feats[o].get("weight", 1.0) for o in owner])),
+                 wt=np.sqrt(np.array([feats[o].get("weight", 1.0) for o in owner])), pw=np.ones(len(pts)),
                  is_h=np.array([kinds[o] == "h" for o in owner]), lines_off=len(x0) + 0)
         x0 += lines
         b["pts_off"] = len(x0)
@@ -403,8 +543,38 @@ def fit_many(plist: list[dict], lock: set[str] | None = None, smooth=0.02, verbo
         hi += [np.inf] * (len(lines) + len(pts))
         free += [True] * (len(lines) + len(pts))
         blocks.append(b)
+    # one proportion per family of shapes, started from the photograph's own median
+    fam_index = {}
+    for b in blocks:
+        shp = [sh for sh in b["prm"].get("shapes", []) if sh.get("weight", 1.0) > 0]
+        b["shapes"] = shp
+        b["shape_fam"] = []
+        for sh in shp:
+            key = (b["prm"]["plate"], sh["family"])
+            if key not in fam_index:
+                ratios = [(m["pts"]["right"][0] - m["pts"]["left"][0]) / (m["pts"]["bottom"][1] - m["pts"]["top"][1])
+                          for m in shp if m["family"] == sh["family"]]
+                fam_index[key] = len(x0)
+                x0.append(float(np.median(ratios)))
+                lo.append(0.8)
+                hi.append(1.2)
+                free.append(True)
+            b["shape_fam"].append(fam_index[key])
+        # each figure's tolerance: how closely its family was drawn alike (compass circles agree far better
+        # than hand-ruled squares); a figure's weight can also switch it off
+        b["shape_wt"] = np.array([sh.get("weight", 1.0) * (FRAME_SIGMA / sh.get("sigma_px", SHAPE_SIGMA)) ** 2 for sh in shp])
     x0 = np.array(x0, float)
     lo, hi, free = np.array(lo), np.array(hi), np.array(free)
+
+    def shape_residuals(x, b):
+        if not b["shapes"]:
+            return np.zeros(0)
+        o = b["off"]
+        R = rotation(*x[o:o + 3])
+        sp = Spline(b["xk"], full_z(b["prm"]["surface"], x[o + 3:o + 3 + b["nfree"]]))
+        W, H = shape_sizes(x[0], x[1] * 1e-2, x[2] * 1e-2, b["cx"] + x[3], b["cy"] + x[4], R, sp, b["shapes"])
+        rho = x[np.array(b["shape_fam"])]
+        return (W - rho * H) * np.sqrt(b["shape_wt"])
 
     def penalty(b, z):
         """Second divided differences of the profile: smoothness where no line passes."""
@@ -430,7 +600,8 @@ def fit_many(plist: list[dict], lock: set[str] | None = None, smooth=0.02, verbo
         xn, yn = P[:, 0] / Zc, P[:, 1] / Zc
         r2 = xn * xn + yn * yn
         d = 1 + k1 * r2 + k2 * r2 * r2
-        return (f * xn * d + cx - b["obs"][:, 0]) * b["wt"], (f * yn * d + cy - b["obs"][:, 1]) * b["wt"], penalty(b, z)
+        k = b["wt"] * b["pw"]
+        return (f * xn * d + cx - b["obs"][:, 0]) * k, (f * yn * d + cy - b["obs"][:, 1]) * k, penalty(b, z)
 
     def residuals(xf):
         x = x0.copy()
@@ -438,11 +609,11 @@ def fit_many(plist: list[dict], lock: set[str] | None = None, smooth=0.02, verbo
         out = []
         for b in blocks:
             u, v, pen = plate_residuals(x, b)
-            out += [u, v, pen]
+            out += [u, v, pen, shape_residuals(x, b)]
         return np.concatenate(out)
 
     # sparsity: a residual depends on the shared camera, its plate's pose and surface, its line, its point
-    nres = sum(2 * b["npt"] + len(b["xk"]) - 2 for b in blocks)
+    nres = sum(2 * b["npt"] + len(b["xk"]) - 2 + len(b["shapes"]) for b in blocks)
     S = lil_matrix((nres, len(x0)), dtype=np.int8)
     row = 0
     for b in blocks:
@@ -456,16 +627,32 @@ def fit_many(plist: list[dict], lock: set[str] | None = None, smooth=0.02, verbo
         row += 2 * npt
         S[row:row + len(b["xk"]) - 2, o + 3:o + 3 + b["nfree"]] = 1
         row += len(b["xk"]) - 2
+        for j, fi in enumerate(b["shape_fam"]):
+            S[row + j, 0:NS] = 1
+            S[row + j, o:o + 3 + b["nfree"]] = 1
+            S[row + j, fi] = 1
+        row += len(b["shapes"])
     S = S.tocsr()[:, free]
 
-    # two passes: plain least squares to reach the right basin, then a robust pass that
-    # stops a few stray points (ink touching a rule) from pulling the fit
+    # plain least squares first, to reach the right basin; then reweight the frame points only
+    # (a stray point where ink touches a rule loses influence, as with a soft-L1 loss) and refit.
+    # Shapes keep their full weight: they are few, and they are trusted.
     xf = np.clip(x0[free], lo[free] + 1e-9, hi[free] - 1e-9)
-    for loss, fs, n in (("linear", 1.0, 300), ("soft_l1", 1.0, 600)):
-        xf = least_squares(residuals, xf, jac_sparsity=S, bounds=(lo[free], hi[free]), loss=loss,
-                           f_scale=fs, x_scale="jac", max_nfev=n, verbose=0).x
+    for it, n in enumerate((300, 400, 400)):
+        if it:
+            xx = x0.copy()
+            xx[free] = xf
+            for b in blocks:
+                b["pw"] = np.ones(b["npt"])
+                u, v, _ = plate_residuals(xx, b)
+                r2 = (u * u + v * v) / np.maximum(b["wt"] ** 2, 1e-12)
+                b["pw"] = (1 + r2) ** -0.25  # √ of the soft-L1 weight 1/√(1+r²)
+        xf = least_squares(residuals, xf, jac_sparsity=S, bounds=(lo[free], hi[free]), loss="linear",
+                           x_scale="jac", max_nfev=n, verbose=0).x
     x = x0.copy()
     x[free] = xf
+    for b in blocks:  # report plain distances, not weighted ones
+        b["pw"] = np.ones(b["npt"])
     secs = round(time.time() - t0, 1)
 
     outs = []
@@ -489,7 +676,16 @@ def fit_many(plist: list[dict], lock: set[str] | None = None, smooth=0.02, verbo
             per[ft["name"]] = {"rms_px": round(float(np.sqrt((d ** 2).mean())), 3), "max_px": round(float(d.max()), 3), "n": int(len(d))}
         if {"top", "bottom", "left", "right"} <= frame.keys():
             out["frame"] = {"u0": frame["left"], "u1": frame["right"], "y0": frame["top"], "y1": frame["bottom"]}
+        shapes_report = None
+        if b["shapes"]:
+            W, H = shape_sizes(x[0], x[1] * 1e-2, x[2] * 1e-2, b["cx"] + x[3], b["cy"] + x[4], model.R, model.spline, b["shapes"])
+            shapes_report = {
+                "families": {sh["family"]: round(float(x[fi]), 5) for sh, fi in zip(b["shapes"], b["shape_fam"])},
+                "shapes": {sh["name"]: {"width": round(float(w), 2), "height": round(float(h), 2), "ratio": round(float(w / h), 5),
+                                        "off_px": round(float(w - x[fi] * h), 2)}
+                           for sh, fi, w, h in zip(b["shapes"], b["shape_fam"], W, H)}}
         out["fit"] = {
+            "shapes": shapes_report,
             "rms_px": round(float(np.sqrt((dist ** 2).mean())), 3),
             "max_px": round(float(dist.max()), 3),
             "per_feature": per,
@@ -587,7 +783,12 @@ def check(flat: np.ndarray, params: dict, scale: float) -> dict:
         flat = cv2.resize(flat, None, fx=1 / scale, fy=1 / scale, interpolation=cv2.INTER_CUBIC)
         scale = 1.0
     try:
-        feats = detect_frame(flat)
+        expect = None
+        if params.get("frame") and params.get("page"):
+            fr, pg = params["frame"], params["page"]
+            expect = {"top": (fr["y0"] - pg["y0"]) * scale, "bottom": (fr["y1"] - pg["y0"]) * scale,
+                      "left": (fr["u0"] - pg["u0"]) * scale, "right": (fr["u1"] - pg["u0"]) * scale}
+        feats = detect_frame(flat, frame_ink(params), expect)
     except RuntimeError as e:
         return {"error": str(e)}
     out, lines = {}, {}
@@ -871,8 +1072,25 @@ def fresh_start(params: dict, f: float, k1: float | None = None) -> dict:
     return q
 
 
+def _objective(outs: list[dict]) -> float:
+    """Total squared misfit: frame-rule distances, plus shape mismatches on the same footing."""
+    tot = 0.0
+    for o in outs:
+        for v in o["fit"]["per_feature"].values():
+            tot += v["rms_px"] ** 2 * v["n"]
+        sig = {s["name"]: s.get("sigma_px", SHAPE_SIGMA) for s in o.get("shapes", [])}
+        for k, v in ((o["fit"].get("shapes") or {}).get("shapes") or {}).items():
+            tot += (v["off_px"] * FRAME_SIGMA / sig.get(k, SHAPE_SIGMA)) ** 2
+    return tot
+
+
 def cmd_calibrate(pids: list[str], sweep: bool, full_lens=False):
-    """Fit the lens (f, k1) jointly across plates photographed together, then save it."""
+    """Fit the lens (f, k1) jointly across plates photographed together, then save it.
+
+    Frame rules alone hardly constrain f. Plates carrying `shapes` (plate 8's figures) do, because
+    their proportions measure width near the gutter. With --sweep, f is first held at a series of
+    values and the best is used to start the final fit, so the solver can't wander off to a far
+    minimum."""
     base = []
     for pid in pids:
         if load_params(pid) is None:
@@ -884,26 +1102,33 @@ def cmd_calibrate(pids: list[str], sweep: bool, full_lens=False):
     for p in base:
         if not full_lens:
             p["camera"].update(k2=0.0, cx=p["image"]["width"] / 2, cy=p["image"]["height"] / 2)
-    table = []
+    table, best = [], None
     if sweep:
-        for f in (6000, 7000, 8000, 9000, 10000, 11000, 12500, 14000, 17000):
+        for f in (7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 16000):
             o = fit_many([fresh_start(p, f) for p in base], {"f"} | lens_lock, verbose=False)
-            rms = float(np.sqrt(np.mean([x["fit"]["rms_px"] ** 2 for x in o])))
-            table.append({"f": f, "rms_px": round(rms, 4), "k1": o[0]["camera"]["k1"]})
-            print(f"  f={f:6d}  rms {rms:.4f}")
-    outs = fit_many([fresh_start(p, 9000) for p in base], lens_lock)
+            obj = _objective(o)
+            row = {"f": f, "objective": round(obj, 2), "k1": o[0]["camera"]["k1"],
+                   "frame_rms_px": round(float(np.sqrt(np.mean([x["fit"]["rms_px"] ** 2 for x in o]))), 4)}
+            sh = {k: v["off_px"] for x in o for k, v in (((x["fit"].get("shapes") or {}).get("shapes")) or {}).items()}
+            if sh:
+                row["shape_off_px"] = sh
+            table.append(row)
+            print(f"  f={f:6d}  objective {obj:9.2f}  frame rms {row['frame_rms_px']:.4f}" +
+                  (f"  gutter square {sh.get('square-1', 0):+.1f} px, circle {sh.get('circle-1', 0):+.1f} px" if sh else ""))
+            if best is None or obj < best[0]:
+                best = (obj, o)
+    outs = fit_many(best[1] if best else [fresh_start(p, 9000) for p in base], lens_lock)
     c0 = outs[0]["camera"]
     cam = {"f": c0["f"], "k1": c0["k1"], "k2": c0["k2"], "cx": c0["cx"], "cy": c0["cy"],
            "plates": pids,
+           "constraints": {"frame rules": pids, "shapes": [o["plate"] for o in outs if o["fit"].get("shapes")]},
            "rms_px": round(float(np.sqrt(np.mean([x["fit"]["rms_px"] ** 2 for x in outs]))), 4),
            "when": time.strftime("%Y-%m-%dT%H:%M:%S"),
-           "note": "One lens photographed every plate, so f and k1 are shared. A single plate cannot separate the "
-                   "focal length from the depth of the gutter; fitting several plates together can. The fit is "
-                   "shallow around the minimum (see sweep), so treat f as known to roughly ±15%."}
+           "note": "One lens photographed every plate, so f and k1 are shared. Frame rules can't separate the focal "
+                   "length from the depth of the gutter; the proportions of plate 8's figures (squares and circles "
+                   "drawn alike, one of each near the gutter) can, because they measure width."}
     if table:
         cam["sweep"] = table
-    elif load_camera() and load_camera().get("sweep"):
-        cam["sweep"] = load_camera()["sweep"]
     DATA.mkdir(parents=True, exist_ok=True)
     CAMERA.write_text(json.dumps(cam, indent=2) + "\n")
     for o in outs:
@@ -913,9 +1138,17 @@ def cmd_calibrate(pids: list[str], sweep: bool, full_lens=False):
 
 # ── Commands ──────────────────────────────────────────────────────────────────
 
+def frame_ink(params: dict | None) -> str:
+    """The ink the frame was found in, so re-detection and checks look for the same thing."""
+    for ft in (params or {}).get("features", []):
+        if ft.get("source") == "auto" and ft.get("ink"):
+            return ft["ink"]
+    return "auto"
+
+
 def cmd_detect(pid: str):
     img = load_bgr(pid)
-    feats = detect_frame(img)
+    feats = detect_frame(img, frame_ink(load_params(pid)))
     params = load_params(pid)
     if params is None:
         params = initial_params(pid, img.shape, feats)
@@ -1019,7 +1252,7 @@ class Handler(BaseHTTPRequestHandler):
             if parts[:2] == ["api", "plate"] and parts[3:] == ["detect"]:
                 img = load_bgr(pid)
                 prm = self._body() or load_params(pid)
-                feats = detect_frame(img)
+                feats = detect_frame(img, frame_ink(prm))
                 if prm is None:
                     prm = initial_params(pid, img.shape, feats)
                 else:
