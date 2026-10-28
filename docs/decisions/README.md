@@ -16,6 +16,7 @@ Only Josh can accept a decision. An agent may draft a record with status `propos
 | [0006](0006-sacraments-say-what-only-we-can-say.md) | Sacraments: say what only we can say | Accepted |
 | [0007](0007-tools-in-python-with-uv.md) | Small tools live in `tools/`, in Python, run with uv | Proposed |
 | [0008](0008-font-approach.md) | How the Pugin fonts are made | Accepted |
+| [0009](0009-lombardic-stem-weights.md) | Two stem weights in Pugin Lombardic | Accepted |
 
 ## Template
 

@@ -1,0 +1,67 @@
+{
+ "method": {
+  "note": "Area-based side bearings (construct.side_bearings), measured in font units over the zone from the baseline to the cap height. Provisional values, to be judged on the proof page; no kerning yet.",
+  "flat": 130,
+  "depth": 120,
+  "minimum": 35,
+  "word_space": 250,
+  "maximum": 75
+ },
+ "glyphs": {
+  "C": {
+   "left": 64,
+   "right": 38,
+   "advance": 758
+  },
+  "D": {
+   "left": 35,
+   "right": 66,
+   "advance": 823
+  },
+  "E": {
+   "left": 65,
+   "right": 38,
+   "advance": 761
+  },
+  "F": {
+   "left": 35,
+   "right": 72,
+   "advance": 777
+  },
+  "H": {
+   "left": 35,
+   "right": 75,
+   "advance": 769
+  },
+  "I": {
+   "left": 35,
+   "right": 35,
+   "advance": 574
+  },
+  "K": {
+   "left": 35,
+   "right": 35,
+   "advance": 782
+  },
+  "L": {
+   "left": 42,
+   "right": 47,
+   "advance": 750
+  },
+  "O": {
+   "left": 68,
+   "right": 68,
+   "advance": 796
+  },
+  "Q": {
+   "left": 69,
+   "right": 55,
+   "advance": 783
+  },
+  "T.1": {
+   "left": 75,
+   "right": 75,
+   "advance": 834
+  }
+ }
+}

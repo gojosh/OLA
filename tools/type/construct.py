@@ -160,7 +160,8 @@ def arc(c, r, a0, a1):
     cuts = [a0]
     q = (math.floor(a0 / 90) + 1) * 90 if up else (math.ceil(a0 / 90) - 1) * 90
     while (q < a1 - 1e-6) if up else (q > a1 + 1e-6):
-        cuts.append(q)
+        if abs(q - a0) > 0.5 and abs(q - a1) > 0.5:     # no slivers next to the ends
+            cuts.append(q)
         q += 90 if up else -90
     cuts.append(a1)
     out = []
@@ -178,6 +179,7 @@ ORIENT = {
     "tl": np.diag([1.0, -1.0]),
     "tr": np.diag([-1.0, -1.0]),
     "foot-left": np.array([[0.0, 1.0], [-1.0, 0.0]]),   # at the foot of a stroke coming down, rolling out to the left
+    "head-right": np.array([[0.0, -1.0], [1.0, 0.0]]),  # at the head of a stroke going up, rolling out to the right
 }
 
 
@@ -245,13 +247,43 @@ def trefoil(C, axis, r, d, enter, leave, place="trefoil"):
     return segs, names, cs[0] + r * hd(a_in), cs[2] + r * hd(a_out)
 
 
+def two_lobe(c1, r, d, angle, enter, leave, place="two-lobe"):
+    """Two equal round lobes, the second d from the first along `angle` (degrees on screen), close
+    enough to overlap so the cusp between them is crisp. Pugin draws this terminal (a curl with a
+    second ball beyond it) with lobes of uneven size and spacing; this one is exact. A clockwise
+    outline comes in on the first lobe at the screen angle `enter` about its centre, runs over it to
+    the cusp and round the second lobe, and leaves it at `leave`. Returns segments, node names, and
+    the entry and exit points."""
+    c1 = np.asarray(c1, float)
+    u = hd(angle)
+    c2 = c1 + d * u
+    h = math.sqrt(max(r * r - (d / 2) ** 2, 0.0))
+    cusp = (c1 + c2) / 2 + h * np.array([u[1], -u[0]])       # on the side a clockwise outline crosses over
+    ang = lambda c, q: math.degrees(math.atan2(q[1] - c[1], q[0] - c[0]))
+    a1 = ang(c1, cusp)
+    while a1 <= enter:
+        a1 += 360
+    b0 = ang(c2, cusp)
+    b1 = leave
+    while b1 <= b0:
+        b1 += 360
+    s1, s2 = arc(c1, r, enter, a1), arc(c2, r, b0, b1)
+    names = [f"{place}: neck"] + [f"{place}: first lobe"] * (len(s1) - 1) + [f"{place}: cusp"] + [f"{place}: second lobe"] * (len(s2) - 1)
+    return s1 + s2, names, s1[0][0], s2[-1][3]
+
+
 # ── Measurements a construction asks for ──────────────────────────────────────
 
 FAMILY = {  # name: (start, low, high, meaning)
-    "stem": (39.0, 30.0, 50.0, "half the stem's width (px)"),
+    "stem_plain": (39.5, 30.0, 50.0, "half the stem's width in letters that are mostly stem: I, L (px)"),
+    "stem_armed": (36.5, 30.0, 50.0, "half the stem's width in letters that carry arms, a shoulder or a wide bar: F, H, K, T (px)"),
     "curl": (1.0, 0.8, 1.25, "the curl's size, as a multiple of the averaged curl"),
     "trefoil_r": (15.0, 9.0, 22.0, "a trefoil lobe's radius (px)"),
     "trefoil_d": (18.0, 9.0, 28.0, "how far each trefoil lobe sits from the trefoil's centre (px)"),
+    "ball_r": (21.0, 14.0, 28.0, "the radius of the balls that hang into O's and Q's counters (px)"),
+    "two_lobe_r": (19.0, 12.0, 26.0, "the radius of both lobes of the two-lobe terminal (px)"),
+    "two_lobe_spread": (1.85, 1.4, 1.95, "how far apart the two-lobe terminal's lobes are, in radii (under 2, so they overlap)"),
+    "two_lobe_angle": (29.0, 0.0, 70.0, "the direction from the first lobe to the second, degrees on screen below the horizontal"),
 }
 
 
@@ -448,11 +480,14 @@ def check_contour(segs, names, smooth_deg=0.5) -> dict:
     sits at an extreme), handles at an extreme lie flat or upright, and every join is smooth unless
     it's meant to be a corner."""
     swells = [names[i] for i, P in enumerate(segs) if G.extrema_ts(P)]
-    corners, skew = [], []
+    corners, skew, degenerate = [], [], []
     for i, P in enumerate(segs):
         prev = segs[i - 1]
         tin = next((prev[3] - prev[k] for k in (2, 1, 0) if np.linalg.norm(prev[3] - prev[k]) > 1e-9), None)
         tout = next((P[k] - P[0] for k in (1, 2, 3) if np.linalg.norm(P[k] - P[0]) > 1e-9), None)
+        if tin is None or tout is None:
+            degenerate.append(names[i])
+            continue
         ang = math.degrees(math.acos(np.clip(np.dot(tin, tout) / (np.linalg.norm(tin) * np.linalg.norm(tout)), -1, 1)))
         if ang > smooth_deg:
             corners.append({"node": names[i], "turn_deg": round(ang, 1)})
@@ -462,7 +497,7 @@ def check_contour(segs, names, smooth_deg=0.5) -> dict:
             if 1e-6 < a < 2 or 88 < a < 90 - 1e-6:
                 skew.append(names[i])
     return {"segments": len(segs), "curves_swelling_past_nodes": swells, "corners": corners,
-            "nearly_flat_handles": sorted(set(skew))}
+            "nearly_flat_handles": sorted(set(skew)), "degenerate_segments": degenerate}
 
 
 def check_outline(contours, names, smooth_deg=0.5) -> dict:
@@ -472,8 +507,9 @@ def check_outline(contours, names, smooth_deg=0.5) -> dict:
     out = {"contours": len(parts), "segments": sum(p["segments"] for p in parts),
            "curves_swelling_past_nodes": [x for p in parts for x in p["curves_swelling_past_nodes"]],
            "corners": [x for p in parts for x in p["corners"]],
-           "nearly_flat_handles": sorted({x for p in parts for x in p["nearly_flat_handles"]})}
-    out["ok"] = not out["curves_swelling_past_nodes"] and not out["nearly_flat_handles"]
+           "nearly_flat_handles": sorted({x for p in parts for x in p["nearly_flat_handles"]}),
+           "degenerate_segments": [x for p in parts for x in p["degenerate_segments"]]}
+    out["ok"] = not out["curves_swelling_past_nodes"] and not out["nearly_flat_handles"] and not out["degenerate_segments"]
     return out
 
 
@@ -488,14 +524,58 @@ def to_units(built, scale, lsb):
     pts = G.sample(all_segs(built), 40)
     x_min, x_max = pts[:, 0].min(), pts[:, 0].max()
     conv = lambda q, x0, u0: np.round(np.column_stack([(q[:, 0] - x0) * scale + u0, (base - q[:, 1]) * scale]))
-    if built.get("half"):
+    halves = built.get("halves") or ([built["half"]] if built.get("half") else None)
+    if halves:
         ax = built["axis"]
         axis_u = int(round(lsb + (ax - x_min) * scale))
-        left = [conv(q, ax, axis_u) for q, _, _ in built["half"]]
-        right = G.reverse([q * [-1, 1] + [2 * axis_u, 0] for q in left])
-        return [left + right], 2 * axis_u, ax - axis_u / scale
+        out = []
+        for half in halves:
+            left = [conv(q, ax, axis_u) for q, _, _ in half]
+            out.append(left + G.reverse([q * [-1, 1] + [2 * axis_u, 0] for q in left]))
+        return out, 2 * axis_u, ax - axis_u / scale
     contours = [[conv(q, x_min, lsb) for q, _, _ in c] for c in built["contours"]]
     return contours, int(round((x_max - x_min) * scale + 2 * lsb)), x_min - lsb / scale
+
+
+def side_bearings(contours, zone, flat, depth, minimum, maximum=None, step=4.0):
+    """Area-based spacing, after the method of HT Letterspacer. Along each side, the white between
+    the letter's outermost point and the rest of its profile is measured on every line of the zone
+    (baseline to cap height), counting no deeper than `depth`. The side bearing is `flat` less that
+    mean depth, never under `minimum`: a flat side gets `flat`, and a side the letter's curls or bowl
+    stand out from gets less, so each letter carries about the same white beside it. `maximum` caps
+    a side whose white is inside the letter rather than at its edge, like T's arms, which the
+    profile can't see.
+    Returns (left, right) side bearings and the mean depths, in font units."""
+    pts = np.concatenate([G.sample(c, 120) for c in contours])
+    x_min, x_max = pts[:, 0].min(), pts[:, 0].max()
+    left, right = [], []
+    for y in np.arange(zone[0] + step / 2, zone[1], step):
+        row = pts[np.abs(pts[:, 1] - y) <= step / 2]
+        if len(row):
+            left.append(row[:, 0].min() - x_min)
+            right.append(x_max - row[:, 0].max())
+        else:
+            left.append(depth)
+            right.append(depth)
+    dl, dr = float(np.minimum(left, depth).mean()), float(np.minimum(right, depth).mean())
+    hi = maximum if maximum is not None else float("inf")
+    return min(hi, max(minimum, flat - dl)), min(hi, max(minimum, flat - dr)), dl, dr
+
+
+def respace(contours, lsb, rsb, symmetric=False):
+    """Move the outline so its left edge sits lsb from the origin; return it with its advance width.
+    A symmetric letter keeps equal side bearings."""
+    pts = np.concatenate([G.sample(c, 40) for c in contours])
+    x_min, x_max = pts[:, 0].min(), pts[:, 0].max()
+    if symmetric:
+        lsb = rsb = (lsb + rsb) / 2
+    lsb, rsb = int(round(lsb)), int(round(rsb))
+    dx = lsb - int(round(x_min))
+    moved = [[q + [dx, 0] for q in c] for c in contours]
+    width = int(round(x_max)) + dx + rsb
+    if symmetric:                       # keep the axis on a whole unit: the same white both sides
+        width = 2 * int(round((int(round(x_min)) + int(round(x_max))) / 2 + dx))
+    return moved, width, dx
 
 
 def is_line(P):

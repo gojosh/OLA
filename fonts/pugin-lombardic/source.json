@@ -73,12 +73,20 @@
  "font": {
   "name": "Pugin Lombardic Draft",
   "postscript_name": "PuginLombardicDraft-Regular",
-  "note": "Working name (Q33). Spacing is provisional: every glyph gets the same side bearings until the letters are spaced together.",
+  "note": "Working name (Q33).",
   "units_per_em": 1000,
   "cap_height": 700,
   "cap_height_px": "measurements.json: summary.height.median_px (the plate's median letter height, curls included)",
-  "sidebearing": 50,
   "ascender": 800,
-  "descender": -200
+  "descender": -200,
+  "sidebearing": 50
+ },
+ "spacing": {
+  "note": "Area-based side bearings (construct.side_bearings), measured in font units over the zone from the baseline to the cap height. Provisional values, to be judged on the proof page; no kerning yet.",
+  "flat": 130,
+  "depth": 120,
+  "minimum": 35,
+  "word_space": 250,
+  "maximum": 75
  }
 }

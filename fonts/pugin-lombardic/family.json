@@ -1,81 +1,148 @@
 {
  "shared": {
-  "curl": 0.975,
-  "stem": 38.827,
-  "trefoil_r": 17.533,
-  "trefoil_d": 22.359
+  "curl": 0.943,
+  "stem_armed": 35.607,
+  "trefoil_r": 17.52,
+  "trefoil_d": 22.361,
+  "two_lobe_r": 19.667,
+  "two_lobe_spread": 1.417,
+  "two_lobe_angle": 47.531,
+  "stem_plain": 39.937,
+  "ball_r": 25.435
  },
  "meaning": {
-  "stem": "half the stem's width (px)",
+  "stem_plain": "half the stem's width in letters that are mostly stem: I, L (px)",
+  "stem_armed": "half the stem's width in letters that carry arms, a shoulder or a wide bar: F, H, K, T (px)",
   "curl": "the curl's size, as a multiple of the averaged curl",
   "trefoil_r": "a trefoil lobe's radius (px)",
-  "trefoil_d": "how far each trefoil lobe sits from the trefoil's centre (px)"
+  "trefoil_d": "how far each trefoil lobe sits from the trefoil's centre (px)",
+  "ball_r": "the radius of the balls that hang into O's and Q's counters (px)",
+  "two_lobe_r": "the radius of both lobes of the two-lobe terminal (px)",
+  "two_lobe_spread": "how far apart the two-lobe terminal's lobes are, in radii (under 2, so they overlap)",
+  "two_lobe_angle": "the direction from the first lobe to the second, degrees on screen below the horizontal"
  },
  "fitted_alone": {
+  "C": {
+   "curl": 0.899
+  },
+  "D": {
+   "stem_armed": 33.686,
+   "curl": 0.946
+  },
   "E": {
-   "curl": 0.933
+   "curl": 0.937
   },
   "F": {
-   "stem": 35.385,
-   "curl": 0.93,
+   "stem_armed": 35.351,
+   "curl": 0.928,
    "trefoil_r": 17.529,
-   "trefoil_d": 22.362
+   "trefoil_d": 22.352
+  },
+  "H": {
+   "stem_armed": 36.591,
+   "curl": 0.84,
+   "two_lobe_r": 20.034,
+   "two_lobe_spread": 1.95,
+   "two_lobe_angle": 26.367
   },
   "I": {
-   "stem": 39.794,
+   "stem_plain": 39.791,
    "curl": 1.006
   },
+  "K": {
+   "stem_armed": 36.046,
+   "curl": 0.886,
+   "two_lobe_r": 19.832,
+   "two_lobe_spread": 1.4,
+   "two_lobe_angle": 70.0
+  },
   "L": {
-   "stem": 40.143,
-   "curl": 1.05
+   "stem_plain": 40.117,
+   "curl": 1.053
+  },
+  "O": {
+   "ball_r": 23.145
+  },
+  "Q": {
+   "curl": 1.057,
+   "ball_r": 26.558
   },
   "T.1": {
-   "stem": 37.408,
-   "curl": 0.865
+   "stem_armed": 37.284,
+   "curl": 0.864
   }
  },
  "mean_px": {
-  "E": {
-   "shared": 0.79,
-   "alone": 0.82
+  "C": {
+   "shared": 0.75,
+   "alone": 0.69
   },
-  "F": {
-   "shared": 1.62,
-   "alone": 1.3
-  },
-  "I": {
+  "D": {
    "shared": 1.0,
+   "alone": 0.73
+  },
+  "E": {
+   "shared": 0.82,
    "alone": 0.89
   },
+  "F": {
+   "shared": 1.38,
+   "alone": 1.27
+  },
+  "H": {
+   "shared": 1.49,
+   "alone": 1.05
+  },
+  "I": {
+   "shared": 1.11,
+   "alone": 0.89
+  },
+  "K": {
+   "shared": 1.21,
+   "alone": 1.07
+  },
   "L": {
-   "shared": 1.66,
-   "alone": 1.51
+   "shared": 1.65,
+   "alone": 1.54
+  },
+  "O": {
+   "shared": 1.69,
+   "alone": 1.64
+  },
+  "Q": {
+   "shared": 1.35,
+   "alone": 1.23
   },
   "T.1": {
-   "shared": 2.08,
-   "alone": 1.89
+   "shared": 2.03,
+   "alone": 1.9
   }
  },
  "at_bounds": [
-  "E:bottom.neck_deg",
-  "E:upper.t6",
-  "F:bottom.neck_deg",
-  "F:top.edge_t1",
-  "F:stroke.t4",
-  "F:lower.t1",
-  "F:lower.t2",
+  "D:top.neck_deg",
   "F:lower.t5",
   "F:foot.neck_deg",
+  "H:bottom.neck_deg",
+  "H:top_right.neck_deg",
+  "H:terminal.neck_in",
   "I:bottom.neck_deg",
   "I:top.neck_deg",
-  "L:top.edge_t2",
+  "K:bottom.neck_deg",
+  "K:terminal.join_at",
+  "K:inside.t2",
+  "K:lower.point_out",
+  "K:lower.t2",
+  "K:bottom_right.neck_deg",
+  "Q:notch.out",
+  "Q:counter.floor_in",
+  "Q:counter.floor_out",
+  "T.1:bottom.neck_deg",
   "T.1:arm.gap",
-  "T.1:arm.outer_t1",
-  "T.1:top.edge_t2"
+  "T.1:arm.inner_t2"
  ],
  "fit": {
-  "evaluations": 98,
-  "cost": 15622.093402650366
+  "evaluations": 119,
+  "cost": 31583.338120232234
  },
- "when": "2026-10-28T13:26:22"
+ "when": "2026-10-28T14:18:50"
 }

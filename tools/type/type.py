@@ -24,6 +24,7 @@ Usage (from the repository root; uv installs the dependencies):
   uv run tools/type/type.py measure pugin-lombardic     # measurements.json
   uv run tools/type/type.py curls   pugin-lombardic     # primitives/: the curl terminals, averaged
   uv run tools/type/type.py build   pugin-lombardic     # recipes → source/*.ufo and build/*.otf
+  uv run tools/type/type.py space   pugin-lombardic     # respace the built letters and rewrite the font
   uv run tools/type/type.py proof   pugin-lombardic     # proof/index.html
 """
 from __future__ import annotations
@@ -462,6 +463,7 @@ def cmd_build(fam: str):
         rp.write_text(json.dumps(r, indent=1, ensure_ascii=False) + "\n")
         trace = sum(len(G.fit_with_extrema(c, tol=0.5)[0]) for c in K.reference_edges(alphas[g]))
         report = {"glyph": g, "char": chr(uni) if uni else g, "construction": r["construction"], "description": r["description"],
+                  "symmetric": bool(built.get("half") or built.get("halves")),
                   "measured": mine, "family": shared, "alone": alone[g],
                   "at_bounds": [k for k in at_bounds if k.startswith(g + ":") or k.startswith("family.")],
                   "direct_trace_segments": trace, "deviation": dev, "checks_px": chk, "checks_units": chk_u,
@@ -483,11 +485,38 @@ def cmd_build(fam: str):
         "mean_px": {g: {"shared": json.loads((out / f"{g.replace('.', '_')}.json").read_text())["deviation"]["overall"]["mean_px"],
                         "alone": a["mean_px"]} for g, a in alone.items()},
         "at_bounds": at_bounds, "fit": info, "when": when}, indent=1) + "\n")
+    write_font(d, src, list(glyphs))
+
+
+def write_font(d: Path, src: dict, names: list[str]):
+    """Space the built letters (construct.side_bearings), write the UFO source and compile it.
+    Reads each letter's outline in font units from build/<glyph>.json and records its spacing there."""
+    import construct as K
+    import ufo2ft
+    fc, sp = src["font"], src["spacing"]
+    out = d / "build"
     cap = fc["cap_height"]
+    glyphs, table = {}, {}
+    for g in names:
+        bp = out / f"{g.replace('.', '_')}.json"
+        b = json.loads(bp.read_text())
+        u = b["units"]
+        contours = [[np.array(q, float) for q in c] for c in u["outline"]]
+        sym = bool(b.get("symmetric"))
+        lsb, rsb, dl, dr = K.side_bearings(contours, (0, cap), sp["flat"], sp["depth"], sp["minimum"], sp.get("maximum"))
+        moved, width, dx = K.respace(contours, lsb, rsb, sym)
+        pts = np.concatenate([G.sample(c, 40) for c in moved])
+        lsb_u, rsb_u = int(round(pts[:, 0].min())), int(round(width - pts[:, 0].max()))
+        u.update({"spaced_outline": [[q.tolist() for q in c] for c in moved], "advance": width, "lsb": lsb_u, "rsb": rsb_u,
+                  "spaced_origin_px": u["origin_px"] - dx / u["scale_per_px"],
+                  "profile_depth": {"left": round(dl, 1), "right": round(dr, 1)}})
+        bp.write_text(json.dumps(b) + "\n")
+        glyphs[g] = {"unicode": ord(b["char"]) if len(b["char"]) == 1 else None, "width": width, "contours": moved}
+        table[g] = {"left": lsb_u, "right": rsb_u, "advance": width}
+    (d / "spacing.json").write_text(json.dumps({"method": sp, "glyphs": table}, indent=1) + "\n")
     glyphs[".notdef"] = {"unicode": None, "width": 500, "contours": K.notdef(500, cap)}
-    glyphs["space"] = {"unicode": 0x20, "width": 250, "contours": []}
-    family = fc["name"]
-    info = {"familyName": family, "styleName": "Regular", "unitsPerEm": fc["units_per_em"], "capHeight": cap,
+    glyphs["space"] = {"unicode": 0x20, "width": sp["word_space"], "contours": []}
+    info = {"familyName": fc["name"], "styleName": "Regular", "unitsPerEm": fc["units_per_em"], "capHeight": cap,
             "ascender": fc["ascender"], "descender": fc["descender"], "versionMajor": 0, "versionMinor": 1,
             "postscriptFontName": fc["postscript_name"],
             "openTypeNameDescription": "Working draft, not for release. A revival of the Lombardic capitals in A. W. N. Pugin's "
@@ -495,12 +524,17 @@ def cmd_build(fam: str):
     ufo = d / "source" / f"{fc['postscript_name']}.ufo"
     ufo.parent.mkdir(exist_ok=True)
     font = K.write_ufo(ufo, info, glyphs)
-    import ufo2ft
-    otf = ufo2ft.compileOTF(font)
     otf_path = out / f"{fc['postscript_name']}.otf"
-    otf.save(otf_path)
-    print(f"  wrote {ufo.relative_to(ROOT)} and {otf_path.relative_to(ROOT)} ({otf_path.stat().st_size} bytes; "
-          f"{', '.join(n for n in glyphs if not n.startswith('.') and n != 'space')})")
+    ufo2ft.compileOTF(font).save(otf_path)
+    print("  spacing: " + ", ".join(f"{g} {v['left']}|{v['right']}" for g, v in table.items()))
+    print(f"  wrote {ufo.relative_to(ROOT)} and {otf_path.relative_to(ROOT)} ({otf_path.stat().st_size} bytes)")
+
+
+def cmd_space(fam: str):
+    """Respace the built letters and rewrite the font, without fitting again."""
+    d = family_dir(fam)
+    names = [json.loads(p.read_text())["glyph"] for p in sorted((d / "build").glob("*.json"))]
+    write_font(d, load_source(fam), [g for g in names])
 
 
 # ── Measurements ──────────────────────────────────────────────────────────────
@@ -626,7 +660,7 @@ def _constructed_html(d: Path, meta: dict) -> tuple[str, str]:
                          else f'<circle class="nd" cx="{x:.2f}" cy="{y:.2f}" r="2.6">{t}</circle>')
         u = b["units"]
         em = 1000 / u["scale_per_px"]
-        fx = u["origin_px"]
+        fx = u.get("spaced_origin_px", u["origin_px"])
         ch = H.escape(b["char"])
         font_text = f'<text class="L-font" x="{fx:.2f}" y="{u["baseline_px"]:.2f}" font-size="{em:.2f}">{ch}</text>'
         path = G.svg_path(contours)
@@ -670,7 +704,7 @@ flattened plate. Hover a node for its name.</p>
   <tr><th>Sharing the family's parts</th><td>{o['mean_px']} px mean; with its own stem, curl and trefoil it would be {b['alone']['mean_px']} px</td></tr>
   <tr><th>Pugin's edge about itself</th><td>{dv['wobble_of_pugins_edge']['mean_px']} px mean wobble about its own smoothed course</td></tr>
   {_lean_row(dv)}
-  <tr><th>In the font</th><td>{u['advance']} units wide (side bearings provisional), {u['cap_units']:.0f} high; 1 plate pixel = {u['scale_per_px']:.3f} units</td></tr>
+  <tr><th>In the font</th><td>{u['advance']} units wide, side bearings {u.get('lsb', '—')} and {u.get('rsb', '—')}; {u['cap_units']:.0f} high; 1 plate pixel = {u['scale_per_px']:.3f} units</td></tr>
   </table>
   <h3>By part (px)</h3>
   <table class="num"><thead><tr><th></th><th>mean</th><th>95%</th><th>worst</th></tr></thead><tbody>{parts}</tbody></table>
@@ -732,21 +766,24 @@ def _family_html(d: Path, meta: dict) -> str:
     sh = f["shared"]
     cell = lambda fam, k, fmt: fmt(fam[k]) if k in fam else "—"
     stem = lambda v: f"{2 * v:.1f}"
+    stem_cell = lambda fam: (f"{stem(fam['stem_plain'])} (plain)" if "stem_plain" in fam
+                             else f"{stem(fam['stem_armed'])} (armed)" if "stem_armed" in fam else "—")
     rows = "".join(
-        f"<tr><th>{H.escape(g)}</th><td>{cell(a, 'stem', stem)}</td><td>{cell(a, 'curl', lambda v: f'{v:.3f}')}</td>"
-        f"<td>{cell(a, 'trefoil_r', lambda v: f'{v:.1f}')}</td><td>{f['mean_px'][g]['alone']}</td><td>{f['mean_px'][g]['shared']}</td></tr>"
+        f"<tr><th>{H.escape(g)}</th><td>{stem_cell(a)}</td><td>{cell(a, 'curl', lambda v: f'{v:.3f}')}</td>"
+        f"<td>{cell(a, 'trefoil_r', lambda v: f'{v:.1f}')}</td><td>{cell(a, 'two_lobe_r', lambda v: f'{v:.1f}')}</td>"
+        f"<td>{f['mean_px'][g]['alone']}</td><td>{f['mean_px'][g]['shared']}</td></tr>"
         for g, a in f["fitted_alone"].items())
-    rows += (f"<tr class='sh'><th>Shared</th><td>{stem(sh['stem'])}</td><td>{sh['curl']:.3f}</td><td>{sh['trefoil_r']:.1f}</td>"
-             f"<td></td><td></td></tr>")
+    rows += (f"<tr class='sh'><th>Shared</th><td>{stem(sh['stem_plain'])} plain, {stem(sh['stem_armed'])} armed</td><td>{sh['curl']:.3f}</td><td>{sh['trefoil_r']:.1f}</td>"
+             f"<td>{sh['two_lobe_r']:.1f}</td><td></td><td></td></tr>")
     inks = {k: "#%02x%02x%02x" % tuple(int(v) for v in c[::-1]) for k, c in meta["inks_bgr"].items()}
-    words = ["LIFE", "FILET", "TILE", "LEFT", "FELT", "FILLET"]
+    words = ["THE", "COLLECT", "OFFICE", "CLOCK", "FIELD", "HOLD"]
     spec = " ".join(f'<span style="color:{inks["red" if i % 2 else "blue"]}">{w}</span>' for i, w in enumerate(words))
     return f"""
 <section class="family"><h2>The letters together</h2>
-<p class="lede">The five letters were fitted to Pugin's in one solve, sharing one stem, one curl and one trefoil, so those parts settle where his
-letters agree. Fitted alone, each letter would take the values in its row. The trefoil is three equal round lobes on the arms of a cross,
-the same wherever it is placed; Pugin's are freehand and vary.</p>
-<table class="num fam"><thead><tr><th></th><th>stem width (px)</th><th>curl size</th><th>trefoil lobe radius (px)</th>
+<p class="lede">The letters were fitted to Pugin's in one solve, sharing one stem, one curl, one trefoil and one two-lobe terminal, so those
+parts settle where his letters agree. Fitted alone, each letter would take the values in its row. The trefoil is three equal round lobes on the
+arms of a cross, and the two-lobe terminal two equal overlapping lobes: each is the same wherever it is placed, where Pugin's are freehand and vary.</p>
+<table class="num fam"><thead><tr><th></th><th>stem width (px)</th><th>curl size</th><th>trefoil lobe radius (px)</th><th>two-lobe radius (px)</th>
 <th>mean from Pugin, alone (px)</th><th>sharing (px)</th></tr></thead><tbody>{rows}</tbody></table>
 <p class="words">{spec}</p>
 <p class="lede">Spacing is provisional: every letter has the same 50-unit side bearings until the letters are spaced together.</p>
@@ -872,10 +909,10 @@ document.querySelectorAll('.layers input').forEach(i => i.addEventListener('chan
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("cmd", choices=["extract", "measure", "curls", "build", "proof"])
+    ap.add_argument("cmd", choices=["extract", "measure", "curls", "build", "space", "proof"])
     ap.add_argument("family")
     a = ap.parse_args()
-    {"extract": cmd_extract, "measure": cmd_measure, "curls": cmd_curls, "build": cmd_build, "proof": cmd_proof}[a.cmd](a.family)
+    {"extract": cmd_extract, "measure": cmd_measure, "curls": cmd_curls, "build": cmd_build, "space": cmd_space, "proof": cmd_proof}[a.cmd](a.family)
 
 
 if __name__ == "__main__":

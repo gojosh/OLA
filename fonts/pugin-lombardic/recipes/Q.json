@@ -1,0 +1,105 @@
+{
+ "glyph": "Q",
+ "unicode": "U+0051",
+ "construction": "letters.py: Q",
+ "description": "The O's bowl, with a ball hanging into the counter from the top and one sitting on its floor. At the bottom right the base runs on past the bowl to a rounded end, and a flag rises from it, parted from the bowl by a pointed notch, to a curl at its head rolling out to the right.",
+ "primitives": {
+  "curl": [
+   "head of the flag"
+  ],
+  "ball": [
+   "top of the counter",
+   "floor of the counter"
+  ]
+ },
+ "corrections": [],
+ "measured": {
+  "axis_x": 203.313,
+  "outer": {
+   "left_x": 26.197,
+   "left_y": 229.403,
+   "top_y": 22.854,
+   "right_x": 381.398,
+   "right_y": 216.01,
+   "t1": 0.385,
+   "t2": 0.492,
+   "t3": 0.499,
+   "t4": 0.432,
+   "t5": 0.716,
+   "t6": 0.651,
+   "bottom_x": 207.813,
+   "bottom_y": 446.25,
+   "t7": 0.498,
+   "t8": 0.443
+  },
+  "notch": {
+   "x": 249.418,
+   "y": 426.773,
+   "in": 141.744,
+   "out": 350.0
+  },
+  "flag": {
+   "curl_x": 383.26,
+   "curl_y": 334.736,
+   "t1": 0.476,
+   "t2": 0.452,
+   "neck_deg": -8.22,
+   "right_x": 398.343,
+   "right_y": 397.644,
+   "t3": 0.888,
+   "t4": 0.573,
+   "t5": 0.714,
+   "t6": 0.637
+  },
+  "end": {
+   "x": 416.192,
+   "y": 430.661,
+   "r": 11.797
+  },
+  "base": {
+   "t1": 0.541,
+   "t2": 0.647
+  },
+  "ball_top": {
+   "y": 67.581,
+   "meets_right": 300.372,
+   "meets_left": 246.243
+  },
+  "counter": {
+   "left_x": 126.752,
+   "left_y": 239.1,
+   "right_x": 289.947,
+   "right_y": 239.766,
+   "top_out": 172.64,
+   "t1": 0.632,
+   "t2": 0.261,
+   "floor_in": 0.022,
+   "t3": 0.445,
+   "t4": 0.807,
+   "floor_out": 344.987,
+   "t5": 0.824,
+   "t6": 0.287,
+   "top_in": 181.018,
+   "t7": 0.404,
+   "t8": 0.67
+  },
+  "ball_floor": {
+   "y": 385.759,
+   "meets_left": 113.386,
+   "meets_right": 49.454
+  },
+  "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/Q.png",
+  "when": "2026-10-28T14:18:50"
+ },
+ "fit": {
+  "mean_px": 1.35,
+  "p95_px": 4.35,
+  "max_px": 13.04,
+  "mean_px_fitted_alone": 1.23,
+  "wobble_of_pugins_edge_mean_px": 0.26,
+  "segments": 25,
+  "outline_checks_pass": true
+ }
+}

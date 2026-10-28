@@ -1,0 +1,133 @@
+{
+ "glyph": "H",
+ "unicode": "U+0048",
+ "construction": "letters.py: H",
+ "description": "The uncial H: a stem with the I's top-left and bottom curls; a long top bar, dipping a little over the stem, out to a top-right curl; and a shoulder that springs from the stem under the bar, arches over and comes down to a foot sweeping right into the two-lobe terminal. Between the bar and the shoulder, a sliver of space comes to a point on the stem.",
+ "primitives": {
+  "curl": [
+   "top-left",
+   "top-right",
+   "bottom-left",
+   "bottom-right"
+  ],
+  "two-lobe": [
+   "foot of the shoulder"
+  ]
+ },
+ "corrections": [],
+ "measured": {
+  "axis_x": 136.616,
+  "bottom": {
+   "half_width": 74.367,
+   "outer_y": 444.171,
+   "neck_deg": 0.007,
+   "flare_t1": 0.517,
+   "flare_t2": 0.58,
+   "right_x": 253.616,
+   "right_y": 446.722,
+   "fillet_t1": 0.887,
+   "fillet_t2": 0.602,
+   "high_x": 137.84,
+   "high_y": 433.959,
+   "edge_t1": 0.592,
+   "edge_t2": 0.546,
+   "edge_t3": 0.532,
+   "edge_t4": 0.815
+  },
+  "stem": {
+   "foot_y": 358.726,
+   "head_y": 135.044,
+   "foot_y_right": 358.128
+  },
+  "top": {
+   "half_width": 72.086,
+   "outer_y": 19.569,
+   "neck_deg": 2.306,
+   "flare_t1": 0.415,
+   "flare_t2": 0.425,
+   "low_x": 147.229,
+   "low_y": 32.251,
+   "right_x": 348.653,
+   "edge_t1": 0.207,
+   "edge_t2": 0.924,
+   "edge_t3": 0.364,
+   "edge_t4": 0.394
+  },
+  "top_right": {
+   "neck_deg": 0.002
+  },
+  "sliver": {
+   "y": 171.899,
+   "t1": 0.826,
+   "t2": 0.832
+  },
+  "shoulder": {
+   "top_x": 300.159,
+   "top_y": 72.054,
+   "spring": 281.727,
+   "t1": 0.689,
+   "t2": 0.491,
+   "right_x": 418.572,
+   "right_y": 201.081,
+   "t3": 0.511,
+   "t4": 0.544,
+   "t5": 0.437,
+   "t6": 0.475
+  },
+  "pocket": {
+   "x": 344.001,
+   "y": 385.759,
+   "t1": 0.991,
+   "t2": 0.993
+  },
+  "terminal": {
+   "x": 385.132,
+   "y": 390.626,
+   "neck_at": 90.821,
+   "join_at": 100.319,
+   "neck_in": 0.0
+  },
+  "foot": {
+   "bottom_x": 363.159,
+   "bottom_y": 445.443,
+   "join_out": 126.374,
+   "t1": 0.763,
+   "t2": 0.626,
+   "t3": 0.62,
+   "t4": 0.598
+  },
+  "inside": {
+   "left_x": 307.657,
+   "left_y": 371.157,
+   "right_x": 328.802,
+   "right_y": 240.029,
+   "t1": 0.339,
+   "t2": 0.601
+  },
+  "arch": {
+   "top_x": 255.45,
+   "top_y": 126.181,
+   "t1": 0.681,
+   "t2": 0.825,
+   "foot_y": 226.048,
+   "t3": 0.436,
+   "t4": 0.637
+  },
+  "bottom_right": {
+   "neck_deg": 0.084
+  },
+  "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/H.png",
+  "when": "2026-10-28T14:18:50"
+ },
+ "fit": {
+  "mean_px": 1.49,
+  "p95_px": 5.22,
+  "max_px": 18.19,
+  "mean_px_fitted_alone": 1.05,
+  "wobble_of_pugins_edge_mean_px": 0.26,
+  "segments": 38,
+  "outline_checks_pass": true
+ }
+}

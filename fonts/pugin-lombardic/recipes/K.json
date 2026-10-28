@@ -1,0 +1,154 @@
+{
+ "glyph": "K",
+ "unicode": "U+004B",
+ "construction": "letters.py: K_",
+ "description": "A stem with the I's top-left and bottom curls. The top bar runs out to a square corner and drops as an arm to a crotch; from there a leg sweeps out, down and right into the two-lobe terminal. The arm closes a pointed upper counter against the stem; below, the lower counter comes to a point under the arm and opens at the bottom right. Pugin's terminal here is a lumpy ball with a second lobe merged into it; the construction uses the same two-lobe terminal as H.",
+ "primitives": {
+  "curl": [
+   "top-left",
+   "bottom-left",
+   "bottom-right"
+  ],
+  "two-lobe": [
+   "foot of the leg"
+  ]
+ },
+ "corrections": [],
+ "measured": {
+  "axis_x": 141.066,
+  "bottom": {
+   "half_width": 77.742,
+   "outer_y": 447.536,
+   "neck_deg": 0.002,
+   "flare_t1": 0.71,
+   "flare_t2": 0.322,
+   "right_x": 265.399,
+   "right_y": 452.42,
+   "fillet_t1": 0.484,
+   "fillet_t2": 0.681,
+   "high_x": 142.628,
+   "high_y": 437.83,
+   "edge_t1": 0.29,
+   "edge_t2": 0.241,
+   "edge_t3": 0.562,
+   "edge_t4": 0.476
+  },
+  "stem": {
+   "foot_y": 354.565,
+   "head_y": 113.418,
+   "foot_y_right": 347.02
+  },
+  "top": {
+   "half_width": 61.292,
+   "outer_y": 22.811,
+   "neck_deg": 8.175,
+   "flare_t1": 0.539,
+   "flare_t2": 0.438,
+   "corner_x": 402.855,
+   "corner_y": 29.575,
+   "low_x": 243.883,
+   "low_y": 31.817,
+   "edge_t1": 0.262,
+   "edge_t2": 0.225,
+   "corner_in": 355.33,
+   "edge_t3": 0.382,
+   "edge_t4": 0.762
+  },
+  "arm": {
+   "right_x": 403.565,
+   "right_y": 54.309,
+   "top_heading": 87.261,
+   "t1": 0.511,
+   "t2": 0.393,
+   "crotch_in": 149.243,
+   "t3": 0.777,
+   "t4": 0.642
+  },
+  "crotch": {
+   "x": 247.031,
+   "y": 227.144
+  },
+  "leg": {
+   "top_x": 306.287,
+   "top_y": 223.167,
+   "spring": 355.667,
+   "t1": 0.828,
+   "t2": 0.388,
+   "right_x": 391.839,
+   "right_y": 328.199,
+   "t3": 0.613,
+   "t4": 0.629,
+   "t5": 0.472,
+   "t6": 0.5
+  },
+  "pocket": {
+   "x": 383.479,
+   "y": 402.002,
+   "t1": 0.843,
+   "t2": 0.646
+  },
+  "terminal": {
+   "x": 418.175,
+   "y": 406.045,
+   "neck_at": 128.949,
+   "join_at": 100.002,
+   "neck_in": 0.554
+  },
+  "foot": {
+   "bottom_x": 391.343,
+   "bottom_y": 454.056,
+   "join_out": 124.107,
+   "t1": 0.973,
+   "t2": 0.703,
+   "t3": 0.477,
+   "t4": 0.448
+  },
+  "inside": {
+   "x": 335.254,
+   "y": 391.078,
+   "heading": 258.618,
+   "t1": 0.728,
+   "t2": 1.0
+  },
+  "lower": {
+   "point_x": 238.073,
+   "point_y": 256.71,
+   "point_in": 195.334,
+   "stem_top_y": 286.002,
+   "point_out": 170.0,
+   "t1": 0.677,
+   "t2": 0.999
+  },
+  "bottom_right": {
+   "neck_deg": 0.01
+  },
+  "upper": {
+   "left_top_y": 103.127,
+   "point_y": 250.916,
+   "right_x": 305.266,
+   "right_y": 78.414,
+   "top_x": 271.404,
+   "top_y": 44.297,
+   "point_out": 323.774,
+   "t1": 0.612,
+   "t2": 0.514,
+   "t3": 0.483,
+   "t4": 0.998,
+   "t5": 0.526,
+   "t6": 0.896
+  },
+  "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/K.png",
+  "when": "2026-10-28T14:18:50"
+ },
+ "fit": {
+  "mean_px": 1.21,
+  "p95_px": 3.78,
+  "max_px": 11.06,
+  "mean_px_fitted_alone": 1.07,
+  "wobble_of_pugins_edge_mean_px": 0.25,
+  "segments": 39,
+  "outline_checks_pass": true
+ }
+}

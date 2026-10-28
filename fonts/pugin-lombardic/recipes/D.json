@@ -1,0 +1,89 @@
+{
+ "glyph": "D",
+ "unicode": "U+0044",
+ "construction": "letters.py: D",
+ "description": "A stem with the I's top-left and bottom-left curls and a round bowl on the right. The top edge dips a little over the stem before rising into the bowl; the bottom edge rises between the curl and the bowl. Pugin's bowl comes to a slight point on the right; the construction rounds it, as it does every bowl.",
+ "primitives": {
+  "curl": [
+   "top-left",
+   "bottom-left"
+  ]
+ },
+ "corrections": [],
+ "measured": {
+  "axis_x": 137.416,
+  "bottom": {
+   "half_width": 74.256,
+   "outer_y": 459.55,
+   "neck_deg": 7.621,
+   "flare_t1": 0.568,
+   "flare_t2": 0.479,
+   "high_x": 136.719,
+   "high_y": 446.879,
+   "edge_t1": 0.483,
+   "edge_t2": 0.466
+  },
+  "stem": {
+   "foot_y": 383.818,
+   "head_y": 93.819
+  },
+  "top": {
+   "half_width": 67.576,
+   "outer_y": 24.921,
+   "neck_deg": 0.001,
+   "flare_t1": 0.576,
+   "flare_t2": 0.676,
+   "low_x": 169.588,
+   "low_y": 36.461,
+   "edge_t1": 0.61,
+   "edge_t2": 0.754,
+   "edge_t3": 0.28,
+   "edge_t4": 0.566
+  },
+  "bowl": {
+   "top_x": 282.683,
+   "top_y": 24.216,
+   "right_x": 463.074,
+   "right_y": 245.125,
+   "bottom_x": 270.726,
+   "bottom_y": 460.04,
+   "t1": 0.415,
+   "t2": 0.397,
+   "t3": 0.451,
+   "t4": 0.445,
+   "t5": 0.642,
+   "t6": 0.727
+  },
+  "counter": {
+   "stem_top_y": 112.098,
+   "stem_foot_y": 365.201,
+   "bottom_x": 260.051,
+   "bottom_y": 438.569,
+   "right_x": 374.329,
+   "right_y": 252.673,
+   "top_x": 271.685,
+   "top_y": 46.35,
+   "t1": 0.456,
+   "t2": 0.565,
+   "t3": 0.65,
+   "t4": 0.555,
+   "t5": 0.558,
+   "t6": 0.657,
+   "t7": 0.623,
+   "t8": 0.548
+  },
+  "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/D.png",
+  "when": "2026-10-28T14:18:50"
+ },
+ "fit": {
+  "mean_px": 1.0,
+  "p95_px": 2.79,
+  "max_px": 4.46,
+  "mean_px_fitted_alone": 0.73,
+  "wobble_of_pugins_edge_mean_px": 0.19,
+  "segments": 20,
+  "outline_checks_pass": true
+ }
+}

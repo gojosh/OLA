@@ -13,40 +13,40 @@
  },
  "corrections": [],
  "measured": {
-  "axis_x": 178.514,
+  "axis_x": 178.597,
   "bottom": {
-   "centre_y": 432.426,
-   "half_width": 112.018,
-   "outer_y": 444.934,
-   "edge_t1": 0.483,
-   "edge_t2": 0.718,
-   "neck_deg": 0.0,
-   "flare_t1": 0.693,
-   "flare_t2": 0.613
+   "centre_y": 432.437,
+   "half_width": 113.231,
+   "outer_y": 444.294,
+   "edge_t1": 0.469,
+   "edge_t2": 0.789,
+   "neck_deg": 0.001,
+   "flare_t1": 0.711,
+   "flare_t2": 0.589
   },
   "stem": {
-   "foot_y": 294.15,
-   "head_y": 158.658
+   "foot_y": 303.211,
+   "head_y": 150.001
   },
   "top": {
-   "half_width": 101.215,
-   "outer_y": 23.968,
-   "neck_deg": 0.0,
-   "flare_t1": 0.644,
-   "flare_t2": 0.717,
-   "centre_y": 38.943,
-   "edge_t2": 0.293,
-   "edge_t1": 0.499
+   "half_width": 102.336,
+   "outer_y": 24.983,
+   "neck_deg": 0.002,
+   "flare_t1": 0.623,
+   "flare_t2": 0.744,
+   "centre_y": 39.167,
+   "edge_t2": 0.442,
+   "edge_t1": 0.616
   },
   "units": "plate pixels, y down; tensions 0–1; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/I.png",
-  "when": "2026-10-28T13:26:22"
+  "when": "2026-10-28T14:18:50"
  },
  "fit": {
-  "mean_px": 1.0,
-  "p95_px": 2.35,
-  "max_px": 4.79,
+  "mean_px": 1.11,
+  "p95_px": 2.7,
+  "max_px": 6.13,
   "mean_px_fitted_alone": 0.89,
   "wobble_of_pugins_edge_mean_px": 0.29,
   "segments": 22,
