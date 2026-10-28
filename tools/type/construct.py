@@ -206,6 +206,8 @@ ORIENT = {
     "tr": np.diag([-1.0, -1.0]),
     "foot-left": np.array([[0.0, 1.0], [-1.0, 0.0]]),   # at the foot of a stroke coming down, rolling out to the left
     "head-right": np.array([[0.0, -1.0], [1.0, 0.0]]),  # at the head of a stroke going up, rolling out to the right
+    "foot-right": np.array([[0.0, -1.0], [-1.0, 0.0]]), # at the foot of a stroke coming down, rolling out to the right
+    "head-left": np.array([[0.0, 1.0], [1.0, 0.0]]),    # at the head of a stroke going up, rolling out to the left
 }
 
 
@@ -311,8 +313,7 @@ FAMILY = {  # name: (start, low, high, meaning)
     "trefoil_d": (22.0, 9.0, 36.0, "how far each trefoil lobe sits from the trefoil's centre (px)"),
     "ball_r": (21.0, 14.0, 28.0, "the radius of the balls that hang into O's and Q's counters (px)"),
     "two_lobe_r": (19.0, 12.0, 26.0, "the radius of both lobes of the two-lobe terminal (px)"),
-    "two_lobe_spread": (1.85, 1.4, 1.95, "how far apart the two-lobe terminal's lobes are, in radii (under 2, so they overlap)"),
-    "two_lobe_angle": (29.0, 0.0, 70.0, "the direction from the first lobe to the second, degrees on screen below the horizontal"),
+    "two_lobe_spread": (1.9, 1.8, 1.97, "how far apart the two-lobe terminal's lobes are, in radii: close to two, so they read as two balls with a deep cusp between"),
 }
 
 
@@ -397,20 +398,22 @@ def sample_fixed(built, n_outline=900, n_counter=400):
     return np.concatenate(out)
 
 
-def fit_letters(letters: dict, refs: dict, kit: Kit, local=False, edge_points=1500, start=None):
+def fit_letters(letters: dict, refs: dict, kit: Kit, local=False, edge_points=1500, start=None, fixed=None):
     """Fit the letters' measurements to Pugin's drawings in one solve. Family measurements (stem,
     curl, trefoil) are shared by every letter, so they settle where the alphabet agrees, unless
     `local` lets each letter have its own. Residuals run both ways: the outline onto his edge, and his
     edge onto the outline. A robust loss keeps his accidents from pulling a whole letter.
     `start` holds values to begin from (the last build's), in place of each construction's own
-    starting values; a measurement it doesn't have starts from the construction's."""
+    starting values; a measurement it doesn't have starts from the construction's. `fixed` holds
+    values that are not fitted at all (the family's, once settled)."""
+    fixed = fixed or {}
     from scipy.sparse import lil_matrix
     spec = {}
     for g, fn in letters.items():
         p = Params(g, None, local)
         fn(p, kit)
         spec.update(p.spec)
-    keys = list(spec)
+    keys = [k for k in spec if k not in fixed]
     lb = np.array([spec[k][1] for k in keys])
     ub = np.array([spec[k][2] for k in keys])
     x0 = np.array([(start or {}).get(k, spec[k][0]) for k in keys], float)
@@ -427,10 +430,10 @@ def fit_letters(letters: dict, refs: dict, kit: Kit, local=False, edge_points=15
         return np.concatenate([sd(dense), cKDTree(dense).query(edge)[0], 20 * swelling(built)])
 
     def resid(x):
-        vals = dict(zip(keys, x))
+        vals = {**fixed, **dict(zip(keys, x))}
         return np.concatenate([glyph_res(g, vals) for g in letters])
 
-    start = dict(zip(keys, x0))
+    start = {**fixed, **dict(zip(keys, x0))}
     sizes = [len(glyph_res(g, start)) for g in letters]
     sparsity = lil_matrix((sum(sizes), len(keys)), dtype=int)
     r0 = 0
@@ -450,7 +453,7 @@ def fit_letters(letters: dict, refs: dict, kit: Kit, local=False, edge_points=15
             cost = r.cost
             break
         cost = r.cost
-    vals = {k: float(v) for k, v in zip(keys, x)}
+    vals = {**{k: float(v) for k, v in fixed.items()}, **{k: float(v) for k, v in zip(keys, x)}}
     # a free heading within 2° of flat or upright is meant to be flat or upright: the node is an extreme
     for k, v in vals.items():
         if k.endswith("_heading") and abs(v - 90 * round(v / 90)) < 2:
@@ -468,7 +471,19 @@ def alone_fit(job):
     v, _, _ = fit_letters({g: LT.LETTERS[g]}, {g: alpha}, kit, local=True, start=start)
     built = LT.LETTERS[g](Params(g, v, local=True), kit)
     return {"family": {k.split("family.")[1]: round(x, 3) for k, x in v.items() if "family." in k},
+            "values": {k: x for k, x in v.items() if "family." not in k},
             "mean_px": deviation(built, alpha)["overall"]["mean_px"]}
+
+
+def refine_fit(job):
+    """One letter fitted with the family's measurements held at their settled values, starting from
+    its own fit alone. A top-level function so the build can run several in separate processes."""
+    import letters as LT
+    g, alpha, curl, start, fixed = job
+    kit = Kit(curl)
+    v, at_bounds, info = fit_letters({g: LT.LETTERS[g]}, {g: alpha}, kit, start=start, fixed=fixed)
+    return {"values": {k: x for k, x in v.items() if not k.startswith("family.")},
+            "at_bounds": at_bounds, "evaluations": info["evaluations"]}
 
 
 def swelling(built):
@@ -642,10 +657,12 @@ def is_line(P):
     return max(off) < 1e-6
 
 
-def write_ufo(path, info: dict, glyphs: dict):
-    """glyphs: name → {"unicode": int | None, "width": int, "contours": [[4×2 segments]]}"""
+def write_ufo(path, info: dict, glyphs: dict, features: str = ""):
+    """glyphs: name → {"unicode": int | None, "width": int, "contours": [[4×2 segments]]}; features
+    is OpenType feature code (the stylistic sets)."""
     import ufoLib2
     font = ufoLib2.Font()
+    font.features.text = features
     for k, v in info.items():
         setattr(font.info, k, v)
     for name, g in glyphs.items():

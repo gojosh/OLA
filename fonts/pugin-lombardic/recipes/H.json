@@ -2,7 +2,7 @@
  "glyph": "H",
  "unicode": "U+0048",
  "construction": "letters.py: H",
- "description": "The uncial H: a stem with the I's top-left and bottom curls; a long top bar, dipping a little over the stem, out to a top-right curl; and a shoulder that springs from the stem under the bar, arches over and comes down to a foot sweeping right into the two-lobe terminal. Between the bar and the shoulder, a sliver of space comes to a point on the stem.",
+ "description": "The uncial H: a stem with the I's top-left and bottom curls; a long top bar, dipping a little over the stem, out to a top-right curl; and a shoulder that springs from the stem under the bar, arches over and comes down to a foot sweeping right into the two-lobe terminal. Between the bar and the shoulder, a sliver of space comes to a point on the stem. The terminal's two balls are clearly separate, with a deep cusp between them, and the pocket under the first dips before rising into its neck.",
  "primitives": {
   "curl": [
    "top-left",
@@ -16,118 +16,123 @@
  },
  "corrections": [],
  "measured": {
-  "axis_x": 136.648,
+  "axis_x": 136.614,
   "bottom": {
-   "half_width": 74.624,
-   "outer_y": 444.307,
-   "neck_deg": 0.016,
-   "flare_t1": 0.496,
-   "flare_t2": 0.579,
-   "right_x": 254.101,
-   "right_y": 446.816,
-   "fillet_t1": 0.969,
-   "fillet_t2": 0.521,
-   "high_x": 133.822,
-   "high_y": 434.257,
-   "edge_t1": 0.551,
-   "edge_t2": 0.647,
-   "edge_t3": 0.46,
-   "edge_t4": 0.543
+   "half_width": 74.27,
+   "outer_y": 444.12,
+   "neck_deg": 0.336,
+   "flare_t1": 0.684,
+   "flare_t2": 0.489,
+   "right_x": 253.303,
+   "right_y": 446.231,
+   "fillet_t1": 0.999,
+   "fillet_t2": 0.574,
+   "high_x": 132.986,
+   "high_y": 433.219,
+   "edge_t1": 0.739,
+   "edge_t2": 0.919,
+   "edge_t3": 0.466,
+   "edge_t4": 0.962
   },
   "stem": {
-   "foot_y": 360.513,
-   "head_y": 131.315,
-   "foot_y_right": 357.938
+   "foot_y": 352.077,
+   "head_y": 142.495,
+   "foot_y_right": 347.648
   },
   "top": {
-   "half_width": 71.656,
-   "outer_y": 19.614,
-   "neck_deg": 5.715,
-   "flare_t1": 0.449,
-   "flare_t2": 0.377,
-   "low_x": 147.473,
-   "low_y": 32.484,
-   "right_x": 348.444,
+   "half_width": 71.982,
+   "outer_y": 19.824,
+   "neck_deg": 7.848,
+   "flare_t1": 0.464,
+   "flare_t2": 0.518,
+   "low_x": 149.497,
+   "low_y": 32.769,
+   "right_x": 348.052,
    "edge_t1": 0.201,
-   "edge_t2": 0.925,
-   "edge_t3": 0.269,
-   "edge_t4": 0.272
+   "edge_t2": 0.94,
+   "edge_t3": 0.245,
+   "edge_t4": 0.476
   },
   "top_right": {
    "neck_deg": 0.0
   },
   "sliver": {
-   "y": 170.157,
-   "t1": 0.845,
-   "t2": 0.805
+   "y": 171.253,
+   "t1": 0.809,
+   "t2": 0.858
   },
   "shoulder": {
-   "top_x": 301.051,
-   "top_y": 72.008,
-   "spring": 282.855,
-   "t1": 0.645,
-   "t2": 0.555,
-   "right_x": 418.618,
-   "right_y": 200.301,
-   "t3": 0.487,
-   "t4": 0.552,
-   "t5": 0.438,
-   "t6": 0.483
+   "top_x": 300.266,
+   "top_y": 71.974,
+   "spring": 280.863,
+   "t1": 0.642,
+   "t2": 0.524,
+   "right_x": 418.705,
+   "right_y": 200.542,
+   "t3": 0.513,
+   "t4": 0.534,
+   "t5": 0.431,
+   "t6": 0.411
   },
   "pocket": {
-   "x": 343.628,
-   "y": 387.299,
-   "t1": 1.0,
-   "t2": 1.0
+   "x": 343.623,
+   "y": 383.655,
+   "f": 0.561,
+   "dip": 7.347,
+   "t1": 0.572,
+   "t2": 0.615,
+   "t3": 0.979,
+   "t4": 0.782
   },
   "terminal": {
-   "x": 385.078,
-   "y": 390.271,
+   "x": 385.9,
+   "y": 391.493,
+   "lobe_angle": 29.304,
    "neck_at": 89.871,
-   "join_at": 100.0,
-   "neck_in": 0.0
+   "join_at": 123.879,
+   "neck_rise": 330.554
   },
   "foot": {
-   "bottom_x": 365.946,
-   "bottom_y": 445.613,
-   "join_out": 120.211,
-   "t1": 0.619,
-   "t2": 0.594,
-   "t3": 0.633,
-   "t4": 0.614
+   "bottom_x": 361.836,
+   "bottom_y": 445.222,
+   "join_out": 129.275,
+   "t1": 0.827,
+   "t2": 0.786,
+   "t3": 0.607,
+   "t4": 0.588
   },
   "inside": {
-   "left_x": 307.49,
-   "left_y": 370.561,
-   "right_x": 328.853,
-   "right_y": 239.962,
-   "t1": 0.303,
-   "t2": 0.54
+   "left_x": 307.273,
+   "left_y": 370.646,
+   "right_x": 328.725,
+   "right_y": 234.729,
+   "t1": 0.288,
+   "t2": 0.636
   },
   "arch": {
-   "top_x": 256.193,
-   "top_y": 126.302,
-   "t1": 0.693,
-   "t2": 0.808,
-   "foot_y": 227.27,
-   "t3": 0.501,
-   "t4": 0.602
+   "top_x": 256.805,
+   "top_y": 126.244,
+   "t1": 0.667,
+   "t2": 0.803,
+   "foot_y": 229.99,
+   "t3": 0.55,
+   "t4": 0.573
   },
   "bottom_right": {
-   "neck_deg": 0.043
+   "neck_deg": 0.008
   },
   "units": "plate pixels, y down; tensions 0–1; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/H.png",
-  "when": "2026-10-28T14:57:02"
+  "when": "2026-10-28T15:44:01"
  },
  "fit": {
-  "mean_px": 1.48,
-  "p95_px": 5.22,
-  "max_px": 18.46,
-  "mean_px_fitted_alone": 1.02,
+  "mean_px": 1.12,
+  "p95_px": 4.1,
+  "max_px": 10.99,
+  "mean_px_fitted_alone": 0.95,
   "wobble_of_pugins_edge_mean_px": 0.26,
-  "segments": 37,
+  "segments": 39,
   "outline_checks_pass": true
  }
 }

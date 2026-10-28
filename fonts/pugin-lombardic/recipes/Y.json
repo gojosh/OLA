@@ -1,0 +1,87 @@
+{
+ "glyph": "Y",
+ "unicode": "U+0059",
+ "construction": "letters.py: Y",
+ "description": "A stem (the plain weight, like I's and L's) with top-left and bottom-left curls; a top bar the width of the letter to a top-right curl; and from it the right side, which curves down and round into the foot, closing the counter against the stem.",
+ "primitives": {
+  "curl": [
+   "top-left",
+   "top-right",
+   "bottom-left"
+  ]
+ },
+ "corrections": [],
+ "measured": {
+  "axis_x": 131.796,
+  "bottom": {
+   "half_width": 67.265,
+   "outer_y": 449.131,
+   "neck_deg": 9.579,
+   "flare_t1": 1.0,
+   "flare_t2": 1.0
+  },
+  "stem": {
+   "foot_y": 388.219,
+   "head_y": 110.691
+  },
+  "top": {
+   "half_width": 68.111,
+   "outer_y": 25.657,
+   "neck_deg": 0.032,
+   "flare_t1": 0.218,
+   "flare_t2": 0.508,
+   "low_x": 209.361,
+   "low_y": 33.585,
+   "right_x": 424.214,
+   "neck_r": 40.0,
+   "t1": 0.4,
+   "t2": 1.0,
+   "t3": 1.0,
+   "t4": 0.203
+  },
+  "arm": {
+   "right_x": 400.11,
+   "right_y": 111.748,
+   "mid_x": 337.796,
+   "mid_y": 350.96,
+   "mid_heading": 134.568,
+   "t1": 0.332,
+   "t2": 0.573,
+   "t3": 0.262,
+   "t4": 0.797,
+   "t5": 0.829,
+   "t6": 0.926
+  },
+  "counter": {
+   "stem_top_y": 121.725,
+   "stem_foot_y": 354.829,
+   "bottom_x": 172.293,
+   "bottom_y": 406.884,
+   "right_x": 316.376,
+   "right_y": 115.597,
+   "top_x": 238.77,
+   "top_y": 45.398,
+   "t1": 0.884,
+   "t2": 0.642,
+   "t3": 0.697,
+   "t4": 0.528,
+   "t5": 0.715,
+   "t6": 0.826,
+   "t7": 0.551,
+   "t8": 0.529
+  },
+  "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/Y.png",
+  "when": "2026-10-28T15:44:01"
+ },
+ "fit": {
+  "mean_px": 1.38,
+  "p95_px": 5.82,
+  "max_px": 8.32,
+  "mean_px_fitted_alone": 1.31,
+  "wobble_of_pugins_edge_mean_px": 0.24,
+  "segments": 22,
+  "outline_checks_pass": true
+ }
+}

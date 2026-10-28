@@ -1,0 +1,103 @@
+{
+ "glyph": "V",
+ "unicode": "U+0056",
+ "construction": "letters.py: V",
+ "description": "Two straight arms meeting at a point, the left thick and the right thin, each headed by a bar with a curl at both ends. Where a cap's flare turns against its arm's slant, the edge runs upright for a moment before leaning with the arm.",
+ "primitives": {
+  "curl": [
+   "four, two on each cap"
+  ]
+ },
+ "corrections": [],
+ "measured": {
+  "point": {
+   "x": 269.319,
+   "y": 438.853,
+   "out": 250.069,
+   "in": 112.442
+  },
+  "crotch": {
+   "x": 295.073,
+   "y": 288.838,
+   "in": 72.441,
+   "out": 289.867
+  },
+  "left_arm": {
+   "outer": {
+    "x": 112.599,
+    "y": 110.016,
+    "heading": 243.838
+   },
+   "inner": {
+    "x": 188.86,
+    "y": 70.0
+   },
+   "t1": 1.0,
+   "t2": 0.346,
+   "t3": 0.2,
+   "t4": 0.233
+  },
+  "right_arm": {
+   "inner": {
+    "x": 385.702,
+    "y": 77.096
+   },
+   "outer": {
+    "x": 417.13,
+    "y": 98.509,
+    "heading": 115.042
+   },
+   "t1": 0.448,
+   "t2": 0.2,
+   "t3": 0.735,
+   "t4": 0.493
+  },
+  "left cap": {
+   "y": 23.205,
+   "left_x": 62.559,
+   "right_x": 202.212,
+   "low_x": 123.013,
+   "low_dy": 12.619,
+   "neck_l": 0.01,
+   "neck_r": 14.268,
+   "flare_l1": 0.404,
+   "flare_l2": 0.776,
+   "edge_t1": 0.2,
+   "edge_t2": 0.805,
+   "edge_t3": 0.539,
+   "edge_t4": 0.229,
+   "flare_r1": 1.0,
+   "flare_r2": 0.977
+  },
+  "right cap": {
+   "y": 26.463,
+   "left_x": 370.969,
+   "right_x": 453.627,
+   "low_x": 404.499,
+   "low_dy": 14.581,
+   "neck_l": 38.662,
+   "neck_r": 40.0,
+   "flare_l1": 0.854,
+   "flare_l2": 0.891,
+   "edge_t1": 0.2,
+   "edge_t2": 0.515,
+   "edge_t3": 0.75,
+   "edge_t4": 0.201,
+   "flare_r1": 1.0,
+   "flare_r2": 0.907
+  },
+  "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/V.png",
+  "when": "2026-10-28T15:44:01"
+ },
+ "fit": {
+  "mean_px": 1.13,
+  "p95_px": 3.54,
+  "max_px": 7.03,
+  "mean_px_fitted_alone": 0.93,
+  "wobble_of_pugins_edge_mean_px": 0.26,
+  "segments": 24,
+  "outline_checks_pass": true
+ }
+}

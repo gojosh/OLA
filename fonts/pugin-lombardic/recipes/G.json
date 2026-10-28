@@ -2,7 +2,7 @@
  "glyph": "G",
  "unicode": "U+0047",
  "construction": "letters.py: G_",
- "description": "The uncial G: a round bowl whose top runs out into a hooked beak, falling at the right to a round bulb. Its lower right rises as a stroke that arches over and spirals down to end in a trefoil pointing down. The counter opens to the outside between the bulb and that stroke.",
+ "description": "The uncial G: a round bowl whose top runs out into a hooked beak, with a round nub on top, falling at the right to a round bulb. Its lower right rises as a stroke that arches over and spirals down to end in a trefoil pointing down. The counter opens to the outside between the bulb and that stroke.",
  "primitives": {
   "trefoil": [
    "end of the spiral"
@@ -11,98 +11,103 @@
  "corrections": [],
  "measured": {
   "bowl": {
-   "left_x": 24.58,
-   "left_y": 235.534,
-   "top_x": 250.567,
-   "top_y": 29.191,
-   "t1": 0.488,
-   "t2": 0.479,
-   "right_x": 441.487,
-   "right_y": 291.284,
-   "bottom_x": 258.036,
-   "bottom_y": 451.581,
-   "t3": 0.491,
-   "t4": 0.488,
-   "t5": 0.535,
-   "t6": 0.516
+   "left_x": 24.547,
+   "left_y": 232.176,
+   "top_x": 250.292,
+   "top_y": 27.915,
+   "t1": 0.469,
+   "t2": 0.467,
+   "right_x": 441.726,
+   "right_y": 293.349,
+   "bottom_x": 260.56,
+   "bottom_y": 451.46,
+   "t3": 0.447,
+   "t4": 0.504,
+   "t5": 0.543,
+   "t6": 0.532
   },
-  "beak": {
-   "right_x": 428.153,
-   "right_y": 56.71,
-   "t1": 0.588,
-   "t2": 1.0,
-   "into_bulb": 90.0,
-   "t3": 0.716,
-   "t4": 0.946,
-   "t5": 0.662,
-   "t6": 0.97
+  "nub": {
+   "x": 401.943,
+   "y": 49.702,
+   "r": 24.801,
+   "from": 193.21,
+   "in": 12.763
   },
   "bulb": {
-   "x": 422.623,
-   "y": 161.908,
-   "r": 18.398,
+   "x": 422.765,
+   "y": 161.914,
+   "r": 18.343,
    "from": 268.18,
-   "to": 508.519
+   "to": 507.981
   },
   "counter": {
-   "top_x": 257.654,
-   "top_y": 58.58,
-   "left_x": 126.15,
-   "left_y": 247.121,
-   "bottom_x": 254.137,
-   "bottom_y": 422.996,
-   "t1": 0.647,
-   "t2": 0.586,
-   "t3": 0.609,
-   "t4": 0.636,
-   "t5": 0.587,
-   "t6": 0.631,
-   "t7": 0.59,
-   "t8": 0.595
+   "top_x": 258.625,
+   "top_y": 58.691,
+   "left_x": 126.23,
+   "left_y": 248.843,
+   "bottom_x": 255.403,
+   "bottom_y": 422.986,
+   "t1": 0.65,
+   "t2": 0.6,
+   "t3": 0.612,
+   "t4": 0.635,
+   "t5": 0.589,
+   "t6": 0.613,
+   "t7": 0.602,
+   "t8": 0.559
   },
   "stroke": {
-   "inside_x": 351.026,
-   "inside_y": 284.819
+   "inside_x": 351.127,
+   "inside_y": 285.138
   },
   "arch": {
-   "inside_x": 277.051,
-   "inside_y": 168.303,
-   "top_x": 284.267,
-   "top_y": 143.865
+   "inside_x": 279.176,
+   "inside_y": 168.323,
+   "top_x": 284.212,
+   "top_y": 143.805
+  },
+  "beak": {
+   "t1": 1.0,
+   "t2": 0.511,
+   "into_bulb": 94.16,
+   "t3": 0.958,
+   "t4": 0.753,
+   "t5": 0.653,
+   "t6": 1.0
   },
   "trefoil": {
-   "x": 223.689,
-   "y": 262.118,
-   "axis": 65.746,
-   "enter": -129.856,
+   "x": 223.08,
+   "y": 262.254,
+   "axis": 65.56,
+   "enter": -132.591,
    "leave": 116.472
   },
   "spiral": {
-   "left_x": 198.152,
-   "left_y": 207.258,
+   "left_x": 198.139,
+   "left_y": 207.39,
    "enter_heading": 90.0,
    "t1": 1.0,
-   "t2": 0.678,
-   "leave_heading": 264.373,
-   "t3": 0.214,
-   "t4": 0.584,
-   "t5": 0.525,
-   "t6": 0.544,
-   "t7": 0.443,
-   "t8": 0.392
+   "t2": 0.686,
+   "leave_heading": 270.0,
+   "t3": 0.636,
+   "t4": 0.825,
+   "t5": 0.539,
+   "t6": 0.529,
+   "t7": 0.439,
+   "t8": 0.407
   },
   "units": "plate pixels, y down; tensions 0–1; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/G.png",
-  "when": "2026-10-28T14:57:02"
+  "when": "2026-10-28T15:44:01"
  },
  "fit": {
-  "mean_px": 1.21,
-  "p95_px": 4.58,
-  "max_px": 12.21,
-  "mean_px_fitted_alone": 1.15,
+  "mean_px": 0.9,
+  "p95_px": 2.42,
+  "max_px": 11.82,
+  "mean_px_fitted_alone": 0.89,
   "wobble_of_pugins_edge_mean_px": 0.25,
-  "segments": 26,
+  "segments": 28,
   "outline_checks_pass": true
  }
 }

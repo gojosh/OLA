@@ -1,0 +1,110 @@
+{
+ "glyph": "U",
+ "unicode": "U+0055",
+ "construction": "letters.py: U",
+ "description": "The uncial U: a round bowl on the left, meeting the underside of a top bar at a notch; the bar runs the width of the letter with a curl at each end; on the right a stem comes down from the bar and flicks out at its foot into a pointed hook, parted from the bowl below by a notch.",
+ "primitives": {
+  "curl": [
+   "top-left",
+   "top-right"
+  ]
+ },
+ "corrections": [],
+ "measured": {
+  "axis_x": 333.448,
+  "bowl": {
+   "left_x": 23.423,
+   "left_y": 276.265,
+   "bottom_x": 211.108,
+   "bottom_y": 454.058,
+   "t1": 0.75,
+   "t2": 0.549,
+   "t5": 0.701,
+   "t6": 0.659,
+   "t3": 0.485,
+   "t4": 0.464
+  },
+  "notch": {
+   "x": 159.655,
+   "y": 61.725,
+   "in": 321.042,
+   "out": 194.353
+  },
+  "top": {
+   "y": 27.9,
+   "left_x": 98.411,
+   "right_x": 412.536,
+   "low_x": 270.177,
+   "low_dy": 17.349,
+   "neck_l": 2.685,
+   "neck_r": 30.306,
+   "t5": 0.825,
+   "t6": 0.641,
+   "t1": 0.514,
+   "t2": 0.397,
+   "t3": 0.62,
+   "t4": 0.497
+  },
+  "stem": {
+   "head_y": 126.513,
+   "foot_y": 362.02,
+   "t1": 0.511,
+   "t2": 0.901
+  },
+  "hook": {
+   "x": 437.811,
+   "y": 399.712,
+   "low_x": 404.697,
+   "low_y": 425.892,
+   "bottom_x": 391.271,
+   "bottom_y": 450.493,
+   "t1": 0.571,
+   "t2": 0.423,
+   "in": 311.67,
+   "t5": 0.942,
+   "t6": 0.536,
+   "out": 95.0,
+   "t3": 0.765,
+   "t4": 0.464,
+   "t7": 0.935,
+   "t8": 0.754
+  },
+  "notch_b": {
+   "x": 316.328,
+   "y": 410.147,
+   "in": 225.999,
+   "out": 139.847
+  },
+  "counter": {
+   "top_x": 213.787,
+   "top_y": 68.261,
+   "left_x": 122.073,
+   "left_y": 270.545,
+   "bottom_x": 212.806,
+   "bottom_y": 424.547,
+   "stem_foot_y": 309.992,
+   "stem_top_y": 180.837,
+   "t1": 0.469,
+   "t2": 0.465,
+   "t3": 0.626,
+   "t4": 0.779,
+   "t5": 0.558,
+   "t6": 0.688,
+   "t7": 0.89,
+   "t8": 0.665
+  },
+  "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/U.png",
+  "when": "2026-10-28T15:44:01"
+ },
+ "fit": {
+  "mean_px": 0.76,
+  "p95_px": 2.16,
+  "max_px": 6.28,
+  "mean_px_fitted_alone": 0.72,
+  "wobble_of_pugins_edge_mean_px": 0.25,
+  "segments": 23,
+  "outline_checks_pass": true
+ }
+}

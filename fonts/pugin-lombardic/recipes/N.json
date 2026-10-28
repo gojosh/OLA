@@ -1,0 +1,123 @@
+{
+ "glyph": "N",
+ "unicode": "U+004E",
+ "construction": "letters.py: N_",
+ "description": "The uncial N: the I's stem with a top-left curl and curls either side of its foot, and from the stem's top an arch that rises over, comes down the right and sweeps into the two-lobe terminal. The counter under the arch opens at the bottom.",
+ "primitives": {
+  "curl": [
+   "top-left",
+   "bottom-left",
+   "bottom-right"
+  ],
+  "two-lobe": [
+   "foot of the arch"
+  ]
+ },
+ "corrections": [],
+ "measured": {
+  "axis_x": 130.966,
+  "bottom": {
+   "half_width": 67.874,
+   "outer_y": 444.977,
+   "neck_deg": 39.749,
+   "flare_t1": 0.408,
+   "flare_t2": 0.828,
+   "right_x": 201.176,
+   "right_y": 445.142,
+   "fillet_t1": 0.41,
+   "fillet_t2": 0.678,
+   "high_x": 132.005,
+   "high_y": 431.44,
+   "edge_t1": 0.3,
+   "edge_t2": 0.2,
+   "edge_t3": 0.717,
+   "edge_t4": 0.2
+  },
+  "stem": {
+   "foot_y": 358.129,
+   "head_y": 117.234,
+   "foot_y_right": 365.619
+  },
+  "top": {
+   "half_width": 59.266,
+   "outer_y": 25.463,
+   "neck_deg": 40.0,
+   "flare_t1": 0.755,
+   "flare_t2": 0.356,
+   "low_x": 125.913,
+   "low_y": 38.174,
+   "t1": 0.2,
+   "t2": 0.749,
+   "t3": 0.446,
+   "t4": 0.774
+  },
+  "arch": {
+   "top_x": 252.643,
+   "top_y": 23.205,
+   "right_x": 426.895,
+   "right_y": 203.595,
+   "t1": 0.409,
+   "t2": 0.485,
+   "t3": 0.466,
+   "t4": 0.427,
+   "inside_x": 237.623,
+   "inside_y": 47.951,
+   "foot_y": 141.654
+  },
+  "pocket": {
+   "x": 325.724,
+   "y": 391.333,
+   "f": 0.447,
+   "dip": 28.113,
+   "t1": 0.68,
+   "t2": 0.967,
+   "t3": 0.955,
+   "t4": 0.663
+  },
+  "terminal": {
+   "x": 383.246,
+   "y": 382.691,
+   "lobe_angle": 55.259,
+   "neck_at": 150.0,
+   "join_at": 132.921,
+   "neck_rise": 291.643
+  },
+  "foot": {
+   "bottom_x": 333.644,
+   "bottom_y": 444.316,
+   "join_out": 157.415,
+   "t1": 0.314,
+   "t2": 0.954,
+   "t3": 0.52,
+   "t4": 0.575
+  },
+  "inside": {
+   "left_x": 289.287,
+   "left_y": 378.776,
+   "right_x": 330.255,
+   "right_y": 201.302,
+   "t1": 0.248,
+   "t2": 0.612,
+   "t3": 0.586,
+   "t4": 0.708,
+   "t5": 0.567,
+   "t6": 0.667
+  },
+  "bottom_right": {
+   "neck_deg": 8.573
+  },
+  "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/N.png",
+  "when": "2026-10-28T15:44:01"
+ },
+ "fit": {
+  "mean_px": 0.83,
+  "p95_px": 2.27,
+  "max_px": 7.38,
+  "mean_px_fitted_alone": 0.61,
+  "wobble_of_pugins_edge_mean_px": 0.24,
+  "segments": 35,
+  "outline_checks_pass": true
+ }
+}

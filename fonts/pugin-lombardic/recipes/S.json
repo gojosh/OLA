@@ -1,0 +1,139 @@
+{
+ "glyph": "S",
+ "unicode": "U+0053",
+ "construction": "letters.py: S_",
+ "description": "The S: an upper bowl and a lower bowl joined by a spine. At the top right the upper bowl meets a short upright flag at a notch; the flag's head is rounded, and at its foot a round ball sits out to the right, the flag's outside meeting it at a sharp notch and its inside running smoothly round under it. At the bottom left the same, turned over. Both counters open toward the balls.",
+ "primitives": {
+  "ball": [
+   "foot of the flag",
+   "head of the left stroke"
+  ]
+ },
+ "corrections": [],
+ "measured": {
+  "upper": {
+   "left_x": 55.103,
+   "left_y": 166.512,
+   "top_x": 207.288,
+   "top_y": 25.165,
+   "t1": 0.568,
+   "t2": 0.588,
+   "t3": 0.897,
+   "t4": 0.35
+  },
+  "notch": {
+   "x": 324.631,
+   "y": 51.485,
+   "in": 16.714,
+   "out": 319.98
+  },
+  "flag": {
+   "head": {
+    "x": 350.76,
+    "y": 45.097,
+    "from": 201.404,
+    "to": 360.0,
+    "r": 21.999
+   },
+   "ball_x": 368.26,
+   "ball_y": 186.251,
+   "notch_at": 258.11,
+   "leaves_at": 152.551,
+   "t1": 0.772,
+   "t2": 0.7,
+   "into_ball": 87.28,
+   "t3": 0.501,
+   "t4": 0.489
+  },
+  "upper_counter": {
+   "top_x": 210.342,
+   "top_y": 53.858,
+   "left_x": 110.03,
+   "left_y": 133.316,
+   "t1": 0.645,
+   "t2": 0.985,
+   "t3": 0.614,
+   "t4": 0.707
+  },
+  "spine": {
+   "top_x": 275.646,
+   "top_y": 197.934,
+   "top_heading": 7.897,
+   "t1": 1.0,
+   "t2": 0.65,
+   "t3": 0.62,
+   "t4": 0.467,
+   "under_x": 201.667,
+   "under_y": 287.539,
+   "under_heading": 185.954,
+   "t5": 0.79,
+   "t6": 0.766,
+   "t7": 0.63,
+   "t8": 0.564
+  },
+  "lower": {
+   "right_x": 398.833,
+   "right_y": 333.044,
+   "bottom_x": 275.317,
+   "bottom_y": 463.807,
+   "t1": 0.566,
+   "t2": 0.563,
+   "t3": 0.715,
+   "t4": 0.674
+  },
+  "notch_b": {
+   "x": 91.647,
+   "y": 417.028,
+   "in": 208.236,
+   "out": 104.073
+  },
+  "foot": {
+   "bottom_x": 67.185,
+   "bottom_y": 458.453,
+   "left_x": 41.834,
+   "left_y": 433.528,
+   "t1": 0.648,
+   "t2": 0.88,
+   "t3": 0.523,
+   "t4": 0.541,
+   "t5": 0.429,
+   "t6": 0.66
+  },
+  "stroke": {
+   "right_x": 56.4,
+   "right_y": 362.632,
+   "into_ball": 260.873,
+   "t1": 0.594,
+   "t2": 0.333
+  },
+  "head": {
+   "ball_x": 47.345,
+   "ball_y": 281.774,
+   "notch_at": 91.61,
+   "leaves_at": 327.538
+  },
+  "lower_counter": {
+   "bottom_x": 263.593,
+   "bottom_y": 434.6,
+   "right_x": 345.974,
+   "right_y": 360.627,
+   "t1": 0.652,
+   "t2": 0.998,
+   "t3": 0.59,
+   "t4": 0.689
+  },
+  "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/S.png",
+  "when": "2026-10-28T15:44:01"
+ },
+ "fit": {
+  "mean_px": 0.99,
+  "p95_px": 3.09,
+  "max_px": 6.41,
+  "mean_px_fitted_alone": 0.96,
+  "wobble_of_pugins_edge_mean_px": 0.22,
+  "segments": 27,
+  "outline_checks_pass": true
+ }
+}

@@ -13,41 +13,41 @@
  },
  "corrections": [],
  "measured": {
-  "axis_x": 178.602,
+  "axis_x": 178.613,
   "bottom": {
-   "centre_y": 432.559,
-   "half_width": 113.316,
-   "outer_y": 444.333,
-   "edge_t1": 0.486,
-   "edge_t2": 0.79,
-   "neck_deg": 0.003,
+   "centre_y": 432.381,
+   "half_width": 113.107,
+   "outer_y": 444.27,
+   "edge_t1": 0.494,
+   "edge_t2": 0.912,
+   "neck_deg": 0.0,
    "flare_t1": 0.696,
-   "flare_t2": 0.591
+   "flare_t2": 0.617
   },
   "stem": {
-   "foot_y": 305.008,
-   "head_y": 149.28
+   "foot_y": 302.157,
+   "head_y": 152.169
   },
   "top": {
-   "half_width": 102.388,
-   "outer_y": 25.01,
-   "neck_deg": 0.0,
-   "flare_t1": 0.615,
-   "flare_t2": 0.746,
-   "centre_y": 39.251,
-   "edge_t2": 0.431,
-   "edge_t1": 0.565
+   "half_width": 102.163,
+   "outer_y": 24.728,
+   "neck_deg": 0.006,
+   "flare_t1": 0.642,
+   "flare_t2": 0.741,
+   "centre_y": 38.685,
+   "edge_t2": 0.313,
+   "edge_t1": 0.555
   },
   "units": "plate pixels, y down; tensions 0–1; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/I.png",
-  "when": "2026-10-28T14:57:02"
+  "when": "2026-10-28T15:44:01"
  },
  "fit": {
-  "mean_px": 1.13,
-  "p95_px": 2.74,
-  "max_px": 6.24,
-  "mean_px_fitted_alone": 0.91,
+  "mean_px": 1.08,
+  "p95_px": 2.62,
+  "max_px": 5.99,
+  "mean_px_fitted_alone": 0.89,
   "wobble_of_pugins_edge_mean_px": 0.29,
   "segments": 22,
   "outline_checks_pass": true

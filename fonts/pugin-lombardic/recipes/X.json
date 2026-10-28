@@ -1,0 +1,187 @@
+{
+ "glyph": "X",
+ "unicode": "U+0058",
+ "construction": "letters.py: X",
+ "description": "A thick stroke from top left to bottom right crossed by a thin one from top right to bottom left, each of the four arms ending in a bar with a curl at both ends.",
+ "primitives": {
+  "curl": [
+   "eight, two on each cap"
+  ]
+ },
+ "corrections": [],
+ "measured": {
+  "crotch_top": {
+   "x": 257.409,
+   "y": 200.79,
+   "in": 57.542,
+   "out": 325.145
+  },
+  "crotch_right": {
+   "x": 267.211,
+   "y": 216.903,
+   "in": 138.16,
+   "out": 58.689
+  },
+  "crotch_bottom": {
+   "x": 210.579,
+   "y": 248.775,
+   "in": 236.192,
+   "out": 127.199
+  },
+  "crotch_left": {
+   "x": 199.091,
+   "y": 231.728,
+   "in": 323.331,
+   "out": 240.91
+  },
+  "tl_arm": {
+   "outer": {
+    "x": 100.967,
+    "y": 84.944,
+    "heading": 227.989
+   },
+   "inner": {
+    "x": 180.548,
+    "y": 76.438
+   }
+  },
+  "tr_arm": {
+   "inner": {
+    "x": 331.157,
+    "y": 88.903
+   },
+   "outer": {
+    "x": 416.76,
+    "y": 83.229,
+    "heading": 108.282
+   }
+  },
+  "br_arm": {
+   "outer": {
+    "x": 394.522,
+    "y": 401.289,
+    "heading": 49.756
+   },
+   "inner": {
+    "x": 297.901,
+    "y": 398.602
+   }
+  },
+  "bl_arm": {
+   "inner": {
+    "x": 155.893,
+    "y": 396.6
+   },
+   "outer": {
+    "x": 77.219,
+    "y": 397.058,
+    "heading": 285.901
+   }
+  },
+  "top-left cap": {
+   "y": 31.776,
+   "left_x": 75.145,
+   "right_x": 190.163,
+   "low_x": 132.384,
+   "low_dy": 8.894,
+   "neck_l": 14.587,
+   "neck_r": 0.009,
+   "flare_l1": 0.435,
+   "flare_l2": 0.236,
+   "edge_t1": 0.224,
+   "edge_t2": 0.718,
+   "edge_t3": 0.318,
+   "edge_t4": 0.392,
+   "flare_r1": 0.906,
+   "flare_r2": 0.6
+  },
+  "tl": {
+   "t1": 0.25,
+   "t2": 0.467,
+   "t3": 0.489,
+   "t4": 0.384
+  },
+  "tr": {
+   "t1": 0.959,
+   "t2": 0.781,
+   "t3": 0.744,
+   "t4": 0.596
+  },
+  "top-right cap": {
+   "y": 24.707,
+   "left_x": 310.3,
+   "right_x": 433.708,
+   "low_x": 366.966,
+   "low_dy": 10.846,
+   "neck_l": 8.065,
+   "neck_r": 1.483,
+   "flare_l1": 0.345,
+   "flare_l2": 0.429,
+   "edge_t1": 0.373,
+   "edge_t2": 0.86,
+   "edge_t3": 0.345,
+   "edge_t4": 0.544,
+   "flare_r1": 0.572,
+   "flare_r2": 0.538
+  },
+  "br": {
+   "t1": 0.695,
+   "t2": 0.709,
+   "t3": 0.55,
+   "t4": 0.426
+  },
+  "bottom-right cap": {
+   "y": 445.435,
+   "left_x": 294.867,
+   "right_x": 423.256,
+   "high_x": 357.369,
+   "high_dy": 12.919,
+   "neck_r": 28.406,
+   "neck_l": 0.777,
+   "flare_r1": 0.571,
+   "flare_r2": 0.507,
+   "edge_t1": 0.34,
+   "edge_t2": 0.66,
+   "edge_t3": 0.661,
+   "edge_t4": 0.316,
+   "flare_l1": 0.871,
+   "flare_l2": 0.612
+  },
+  "bl": {
+   "t1": 0.811,
+   "t2": 0.806,
+   "t3": 0.801,
+   "t4": 0.979
+  },
+  "bottom-left cap": {
+   "y": 446.299,
+   "left_x": 62.348,
+   "right_x": 165.685,
+   "high_x": 116.785,
+   "high_dy": 11.301,
+   "neck_r": 29.505,
+   "neck_l": 3.197,
+   "flare_r1": 0.348,
+   "flare_r2": 0.204,
+   "edge_t1": 0.234,
+   "edge_t2": 0.422,
+   "edge_t3": 0.659,
+   "edge_t4": 0.268,
+   "flare_l1": 0.216,
+   "flare_l2": 0.351
+  },
+  "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/X.png",
+  "when": "2026-10-28T15:44:01"
+ },
+ "fit": {
+  "mean_px": 1.1,
+  "p95_px": 3.38,
+  "max_px": 8.88,
+  "mean_px_fitted_alone": 1.07,
+  "wobble_of_pugins_edge_mean_px": 0.31,
+  "segments": 48,
+  "outline_checks_pass": true
+ }
+}

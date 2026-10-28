@@ -476,7 +476,7 @@ def cmd_build(fam: str, fresh: bool = False):
     alone, todo = {}, []
     for g in letters:
         fp = _fingerprint(g, d / refs[g]["coverage"], curl)
-        if cache.get(g, {}).get("fingerprint") == fp:
+        if cache.get(g, {}).get("fingerprint") == fp and "values" in cache[g]:
             alone[g] = cache[g]
         else:
             todo.append((g, fp))
@@ -493,11 +493,43 @@ def cmd_build(fam: str, fresh: bool = False):
                 alone[g] = {**res, "fingerprint": fp}
     cache_p.write_text(json.dumps(alone, indent=1) + "\n")
     print(f"  letters alone: {len(todo)} fitted, {len(letters) - len(todo)} unchanged ({time.time() - t0:.0f} s)")
-    # all of them together, sharing the family's measurements
+    # The family's measurements settle where Pugin's letters agree: each is the median of what the
+    # letters that use it want on their own. Then every letter is fitted again with those held fixed,
+    # in parallel, starting from its own fit alone. A letter whose construction and the family's
+    # values are unchanged keeps its last result.
     t0 = time.time()
-    vals, at_bounds, info = K.fit_letters(letters, alphas, kit, start=start)
-    shared = fam_of(vals)
-    print(f"  together: {info['evaluations']} evaluations ({time.time() - t0:.0f} s); shared {shared}")
+    wants = {}
+    for g in letters:
+        for k, v in alone[g]["family"].items():
+            wants.setdefault(k, []).append(v)
+    shared = {k: round(float(np.median(v)), 3) for k, v in sorted(wants.items())}
+    fixed = {f"family.{k}": v for k, v in shared.items()}
+    ref_p = out / "refined.json"
+    ref_cache = json.loads(ref_p.read_text()) if ref_p.exists() and not fresh else {}
+    refined, todo2 = {}, []
+    for g in letters:
+        key = {"fingerprint": alone[g]["fingerprint"], "family": {k: v for k, v in shared.items() if k in alone[g]["family"]}}
+        if all(ref_cache.get(g, {}).get(k) == v for k, v in key.items()):
+            refined[g] = ref_cache[g]
+        else:
+            todo2.append((g, key))
+    if todo2:
+        import os
+        from concurrent.futures import ProcessPoolExecutor
+        jobs = [(g, alphas[g], curl, alone[g]["values"], {k: v for k, v in fixed.items() if k.split("family.")[1] in alone[g]["family"]})
+                for g, _ in todo2]
+        with ProcessPoolExecutor(max_workers=min(len(jobs), max(1, (os.cpu_count() or 2) - 1))) as ex:
+            for (g, key), res in zip(todo2, ex.map(K.refine_fit, jobs)):
+                refined[g] = {**key, **res}
+    ref_p.write_text(json.dumps(refined, indent=1) + "\n")
+    vals = dict(fixed)
+    at_bounds = []
+    for g in letters:
+        vals.update(refined[g]["values"])
+        at_bounds += refined[g]["at_bounds"]
+    info = {"method": "family = median of the letters' own fits; each letter refitted with it fixed",
+            "refitted": len(todo2), "unchanged": len(letters) - len(todo2)}
+    print(f"  together: {len(todo2)} refitted, {len(letters) - len(todo2)} unchanged ({time.time() - t0:.0f} s); shared {shared}")
     for g, (rp, r) in recipes.items():
         for c in r.get("corrections", []):
             vals[f"{g}:{c['measure']}"] += c["add"]
@@ -513,6 +545,8 @@ def cmd_build(fam: str, fresh: bool = False):
         chk_u = K.check_outline(units, names, smooth_deg=3.0, swell_tol=0.5)
         mine = {k[len(g) + 1:]: round(v, 3) for k, v in vals.items() if k.startswith(g + ":")}
         uni = int(r["unicode"][2:], 16) if r.get("unicode") else None
+        base = recipes.get(r.get("alternate_of", ""), (None, {}))[1]
+        char = chr(uni) if uni else chr(int(base["unicode"][2:], 16)) if base.get("unicode") else g
         r["measured"] = {**K._nest(mine), "units": "plate pixels, y down; tensions 0–1; angles in degrees",
                          "family": "shared with the other letters: see family.json", "from": refs[g]["coverage"], "when": when}
         r["fit"] = {"mean_px": dev["overall"]["mean_px"], "p95_px": dev["overall"]["p95_px"], "max_px": dev["overall"]["max_px"],
@@ -520,7 +554,8 @@ def cmd_build(fam: str, fresh: bool = False):
                     "segments": chk_u["segments"], "outline_checks_pass": chk_u["ok"]}
         rp.write_text(json.dumps(r, indent=1, ensure_ascii=False) + "\n")
         trace = sum(len(G.fit_with_extrema(c, tol=0.5)[0]) for c in K.reference_edges(alphas[g]))
-        report = {"glyph": g, "char": chr(uni) if uni else g, "construction": r["construction"], "description": r["description"],
+        report = {"glyph": g, "char": char, "feature": r.get("feature"), "alternate_of": r.get("alternate_of"),
+                  "construction": r["construction"], "description": r["description"],
                   "symmetric": bool(built.get("half") or built.get("halves")),
                   "measured": mine, "family": shared, "alone": alone[g],
                   "at_bounds": [k for k in at_bounds if k.startswith(g + ":") or k.startswith("family.")],
@@ -554,7 +589,7 @@ def write_font(d: Path, src: dict, names: list[str]):
     fc, sp = src["font"], src["spacing"]
     out = d / "build"
     cap = fc["cap_height"]
-    glyphs, table = {}, {}
+    glyphs, table, features = {}, {}, {}
     for g in names:
         bp = out / f"{g.replace('.', '_')}.json"
         b = json.loads(bp.read_text())
@@ -569,7 +604,9 @@ def write_font(d: Path, src: dict, names: list[str]):
                   "spaced_origin_px": u["origin_px"] - dx / u["scale_per_px"],
                   "profile_depth": {"left": round(dl, 1), "right": round(dr, 1)}})
         bp.write_text(json.dumps(b) + "\n")
-        glyphs[g] = {"unicode": ord(b["char"]) if len(b["char"]) == 1 else None, "width": width, "contours": moved}
+        glyphs[g] = {"unicode": ord(b["char"]) if len(b["char"]) == 1 and not b.get("feature") else None, "width": width, "contours": moved}
+        if b.get("feature"):
+            features.setdefault(b["feature"], []).append((b["alternate_of"], g))
         table[g] = {"left": lsb_u, "right": rsb_u, "advance": width}
     (d / "spacing.json").write_text(json.dumps({"method": sp, "glyphs": table}, indent=1) + "\n")
     glyphs[".notdef"] = {"unicode": None, "width": 500, "contours": K.notdef(500, cap)}
@@ -581,7 +618,10 @@ def write_font(d: Path, src: dict, names: list[str]):
                                        "Glossary of Ecclesiastical Ornament (1844), plate 9, rebuilt from measured primitives."}
     ufo = d / "source" / f"{fc['postscript_name']}.ufo"
     ufo.parent.mkdir(exist_ok=True)
-    font = K.write_ufo(ufo, info, glyphs)
+    # stylistic sets: each alternate replaces its base letter when its feature is on
+    fea = "".join(f"feature {tag} {{\n" + "".join(f"    sub {a} by {b};\n" for a, b in pairs) + f"}} {tag};\n"
+                  for tag, pairs in sorted(features.items()))
+    font = K.write_ufo(ufo, info, glyphs, fea)
     otf_path = out / f"{fc['postscript_name']}.otf"
     ufo2ft.compileOTF(font).save(otf_path)
     print("  spacing: " + ", ".join(f"{g} {v['left']}|{v['right']}" for g, v in table.items()))
@@ -720,7 +760,8 @@ def _constructed_html(d: Path, meta: dict) -> tuple[str, str]:
         em = 1000 / u["scale_per_px"]
         fx = u.get("spaced_origin_px", u["origin_px"])
         ch = H.escape(b["char"])
-        font_text = f'<text class="L-font" x="{fx:.2f}" y="{u["baseline_px"]:.2f}" font-size="{em:.2f}">{ch}</text>'
+        ffs = f' style="font-feature-settings:\'{b["feature"]}\'"' if b.get("feature") else ""
+        font_text = f'<text class="L-font" x="{fx:.2f}" y="{u["baseline_px"]:.2f}" font-size="{em:.2f}"{ffs}>{ch}</text>'
         path = G.svg_path(contours)
         dv = b["deviation"]
         o = dv["overall"]
@@ -730,7 +771,8 @@ def _constructed_html(d: Path, meta: dict) -> tuple[str, str]:
         ck = b["checks_units"]
         ink = hexc(inks[g["ink"]])
         other = hexc(inks["red" if g["ink"] == "blue" else "blue"])
-        spec = "".join(f'<span style="font-size:{s_}px;color:{col}">{ch}</span>'
+        fs = f";font-feature-settings:'{b['feature']}'" if b.get("feature") else ""
+        spec = "".join(f'<span style="font-size:{s_}px;color:{col}{fs}">{ch}</span>'
                        for s_, col in ((24, ink), (48, other), (96, ink), (192, other)))
         vb = f"0 0 {Ww} {Hh}"
         out.append(f"""
@@ -770,7 +812,7 @@ two-lobe terminal). The outline below is drawn over his {H.escape(name)} on the 
 </div>
 <div class="tri">
   <figure><img src="{_png_uri(crop, '.jpg', 92)}" alt=""><figcaption>Pugin</figcaption></figure>
-  <figure><svg viewBox="{vb}" style="background:{hexc(paper)}"><text x="{fx:.2f}" y="{u['baseline_px']:.2f}" font-size="{em:.2f}" fill="{ink}" font-family="Draft">{ch}</text></svg><figcaption>The font</figcaption></figure>
+  <figure><svg viewBox="{vb}" style="background:{hexc(paper)}"><text x="{fx:.2f}" y="{u['baseline_px']:.2f}" font-size="{em:.2f}" fill="{ink}" font-family="Draft"{ffs}>{ch}</text></svg><figcaption>The font</figcaption></figure>
   <figure><img src="{_png_uri(diff_paper.astype(np.uint8))}" alt=""><figcaption>Where they differ</figcaption></figure>
 </div>
 <p class="spec">{spec}</p>
@@ -834,7 +876,7 @@ def _family_html(d: Path, meta: dict) -> str:
     rows += (f"<tr class='sh'><th>Shared</th><td>{stem(sh['stem_plain'])} plain, {stem(sh['stem_armed'])} armed</td><td>{sh['curl']:.3f}</td><td>{sh['trefoil_r']:.1f}</td>"
              f"<td>{sh['two_lobe_r']:.1f}</td><td></td><td></td></tr>")
     inks = {k: "#%02x%02x%02x" % tuple(int(v) for v in c[::-1]) for k, c in meta["inks_bgr"].items()}
-    words = ["THE", "LORD", "GLORIFIED", "CHOIR", "CREED", "PROPER", "COLLECT", "BELL"]
+    words = ["KYRIE", "GLORIA", "CREDO", "ALLELUIA", "VENI CREATOR", "LAUDATE", "BENEDICTE", "AVE"]
     spec = " ".join(f'<span style="color:{inks["red" if i % 2 else "blue"]}">{w}</span>' for i, w in enumerate(words))
     return f"""
 <section class="family"><h2>The letters together</h2>

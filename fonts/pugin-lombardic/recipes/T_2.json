@@ -1,0 +1,117 @@
+{
+ "glyph": "T.2",
+ "alternate_of": "T.1",
+ "feature": "ss01",
+ "feature_note": "The uncial T, reached from T through the stylistic set ss01 until Q34 decides the defaults.",
+ "construction": "letters.py: T_2",
+ "description": "The uncial T: a top bar the width of the letter with a curl at each end; from under its middle a stroke comes down and sweeps left into a round bowl, which comes round the bottom and up the right, and curls over at the top into a spiral that ends in a trefoil in the middle of the counter. The counter opens between the stroke and the top of the spiral.",
+ "primitives": {
+  "curl": [
+   "top-left",
+   "top-right"
+  ],
+  "trefoil": [
+   "end of the spiral"
+  ]
+ },
+ "corrections": [],
+ "measured": {
+  "bowl": {
+   "left_x": 31.192,
+   "left_y": 273.849,
+   "t1": 0.609,
+   "t2": 0.39,
+   "right_x": 440.298,
+   "right_y": 302.646,
+   "bottom_x": 247.055,
+   "bottom_y": 456.856,
+   "t3": 0.476,
+   "t4": 0.47,
+   "t5": 0.561,
+   "t6": 0.595,
+   "t7": 0.615,
+   "t8": 0.577
+  },
+  "notch_l": {
+   "x": 204.846,
+   "y": 78.0,
+   "in": 296.221,
+   "out": 180.0
+  },
+  "top": {
+   "y": 26.55,
+   "left_x": 64.738,
+   "right_x": 393.369,
+   "low_x": 233.528,
+   "low_dy": 12.593,
+   "neck_l": 4.622,
+   "neck_r": 21.638,
+   "t5": 0.682,
+   "t6": 0.757,
+   "t1": 0.437,
+   "t2": 0.484,
+   "t3": 0.57,
+   "t4": 0.424,
+   "t7": 0.394,
+   "t8": 0.711
+  },
+  "notch_r": {
+   "x": 284.809,
+   "y": 77.98,
+   "in": 175.684,
+   "out": 126.101
+  },
+  "counter": {
+   "left_x": 134.302,
+   "left_y": 284.284,
+   "bottom_x": 250.552,
+   "bottom_y": 430.97,
+   "right_x": 354.749,
+   "right_y": 301.236,
+   "t1": 0.534,
+   "t2": 0.618,
+   "t3": 0.748,
+   "t4": 0.696,
+   "t5": 0.62,
+   "t6": 0.659
+  },
+  "pocket": {
+   "x": 280.711,
+   "y": 188.714
+  },
+  "stroke": {
+   "t1": 0.228,
+   "t2": 0.807
+  },
+  "trefoil": {
+   "x": 234.89,
+   "y": 286.151,
+   "axis": 58.047,
+   "enter": -127.156,
+   "leave": 91.374
+  },
+  "spiral": {
+   "top_x": 299.124,
+   "top_y": 164.892,
+   "enter_heading": 90.0,
+   "t1": 0.842,
+   "t2": 0.832,
+   "leave_heading": 270.0,
+   "t3": 0.75,
+   "t4": 0.774
+  },
+  "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/T_2.png",
+  "when": "2026-10-28T15:44:01"
+ },
+ "fit": {
+  "mean_px": 1.63,
+  "p95_px": 6.71,
+  "max_px": 21.54,
+  "mean_px_fitted_alone": 1.51,
+  "wobble_of_pugins_edge_mean_px": 0.24,
+  "segments": 29,
+  "outline_checks_pass": true
+ }
+}

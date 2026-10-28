@@ -1,0 +1,107 @@
+{
+ "glyph": "A",
+ "unicode": "U+0041",
+ "construction": "letters.py: A",
+ "description": "A top bar the width of the letter with a curl at each end; on the right a stem with curls either side of its foot; on the left a stroke that bows out and sweeps in to a bottom-left curl; a crossbar between them closing a squarish counter above it.",
+ "primitives": {
+  "curl": [
+   "top-left",
+   "top-right",
+   "bottom-left",
+   "foot of the stem, both sides"
+  ]
+ },
+ "corrections": [],
+ "measured": {
+  "axis_x": 306.126,
+  "left": {
+   "curl_x": 65.662,
+   "curl_y": 444.853,
+   "neck": 0.0,
+   "foot_x": 98.82,
+   "foot_y": 385.136,
+   "out_x": 50.779,
+   "out_y": 227.716,
+   "t1": 0.951,
+   "t2": 1.0,
+   "t3": 0.218,
+   "t4": 0.394,
+   "t5": 0.999,
+   "t6": 0.592,
+   "inside_x": 152.79,
+   "bottom_x": 80.0,
+   "bottom_y": 445.482,
+   "inside_heading": 90.0,
+   "t7": 0.617,
+   "t8": 0.901,
+   "t9": 0.2,
+   "t10": 0.989
+  },
+  "notch": {
+   "x": 131.72,
+   "y": 60.717,
+   "in": 303.018,
+   "out": 179.446
+  },
+  "top": {
+   "y": 26.699,
+   "left_x": 78.721,
+   "right_x": 384.023,
+   "low_x": 222.127,
+   "low_dy": 0.0,
+   "neck_l": 40.0,
+   "neck_r": 15.169,
+   "t5": 0.497,
+   "t6": 1.0,
+   "t1": 0.556,
+   "t2": 0.608,
+   "t3": 0.377,
+   "t4": 0.705
+  },
+  "stem": {
+   "head_y": 137.779,
+   "foot_y": 353.327,
+   "t1": 0.737,
+   "t2": 0.683
+  },
+  "foot": {
+   "y": 445.085,
+   "left_x": 233.736,
+   "right_x": 384.87,
+   "high_x": 313.659,
+   "high_dy": 8.415,
+   "neck_r": 13.134,
+   "neck_l": 0.144,
+   "flare_r1": 0.857,
+   "flare_r2": 0.862,
+   "edge_t1": 0.566,
+   "edge_t2": 0.949,
+   "edge_t3": 0.336,
+   "edge_t4": 1.0,
+   "flare_l1": 0.799,
+   "flare_l2": 0.691
+  },
+  "crossbar": {
+   "under_y": 252.151,
+   "slope": -2.677
+  },
+  "counter": {
+   "top_y": 59.921,
+   "bottom_y": 211.759,
+   "left_x": 154.456
+  },
+  "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/A.png",
+  "when": "2026-10-28T15:44:01"
+ },
+ "fit": {
+  "mean_px": 1.93,
+  "p95_px": 7.26,
+  "max_px": 15.75,
+  "mean_px_fitted_alone": 0.99,
+  "wobble_of_pugins_edge_mean_px": 0.29,
+  "segments": 35,
+  "outline_checks_pass": true
+ }
+}

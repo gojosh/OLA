@@ -1,0 +1,3 @@
+feature ss01 {
+    sub T.1 by T.2;
+} ss01;
