@@ -17,3 +17,7 @@
 - Q23 (after-hours emergency route) is a parish process question that the new site depends on.
 - Next session: the IA. Start from the audit's §7 and `02-audiences.md` §E.
 - A crawler bug, not the site's: `tel:` links were mis-resolved as page paths during the crawl. Nothing in the audit relies on them.
+
+## Addendum: Drupal admin (same session)
+- Josh logged into the site's Drupal admin in the browser pane. Read-only review: no traffic reports exist there (only error logs, ~3.7 days, mostly bots); the content list shows 95 pages, 11 unpublished. The Parishioner Business Directory is unpublished, not members-only. Findings are in the audit §8; Q24 (Mass intentions) added.
+- Nothing was changed in the admin.

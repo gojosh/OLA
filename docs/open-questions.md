@@ -9,17 +9,18 @@ Questions that need Josh, the parish, or research. Agents: add questions here in
 
 ### Scope and people
 - **Q2. Who decides and who approves?** Pastor, staff, parish council? Who reviews theological and liturgical content?
-- **Q3. Who will maintain content after launch,** and how comfortable are they with technology? *(Drives the CMS and content-model choices.)*
+- **Q3. Who will maintain content after launch,** and how comfortable are they with technology? *(Drives the CMS and content-model choices.)* *(Evidence: five staff accounts have edited the current site since 2025, two of them most of the time; see the audit §8.)*
 - **Q4. Language:** is there a Spanish-speaking (or other) community the site should serve?
 - **Q5. Timeline and budget constraints,** if any.
 
 ### Existing systems and content
 - **Q8. Photography:** is there a photo archive of the church, liturgy, and people (with consent)? Is commissioning new photography possible?
 - **Q9. Brand assets:** does OLA have a logo, seal, coat of arms, or established marks?
-- **Q20. Analytics access:** the current site runs Google Analytics. Can we get read access? Real usage data (top pages, devices, search terms) would ground the IA.
+- **Q20. Analytics access:** the current site runs Google Analytics 4 (`G-TNJJSDCJLW`). Can we get read access? Real usage data (top pages, devices, search terms) would ground the IA. *(The Drupal admin has no traffic reports, so GA is the only source. Whoever set up the property, the parish or On Fire Media, owns access.)*
 - **Q21. On Fire Media:** what is the parish's arrangement with the current vendor? Who controls the domain and DNS, and can we get a full content export?
 - **Q22. ParishSOFT:** the site links to ParishSOFT Giving for choir fees, religious-ed registration, and some ministry donations. Is ParishSOFT also the parish's records/management system? Why two giving tools (Tithely and ParishSOFT)?
 - **Q23. After-hours emergencies:** the Emergency Pastoral Care page says "contact parish office," and the office is open weekdays only. Is there an after-hours route (a priest's on-call number, or an answering service)? The site can only be as good as the process behind it.
+- **Q24. Mass intentions:** how do people request a Mass intention today? There's an unpublished "Mass Intention" page from 2022.
 
 ### Aesthetic
 - **Q11. AI-image concepts:** does the diagnosis in `03-aesthetic.md` §1 match your sense of why they miss?

@@ -20,7 +20,7 @@ A full-text snapshot was deliberately **not** committed: many pages carry volunt
    - A booster-club page for the Academy is still live, though the school closed in June 2024.
 3. **The most urgent page is the weakest.** Emergency Pastoral Care says "contact parish office," and gives no after-hours route; the office is open weekdays only ⚑ verify whether the office line forwards after hours.
 4. **The main visitor page is empty.** "Join Us" has about 10 words. The good inquirer content (the home page FAQ, *The Ordinariate*, *Becoming Catholic*, *Coming Back to the Church*) exists but is scattered.
-5. **Some public links lead to a login page.** The footer's Parishioner Business Directory, and an old Becoming Catholic URL, send anonymous visitors to a login screen.
+5. **Some public links lead to a login page.** The footer's Parishioner Business Directory isn't members-only; it's an **unpublished** page, still linked from every page's footer and the About menu. An old, unpublished Becoming Catholic page does the same.
 6. **The real menu is about 70 links,** not 19. Ministries alone account for 28.
 7. **Content governance is the underlying problem.** Of 83 unique pages, 22 aren't linked from the menus or the home page, 12 are nearly empty, and 45 haven't been updated since before 2024. Schedules are retyped on several pages and already disagree in small ways.
 8. **The parish already uses a stack of outside services:** Tithely, ParishSOFT, Flocknote, LPi, Universalis, Formed, Google Forms, YouTube, Vimeo. The new site should hand off to these well rather than replace them.
@@ -169,7 +169,7 @@ Josh's count of 19 covered the top level. Counting every link in the menus, the 
 | **Duplicates** | Two calendars (`/about-us/calendar`, `/about-us/calendar-0`); two Bereavement pages; two St. Cuthbert pages |
 | **Two parallel sacrament sets** | Practical pages (`/sacraments/baptism`: how to arrange it at OLA, mostly updated 2026) and older catechetical pages (`/sacraments/sacrament-baptism`: what the sacrament is, 2019–2023). Most catechetical pages aren't in the nav. Holy Orders exists only in the catechetical set. |
 | **Schedules retyped on several pages** | Mass times on the home page and the Holy Mass page (the holy-day Mass appears only on the home page); devotions on the home page and the Parish Devotion Hours page differ (an "Adoration Hour 6:30–7:30 PM" has no day; the "Right to Life Mass" appears only on the home page) |
-| **Login walls on public links** | Parishioner Business Directory (footer); `/education/why-catholic/becoming-catholic` |
+| **Login walls on public links** | Parishioner Business Directory (unpublished, but linked in the footer and About menu); `/education/why-catholic/becoming-catholic` (unpublished duplicate) |
 | **Orphans and stubs** | `/test`, `/news` (empty), `/nonnatus` (Meal Train, 2021), Security & Safety Committee, American Heritage Girls, ENDOW, Our Lady's Lambies, Weekend Adoration Ministry |
 | **Content in embeds and documents** | Altar server schedule in a Google Doc; interest forms in Google Forms; giving through Tithely (embedded) and ParishSOFT (links out); bulletin in an LPi widget |
 
@@ -206,3 +206,20 @@ Copied from the current site for reference so agents don't have to invent placeh
 4. **Give inquirers a real front door.** The ingredients exist (FAQ, Ordinariate explainer, Becoming Catholic, Coming Back) but need one clear path, especially for Anglican/Protestant seekers.
 5. **Emergency care needs a real after-hours route,** reachable in one tap from anywhere. This is a parish process question before it's a design question.
 6. **Build content governance into the model:** owners, review dates, and expiry for time-bound content, so the new site doesn't drift the way this one has.
+7. **Mass intentions.** An unpublished "Mass Intention" page (2022) suggests a common parish task (requesting a Mass for someone) with no current home ⚑ Josh: how are intentions requested today?
+
+## 8. From the Drupal admin (2026-10-27)
+
+Read-only look, with Josh logged in.
+
+**No traffic data.** Drupal's Reports section has only error logs (recent messages, top 403s, top 404s). Real usage data exists only in Google Analytics (Q20).
+
+**The error logs cover about 3.7 days** (Oct 24 03:33 to Oct 27 20:53, roughly 10,000 entries) and are dominated by bots:
+- **404s:** almost entirely vulnerability scanners probing `/api`, `/graphql`, `/login`, `/.env`, and similar. One real fault: 76 hits on `<nolink>`, a broken entry in the site's own sitemap.
+- **403s:** `node/208` (the unpublished Parishioner Business Directory) leads with 746, about 200 a day. It's linked in every page's footer, so this is mostly crawlers, and it can't be read as human demand. Smaller numbers hit other unpublished pages that outside links or search indexes still point to: old Becoming Catholic (44), Documents and Forms (42), old Holy Mass (9), old St. Vincent de Paul (6), COVID-19 (3), "New Here?" (2).
+
+**Content (`/admin/content`):**
+- 95 pages: 84 published, 11 unpublished; 62 in the main menu, 33 not.
+- Unpublished: Becoming Catholic (old), Documents and Forms, Parishioner Business Directory, Test Page, Adult Inquiry, Society of St. Vincent De Paul (old), Holy Mass (old), Read the Sunday Bulletin, Join the Parish, **Mass Intention**, COVID-19.
+- Last updated, by year: 2016: 1 · 2019: 6 · 2020: 1 · 2021: 6 · 2022: 28 · 2023: 11 · 2024: 9 · 2025: 9 · 2026: 24.
+- **Editors:** five accounts have edited pages since 2025, and two of them made most of the edits (13 and 11). The parish does have people actively maintaining the site (relevant to Q3).
