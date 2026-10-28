@@ -1,0 +1,117 @@
+{
+ "glyph": "B",
+ "unicode": "U+0042",
+ "construction": "letters.py: B",
+ "description": "A stem with the I's top-left and bottom-left curls, the bottom bar running into the lower bowl. Two bowls, the lower the larger, with a notch between them outside; at their waist a trefoil points back at the stem, leaving a gap, so the two counters are one.",
+ "primitives": {
+  "curl": [
+   "top-left",
+   "bottom-left"
+  ],
+  "trefoil": [
+   "waist"
+  ]
+ },
+ "corrections": [],
+ "measured": {
+  "axis_x": 131.737,
+  "bottom": {
+   "half_width": 68.444,
+   "outer_y": 447.28,
+   "neck_deg": 0.003,
+   "flare_t1": 0.695,
+   "flare_t2": 0.658
+  },
+  "stem": {
+   "foot_y": 384.251,
+   "head_y": 105.228
+  },
+  "top": {
+   "half_width": 65.756,
+   "outer_y": 27.77,
+   "neck_deg": 0.176,
+   "flare_t1": 0.3,
+   "flare_t2": 0.552,
+   "low_x": 156.797,
+   "low_y": 38.577,
+   "edge_t1": 0.374,
+   "edge_t2": 0.96,
+   "edge_t3": 0.205,
+   "edge_t4": 0.426
+  },
+  "upper": {
+   "top_x": 254.939,
+   "top_y": 23.506,
+   "right_x": 414.364,
+   "right_y": 143.885,
+   "t1": 0.533,
+   "t2": 0.508,
+   "t3": 0.699,
+   "t4": 0.686
+  },
+  "waist": {
+   "x": 333.625,
+   "y": 228.698,
+   "in": 162.302,
+   "out": 22.532,
+   "enter_heading": 180.0,
+   "top_heading": 360.0
+  },
+  "lower": {
+   "right_x": 434.752,
+   "right_y": 342.695,
+   "bottom_x": 289.237,
+   "bottom_y": 461.523,
+   "t1": 0.811,
+   "t2": 0.44,
+   "t3": 0.644,
+   "t4": 0.616,
+   "t5": 0.416,
+   "t6": 0.986
+  },
+  "counter": {
+   "stem_top_y": 118.272,
+   "stem_foot_y": 370.357,
+   "bottom_x": 239.247,
+   "bottom_y": 438.599,
+   "lower_right_x": 352.445,
+   "lower_right_y": 364.765,
+   "upper_right_x": 333.788,
+   "upper_right_y": 146.931,
+   "top_x": 256.594,
+   "top_y": 43.833,
+   "t1": 0.339,
+   "t2": 0.65,
+   "t3": 0.593,
+   "t4": 0.431,
+   "t5": 0.728,
+   "t6": 0.745,
+   "t9": 0.688,
+   "t10": 0.573,
+   "t11": 0.471,
+   "t12": 0.65,
+   "t13": 0.636,
+   "t14": 0.856
+  },
+  "trefoil": {
+   "x": 244.104,
+   "y": 228.172,
+   "axis": 191.489,
+   "enter": -139.44,
+   "leave": 146.712
+  },
+  "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/B.png",
+  "when": "2026-10-28T14:57:02"
+ },
+ "fit": {
+  "mean_px": 1.21,
+  "p95_px": 4.13,
+  "max_px": 10.98,
+  "mean_px_fitted_alone": 1.04,
+  "wobble_of_pugins_edge_mean_px": 0.25,
+  "segments": 33,
+  "outline_checks_pass": true
+ }
+}

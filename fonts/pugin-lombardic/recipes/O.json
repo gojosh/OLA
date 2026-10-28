@@ -2,7 +2,7 @@
  "glyph": "O",
  "unicode": "U+004F",
  "construction": "letters.py: O",
- "description": "An oval ring, heavy at the sides and light at top and bottom, with a round ball hanging into the counter from the top and one rising from the floor. Symmetric about its axis; Pugin's lower ball sits off to the left, and the construction centres it.",
+ "description": "An oval ring, heavy at the sides and light at top and bottom. A round ball hangs into the counter from the top, on the axis. From the floor a curl rises: the floor runs smoothly up into its ball on the left, and the ball rolls on round its right side to a sharp notch tucked under it.",
  "primitives": {
   "ball": [
    "top of the counter",
@@ -11,47 +11,67 @@
  },
  "corrections": [],
  "measured": {
-  "axis_x": 226.693,
+  "axis_x": 226.473,
   "outer": {
-   "bottom_y": 451.674,
-   "left_x": 25.626,
-   "left_y": 233.292,
-   "top_y": 23.57,
-   "t1": 0.529,
-   "t2": 0.523,
-   "t3": 0.499,
-   "t4": 0.529
+   "bottom_y": 451.762,
+   "left_x": 25.464,
+   "left_y": 235.175,
+   "top_y": 23.55,
+   "t1": 0.53,
+   "t2": 0.515,
+   "t3": 0.522,
+   "t4": 0.514
   },
   "ball_top": {
-   "y": 52.2,
-   "meets_at": 202.004
+   "y": 49.421,
+   "meets_at": 191.993
   },
   "counter": {
-   "left_x": 119.341,
-   "left_y": 234.304,
-   "top_out": 165.349,
-   "t1": 0.568,
-   "t2": 0.472,
-   "bottom_in": 4.001,
-   "t3": 0.399,
-   "t4": 0.682
+   "left_x": 120.989,
+   "left_y": 241.318,
+   "right_x": 336.378,
+   "right_y": 227.639,
+   "top_out": 170.232,
+   "t1": 0.582,
+   "t2": 0.494,
+   "t3": 0.337,
+   "t4": 0.422,
+   "t5": 0.208,
+   "t6": 0.992,
+   "t7": 0.521,
+   "t8": 0.539,
+   "top_in": 199.985,
+   "t9": 0.505,
+   "t10": 0.448
   },
-  "ball_bottom": {
-   "y": 406.881,
-   "meets_at": 101.141
+  "curl": {
+   "x": 224.043,
+   "y": 402.647,
+   "notch_at": 87.047
+  },
+  "floor": {
+   "low_dx": 2.02,
+   "low_dy": 19.695
+  },
+  "pocket": {
+   "dx": 17.811,
+   "dy": 7.82,
+   "out": 55.205,
+   "t1": 0.395,
+   "t2": 0.809
   },
   "units": "plate pixels, y down; tensions 0–1; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/O.png",
-  "when": "2026-10-28T14:18:50"
+  "when": "2026-10-28T14:57:02"
  },
  "fit": {
-  "mean_px": 1.69,
-  "p95_px": 4.84,
-  "max_px": 10.47,
-  "mean_px_fitted_alone": 1.64,
+  "mean_px": 0.93,
+  "p95_px": 1.98,
+  "max_px": 8.55,
+  "mean_px_fitted_alone": 0.82,
   "wobble_of_pugins_edge_mean_px": 0.24,
-  "segments": 16,
+  "segments": 17,
   "outline_checks_pass": true
  }
 }

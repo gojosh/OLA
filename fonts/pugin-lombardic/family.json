@@ -1,14 +1,14 @@
 {
  "shared": {
-  "curl": 0.943,
-  "stem_armed": 35.607,
-  "trefoil_r": 17.52,
-  "trefoil_d": 22.361,
-  "two_lobe_r": 19.667,
-  "two_lobe_spread": 1.417,
-  "two_lobe_angle": 47.531,
-  "stem_plain": 39.937,
-  "ball_r": 25.435
+  "stem_armed": 35.777,
+  "curl": 0.941,
+  "trefoil_r": 20.929,
+  "trefoil_d": 24.682,
+  "two_lobe_r": 19.364,
+  "two_lobe_spread": 1.442,
+  "two_lobe_angle": 47.413,
+  "stem_plain": 39.936,
+  "ball_r": 27.348
  },
  "meaning": {
   "stem_plain": "half the stem's width in letters that are mostly stem: I, L (px)",
@@ -22,127 +22,193 @@
   "two_lobe_angle": "the direction from the first lobe to the second, degrees on screen below the horizontal"
  },
  "fitted_alone": {
+  "B": {
+   "stem_armed": 36.403,
+   "curl": 0.975,
+   "trefoil_r": 17.837,
+   "trefoil_d": 22.778
+  },
   "C": {
    "curl": 0.899
   },
   "D": {
-   "stem_armed": 33.686,
+   "stem_armed": 33.738,
    "curl": 0.946
   },
   "E": {
-   "curl": 0.937
+   "curl": 0.931
   },
   "F": {
-   "stem_armed": 35.351,
-   "curl": 0.928,
-   "trefoil_r": 17.529,
-   "trefoil_d": 22.352
+   "stem_armed": 35.383,
+   "curl": 0.931,
+   "trefoil_r": 17.807,
+   "trefoil_d": 22.457
+  },
+  "G": {
+   "trefoil_r": 20.783,
+   "trefoil_d": 27.328
   },
   "H": {
-   "stem_armed": 36.591,
+   "stem_armed": 36.462,
    "curl": 0.84,
-   "two_lobe_r": 20.034,
+   "two_lobe_r": 20.037,
    "two_lobe_spread": 1.95,
-   "two_lobe_angle": 26.367
+   "two_lobe_angle": 26.44
   },
   "I": {
-   "stem_plain": 39.791,
-   "curl": 1.006
+   "stem_plain": 39.842,
+   "curl": 1.005
   },
   "K": {
-   "stem_armed": 36.046,
-   "curl": 0.886,
-   "two_lobe_r": 19.832,
-   "two_lobe_spread": 1.4,
-   "two_lobe_angle": 70.0
+   "stem_armed": 36.009,
+   "curl": 0.902,
+   "two_lobe_r": 19.002,
+   "two_lobe_spread": 1.443,
+   "two_lobe_angle": 47.422
   },
   "L": {
-   "stem_plain": 40.117,
-   "curl": 1.053
+   "stem_plain": 40.081,
+   "curl": 1.041
   },
   "O": {
-   "ball_r": 23.145
+   "ball_r": 23.328,
+   "curl": 1.024
+  },
+  "P": {
+   "stem_armed": 35.49,
+   "curl": 0.929,
+   "trefoil_r": 21.094,
+   "trefoil_d": 25.044
   },
   "Q": {
-   "curl": 1.057,
-   "ball_r": 26.558
+   "curl": 1.019,
+   "ball_r": 27.516
+  },
+  "R": {
+   "stem_armed": 35.553,
+   "curl": 0.908,
+   "trefoil_r": 23.088,
+   "trefoil_d": 26.593
   },
   "T.1": {
-   "stem_armed": 37.284,
-   "curl": 0.864
+   "stem_armed": 37.304,
+   "curl": 0.868
   }
  },
  "mean_px": {
+  "B": {
+   "shared": 1.21,
+   "alone": 1.04
+  },
   "C": {
-   "shared": 0.75,
+   "shared": 0.76,
    "alone": 0.69
   },
   "D": {
-   "shared": 1.0,
-   "alone": 0.73
+   "shared": 1.06,
+   "alone": 0.76
   },
   "E": {
-   "shared": 0.82,
-   "alone": 0.89
+   "shared": 0.84,
+   "alone": 0.76
   },
   "F": {
-   "shared": 1.38,
-   "alone": 1.27
+   "shared": 1.55,
+   "alone": 1.34
+  },
+  "G": {
+   "shared": 1.21,
+   "alone": 1.15
   },
   "H": {
-   "shared": 1.49,
-   "alone": 1.05
+   "shared": 1.48,
+   "alone": 1.02
   },
   "I": {
-   "shared": 1.11,
-   "alone": 0.89
+   "shared": 1.13,
+   "alone": 0.91
   },
   "K": {
    "shared": 1.21,
-   "alone": 1.07
+   "alone": 1.16
   },
   "L": {
-   "shared": 1.65,
-   "alone": 1.54
+   "shared": 1.6,
+   "alone": 1.49
   },
   "O": {
-   "shared": 1.69,
-   "alone": 1.64
+   "shared": 0.93,
+   "alone": 0.82
+  },
+  "P": {
+   "shared": 1.12,
+   "alone": 1.07
   },
   "Q": {
-   "shared": 1.35,
-   "alone": 1.23
+   "shared": 1.12,
+   "alone": 1.03
+  },
+  "R": {
+   "shared": 1.07,
+   "alone": 0.83
   },
   "T.1": {
-   "shared": 2.03,
+   "shared": 2.05,
    "alone": 1.9
   }
  },
  "at_bounds": [
+  "B:bottom.neck_deg",
+  "B:waist.enter_heading",
+  "B:waist.top_heading",
   "D:top.neck_deg",
+  "D:counter.stem_foot_y",
   "F:lower.t5",
   "F:foot.neck_deg",
+  "G:beak.t2",
+  "G:beak.into_bulb",
+  "G:spiral.enter_heading",
+  "G:spiral.t1",
   "H:bottom.neck_deg",
+  "H:top.edge_t1",
   "H:top_right.neck_deg",
+  "H:terminal.join_at",
   "H:terminal.neck_in",
+  "H:pocket.t1",
+  "H:pocket.t2",
   "I:bottom.neck_deg",
   "I:top.neck_deg",
   "K:bottom.neck_deg",
+  "K:top.edge_t2",
+  "K:crotch.x",
+  "K:leg.spring",
   "K:terminal.join_at",
+  "K:terminal.neck_in",
   "K:inside.t2",
   "K:lower.point_out",
   "K:lower.t2",
   "K:bottom_right.neck_deg",
-  "Q:notch.out",
-  "Q:counter.floor_in",
+  "K:upper.t4",
+  "O:floor.low_dx",
+  "P:top.edge_t1",
+  "P:bottom_right.neck_deg",
+  "Q:flag.t8",
+  "Q:flag.t3",
+  "Q:counter.top_dx",
+  "Q:pocket.in",
+  "Q:counter.t9",
   "Q:counter.floor_out",
+  "R:foot.curl_y",
+  "R:foot.neck_deg",
+  "R:under.enter_heading",
+  "R:bottom.right_y",
+  "R:bottom.edge_t4",
   "T.1:bottom.neck_deg",
-  "T.1:arm.gap",
-  "T.1:arm.inner_t2"
+  "T.1:arm.gap"
  ],
  "fit": {
-  "evaluations": 119,
-  "cost": 31583.338120232234
+  "evaluations": 22,
+  "cost": 42464.40964506802
  },
- "when": "2026-10-28T14:18:50"
+ "when": "2026-10-28T14:57:02"
 }

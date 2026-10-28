@@ -87,6 +87,17 @@ def _r(v, nd=3):
     return [round(float(x), nd) for x in v]
 
 
+def _flat(nested: dict, pre="") -> dict:
+    """{"a": {"b": 1}} → {"a.b": 1}, the inverse of _nest."""
+    out = {}
+    for k, v in nested.items():
+        if isinstance(v, dict):
+            out.update(_flat(v, f"{pre}{k}."))
+        else:
+            out[pre + k] = v
+    return out
+
+
 def _nest(flat: dict) -> dict:
     """{"a.b": 1} → {"a": {"b": 1}}, for recipes people read."""
     out = {}
@@ -147,6 +158,14 @@ def cubic(A, ha, B, hb, ta, tb):
     return np.array([A, A + a * u, B - b * v, B])
 
 
+def ends(segs):
+    """The first and last points of a run of segments, with the headings there (as vectors)."""
+    a, b = segs[0], segs[-1]
+    h0 = next(a[k] - a[0] for k in (1, 2, 3) if np.linalg.norm(a[k] - a[0]) > 1e-9)
+    h1 = next(b[3] - b[k] for k in (2, 1, 0) if np.linalg.norm(b[3] - b[k]) > 1e-9)
+    return a[0], _unit(h0), b[3], _unit(h1)
+
+
 def line(A, B):
     A, B = np.asarray(A, float), np.asarray(B, float)
     return np.array([A, A + (B - A) / 3, A + 2 * (B - A) / 3, B])
@@ -157,10 +176,17 @@ def arc(c, r, a0, a1):
     each quarter, so the nodes fall on the circle's extremes whichever way the arc is turned."""
     c = np.asarray(c, float)
     up = a1 >= a0
+    # an extreme within about a pixel of arc from an end becomes that end, rather than leaving a
+    # sliver of a segment that rounding to font units would collapse
+    snap = max(0.5, math.degrees(1.2 / max(r, 1e-6)))
     cuts = [a0]
     q = (math.floor(a0 / 90) + 1) * 90 if up else (math.ceil(a0 / 90) - 1) * 90
-    while (q < a1 - 1e-6) if up else (q > a1 + 1e-6):
-        if abs(q - a0) > 0.5 and abs(q - a1) > 0.5:     # no slivers next to the ends
+    while (q < a1 + snap) if up else (q > a1 - snap):
+        if abs(q - a0) <= snap:
+            cuts[0] = q
+        elif abs(q - a1) <= snap:
+            a1 = q
+        elif (q < a1) if up else (q > a1):
             cuts.append(q)
         q += 90 if up else -90
     cuts.append(a1)
@@ -190,6 +216,9 @@ class Kit:
         self.curl_model = curl
         self.curl_segs = [np.array(s, float) for s in curl["segments"]]
         self.curl_nodes = {k: np.array(v, float) for k, v in curl["nodes"].items()}
+        # the curl's ball as a circle, for curls drawn round (inside O and Q): its back and neck are
+        # the ball's left and right extremes
+        self.curl_ball_r = float(self.curl_nodes["neck"][0] - self.curl_nodes["back"][0]) / 2
 
     def curl(self, at, orient, k, theta, anchor="outer", whole=True, place="curl"):
         """The curl with its `anchor` node at `at`, turned by `orient` and scaled by k. Returns its
@@ -244,7 +273,7 @@ def trefoil(C, axis, r, d, enter, leave, place="trefoil"):
         s = arc(c, r, a0, a1)
         segs += s
         names += [f"{place}: {first}"] + [f"{place}: lobe"] * (len(s) - 1)
-    return segs, names, cs[0] + r * hd(a_in), cs[2] + r * hd(a_out)
+    return segs, names, segs[0][0], segs[-1][3]
 
 
 def two_lobe(c1, r, d, angle, enter, leave, place="two-lobe"):
@@ -278,8 +307,8 @@ FAMILY = {  # name: (start, low, high, meaning)
     "stem_plain": (39.5, 30.0, 50.0, "half the stem's width in letters that are mostly stem: I, L (px)"),
     "stem_armed": (36.5, 30.0, 50.0, "half the stem's width in letters that carry arms, a shoulder or a wide bar: F, H, K, T (px)"),
     "curl": (1.0, 0.8, 1.25, "the curl's size, as a multiple of the averaged curl"),
-    "trefoil_r": (15.0, 9.0, 22.0, "a trefoil lobe's radius (px)"),
-    "trefoil_d": (18.0, 9.0, 28.0, "how far each trefoil lobe sits from the trefoil's centre (px)"),
+    "trefoil_r": (18.0, 9.0, 28.0, "a trefoil lobe's radius (px)"),
+    "trefoil_d": (22.0, 9.0, 36.0, "how far each trefoil lobe sits from the trefoil's centre (px)"),
     "ball_r": (21.0, 14.0, 28.0, "the radius of the balls that hang into O's and Q's counters (px)"),
     "two_lobe_r": (19.0, 12.0, 26.0, "the radius of both lobes of the two-lobe terminal (px)"),
     "two_lobe_spread": (1.85, 1.4, 1.95, "how far apart the two-lobe terminal's lobes are, in radii (under 2, so they overlap)"),
@@ -368,11 +397,13 @@ def sample_fixed(built, n_outline=900, n_counter=400):
     return np.concatenate(out)
 
 
-def fit_letters(letters: dict, refs: dict, kit: Kit, local=False, edge_points=1500):
+def fit_letters(letters: dict, refs: dict, kit: Kit, local=False, edge_points=1500, start=None):
     """Fit the letters' measurements to Pugin's drawings in one solve. Family measurements (stem,
     curl, trefoil) are shared by every letter, so they settle where the alphabet agrees, unless
     `local` lets each letter have its own. Residuals run both ways: the outline onto his edge, and his
-    edge onto the outline. A robust loss keeps his accidents from pulling a whole letter."""
+    edge onto the outline. A robust loss keeps his accidents from pulling a whole letter.
+    `start` holds values to begin from (the last build's), in place of each construction's own
+    starting values; a measurement it doesn't have starts from the construction's."""
     from scipy.sparse import lil_matrix
     spec = {}
     for g, fn in letters.items():
@@ -380,9 +411,10 @@ def fit_letters(letters: dict, refs: dict, kit: Kit, local=False, edge_points=15
         fn(p, kit)
         spec.update(p.spec)
     keys = list(spec)
-    x0 = np.array([spec[k][0] for k in keys])
     lb = np.array([spec[k][1] for k in keys])
     ub = np.array([spec[k][2] for k in keys])
+    x0 = np.array([(start or {}).get(k, spec[k][0]) for k in keys], float)
+    x0 = np.clip(x0, lb, ub)
     data = {}
     for g in letters:
         e = np.concatenate(reference_edges(refs[g]))
@@ -425,6 +457,18 @@ def fit_letters(letters: dict, refs: dict, kit: Kit, local=False, edge_points=15
             vals[k] = 90.0 * round(v / 90)
     at_bounds = [k for k, v, lo, hi in zip(keys, x, lb, ub) if min(v - lo, hi - v) < 1e-3 * max(1.0, hi - lo)]
     return vals, at_bounds, {"evaluations": int(nfev), "cost": float(cost)}
+
+
+def alone_fit(job):
+    """One letter fitted alone, with its own family measurements. A top-level function so the
+    build can run several in separate processes."""
+    import letters as LT
+    g, alpha, curl, start = job
+    kit = Kit(curl)
+    v, _, _ = fit_letters({g: LT.LETTERS[g]}, {g: alpha}, kit, local=True, start=start)
+    built = LT.LETTERS[g](Params(g, v, local=True), kit)
+    return {"family": {k.split("family.")[1]: round(x, 3) for k, x in v.items() if "family." in k},
+            "mean_px": deviation(built, alpha)["overall"]["mean_px"]}
 
 
 def swelling(built):
@@ -475,11 +519,17 @@ def deviation(built, alpha: np.ndarray) -> dict:
 
 # ── Checks ────────────────────────────────────────────────────────────────────
 
-def check_contour(segs, names, smooth_deg=0.5) -> dict:
+def _swell(P):
+    pts = G.bez(P, np.linspace(0, 1, 64))
+    lo, hi = np.minimum(P[0], P[3]), np.maximum(P[0], P[3])
+    return float(max(np.clip(lo - pts, 0, None).max(), np.clip(pts - hi, 0, None).max()))
+
+
+def check_contour(segs, names, smooth_deg=0.5, swell_tol=0.0) -> dict:
     """The rules a type designer's outline keeps: no curve swells past its end nodes (so every node
     sits at an extreme), handles at an extreme lie flat or upright, and every join is smooth unless
     it's meant to be a corner."""
-    swells = [names[i] for i, P in enumerate(segs) if G.extrema_ts(P)]
+    swells = [names[i] for i, P in enumerate(segs) if G.extrema_ts(P) and (swell_tol <= 0 or _swell(P) > swell_tol)]
     corners, skew, degenerate = [], [], []
     for i, P in enumerate(segs):
         prev = segs[i - 1]
@@ -500,10 +550,11 @@ def check_contour(segs, names, smooth_deg=0.5) -> dict:
             "nearly_flat_handles": sorted(set(skew)), "degenerate_segments": degenerate}
 
 
-def check_outline(contours, names, smooth_deg=0.5) -> dict:
+def check_outline(contours, names, smooth_deg=0.5, swell_tol=0.0) -> dict:
     """check_contour over every contour of a glyph. In whole font units a smooth join on a slant can
-    kink by a degree or two when a short handle is rounded, so the font's check allows up to 2°."""
-    parts = [check_contour(c, n, smooth_deg) for c, n in zip(contours, names)]
+    kink by a few degrees where a handle is only ten or so units long, and a curve can poke a
+    fraction of a unit past its node, so the font's check allows up to 3° and half a unit."""
+    parts = [check_contour(c, n, smooth_deg, swell_tol) for c, n in zip(contours, names)]
     out = {"contours": len(parts), "segments": sum(p["segments"] for p in parts),
            "curves_swelling_past_nodes": [x for p in parts for x in p["curves_swelling_past_nodes"]],
            "corners": [x for p in parts for x in p["corners"]],
@@ -526,10 +577,14 @@ def to_units(built, scale, lsb):
     conv = lambda q, x0, u0: np.round(np.column_stack([(q[:, 0] - x0) * scale + u0, (base - q[:, 1]) * scale]))
     halves = built.get("halves") or ([built["half"]] if built.get("half") else None)
     if halves:
+        # contours given as halves are mirrored on a whole unit; a None takes the contour as built
         ax = built["axis"]
         axis_u = int(round(lsb + (ax - x_min) * scale))
         out = []
-        for half in halves:
+        for i, half in enumerate(halves):
+            if half is None:
+                out.append([conv(q, ax, axis_u) for q, _, _ in built["contours"][i]])
+                continue
             left = [conv(q, ax, axis_u) for q, _, _ in half]
             out.append(left + G.reverse([q * [-1, 1] + [2 * axis_u, 0] for q in left]))
         return out, 2 * axis_u, ax - axis_u / scale

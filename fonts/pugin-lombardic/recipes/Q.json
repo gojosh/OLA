@@ -2,7 +2,7 @@
  "glyph": "Q",
  "unicode": "U+0051",
  "construction": "letters.py: Q",
- "description": "The O's bowl, with a ball hanging into the counter from the top and one sitting on its floor. At the bottom right the base runs on past the bowl to a rounded end, and a flag rises from it, parted from the bowl by a pointed notch, to a curl at its head rolling out to the right.",
+ "description": "The O's bowl, with a curl hanging into the counter from the top (its ball runs smoothly up into the top wall on the left and rolls on round to a sharp notch at the right) and a ball on its floor. At the bottom right the base runs on past the bowl to a rounded end, and a flag rises from it, parted from the bowl by a pointed notch: its inside runs nearly flat from the notch, then rises steeply to a curl at its head rolling out to the right.",
  "primitives": {
   "curl": [
    "head of the flag"
@@ -14,92 +14,101 @@
  },
  "corrections": [],
  "measured": {
-  "axis_x": 203.313,
+  "axis_x": 201.744,
   "outer": {
-   "left_x": 26.197,
-   "left_y": 229.403,
-   "top_y": 22.854,
-   "right_x": 381.398,
-   "right_y": 216.01,
-   "t1": 0.385,
-   "t2": 0.492,
-   "t3": 0.499,
-   "t4": 0.432,
-   "t5": 0.716,
-   "t6": 0.651,
-   "bottom_x": 207.813,
-   "bottom_y": 446.25,
-   "t7": 0.498,
-   "t8": 0.443
+   "left_x": 26.481,
+   "left_y": 227.639,
+   "top_y": 22.998,
+   "right_x": 381.7,
+   "right_y": 221.354,
+   "t1": 0.371,
+   "t2": 0.493,
+   "t3": 0.519,
+   "t4": 0.442,
+   "t5": 0.555,
+   "t6": 0.522,
+   "bottom_x": 208.363,
+   "bottom_y": 446.328,
+   "t7": 0.458,
+   "t8": 0.499
   },
   "notch": {
-   "x": 249.418,
-   "y": 426.773,
-   "in": 141.744,
-   "out": 350.0
+   "x": 250.275,
+   "y": 419.256,
+   "in": 152.327,
+   "out": 0.093
   },
   "flag": {
-   "curl_x": 383.26,
-   "curl_y": 334.736,
-   "t1": 0.476,
-   "t2": 0.452,
-   "neck_deg": -8.22,
-   "right_x": 398.343,
-   "right_y": 397.644,
-   "t3": 0.888,
-   "t4": 0.573,
-   "t5": 0.714,
-   "t6": 0.637
+   "curl_x": 383.282,
+   "curl_y": 334.675,
+   "low_dx": 28.789,
+   "low_dy": 0.042,
+   "t1": 0.912,
+   "t2": 0.432,
+   "t7": 0.368,
+   "t8": 0.2,
+   "neck_deg": -8.104,
+   "right_x": 398.422,
+   "right_y": 396.976,
+   "t3": 0.999,
+   "t4": 0.422,
+   "t5": 0.93,
+   "t6": 0.468
   },
   "end": {
-   "x": 416.192,
-   "y": 430.661,
-   "r": 11.797
+   "x": 416.212,
+   "y": 430.632,
+   "r": 11.778
   },
   "base": {
-   "t1": 0.541,
-   "t2": 0.647
+   "t1": 0.525,
+   "t2": 0.651
   },
-  "ball_top": {
-   "y": 67.581,
-   "meets_right": 300.372,
-   "meets_left": 246.243
+  "curl_top": {
+   "x": 208.895,
+   "y": 71.182,
+   "notch_at": 280.858
   },
   "counter": {
-   "left_x": 126.752,
-   "left_y": 239.1,
-   "right_x": 289.947,
-   "right_y": 239.766,
-   "top_out": 172.64,
-   "t1": 0.632,
-   "t2": 0.261,
-   "floor_in": 0.022,
-   "t3": 0.445,
-   "t4": 0.807,
-   "floor_out": 344.987,
-   "t5": 0.824,
-   "t6": 0.287,
-   "top_in": 181.018,
-   "t7": 0.404,
-   "t8": 0.67
+   "top_dx": 2.019,
+   "top_dy": 22.54,
+   "left_x": 126.478,
+   "left_y": 239.318,
+   "right_x": 289.99,
+   "right_y": 243.353,
+   "t7": 0.349,
+   "t8": 0.807,
+   "t9": 0.999,
+   "t10": 0.965,
+   "t1": 0.48,
+   "t2": 0.318,
+   "floor_in": 2.598,
+   "t3": 0.462,
+   "t4": 0.706,
+   "floor_out": 344.953,
+   "t5": 0.795,
+   "t6": 0.24
   },
   "ball_floor": {
-   "y": 385.759,
-   "meets_left": 113.386,
-   "meets_right": 49.454
+   "y": 387.549,
+   "meets_left": 123.948,
+   "meets_right": 43.715
+  },
+  "pocket": {
+   "in": 180.002
   },
   "units": "plate pixels, y down; tensions 0–1; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/Q.png",
-  "when": "2026-10-28T14:18:50"
+  "when": "2026-10-28T14:57:02"
  },
  "fit": {
-  "mean_px": 1.35,
-  "p95_px": 4.35,
-  "max_px": 13.04,
-  "mean_px_fitted_alone": 1.23,
+  "mean_px": 1.12,
+  "p95_px": 3.36,
+  "max_px": 11.57,
+  "mean_px_fitted_alone": 1.03,
   "wobble_of_pugins_edge_mean_px": 0.26,
-  "segments": 25,
+  "segments": 26,
   "outline_checks_pass": true
  }
 }

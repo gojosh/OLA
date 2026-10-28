@@ -1,0 +1,143 @@
+{
+ "glyph": "R",
+ "unicode": "U+0052",
+ "construction": "letters.py: R",
+ "description": "A stem with the I's top-left and bottom curls, the bottom bar running out to a bottom-right curl. The bowl's lower stroke comes back toward the stem and ends in a trefoil pointing at it, a hair short of touching, so the bowl stays open. From the notch under the bowl a leg sweeps out and down to a curl at its foot.",
+ "primitives": {
+  "curl": [
+   "top-left",
+   "bottom-left",
+   "bottom-right",
+   "foot of the leg"
+  ],
+  "trefoil": [
+   "end of the bowl's stroke"
+  ]
+ },
+ "corrections": [],
+ "measured": {
+  "axis_x": 122.192,
+  "bottom": {
+   "half_width": 66.513,
+   "outer_y": 459.778,
+   "neck_deg": 6.937,
+   "flare_t1": 0.444,
+   "flare_t2": 0.393,
+   "right_x": 243.69,
+   "right_y": 458.0,
+   "fillet_t1": 0.398,
+   "fillet_t2": 0.55,
+   "high_x": 135.156,
+   "high_y": 445.138,
+   "edge_t1": 0.648,
+   "edge_t2": 0.49,
+   "edge_t3": 0.483,
+   "edge_t4": 0.201
+  },
+  "stem": {
+   "foot_y": 367.834,
+   "head_y": 123.801,
+   "foot_y_right": 350.184
+  },
+  "top": {
+   "half_width": 64.319,
+   "outer_y": 22.743,
+   "neck_deg": 25.139,
+   "flare_t1": 0.45,
+   "flare_t2": 0.244,
+   "low_x": 140.232,
+   "low_y": 35.948,
+   "edge_t1": 0.29,
+   "edge_t2": 0.877,
+   "edge_t3": 0.254,
+   "edge_t4": 0.624
+  },
+  "bowl": {
+   "top_x": 238.052,
+   "top_y": 23.393,
+   "right_x": 384.032,
+   "right_y": 131.705,
+   "t1": 0.507,
+   "t2": 0.497,
+   "t3": 0.846,
+   "t4": 0.589
+  },
+  "notch": {
+   "x": 293.41,
+   "y": 222.769,
+   "in": 158.808,
+   "out": 5.873
+  },
+  "leg": {
+   "right_x": 409.59,
+   "right_y": 304.728,
+   "t1": 0.528,
+   "t2": 0.606,
+   "t3": 0.52,
+   "t4": 0.536
+  },
+  "pocket": {
+   "x": 351.126,
+   "y": 416.809,
+   "t1": 0.782,
+   "t2": 0.993
+  },
+  "foot": {
+   "curl_x": 373.499,
+   "curl_y": 457.0,
+   "neck_deg": 0.008,
+   "t1": 0.655,
+   "t2": 0.511
+  },
+  "inside": {
+   "left_x": 313.178,
+   "left_y": 398.01,
+   "right_x": 327.746,
+   "right_y": 321.576,
+   "t1": 0.424,
+   "t2": 0.79
+  },
+  "trefoil": {
+   "x": 216.33,
+   "y": 232.399,
+   "axis": 177.878,
+   "enter": -137.877,
+   "leave": 120.255
+  },
+  "under": {
+   "enter_heading": 180.0,
+   "t1": 0.575,
+   "t2": 0.719
+  },
+  "counter": {
+   "right_x": 301.14,
+   "right_y": 142.646,
+   "top_x": 221.511,
+   "top_y": 48.817,
+   "stem_top_y": 124.555,
+   "floor_heading": 350.463,
+   "t1": 0.623,
+   "t2": 0.664,
+   "t3": 0.484,
+   "t4": 0.617,
+   "t5": 0.405,
+   "t6": 0.749
+  },
+  "bottom_right": {
+   "neck_deg": 0.495
+  },
+  "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/R.png",
+  "when": "2026-10-28T14:57:02"
+ },
+ "fit": {
+  "mean_px": 1.07,
+  "p95_px": 3.58,
+  "max_px": 9.52,
+  "mean_px_fitted_alone": 0.83,
+  "wobble_of_pugins_edge_mean_px": 0.28,
+  "segments": 44,
+  "outline_checks_pass": true
+ }
+}

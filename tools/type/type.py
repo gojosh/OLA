@@ -23,7 +23,7 @@ Usage (from the repository root; uv installs the dependencies):
   uv run tools/type/type.py extract pugin-lombardic     # references/: one image and outline per glyph
   uv run tools/type/type.py measure pugin-lombardic     # measurements.json
   uv run tools/type/type.py curls   pugin-lombardic     # primitives/: the curl terminals, averaged
-  uv run tools/type/type.py build   pugin-lombardic     # recipes → source/*.ufo and build/*.otf
+  uv run tools/type/type.py build   pugin-lombardic     # recipes → source/*.ufo and build/*.otf (--fresh: from scratch)
   uv run tools/type/type.py space   pugin-lombardic     # respace the built letters and rewrite the font
   uv run tools/type/type.py proof   pugin-lombardic     # proof/index.html
 """
@@ -390,7 +390,42 @@ def cmd_curls(fam: str):
 
 # ── Construction: primitives → recipes → font ─────────────────────────────────
 
-def cmd_build(fam: str):
+def _saved_measurements(d: Path, recipes: dict) -> dict:
+    """Where the last build left off: each letter's measurements from its recipe and the family's
+    from family.json, keyed as the fit keys them. Recorded corrections are taken back off, since
+    the build applies them again after fitting."""
+    import construct as K
+    start = {}
+    fj = d / "family.json"
+    if fj.exists():
+        start.update({f"family.{k}": v for k, v in json.loads(fj.read_text())["shared"].items()})
+    for g, (_, r) in recipes.items():
+        m = {k: v for k, v in r.get("measured", {}).items() if k not in ("units", "family", "from", "when")}
+        start.update({f"{g}:{k}": v for k, v in K._flat(m).items()})
+        for c in r.get("corrections", []):
+            if f"{g}:{c['measure']}" in start:
+                start[f"{g}:{c['measure']}"] -= c["add"]
+    return start
+
+
+def _fingerprint(g: str, coverage: Path, curl: dict) -> str:
+    """What fitting a letter alone depends on: its construction, the shared parts and the kit, its
+    reference, and the curl. When none of these has changed, the last result still stands."""
+    import hashlib
+    import inspect
+    import construct as K
+    import letters as LT
+    helpers = [f for _, f in inspect.getmembers(LT, inspect.isfunction)
+               if f.__module__ == LT.__name__ and f not in LT.LETTERS.values()]
+    h = hashlib.sha256()
+    for src in [inspect.getsource(LT.LETTERS[g]), *map(inspect.getsource, helpers), inspect.getsource(K), inspect.getsource(G)]:
+        h.update(src.encode())
+    h.update(coverage.read_bytes())
+    h.update(json.dumps({k: v for k, v in curl.items() if k != "when"}, sort_keys=True).encode())
+    return h.hexdigest()[:16]
+
+
+def cmd_build(fam: str, fresh: bool = False):
     """Fit the clean curl to its consensus; fit each recipe's measurements to Pugin's letter; check
     the outlines; write the UFO source and compile it."""
     import construct as K
@@ -429,17 +464,40 @@ def cmd_build(fam: str):
     letters = {g: LT.LETTERS[g] for g in recipes}
     alphas = {g: cv2.imread(str(d / refs[g]["coverage"]), cv2.IMREAD_GRAYSCALE).astype(np.float32) / 255 for g in letters}
     fam_of = lambda v: {k.split("family.")[1]: round(x, 3) for k, x in v.items() if "family." in k}
-    # each letter alone, with its own stem, curl and trefoil: how far Pugin's letters disagree
-    alone = {}
+    # Every fit starts where the last build left off, so letters that haven't changed settle at once.
+    # --fresh starts from the constructions' own starting values instead.
+    start = {} if fresh else _saved_measurements(d, recipes)
+    # each letter alone, with its own stem, curl and trefoil: how far Pugin's letters disagree. A
+    # letter whose construction, reference and kit are unchanged keeps its last result; the rest
+    # are fitted in parallel.
+    t0 = time.time()
+    cache_p = out / "alone.json"
+    cache = json.loads(cache_p.read_text()) if cache_p.exists() and not fresh else {}
+    alone, todo = {}, []
     for g in letters:
-        v, _, _ = K.fit_letters({g: letters[g]}, {g: alphas[g]}, kit, local=True)
-        built = letters[g](K.Params(g, v, local=True), kit)
-        alone[g] = {"family": fam_of(v), "mean_px": K.deviation(built, alphas[g])["overall"]["mean_px"]}
-        print(f"  {g} alone: {alone[g]['family']}, {alone[g]['mean_px']} px")
-    # all of them together, sharing one stem, one curl and one trefoil
-    vals, at_bounds, info = K.fit_letters(letters, alphas, kit)
+        fp = _fingerprint(g, d / refs[g]["coverage"], curl)
+        if cache.get(g, {}).get("fingerprint") == fp:
+            alone[g] = cache[g]
+        else:
+            todo.append((g, fp))
+    if todo:
+        import os
+        from concurrent.futures import ProcessPoolExecutor
+        jobs = []
+        for g, _ in todo:
+            own = {k: v for k, v in start.items() if k.startswith(g + ":")}
+            own.update({f"{g}:{k}": v for k, v in start.items() if k.startswith("family.")})
+            jobs.append((g, alphas[g], curl, own))
+        with ProcessPoolExecutor(max_workers=min(len(jobs), max(1, (os.cpu_count() or 2) - 1))) as ex:
+            for (g, fp), res in zip(todo, ex.map(K.alone_fit, jobs)):
+                alone[g] = {**res, "fingerprint": fp}
+    cache_p.write_text(json.dumps(alone, indent=1) + "\n")
+    print(f"  letters alone: {len(todo)} fitted, {len(letters) - len(todo)} unchanged ({time.time() - t0:.0f} s)")
+    # all of them together, sharing the family's measurements
+    t0 = time.time()
+    vals, at_bounds, info = K.fit_letters(letters, alphas, kit, start=start)
     shared = fam_of(vals)
-    print(f"  shared: {shared} ({info['evaluations']} evaluations)")
+    print(f"  together: {info['evaluations']} evaluations ({time.time() - t0:.0f} s); shared {shared}")
     for g, (rp, r) in recipes.items():
         for c in r.get("corrections", []):
             vals[f"{g}:{c['measure']}"] += c["add"]
@@ -450,9 +508,9 @@ def cmd_build(fam: str):
         built = fn(K.Params(g, vals), kit)
         dev = K.deviation(built, alphas[g])
         names = [[nm for _, _, nm in c] for c in built["contours"]]
-        chk = K.check_outline([[q for q, _, _ in c] for c in built["contours"]], names)
+        chk = K.check_outline([[q for q, _, _ in c] for c in built["contours"]], names, swell_tol=0.2)
         units, width, origin = K.to_units(built, scale, fc["sidebearing"])
-        chk_u = K.check_outline(units, names, smooth_deg=2.0)
+        chk_u = K.check_outline(units, names, smooth_deg=3.0, swell_tol=0.5)
         mine = {k[len(g) + 1:]: round(v, 3) for k, v in vals.items() if k.startswith(g + ":")}
         uni = int(r["unicode"][2:], 16) if r.get("unicode") else None
         r["measured"] = {**K._nest(mine), "units": "plate pixels, y down; tensions 0–1; angles in degrees",
@@ -678,8 +736,8 @@ def _constructed_html(d: Path, meta: dict) -> tuple[str, str]:
         out.append(f"""
 <section class="built"><h2>Constructed: {H.escape(name)}</h2>
 <p class="lede">{H.escape(b['description'])} Built from the kit's parts, not traced; its measurements were fitted to Pugin's letter
-together with the other letters, sharing one stem, one curl and one trefoil. The outline below is drawn over his {H.escape(name)} on the
-flattened plate. Hover a node for its name.</p>
+together with the other letters, sharing the family's measurements (two stem weights, the curl, the balls, the trefoil and the
+two-lobe terminal). The outline below is drawn over his {H.escape(name)} on the flattened plate. Hover a node for its name.</p>
 <div class="ov-grid">
 <figure class="ov off-diff off-font" id="ov-{H.escape(name)}">
   <div class="ov-wrap"><img class="L-plate" src="{_png_uri(crop, '.jpg', 92)}" alt="Pugin's {H.escape(name)}, plate 9">
@@ -776,17 +834,17 @@ def _family_html(d: Path, meta: dict) -> str:
     rows += (f"<tr class='sh'><th>Shared</th><td>{stem(sh['stem_plain'])} plain, {stem(sh['stem_armed'])} armed</td><td>{sh['curl']:.3f}</td><td>{sh['trefoil_r']:.1f}</td>"
              f"<td>{sh['two_lobe_r']:.1f}</td><td></td><td></td></tr>")
     inks = {k: "#%02x%02x%02x" % tuple(int(v) for v in c[::-1]) for k, c in meta["inks_bgr"].items()}
-    words = ["THE", "COLLECT", "OFFICE", "CLOCK", "FIELD", "HOLD"]
+    words = ["THE", "LORD", "GLORIFIED", "CHOIR", "CREED", "PROPER", "COLLECT", "BELL"]
     spec = " ".join(f'<span style="color:{inks["red" if i % 2 else "blue"]}">{w}</span>' for i, w in enumerate(words))
     return f"""
 <section class="family"><h2>The letters together</h2>
-<p class="lede">The letters were fitted to Pugin's in one solve, sharing one stem, one curl, one trefoil and one two-lobe terminal, so those
+<p class="lede">The letters were fitted to Pugin's in one solve, sharing two stem weights, one curl, one ball, one trefoil and one two-lobe terminal, so those
 parts settle where his letters agree. Fitted alone, each letter would take the values in its row. The trefoil is three equal round lobes on the
 arms of a cross, and the two-lobe terminal two equal overlapping lobes: each is the same wherever it is placed, where Pugin's are freehand and vary.</p>
 <table class="num fam"><thead><tr><th></th><th>stem width (px)</th><th>curl size</th><th>trefoil lobe radius (px)</th><th>two-lobe radius (px)</th>
 <th>mean from Pugin, alone (px)</th><th>sharing (px)</th></tr></thead><tbody>{rows}</tbody></table>
 <p class="words">{spec}</p>
-<p class="lede">Spacing is provisional: every letter has the same 50-unit side bearings until the letters are spaced together.</p>
+<p class="lede">Spacing is a first pass: each side bearing is set by the white beside the letter's profile (see the README). No kerning yet.</p>
 </section>"""
 
 
@@ -911,8 +969,13 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("cmd", choices=["extract", "measure", "curls", "build", "space", "proof"])
     ap.add_argument("family")
+    ap.add_argument("--fresh", action="store_true",
+                    help="build: start every fit from the constructions' starting values, not the last build's, and refit every letter alone")
     a = ap.parse_args()
-    {"extract": cmd_extract, "measure": cmd_measure, "curls": cmd_curls, "build": cmd_build, "space": cmd_space, "proof": cmd_proof}[a.cmd](a.family)
+    if a.cmd == "build":
+        cmd_build(a.family, fresh=a.fresh)
+        return
+    {"extract": cmd_extract, "measure": cmd_measure, "curls": cmd_curls, "space": cmd_space, "proof": cmd_proof}[a.cmd](a.family)
 
 
 if __name__ == "__main__":

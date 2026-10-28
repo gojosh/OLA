@@ -1,0 +1,123 @@
+{
+ "glyph": "P",
+ "unicode": "U+0050",
+ "construction": "letters.py: P",
+ "description": "A stem with the I's top-left and bottom curls, the bottom bar running out to a bottom-right curl. The bowl comes round from the top and spirals inward, rising to end in a trefoil in the middle of the counter. The counter is open below the bowl.",
+ "primitives": {
+  "curl": [
+   "top-left",
+   "bottom-left",
+   "bottom-right"
+  ],
+  "trefoil": [
+   "end of the spiral"
+  ]
+ },
+ "corrections": [],
+ "measured": {
+  "axis_x": 138.717,
+  "bottom": {
+   "half_width": 76.339,
+   "outer_y": 442.086,
+   "neck_deg": 0.103,
+   "flare_t1": 0.487,
+   "flare_t2": 0.206,
+   "right_x": 327.67,
+   "right_y": 443.594,
+   "fillet_t1": 0.744,
+   "fillet_t2": 0.602,
+   "high_x": 180.715,
+   "high_y": 428.378,
+   "edge_t1": 0.702,
+   "edge_t2": 0.398,
+   "edge_t3": 0.782,
+   "edge_t4": 0.364
+  },
+  "stem": {
+   "foot_y": 356.004,
+   "head_y": 122.397,
+   "foot_y_right": 342.832
+  },
+  "top": {
+   "half_width": 65.158,
+   "outer_y": 22.567,
+   "neck_deg": 38.726,
+   "flare_t1": 0.906,
+   "flare_t2": 0.318,
+   "low_x": 153.652,
+   "low_y": 38.384,
+   "edge_t1": 0.201,
+   "edge_t2": 0.995,
+   "edge_t3": 0.215,
+   "edge_t4": 0.647
+  },
+  "bowl": {
+   "top_x": 281.24,
+   "top_y": 25.053,
+   "right_x": 428.404,
+   "right_y": 184.998,
+   "bottom_x": 310.114,
+   "bottom_y": 320.08,
+   "t1": 0.495,
+   "t2": 0.498,
+   "t3": 0.502,
+   "t4": 0.496,
+   "t5": 0.565,
+   "t6": 0.621
+  },
+  "spiral": {
+   "left_x": 218.492,
+   "left_y": 249.032,
+   "enter_heading": 314.391,
+   "t1": 0.919,
+   "t2": 0.327,
+   "leave_heading": 154.172
+  },
+  "trefoil": {
+   "x": 268.612,
+   "y": 187.836,
+   "axis": 310.335,
+   "enter": -121.588,
+   "leave": 117.575
+  },
+  "inner": {
+   "left_x": 247.801,
+   "left_y": 255.163,
+   "bottom_x": 287.506,
+   "bottom_y": 291.812,
+   "right_x": 356.358,
+   "right_y": 188.563,
+   "top_x": 248.002,
+   "top_y": 51.166,
+   "t1": 0.818,
+   "t2": 0.434,
+   "t3": 0.528,
+   "t4": 0.61,
+   "t5": 0.523,
+   "t6": 0.57,
+   "t7": 0.515,
+   "t8": 0.644,
+   "t9": 0.456,
+   "t10": 0.781
+  },
+  "counter": {
+   "stem_top_y": 129.538
+  },
+  "bottom_right": {
+   "neck_deg": 0.0
+  },
+  "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/P.png",
+  "when": "2026-10-28T14:57:02"
+ },
+ "fit": {
+  "mean_px": 1.12,
+  "p95_px": 4.39,
+  "max_px": 8.89,
+  "mean_px_fitted_alone": 1.07,
+  "wobble_of_pugins_edge_mean_px": 0.25,
+  "segments": 36,
+  "outline_checks_pass": true
+ }
+}

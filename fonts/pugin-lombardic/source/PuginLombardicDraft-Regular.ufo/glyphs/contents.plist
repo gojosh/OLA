@@ -4,6 +4,8 @@
   <dict>
     <key>.notdef</key>
     <string>_notdef.glif</string>
+    <key>B</key>
+    <string>B_.glif</string>
     <key>C</key>
     <string>C_.glif</string>
     <key>D</key>
@@ -12,6 +14,8 @@
     <string>E_.glif</string>
     <key>F</key>
     <string>F_.glif</string>
+    <key>G</key>
+    <string>G_.glif</string>
     <key>H</key>
     <string>H_.glif</string>
     <key>I</key>
@@ -22,8 +26,12 @@
     <string>L_.glif</string>
     <key>O</key>
     <string>O_.glif</string>
+    <key>P</key>
+    <string>P_.glif</string>
     <key>Q</key>
     <string>Q_.glif</string>
+    <key>R</key>
+    <string>R_.glif</string>
     <key>T.1</key>
     <string>T_.1.glif</string>
     <key>space</key>

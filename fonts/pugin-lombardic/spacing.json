@@ -8,15 +8,20 @@
   "maximum": 75
  },
  "glyphs": {
+  "B": {
+   "left": 35,
+   "right": 75,
+   "advance": 786
+  },
   "C": {
-   "left": 64,
+   "left": 63,
    "right": 38,
-   "advance": 758
+   "advance": 757
   },
   "D": {
    "left": 35,
-   "right": 66,
-   "advance": 823
+   "right": 67,
+   "advance": 824
   },
   "E": {
    "left": 65,
@@ -25,8 +30,13 @@
   },
   "F": {
    "left": 35,
-   "right": 72,
-   "advance": 777
+   "right": 68,
+   "advance": 781
+  },
+  "G": {
+   "left": 63,
+   "right": 75,
+   "advance": 821
   },
   "H": {
    "left": 35,
@@ -41,7 +51,7 @@
   "K": {
    "left": 35,
    "right": 35,
-   "advance": 782
+   "advance": 780
   },
   "L": {
    "left": 42,
@@ -53,10 +63,20 @@
    "right": 68,
    "advance": 796
   },
+  "P": {
+   "left": 35,
+   "right": 62,
+   "advance": 764
+  },
   "Q": {
-   "left": 69,
+   "left": 67,
    "right": 55,
-   "advance": 783
+   "advance": 781
+  },
+  "R": {
+   "left": 36,
+   "right": 71,
+   "advance": 761
   },
   "T.1": {
    "left": 75,
