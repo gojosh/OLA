@@ -4,8 +4,29 @@
     {
       "name": "plate-flattener",
       "runtimeExecutable": "uv",
-      "runtimeArgs": ["run", "--quiet", "tools/flatten/flatten.py", "serve", "--port", "8765"],
+      "runtimeArgs": [
+        "run",
+        "--quiet",
+        "tools/flatten/flatten.py",
+        "serve",
+        "--port",
+        "8765"
+      ],
       "port": 8765
+    },
+    {
+      "name": "font-proofs",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8766",
+        "--bind",
+        "127.0.0.1",
+        "--directory",
+        "fonts"
+      ],
+      "port": 8766
     }
   ]
 }

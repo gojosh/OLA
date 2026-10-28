@@ -1,0 +1,130 @@
+{
+ "glyph": "F",
+ "unicode": "U+0046",
+ "construction": "letters.py: F",
+ "description": "A stem with curls at its top-left and bottom-left. The top bar ends square and drops as a stroke that closes the upper counter, crosses the middle bar and ends in a trefoil. The foot runs right into a bottom-right curl.",
+ "primitives": {
+  "curl": [
+   "top-left",
+   "bottom-left",
+   "bottom-right"
+  ],
+  "trefoil": [
+   "foot of the right stroke"
+  ]
+ },
+ "corrections": [],
+ "measured": {
+  "axis_x": 121.252,
+  "bottom": {
+   "half_width": 70.046,
+   "outer_y": 440.11,
+   "neck_deg": 39.993,
+   "flare_t1": 0.3,
+   "flare_t2": 0.765
+  },
+  "stem": {
+   "foot_y": 364.223,
+   "head_y": 109.795,
+   "counter_top_y": 246.654,
+   "counter_foot_y": 318.101
+  },
+  "top": {
+   "half_width": 67.282,
+   "outer_y": 22.757,
+   "neck_deg": 39.065,
+   "flare_t1": 0.623,
+   "flare_t2": 0.32,
+   "corner_x": 395.431,
+   "corner_y": 26.602,
+   "low_x": 217.243,
+   "low_y": 34.748,
+   "edge_t1": 0.2,
+   "edge_t2": 0.286,
+   "corner_in": 356.822,
+   "edge_t3": 0.981,
+   "edge_t4": 0.362
+  },
+  "trefoil": {
+   "axis": 44.385,
+   "x": 384.005,
+   "y": 328.041,
+   "enter": -110.749,
+   "leave_at": 149.001
+  },
+  "stroke": {
+   "waist_x": 370.853,
+   "waist_y": 254.332,
+   "top_heading": 93.27,
+   "t1": 0.5,
+   "t2": 0.371,
+   "foot_heading": 0.0,
+   "t3": 0.567,
+   "t4": 1.0,
+   "inside_x": 341.436,
+   "inside_y": 284.982
+  },
+  "lower": {
+   "point_x": 333.621,
+   "point_y": 244.314,
+   "t1": 0.2,
+   "t2": 0.201,
+   "point_in": 240.191,
+   "t7": 0.383,
+   "t8": 0.56,
+   "top_x": 243.762,
+   "top_y": 224.39,
+   "point_out": 204.299,
+   "t5": 1.0,
+   "t6": 0.596,
+   "t3": 0.373,
+   "t4": 0.243
+  },
+  "foot": {
+   "curl_x": 336.478,
+   "curl_y": 444.414,
+   "neck_deg": 0.0,
+   "fillet_t1": 0.596,
+   "fillet_t2": 0.625,
+   "under_x": 172.512,
+   "under_y": 426.331,
+   "under_t1": 0.614,
+   "under_t2": 0.575,
+   "edge_t1": 0.744,
+   "edge_t2": 0.227
+  },
+  "counter": {
+   "left_top_y": 101.02,
+   "left_foot_y": 185.509,
+   "bottom_x": 230.504,
+   "bottom_y": 202.336,
+   "corner_x": 327.814,
+   "corner_y": 181.698,
+   "top_x": 232.768,
+   "top_y": 56.589,
+   "corner_in": 342.137,
+   "t1": 0.215,
+   "t2": 0.556,
+   "t3": 0.72,
+   "t4": 0.516,
+   "corner_out": 261.552,
+   "t5": 0.784,
+   "t6": 0.845,
+   "t7": 0.566,
+   "t8": 0.558
+  },
+  "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/F.png",
+  "when": "2026-10-28T13:26:22"
+ },
+ "fit": {
+  "mean_px": 1.62,
+  "p95_px": 4.5,
+  "max_px": 17.43,
+  "mean_px_fitted_alone": 1.3,
+  "wobble_of_pugins_edge_mean_px": 0.27,
+  "segments": 37,
+  "outline_checks_pass": true
+ }
+}

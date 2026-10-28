@@ -50,7 +50,8 @@ docs/
 reference/           ← outside source material (inspiration, not templates)
   pugin-glossary/    ← Pugin's 1844 Glossary plates + viewable previews
 explorations/        ← concept work made for this project, each with a verdict
-tools/               ← small utilities (e.g. tools/flatten: unrolls the Pugin plates), each with a README
+tools/               ← small utilities (tools/flatten: unrolls the Pugin plates; tools/type: builds the fonts)
+fonts/               ← the Pugin font revivals: references, measurements, primitives, sources, proofs
 ```
 
 No `site/` or `src/` folder exists yet. When a codebase starts, it gets its own folder and a decision record explaining the stack.

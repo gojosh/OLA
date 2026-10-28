@@ -34,6 +34,12 @@ Questions that need Josh, the parish, or research. Agents: add questions here in
 - **Q27. Sacraments: rites and licensing.** Which sacraments does OLA celebrate from *Divine Worship: Occasional Services* and which from the Roman books? May the site quote short passages of the rites?
 - **Q30. Lenten array:** does OLA veil the church in unbleached linen (Lenten array) in Lent, or use violet? The home page concepts propose that the site keep array in Lent; that only makes sense if the parish does, or wants the site to teach the custom.
 
+### Fonts
+- **Q31. Uses of the Pugin fonts:** website headings, initials, and liturgical text only, or print as well? This sets the character set, the sizes to design for, and whether screen hinting matters.
+- **Q32. Editors and finishing:** does Josh use Glyphs or RoboFont? Will a professional type designer do final optical passes? (The source of truth stays in the repository either way; decision 0008.)
+- **Q33. Names and licenses:** what are the families called, and are they released openly (for example under the SIL Open Font License) or kept for the parish?
+- **Q34. Lombardic defaults:** plate 9 gives two forms each of M (uncial and straight), T (straight and uncial), and W (interlaced Vs and rounded double U). Which is the default, and which the alternate? *Meanwhile (2026-10-28):* the draft font puts the straight T (T.1) on the T key so words can be set; that is provisional.
+
 ### Repository
 - **Q18. Large files:** the Pugin plates (~258 MB) are in Git history and already on GitHub. Options: leave as is; move future large binaries to Git LFS; or migrate history to LFS (rewrites history and needs a force-push). *Also:* flattened plates are about 10 MB each at full resolution. They are ignored by git for now (regenerable from the saved parameters); decide whether they belong in LFS.
 - **Q19. Pugin plates provenance:** they look like photographs of a physical copy. Whose copy, which edition, and are there any rights or attribution to respect? *Evidence (2026-10-28):* the JPEG 2000 files were encoded with Kakadu v5.2.1, and the photographs show a glass platen with its edge at the gutter, a book cradle, and a 5616 × 3744 camera. That combination matches the Internet Archive's book-scanning pipeline, so the source is probably an archive.org scan. Finding the item would give the edition and its rights statement.

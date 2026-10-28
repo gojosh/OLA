@@ -1,0 +1,120 @@
+{
+ "glyph": "E",
+ "unicode": "U+0045",
+ "construction": "letters.py: E_",
+ "description": "The uncial E: a round bowl closed on the right by a stroke that ends in a top-right and a bottom-right curl, with a bar across the middle. Notches where the bowl meets the stroke, top and bottom. Two counters.",
+ "primitives": {
+  "curl": [
+   "top-right",
+   "bottom-right"
+  ]
+ },
+ "corrections": [],
+ "measured": {
+  "bowl": {
+   "left_x": 24.208,
+   "left_y": 242.122,
+   "top_x": 222.285,
+   "top_y": 27.825,
+   "bottom_x": 228.183,
+   "bottom_y": 454.558,
+   "t1": 0.441,
+   "t2": 0.413,
+   "t3": 0.547,
+   "t4": 0.932,
+   "t7": 0.992,
+   "t8": 0.593,
+   "t5": 0.458,
+   "t6": 0.48
+  },
+  "notch": {
+   "x": 321.184,
+   "y": 61.682,
+   "in": 37.61,
+   "out": 317.845
+  },
+  "stroke": {
+   "right_x": 352.771,
+   "left_x": 315.814,
+   "top_y": 171.216,
+   "foot_y": 344.982
+  },
+  "top": {
+   "curl_x": 383.086,
+   "curl_y": 26.915,
+   "edge_t1": 0.627,
+   "edge_t2": 0.713,
+   "neck_deg": 37.139,
+   "flare_t1": 0.388,
+   "flare_t2": 0.574
+  },
+  "bottom": {
+   "curl_x": 385.385,
+   "curl_y": 454.206,
+   "neck_deg": 0.019,
+   "flare_t1": 0.402,
+   "flare_t2": 0.309,
+   "edge_t1": 0.214,
+   "edge_t2": 0.489
+  },
+  "notch_b": {
+   "x": 328.95,
+   "y": 422.0,
+   "in": 249.629,
+   "out": 124.832
+  },
+  "upper": {
+   "top_x": 229.842,
+   "top_y": 48.14,
+   "left_x": 129.957,
+   "left_y": 184.676,
+   "bottom_x": 178.454,
+   "corner_dy": 1.444,
+   "right_top_y": 160.814,
+   "t1": 0.493,
+   "t2": 0.443,
+   "t3": 0.495,
+   "t4": 0.446,
+   "corner_in": 0.995,
+   "t5": 0.646,
+   "t6": 0.2,
+   "t7": 0.6,
+   "t8": 0.555
+  },
+  "bar": {
+   "top_y": 203.181,
+   "under_y": 267.381
+  },
+  "lower": {
+   "left_x": 123.82,
+   "left_y": 288.553,
+   "bottom_x": 243.124,
+   "bottom_y": 434.341,
+   "right_foot_y": 324.593,
+   "top_x": 200.711,
+   "top_y": 262.341,
+   "corner_out": 183.779,
+   "t7": 0.299,
+   "t8": 0.329,
+   "t1": 0.665,
+   "t2": 0.702,
+   "t3": 0.605,
+   "t4": 0.559,
+   "t5": 0.509,
+   "t6": 0.481
+  },
+  "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/E.png",
+  "when": "2026-10-28T13:26:22"
+ },
+ "fit": {
+  "mean_px": 0.79,
+  "p95_px": 2.32,
+  "max_px": 7.13,
+  "mean_px_fitted_alone": 0.82,
+  "wobble_of_pugins_edge_mean_px": 0.32,
+  "segments": 25,
+  "outline_checks_pass": true
+ }
+}

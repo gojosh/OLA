@@ -1,0 +1,78 @@
+{
+ "glyph": "T.1",
+ "unicode": "U+0054",
+ "unicode_note": "Provisional: the straight T has the T key until Q34 decides the default.",
+ "construction": "letters.py: T_1",
+ "description": "The straight T. Below, the I's stem, bottom bar and curls. Above, a bar arched up to the axis whose ends turn down into two tapering arms, each with a round knob on its outer top corner and a curl at its foot rolling outward. Symmetric about the stem's axis.",
+ "primitives": {
+  "curl": [
+   "bottom-left",
+   "bottom-right",
+   "foot of each arm, turned"
+  ]
+ },
+ "corrections": [],
+ "measured": {
+  "axis_x": 232.198,
+  "bottom": {
+   "centre_y": 442.367,
+   "half_width": 153.743,
+   "outer_y": 458.26,
+   "edge_t1": 0.459,
+   "edge_t2": 0.432,
+   "neck_deg": 0.23,
+   "flare_t1": 0.621,
+   "flare_t2": 0.475
+  },
+  "stem": {
+   "foot_y": 320.006,
+   "head_y": 68.887
+  },
+  "arm": {
+   "inner_x": 95.385,
+   "inner_y": 201.715,
+   "inner_heading": 98.91,
+   "curl_x": 85.587,
+   "gap": 16.3,
+   "inner_t1": 0.576,
+   "inner_t2": 0.242,
+   "neck_deg": -7.253,
+   "waist_dx": 3.55,
+   "waist_y": 295.622,
+   "outer_t1": 1.0,
+   "outer_t2": 0.215,
+   "outer_t3": 0.222,
+   "outer_t4": 0.378
+  },
+  "arch": {
+   "spring_heading": 167.57,
+   "t1": 0.488,
+   "t2": 0.506
+  },
+  "knob": {
+   "x": 44.787,
+   "y": 48.319,
+   "r": 20.947,
+   "neck_at": 45.582
+  },
+  "top": {
+   "centre_y": 28.016,
+   "neck_out": -0.491,
+   "edge_t1": 0.521,
+   "edge_t2": 1.0
+  },
+  "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/T_1.png",
+  "when": "2026-10-28T13:26:22"
+ },
+ "fit": {
+  "mean_px": 2.08,
+  "p95_px": 7.16,
+  "max_px": 21.02,
+  "mean_px_fitted_alone": 1.89,
+  "wobble_of_pugins_edge_mean_px": 0.25,
+  "segments": 34,
+  "outline_checks_pass": true
+ }
+}

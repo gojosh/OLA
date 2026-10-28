@@ -1,0 +1,81 @@
+{
+ "shared": {
+  "curl": 0.975,
+  "stem": 38.827,
+  "trefoil_r": 17.533,
+  "trefoil_d": 22.359
+ },
+ "meaning": {
+  "stem": "half the stem's width (px)",
+  "curl": "the curl's size, as a multiple of the averaged curl",
+  "trefoil_r": "a trefoil lobe's radius (px)",
+  "trefoil_d": "how far each trefoil lobe sits from the trefoil's centre (px)"
+ },
+ "fitted_alone": {
+  "E": {
+   "curl": 0.933
+  },
+  "F": {
+   "stem": 35.385,
+   "curl": 0.93,
+   "trefoil_r": 17.529,
+   "trefoil_d": 22.362
+  },
+  "I": {
+   "stem": 39.794,
+   "curl": 1.006
+  },
+  "L": {
+   "stem": 40.143,
+   "curl": 1.05
+  },
+  "T.1": {
+   "stem": 37.408,
+   "curl": 0.865
+  }
+ },
+ "mean_px": {
+  "E": {
+   "shared": 0.79,
+   "alone": 0.82
+  },
+  "F": {
+   "shared": 1.62,
+   "alone": 1.3
+  },
+  "I": {
+   "shared": 1.0,
+   "alone": 0.89
+  },
+  "L": {
+   "shared": 1.66,
+   "alone": 1.51
+  },
+  "T.1": {
+   "shared": 2.08,
+   "alone": 1.89
+  }
+ },
+ "at_bounds": [
+  "E:bottom.neck_deg",
+  "E:upper.t6",
+  "F:bottom.neck_deg",
+  "F:top.edge_t1",
+  "F:stroke.t4",
+  "F:lower.t1",
+  "F:lower.t2",
+  "F:lower.t5",
+  "F:foot.neck_deg",
+  "I:bottom.neck_deg",
+  "I:top.neck_deg",
+  "L:top.edge_t2",
+  "T.1:arm.gap",
+  "T.1:arm.outer_t1",
+  "T.1:top.edge_t2"
+ ],
+ "fit": {
+  "evaluations": 98,
+  "cost": 15622.093402650366
+ },
+ "when": "2026-10-28T13:26:22"
+}

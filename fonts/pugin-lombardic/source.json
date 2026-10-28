@@ -1,0 +1,84 @@
+{
+ "family": "Pugin Lombardic",
+ "note": "Working name. The capitals of A. W. N. Pugin, Glossary of Ecclesiastical Ornament (1844), plate 9 ('Alphabets No. 1'). Rows are listed as they appear on the plate, left to right. Where Pugin gives two forms of a letter, both are kept with neutral suffixes (.1, .2) until the defaults are chosen.",
+ "plate": "09-alphabets-no-1",
+ "image": "reference/pugin-glossary/flattened/09-alphabets-no-1.deshaded.png",
+ "params": "reference/pugin-glossary/flatten/09-alphabets-no-1.json",
+ "rows": [
+  [
+   "cross",
+   "A",
+   "B",
+   "C",
+   "D",
+   "E"
+  ],
+  [
+   "F",
+   "G",
+   "H",
+   "I",
+   "K",
+   "L"
+  ],
+  [
+   "M.1",
+   "M.2",
+   "N",
+   "O",
+   "P",
+   "Q"
+  ],
+  [
+   "R",
+   "S",
+   "T.1",
+   "T.2",
+   "V",
+   "U"
+  ],
+  [
+   "W.1",
+   "W.2",
+   "X",
+   "Y",
+   "Z",
+   "ornament.dots"
+  ]
+ ],
+ "forms": {
+  "M.1": "uncial M: rounded, closed with a hairline",
+  "M.2": "straight-sided M",
+  "T.1": "straight T",
+  "T.2": "uncial T: rounded, with a curl in the counter",
+  "W.1": "W as two interlaced V forms",
+  "W.2": "W as a rounded double U",
+  "ornament.dots": "four groups of four dots around a central dot"
+ },
+ "primitives": {
+  "curl": {
+   "note": "the scroll terminal: a bar or stroke end that rolls into a ball, turning back toward the letter. The template is the ball and the start of its stroke only, so curls are found whatever they hang from.",
+   "template": {
+    "glyph": "I",
+    "box": [
+     20,
+     388,
+     84,
+     446
+    ],
+    "orientation": "bottom-left"
+   }
+  }
+ },
+ "font": {
+  "name": "Pugin Lombardic Draft",
+  "postscript_name": "PuginLombardicDraft-Regular",
+  "note": "Working name (Q33). Spacing is provisional: every glyph gets the same side bearings until the letters are spaced together.",
+  "units_per_em": 1000,
+  "cap_height": 700,
+  "cap_height_px": "measurements.json: summary.height.median_px (the plate's median letter height, curls included)",
+  "sidebearing": 50,
+  "ascender": 800,
+  "descender": -200
+ }
+}

@@ -1,0 +1,55 @@
+{
+ "glyph": "I",
+ "unicode": "U+0049",
+ "construction": "letters.py: I",
+ "description": "A straight stem that flares into a top and a bottom bar. Each bar ends in a curl at both sides, rolling toward the stem. The letter is symmetric about the stem's axis.",
+ "primitives": {
+  "curl": [
+   "bottom-left",
+   "bottom-right",
+   "top-left",
+   "top-right"
+  ]
+ },
+ "corrections": [],
+ "measured": {
+  "axis_x": 178.514,
+  "bottom": {
+   "centre_y": 432.426,
+   "half_width": 112.018,
+   "outer_y": 444.934,
+   "edge_t1": 0.483,
+   "edge_t2": 0.718,
+   "neck_deg": 0.0,
+   "flare_t1": 0.693,
+   "flare_t2": 0.613
+  },
+  "stem": {
+   "foot_y": 294.15,
+   "head_y": 158.658
+  },
+  "top": {
+   "half_width": 101.215,
+   "outer_y": 23.968,
+   "neck_deg": 0.0,
+   "flare_t1": 0.644,
+   "flare_t2": 0.717,
+   "centre_y": 38.943,
+   "edge_t2": 0.293,
+   "edge_t1": 0.499
+  },
+  "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/I.png",
+  "when": "2026-10-28T13:26:22"
+ },
+ "fit": {
+  "mean_px": 1.0,
+  "p95_px": 2.35,
+  "max_px": 4.79,
+  "mean_px_fitted_alone": 0.89,
+  "wobble_of_pugins_edge_mean_px": 0.29,
+  "segments": 22,
+  "outline_checks_pass": true
+ }
+}

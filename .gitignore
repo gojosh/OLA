@@ -22,5 +22,9 @@ build/
 # Full-resolution flattened plates (about 10 MB each; regenerate with tools/flatten, see Q18)
 reference/pugin-glossary/flattened/*.png
 
+# Generated font proof pages (self-contained, about 1 MB) and compiled fonts; regenerate with tools/type
+fonts/*/proof/
+fonts/*/build/
+
 # Claude Code local settings
 .claude/settings.local.json

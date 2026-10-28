@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>ascender</key>
+    <integer>800</integer>
+    <key>capHeight</key>
+    <integer>700</integer>
+    <key>descender</key>
+    <integer>-200</integer>
+    <key>familyName</key>
+    <string>Pugin Lombardic Draft</string>
+    <key>openTypeNameDescription</key>
+    <string>Working draft, not for release. A revival of the Lombardic capitals in A. W. N. Pugin's Glossary of Ecclesiastical Ornament (1844), plate 9, rebuilt from measured primitives.</string>
+    <key>postscriptFontName</key>
+    <string>PuginLombardicDraft-Regular</string>
+    <key>styleName</key>
+    <string>Regular</string>
+    <key>unitsPerEm</key>
+    <integer>1000</integer>
+    <key>versionMajor</key>
+    <integer>0</integer>
+    <key>versionMinor</key>
+    <integer>1</integer>
+  </dict>
+</plist>
