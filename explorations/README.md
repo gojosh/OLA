@@ -17,6 +17,7 @@ Concept work made for this project: studies, sketches, prototypes. **Not a codeb
 
 | Folder | Made | Verdict |
 |---|---|---|
+| [`home-page-concepts/`](home-page-concepts/) | 2026-10-27, Claude | **Folio (A) chosen** to take further (Josh, 2026-10-28); B kept for reference |
 | [`liturgical-system/`](liturgical-system/) | Dec 2025, Claude | **Partial reference:** "elements… in the ballpark" |
 | [`interior-inspired/`](interior-inspired/) | Dec 2025, Claude | Superseded; one principle worth keeping |
 | [`ai-image-concepts/`](ai-image-concepts/) | Dec 2025, AI image generation | **Anti-reference:** "almost represent what we don't want" |

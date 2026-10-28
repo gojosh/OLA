@@ -43,7 +43,8 @@ docs/
   log/               ← one dated entry per working session
   roadmap.md         ← phases; what's happening now and next
   open-questions.md  ← questions waiting on Josh or on research
-  glossary.md        ← domain vocabulary
+  glossary.md        ← domain vocabulary, and the usage list of which term we use
+  effect-ledger.md   ← every non-trivial effect, justified before it is built
   research/          ← discovery findings (e.g. the current-site audit)
   sections/          ← one design doc per site section, written before its pages
 reference/           ← outside source material (inspiration, not templates)

@@ -1,0 +1,708 @@
+<!doctype html>
+<html lang="en" data-color="green" data-rank="feria">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Folio — home page concept A</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Texturina:opsz,wght@12..72,400..600&display=swap" rel="stylesheet">
+<style>
+/* Colors: sampled from the Pugin Glossary plates (reference/pugin-glossary), white-balanced
+   against the plates' paper, then darkened where text needs contrast. See NOTES.md. */
+:root{
+  --paper:#F4EFE3; --paper-hi:#FAF7EF; --ink:#1E1A16; --ink-2:#5C5248; --rule:#D3C8B4;
+  --rubric:#A8382A;            /* vermilion, text-safe */
+  --vermilion:#C4503B; --ultramarine:#2F4F94; --gold:#B8963F; --gold-hi:#D6BD72;
+  --lit-green:#3F6447; --lit-red:#B03A2C; --lit-white:#B8963F; --lit-violet:#56406F;
+  --lit-black:#232023; --lit-rose:#B76E7C; --linen:#E4D9C2;
+  --day:var(--lit-green); --day-ink:var(--lit-green); --dir:1;
+  --serif:'Libre Caslon Text', 'Iowan Old Style', Georgia, serif;
+  --display:'Libre Caslon Display', 'Libre Caslon Text', Georgia, serif;
+  --gutter:clamp(16px, 4vw, 56px);
+}
+html[data-color=red]    { --day:var(--lit-red);    --day-ink:#9C3125; }
+html[data-color=white]  { --day:var(--lit-white);  --day-ink:#8A6D22; }
+html[data-color=violet] { --day:var(--lit-violet); --day-ink:var(--lit-violet); }
+html[data-color=black]  { --day:var(--lit-black);  --day-ink:var(--ink); }
+html[data-color=array]  { --day:var(--ink);        --day-ink:var(--rubric); --paper:#EEE7D6; --paper-hi:#F5F0E3; }
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.6;
+  font-variant-numeric:oldstyle-nums;text-rendering:optimizeLegibility}
+a{color:inherit;text-decoration-thickness:1px;text-underline-offset:.2em}
+a:focus-visible,button:focus-visible,select:focus-visible{outline:2px solid var(--ultramarine);outline-offset:3px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:-999px;top:8px;background:var(--ink);color:var(--paper);padding:.5rem 1rem;z-index:9}
+.skip:focus{left:8px}
+.wrap{max-width:1240px;margin:0 auto;padding:0 var(--gutter)}
+.caps{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;font-variant-numeric:lining-nums}
+.rubric{color:var(--rubric)}
+
+/* ── Masthead ───────────────────────────────────────── */
+.mast{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:24px 40px;padding-top:26px;padding-bottom:22px}
+.name{text-decoration:none;display:block}
+.name-main{display:flex;align-items:center;gap:.5rem;font-family:var(--display);font-size:clamp(1.35rem,2.2vw,1.7rem);line-height:1.1}
+.name-main svg{width:.62em;height:.62em;fill:var(--rubric);flex:none}
+.name-sub{display:block;margin-top:.35rem;color:var(--ink-2)}
+.doors-nav ul{list-style:none;margin:0;padding:0;display:flex;justify-content:center;gap:clamp(16px,2.4vw,34px)}
+.doors-nav a{text-decoration:none;font-size:1rem;padding:.3rem 0;border-bottom:1px solid transparent}
+.doors-nav a:hover{border-bottom-color:var(--ink)}
+.always{display:flex;align-items:center;gap:18px;font-size:.95rem;white-space:nowrap}
+.priest{color:var(--rubric);text-decoration:none;display:flex;align-items:center;gap:.4rem}
+.priest svg{width:.7em;height:.7em;fill:currentColor}
+.give{border:1px solid var(--ink);padding:.32rem 1rem;text-decoration:none}
+.give:hover{background:var(--ink);color:var(--paper)}
+
+/* ── Cresting: the top edge, vested for the day ─────── */
+.crest{padding-top:6px}
+.crest svg{width:100%;display:none}
+html[data-rank=feria]      .crest .c-feria,
+html[data-rank=commemoration] .crest .c-feria,
+html[data-rank=sunday]     .crest .c-sunday,
+html[data-rank=feast]      .crest .c-feast,
+html[data-rank=solemnity]  .crest .c-solemnity,
+html[data-rank=array]      .crest .c-array{display:block}
+.c-solemn-diaper{display:none;width:100%}
+html[data-rank=solemnity] .c-solemn-diaper{display:block}
+.f-day{fill:var(--day)} .f-gold{fill:var(--gold)} .f-goldhi{fill:var(--gold-hi)} .f-red{fill:var(--vermilion)} .f-blue{fill:var(--ultramarine)}
+.f-paper{fill:var(--paper-hi)} .f-ink{fill:var(--ink)} .f-linen{fill:var(--linen)} .f-arrayred{fill:#A3352A} .f-pall{fill:#232023}
+.s-gold{stroke:var(--gold);fill:none}
+
+/* ── The plate ──────────────────────────────────────── */
+.plate{position:relative;margin:clamp(28px,5vw,64px) 0 0;border:1px solid var(--vermilion);view-transition-name:plate;
+  padding:clamp(40px,6.5vw,92px) clamp(22px,6vw,88px);display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:clamp(40px,6vw,96px)}
+html:not([data-rank=feria]) .plate{padding-top:clamp(44px,4.4vw,60px);row-gap:clamp(28px,3.4vw,48px)}
+.orphrey{position:absolute;left:0;top:0;bottom:0;width:0;display:none}
+.orphrey svg{display:block;width:100%;height:100%}
+html[data-rank=sunday] .orphrey,html[data-rank=commemoration] .orphrey{display:block;width:5px;background:var(--day)}
+html[data-rank=feast] .orphrey{display:block;width:20px}
+html[data-rank=solemnity] .orphrey{display:block;width:32px}
+html[data-rank=array] .orphrey{display:block;width:22px}
+.orphrey .o-feast,.orphrey .o-solemn,.orphrey .o-array{display:none}
+html[data-rank=feast] .o-feast,html[data-rank=solemnity] .o-solemn,html[data-rank=array] .o-array{display:block}
+
+/* turning the page: the folio number, flanked */
+.turn{position:absolute;top:6px;right:8px;display:flex;align-items:center;color:var(--rubric);font-variant-numeric:lining-nums}
+.turn button{background:none;border:0;color:inherit;font:inherit;font-size:1.35rem;line-height:1;padding:.15rem .5rem;cursor:pointer;border-radius:3px}
+.turn button:hover:not(:disabled){background:var(--paper-hi)}
+.turn button:disabled{opacity:.22;cursor:default}
+.folio{font-size:.95rem;min-width:1.4em;text-align:center}
+
+/* the frontal: the altar dressed for the day */
+.frontal-fig{grid-column:1/-1;margin:0}
+html[data-rank=feria] .frontal-fig{display:none}
+.frontal{height:clamp(128px,19vw,250px)}
+.frontal svg{display:block;width:100%;height:100%}
+.frontal-cap{display:flex;justify-content:space-between;gap:1rem;margin-top:.55rem;font-size:.8rem;color:var(--ink-2)}
+.frontal-cap i{font-style:italic}
+
+.plate-cap{position:absolute;bottom:-.8em;left:50%;transform:translateX(-50%);background:var(--paper);padding:0 .9rem;
+  color:var(--rubric);white-space:nowrap;display:flex;align-items:center;gap:.6rem;margin:0}
+.plate-cap svg{width:.7em;height:.7em;fill:currentColor}
+
+.day .date{margin:0 0 1.6rem;color:var(--rubric)}
+.feast{font-family:var(--display);font-weight:400;font-size:clamp(2.35rem,5.4vw,4.6rem);line-height:1.04;letter-spacing:-.005em;
+  margin:0 0 1.4rem;max-width:15ch;text-wrap:balance;color:var(--ink)}
+html[data-rank=feria] .feast,html[data-rank=array] .feast{font-size:clamp(1.9rem,3.6vw,3.05rem);max-width:19ch}
+.initial{font-size:1.38em;line-height:.8;color:var(--day-ink);margin-right:.03em}
+html[data-color=white] .initial,html[data-color=black] .initial{color:var(--rubric)}
+html[data-rank=solemnity] .initial{display:inline-grid;place-items:center;width:1.12em;height:1.12em;margin:0 .1em -.06em 0;font-size:1.25em;
+  background:var(--paper-hi) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Cpath d='M8 0L16 8L8 16L0 8Z' fill='none' stroke='%23B8963F' stroke-width='.8'/%3E%3Ccircle cx='8' cy='8' r='1.3' fill='%23B8963F'/%3E%3C/svg%3E") center/14px;
+  border:2px solid var(--gold);line-height:1;vertical-align:-.08em;color:var(--rubric)}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .9rem;margin:0 0 2rem;color:var(--ink-2)}
+.meta .sep{color:var(--rule)}
+.swatch{width:13px;height:13px;flex:none;vertical-align:-1px}
+.about{font-size:1.15rem;max-width:34rem;margin:0 0 2.6rem;text-wrap:pretty}
+
+.collect{max-width:34rem;margin:0 0 2.4rem;padding-top:1.6rem;border-top:1px solid var(--rule)}
+.collect .label{margin:0 0 .9rem}
+.collect-text{font-size:1.18rem;line-height:1.62;margin:0;text-wrap:pretty}
+.collect-text:not(.ph-block)::first-letter{color:var(--rubric);font-family:var(--display);font-size:2.3em;float:left;line-height:.9;margin:.06em .08em 0 0}
+@supports (initial-letter:2) or (-webkit-initial-letter:2){
+  .collect-text:not(.ph-block)::first-letter{float:none;font-size:inherit;-webkit-initial-letter:2;initial-letter:2;margin:0 .12em 0 0;line-height:1}
+}
+.ph-block{color:#8E8273;font-style:italic;font-size:1rem}
+.source{margin:.9rem 0 0;font-size:.85rem;font-style:italic;color:var(--ink-2)}
+.readings{display:inline-flex;gap:.4rem;font-size:1rem}
+
+/* the ordo (right column) */
+.ordo h2{margin:0 0 .7rem;font-weight:400;color:var(--rubric)}
+.hours{list-style:none;margin:0 0 1rem;padding:0;border-bottom:1px solid var(--rule)}
+.hours li{display:grid;grid-template-columns:5.6rem 1fr;align-items:baseline;padding:.62rem 0;border-top:1px solid var(--rule)}
+.hours time{color:var(--rubric);font-size:1.05rem;font-variant-numeric:oldstyle-nums tabular-nums}
+.hours .ampm{font-size:.68em;letter-spacing:.08em;margin-left:.15em}
+.hours .what{font-size:1.06rem}
+.hours .until{display:block;font-size:.8rem;color:var(--ink-2)}
+.hours li.past{opacity:.42}
+.hours li.next .what::after{content:"Next";margin-left:.6rem;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--paper);background:var(--rubric);padding:.12rem .4rem;vertical-align:.15em}
+.status{font-size:.9rem;color:var(--ink-2);margin:0 0 .4rem}
+.ordo .more{font-size:.95rem}
+.ordo h2.second{margin-top:3rem;display:flex;justify-content:space-between;align-items:baseline}
+.ordo h2.second span{letter-spacing:.04em;text-transform:none;font-size:.82rem;font-style:italic;color:var(--ink-2)}
+
+/* the kalendar: a week, after the calendar pages of a Book of Hours */
+.kal{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink)}
+.kal li{border-bottom:1px solid var(--rule)}
+.kal .row{display:grid;grid-template-columns:2rem 2.5rem 1fr;align-items:baseline;gap:0 .45rem;padding:.48rem .35rem .48rem .55rem;width:100%;
+  text-align:left;background:none;border:0;font:inherit;color:inherit;position:relative}
+.kal button.row{cursor:pointer}
+.kal button.row:hover{background:var(--paper-hi)}
+.kal .n{font-family:var(--display);font-size:1.4rem;line-height:1;font-variant-numeric:oldstyle-nums}
+.kal .w{font-size:.64rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-2);font-variant-numeric:lining-nums}
+.kal .o{font-size:.98rem;line-height:1.3}
+.kal .o .rk{font-style:italic;font-size:.84rem;color:var(--ink-2);margin-left:.25rem}
+.kal .o .swatch{width:10px;height:10px;margin-right:.35rem;vertical-align:0}
+.kal .red .o,.kal .red .n{color:var(--rubric)}
+.kal .blank .n{color:#9A8F80}
+.kal .sun .n{color:var(--ink)}
+.kal .cur{background:var(--paper-hi)}
+.kal .cur::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--day)}
+html[data-color=white] .kal .cur::before{background:var(--gold)}
+html[data-color=array] .kal .cur::before{background:var(--rubric)}
+
+/* ── Border band (after Pugin's borders for altar cloths) ─ */
+.band{height:22px;margin:clamp(64px,8vw,104px) 0 0;display:block;width:100%}
+
+/* ── In the parish ──────────────────────────────────── */
+.section-h{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;margin:clamp(40px,5vw,64px) 0 1.6rem}
+.section-h h2{font-family:var(--display);font-weight:400;font-size:clamp(1.7rem,2.6vw,2.2rem);margin:0}
+.notices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(24px,4vw,56px)}
+.notice{padding-top:1rem;border-top:1px solid var(--ink)}
+.notice h3{font-family:var(--display);font-weight:400;font-size:1.35rem;line-height:1.2;margin:.5rem 0 .6rem}
+.notice p{margin:0 0 .6rem;font-size:1rem}
+.ph{color:#8E8273;border-bottom:1px dotted #B9AD98}
+
+/* ── Contents: the five doors ───────────────────────── */
+.contents{margin-top:clamp(72px,9vw,120px)}
+.contents ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-top:1px solid var(--ink)}
+.contents li{border-right:1px solid var(--rule)}
+.contents li:last-child{border-right:0}
+.contents a{display:block;padding:1.4rem 1.4rem 1.8rem 0;text-decoration:none;height:100%}
+.contents li+li a{padding-left:1.4rem}
+.contents .num{display:block;color:var(--rubric);font-variant-numeric:lining-nums;margin-bottom:.9rem}
+.contents .door{display:block;font-family:var(--display);font-size:clamp(1.45rem,2.1vw,1.85rem);line-height:1.1;margin-bottom:.6rem}
+.contents .line{display:block;font-size:.95rem;color:var(--ink-2);line-height:1.5}
+.contents a:hover .door{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.18em}
+
+/* ── Colophon ───────────────────────────────────────── */
+.colophon{margin-top:clamp(80px,10vw,140px);padding:48px 0 120px;border-top:1px solid var(--rule);text-align:center;font-size:.95rem;color:var(--ink-2)}
+.colophon .addr{color:var(--ink);font-size:1.05rem;margin:0 0 .3rem}
+.colophon p{margin:.2rem auto;max-width:44rem}
+.colophon .set{margin-top:1.6rem;font-style:italic;font-size:.88rem}
+.finis{display:block;margin:2rem auto 0;width:16px;height:16px;fill:var(--rubric)}
+
+/* ── Turning: a short slide and fade between days (Effect Ledger) ── */
+::view-transition-old(plate){animation:.34s cubic-bezier(.4,0,.2,1) both turn-out}
+::view-transition-new(plate){animation:.34s cubic-bezier(.4,0,.2,1) both turn-in}
+@keyframes turn-out{to{opacity:0;transform:translateX(calc(var(--dir) * -28px))}}
+@keyframes turn-in{from{opacity:0;transform:translateX(calc(var(--dir) * 28px))}}
+
+/* ── Concept sampler (not part of the design) ───────── */
+.sampler{position:fixed;left:12px;bottom:12px;z-index:20;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;
+  font:13px/1.3 system-ui,-apple-system,sans-serif;background:#1E1A16;color:#F4EFE3;padding:9px 14px;border-radius:12px;max-width:calc(100vw - 24px);box-shadow:0 6px 24px rgba(0,0,0,.18)}
+.sampler b{font-weight:600}
+.sampler select{font:inherit;background:#F4EFE3;color:#1E1A16;border:0;border-radius:6px;padding:4px 6px;max-width:62vw}
+.sampler a{color:#F4EFE3}
+.sampler .flag{opacity:.7}
+
+@media (max-width:980px){
+  .mast{grid-template-columns:1fr auto;}
+  .doors-nav{grid-column:1 / -1;grid-row:2}
+  .doors-nav ul{justify-content:flex-start;flex-wrap:wrap;gap:6px 20px}
+  .plate{grid-template-columns:1fr;gap:0}
+  html:not([data-rank=feria]) .plate{row-gap:0}
+  .frontal-fig{order:6;margin-bottom:2.4rem}
+  .day{display:contents}
+  .day .date{order:1}.feast{order:2}.meta{order:3}.about{order:4}.ordo{order:5;margin-bottom:2.6rem}.collect{order:7}.readings{order:8;justify-self:start}
+  .notices{grid-template-columns:1fr}
+  .contents ol{grid-template-columns:1fr}
+  .contents li{border-right:0;border-bottom:1px solid var(--rule)}
+  .contents li+li a, .contents a{padding:1.1rem 0 1.2rem}
+  .contents a{display:grid;grid-template-columns:2.4rem 1fr;column-gap:.4rem}
+  .contents .num{grid-row:span 2;margin:0;padding-top:.3rem}
+}
+@media (max-width:560px){
+  body{font-size:17px}
+  .mast{gap:14px 16px;padding-top:18px}
+  .name-sub{font-size:.62rem;letter-spacing:.12em}
+  .always{flex-direction:column;align-items:flex-end;gap:6px;font-size:.88rem}
+  .doors-nav a{font-size:.95rem}
+  .plate{border-left:0;border-right:0;padding-left:0;padding-right:0}
+  .orphrey{display:none!important}
+  .turn{right:-6px}
+  .plate-cap{font-size:.62rem}
+  .frontal-cap{flex-direction:column;gap:.1rem}
+  .sampler{font-size:12px}
+  .sampler .flag{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- Ornament and emblems, after A. W. N. Pugin, Glossary of Ecclesiastical Ornament (1844). Drawn as vectors, not copied. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="fleur" viewBox="0 0 100 106">
+      <path d="M50 2C56 12 63 22 63 36C63 48 57 58 52 67H48C43 58 37 48 37 36C37 22 44 12 50 2Z"/>
+      <path d="M55 70C62 52 76 40 88 44C98 47 99 60 90 67C92 58 88 52 80 54C70 57 64 66 60 75Z"/>
+      <path d="M45 70C38 52 24 40 12 44C2 47 1 60 10 67C8 58 12 52 20 54C30 57 36 66 40 75Z"/>
+      <rect x="32" y="69" width="36" height="8" rx="1.5"/>
+      <path d="M46 77C46 87 48 96 50 105C52 96 54 87 54 77Z"/>
+      <path d="M56 77C63 81 69 88 71 97C64 95 58 88 54 80Z"/>
+      <path d="M44 77C37 81 31 88 29 97C36 95 42 88 46 80Z"/>
+    </symbol>
+    <symbol id="paty" viewBox="0 0 100 100"><path d="M39 0H61L55 45L100 39V61L55 55L61 100H39L45 55L0 61V39L45 45Z"/></symbol>
+    <symbol id="qf" viewBox="0 0 100 100"><path d="M27 27A23 23 0 0 1 73 27A23 23 0 0 1 73 73A23 23 0 0 1 27 73A23 23 0 0 1 27 27Z"/></symbol>
+    <symbol id="crosslet" viewBox="0 0 100 100">
+      <path d="M44 14H56V44H86V56H56V86H44V56H14V44H44Z"/>
+      <circle cx="50" cy="9" r="8"/><circle cx="50" cy="91" r="8"/><circle cx="9" cy="50" r="8"/><circle cx="91" cy="50" r="8"/>
+    </symbol>
+
+    <!-- Emblems of the day (after plate 63: emblems in gold on a colored ground). currentColor throughout. -->
+    <symbol id="saw" viewBox="0 0 100 100"><!-- Saint Simon --><g transform="rotate(-32 50 50)">
+      <path fill="currentColor" fill-rule="evenodd" d="M36 6H64Q70 6 70 12V24Q70 30 64 30H36Q30 30 30 24V12Q30 6 36 6ZM42 12V24H58V12Z"/>
+      <path fill="currentColor" d="M40.0 30.0 L60.0 30.0 L56.0 94.0 L48.0 94.0 L41.5 92.0 L47.2 87.6 L40.7 85.6 L46.4 81.2 L39.9 79.2 L45.6 74.8 L39.1 72.8 L44.8 68.4 L38.3 66.4 L44.0 62.0 L37.5 60.0 L43.2 55.6 L36.7 53.6 L42.4 49.2 L35.9 47.2 L41.6 42.8 L35.1 40.8 L40.8 36.4 L34.3 34.4 L40.0 30.0 Z"/>
+    </g></symbol>
+    <symbol id="ship" viewBox="0 0 100 100"><!-- Saint Jude -->
+      <path fill="currentColor" d="M50.5 4L68 9L50.5 14Z"/>
+      <rect fill="currentColor" x="48" y="8" width="4.5" height="56"/>
+      <path fill="currentColor" fill-rule="evenodd" d="M27 20Q50 15 73 20L71 50Q50 55 29 50ZM47.5 25V31H41.5V37H47.5V46H53V37H59V31H53V25Z"/>
+      <path fill="currentColor" d="M6 60H94L84 78Q50 88 16 78Z"/>
+      <path fill="currentColor" d="M6 60V51H19V60ZM81 60V51H94V60Z"/>
+      <path fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" d="M10 92Q17 87 24 92T38 92T52 92T66 92T80 92T94 92"/>
+    </symbol>
+    <symbol id="crown" viewBox="0 0 100 100"><!-- All Saints: the crown of glory -->
+      <use href="#fleur" x="35" y="10" width="30" height="50" fill="currentColor"/>
+      <use href="#fleur" x="5" y="24" width="23" height="38" fill="currentColor"/>
+      <use href="#fleur" x="72" y="24" width="23" height="38" fill="currentColor"/>
+      <circle fill="currentColor" cx="30.5" cy="50" r="3.6"/><circle fill="currentColor" cx="69.5" cy="50" r="3.6"/>
+      <path fill="currentColor" fill-rule="evenodd" d="M12 60H88V82H12ZM24 67A4 4 0 1 0 24 75A4 4 0 1 0 24 67ZM50 65L55 71L50 77L45 71ZM76 67A4 4 0 1 0 76 75A4 4 0 1 0 76 67Z"/>
+      <rect fill="currentColor" x="8" y="85" width="84" height="4"/>
+    </symbol>
+    <symbol id="thorns" viewBox="0 0 100 100"><!-- Lent: the crown of thorns -->
+      <ellipse cx="50" cy="50" rx="35" ry="33" fill="none" stroke="currentColor" stroke-width="3.4" transform="rotate(-9 50 50)"/>
+      <ellipse cx="50" cy="50" rx="35" ry="33" fill="none" stroke="currentColor" stroke-width="3.4" transform="rotate(14 50 50)"/>
+      <path fill="currentColor" d="M85.4 47.9 L94.8 54.5 L85.4 52.1 Z M81.7 57.3 L72.6 54.2 L80.6 61.0 Z M81.0 67.4 L85.2 78.0 L78.7 70.9 Z M72.7 73.2 L66.7 65.8 L69.8 75.8 Z M66.7 81.3 L64.5 92.6 L62.8 83.1 Z M56.5 81.8 L55.5 72.3 L52.7 82.4 Z M47.1 85.4 L39.2 93.7 L42.8 84.8 Z M38.3 80.3 L42.6 71.8 L34.8 78.7 Z M28.4 78.2 L17.3 80.9 L25.2 75.4 Z M23.8 69.2 L32.0 64.3 L21.7 65.9 Z M16.6 62.0 L5.8 58.3 L15.4 57.9 Z M17.6 51.9 L27.1 52.3 L17.6 48.1 Z M15.4 42.1 L8.3 33.1 L16.6 38.0 Z M21.7 34.1 L29.5 39.6 L23.8 30.8 Z M25.2 24.6 L24.1 13.2 L28.4 21.8 Z M34.8 21.3 L38.4 30.1 L38.3 19.7 Z M42.8 15.2 L48.1 5.0 L47.1 14.6 Z M52.7 17.6 L51.0 27.0 L56.5 18.2 Z M62.8 16.9 L72.7 11.1 L66.7 18.7 Z M69.8 24.2 L63.3 31.2 L72.7 26.8 Z M78.7 29.1 L90.1 29.6 L81.0 32.6 Z M80.6 39.0 L71.3 41.3 L81.7 42.7 Z"/>
+    </symbol>
+
+    <!-- Cresting (plate 19). One tile: a fleur on a band, a trefoil between. -->
+    <pattern id="crest-sun" width="56" height="44" patternUnits="userSpaceOnUse">
+      <rect y="38" width="56" height="6" class="f-day"/>
+      <use href="#fleur" x="17" y="9" width="22" height="30" class="f-day"/>
+      <circle cx="0" cy="30" r="3" class="f-day"/><circle cx="56" cy="30" r="3" class="f-day"/>
+      <rect x="-1" y="30" width="2" height="9" class="f-day"/><rect x="55" y="30" width="2" height="9" class="f-day"/>
+    </pattern>
+    <pattern id="crest-feast" width="60" height="56" patternUnits="userSpaceOnUse">
+      <rect y="40" width="60" height="16" class="f-day"/>
+      <rect y="40" width="60" height="1.6" class="f-gold"/><rect y="54.4" width="60" height="1.6" class="f-gold"/>
+      <use href="#fleur" x="16" y="2" width="28" height="39" class="f-gold"/>
+      <circle cx="0" cy="26" r="3.6" class="f-gold"/><circle cx="-3.6" cy="31" r="3.6" class="f-gold"/><circle cx="3.6" cy="31" r="3.6" class="f-gold"/>
+      <circle cx="60" cy="26" r="3.6" class="f-gold"/><circle cx="56.4" cy="31" r="3.6" class="f-gold"/><circle cx="63.6" cy="31" r="3.6" class="f-gold"/>
+      <rect x="-1.2" y="31" width="2.4" height="10" class="f-gold"/><rect x="58.8" y="31" width="2.4" height="10" class="f-gold"/>
+      <circle cx="15" cy="48" r="2.4" class="f-paper"/><circle cx="45" cy="48" r="2.4" class="f-paper"/>
+      <use href="#qf" x="25" y="43" width="10" height="10" class="f-gold"/>
+    </pattern>
+    <pattern id="crest-solemn" width="64" height="60" patternUnits="userSpaceOnUse">
+      <rect y="42" width="64" height="18" class="f-gold"/>
+      <use href="#fleur" x="16" y="0" width="32" height="44" class="f-gold"/>
+      <circle cx="0" cy="26" r="4" class="f-gold"/><circle cx="-4" cy="32" r="4" class="f-gold"/><circle cx="4" cy="32" r="4" class="f-gold"/>
+      <circle cx="64" cy="26" r="4" class="f-gold"/><circle cx="60" cy="32" r="4" class="f-gold"/><circle cx="68" cy="32" r="4" class="f-gold"/>
+      <rect x="-1.4" y="32" width="2.8" height="11" class="f-gold"/><rect x="62.6" y="32" width="2.8" height="11" class="f-gold"/>
+      <ellipse cx="16" cy="51" rx="3" ry="4.4" class="f-blue"/><ellipse cx="48" cy="51" rx="3" ry="4.4" class="f-blue"/>
+      <use href="#qf" x="26" y="45" width="12" height="12" class="f-red"/>
+      <circle cx="4" cy="51" r="1.6" class="f-paper"/><circle cx="60" cy="51" r="1.6" class="f-paper"/>
+    </pattern>
+    <!-- Diapering (after plates 24–27) -->
+    <pattern id="diaper" width="40" height="40" patternUnits="userSpaceOnUse">
+      <rect width="40" height="40" class="f-day"/>
+      <path d="M20 0L40 20L20 40L0 20Z" class="s-gold" stroke-width="1.2"/>
+      <use href="#fleur" x="13" y="10" width="14" height="17" class="f-gold"/>
+      <use href="#qf" x="-4" y="-4" width="8" height="8" class="f-gold"/><use href="#qf" x="36" y="-4" width="8" height="8" class="f-gold"/>
+      <use href="#qf" x="-4" y="36" width="8" height="8" class="f-gold"/><use href="#qf" x="36" y="36" width="8" height="8" class="f-gold"/>
+    </pattern>
+    <pattern id="diaper-white" width="40" height="40" patternUnits="userSpaceOnUse">
+      <rect width="40" height="40" class="f-paper"/>
+      <path d="M20 0L40 20L20 40L0 20Z" class="s-gold" stroke-width="1.2"/>
+      <use href="#fleur" x="13" y="10" width="14" height="17" class="f-gold"/>
+      <use href="#qf" x="-4" y="-4" width="8" height="8" class="f-red"/><use href="#qf" x="36" y="-4" width="8" height="8" class="f-red"/>
+      <use href="#qf" x="-4" y="36" width="8" height="8" class="f-red"/><use href="#qf" x="36" y="36" width="8" height="8" class="f-red"/>
+    </pattern>
+    <!-- Powdering (plates 20–22) -->
+    <pattern id="pow-gold" width="56" height="56" patternUnits="userSpaceOnUse">
+      <use href="#crosslet" x="7" y="7" width="14" height="14" class="f-gold"/>
+      <use href="#crosslet" x="35" y="35" width="14" height="14" class="f-gold"/>
+    </pattern>
+    <pattern id="pow-pall" width="60" height="60" patternUnits="userSpaceOnUse">
+      <use href="#paty" x="9" y="9" width="12" height="12" class="f-paper"/>
+      <use href="#paty" x="39" y="39" width="12" height="12" class="f-paper"/>
+    </pattern>
+    <!-- Orphreys: the vertical bands at the sides of a frontal (plate 07) -->
+    <pattern id="orph" width="46" height="46" patternUnits="userSpaceOnUse">
+      <rect width="46" height="46" class="f-blue"/>
+      <rect x="2.5" width="2" height="46" class="f-gold"/><rect x="41.5" width="2" height="46" class="f-gold"/>
+      <use href="#qf" x="10" y="10" width="26" height="26" class="f-gold"/>
+      <circle cx="23" cy="0" r="2.2" class="f-paper"/><circle cx="23" cy="46" r="2.2" class="f-paper"/>
+    </pattern>
+    <pattern id="orph-pall" width="46" height="46" patternUnits="userSpaceOnUse">
+      <rect width="46" height="46" class="f-pall"/>
+      <rect x="2.5" width="2" height="46" class="f-gold"/><rect x="41.5" width="2" height="46" class="f-gold"/>
+      <use href="#crosslet" x="14" y="14" width="18" height="18" class="f-paper"/>
+    </pattern>
+    <!-- Fringe (plate 74) -->
+    <pattern id="fringe" width="10" height="16" patternUnits="userSpaceOnUse">
+      <rect x="1" width="3" height="13" class="f-gold"/><rect x="6" width="3" height="13" class="f-day"/>
+      <circle cx="2.5" cy="13.5" r="1.9" class="f-gold"/><circle cx="7.5" cy="13.5" r="1.9" class="f-day"/>
+    </pattern>
+    <!-- Lenten array: linen, crosses for marking church linen (plates 13–14), in red and black -->
+    <pattern id="array" width="56" height="28" patternUnits="userSpaceOnUse">
+      <rect width="56" height="28" class="f-linen"/>
+      <use href="#crosslet" x="7" y="7" width="14" height="14" class="f-arrayred"/>
+      <use href="#paty" x="37" y="9" width="10" height="10" class="f-ink"/>
+    </pattern>
+    <pattern id="array-v" width="22" height="44" patternUnits="userSpaceOnUse">
+      <rect width="22" height="44" class="f-linen"/>
+      <use href="#crosslet" x="5" y="4" width="12" height="12" class="f-arrayred"/>
+      <use href="#paty" x="6.5" y="28" width="9" height="9" class="f-ink"/>
+    </pattern>
+    <!-- Border for altar cloths (plates 15–16) -->
+    <pattern id="border" width="22" height="22" patternUnits="userSpaceOnUse">
+      <rect y="0" width="22" height="1" class="f-day"/><rect y="21" width="22" height="1" class="f-day"/>
+      <use href="#qf" x="5" y="5" width="12" height="12" class="f-day"/>
+      <circle cx="0" cy="11" r="1.4" class="f-day"/><circle cx="22" cy="11" r="1.4" class="f-day"/>
+    </pattern>
+  </defs>
+</svg>
+
+<header>
+  <div class="wrap mast">
+    <a class="name" href="#">
+      <span class="name-main"><svg aria-hidden="true"><use href="#paty"/></svg>Our Lady of the Atonement</span>
+      <span class="name-sub caps">Catholic Church · San Antonio, Texas</span>
+    </a>
+    <nav class="doors-nav" aria-label="Sections">
+      <ul><li><a href="#">Visit</a></li><li><a href="#">Worship</a></li><li><a href="#">Sacraments</a></li><li><a href="#">Parish Life</a></li><li><a href="#">About</a></li></ul>
+    </nav>
+    <div class="always">
+      <a class="priest" href="#"><svg aria-hidden="true"><use href="#paty"/></svg>Need a priest?</a>
+      <a class="give" href="#">Give</a>
+    </div>
+  </div>
+  <div class="crest" aria-hidden="true">
+    <svg class="c-feria" height="9"><rect width="100%" height="3" class="f-day"/><rect y="7" width="100%" height="1" class="f-day"/></svg>
+    <svg class="c-sunday" height="44"><rect width="100%" height="44" fill="url(#crest-sun)"/></svg>
+    <svg class="c-feast" height="56"><rect width="100%" height="56" fill="url(#crest-feast)"/></svg>
+    <svg class="c-solemnity" height="60"><rect width="100%" height="60" fill="url(#crest-solemn)"/></svg>
+    <svg class="c-array" height="28"><rect width="100%" height="28" fill="url(#array)"/></svg>
+  </div>
+  <svg class="c-solemn-diaper" aria-hidden="true" height="40"><rect width="100%" height="40" fill="url(#diaper-white)"/></svg>
+</header>
+
+<main id="main" class="wrap">
+  <div class="plate">
+    <div class="orphrey" aria-hidden="true">
+      <svg class="o-feast"><rect width="100%" height="100%" fill="url(#diaper)"/></svg>
+      <svg class="o-solemn"><rect width="100%" height="100%" fill="url(#diaper-white)"/></svg>
+      <svg class="o-array"><rect width="100%" height="100%" fill="url(#array-v)"/></svg>
+    </div>
+    <nav class="turn" aria-label="Turn to another day">
+      <button id="prev" type="button">‹</button><span class="folio" id="folio" aria-hidden="true">27</span><button id="next" type="button">›</button>
+    </nav>
+
+    <figure class="frontal-fig">
+      <div class="frontal" id="frontal" aria-hidden="true"></div>
+      <figcaption class="frontal-cap"><span>The frontal for the day</span><span id="frontal-src"></span></figcaption>
+    </figure>
+
+    <section class="day" aria-labelledby="feast">
+      <p class="date caps" id="date"></p>
+      <h1 class="feast" id="feast"></h1>
+      <p class="meta caps" id="meta"></p>
+      <p class="about" id="about"></p>
+      <div class="collect">
+        <p class="label caps rubric" id="collect-label">The Collect</p>
+        <p class="collect-text" id="collect"></p>
+        <p class="source" id="source">Book of Common Prayer, 1662</p>
+      </div>
+      <a class="readings" href="#">The readings for this day <span aria-hidden="true">→</span></a>
+    </section>
+
+    <aside class="ordo" aria-labelledby="today-h">
+      <h2 class="caps" id="today-h">Today at the Atonement</h2>
+      <ol class="hours" id="hours"></ol>
+      <p class="status" id="status"></p>
+      <a class="more" href="#">All Mass and Confession times</a>
+      <h2 class="caps second" id="kal-h">The week <span id="kal-month"></span></h2>
+      <ol class="kal" id="kal" aria-labelledby="kal-h"></ol>
+    </aside>
+
+    <p class="plate-cap caps" aria-hidden="true"><svg><use href="#paty"/></svg><span id="cap">The Time after Trinity</span><svg><use href="#paty"/></svg></p>
+  </div>
+
+  <svg class="band" aria-hidden="true"><rect width="100%" height="22" fill="url(#border)"/></svg>
+
+  <section aria-labelledby="parish-h">
+    <div class="section-h"><h2 id="parish-h">In the parish this week</h2><a href="#">The bulletin</a></div>
+    <div class="notices">
+      <article class="notice"><p class="caps rubric"><span class="ph">[Day, date]</span></p><h3><span class="ph">[Notice or event title]</span></h3><p><span class="ph">[One or two sentences: what it is, when, and who to ask.]</span></p></article>
+      <article class="notice"><p class="caps rubric"><span class="ph">[Day, date]</span></p><h3><span class="ph">[Notice or event title]</span></h3><p><span class="ph">[One or two sentences: what it is, when, and who to ask.]</span></p></article>
+      <article class="notice"><p class="caps rubric"><span class="ph">[Until date]</span></p><h3><span class="ph">[Standing notice]</span></h3><p><span class="ph">[One or two sentences. Every notice carries an expiry date.]</span></p></article>
+    </div>
+  </section>
+
+  <nav class="contents" aria-labelledby="contents-h">
+    <div class="section-h"><h2 id="contents-h">Contents</h2></div>
+    <ol>
+      <li><a href="#"><span class="num caps">I</span><span class="door">Visit</span><span class="line">Times, directions, and what to expect at Holy Mass in this tradition.</span></a></li>
+      <li><a href="#"><span class="num caps">II</span><span class="door">Worship</span><span class="line">Holy Mass, Mattins and Evensong, Confession, music, the Christian year.</span></a></li>
+      <li><a href="#"><span class="num caps">III</span><span class="door">Sacraments</span><span class="line">From Holy Baptism to the Requiem: how to arrange each one here.</span></a></li>
+      <li><a href="#"><span class="num caps">IV</span><span class="door">Parish Life</span><span class="line">Join the parish, the bulletin, groups and ministries, giving.</span></a></li>
+      <li><a href="#"><span class="num caps">V</span><span class="door">About</span><span class="line">Our story since 1983, the Ordinariate, and the church itself.</span></a></li>
+    </ol>
+  </nav>
+</main>
+
+<footer class="colophon">
+  <div class="wrap">
+    <p class="addr">Our Lady of the Atonement Catholic Church</p>
+    <p>15415 Red Robin Road, San Antonio, Texas 78255 · (210) 695-2944</p>
+    <p>A parish of the Personal Ordinariate of the Chair of Saint Peter</p>
+    <p class="set">Set in Caslon, the type of English and colonial American printers; inscriptions in textura. Ornament and emblems after A. W. N. Pugin’s <i>Glossary of Ecclesiastical Ornament</i> (1844), their colors sampled from the plates. The page is dressed for the day.</p>
+    <svg class="finis" aria-hidden="true"><use href="#paty"/></svg>
+  </div>
+</footer>
+
+<div class="sampler" role="region" aria-label="Concept controls">
+  <b>Concept A · Folio</b>
+  <label>Sample day <select id="pick"></select></label>
+  <a href="b-tracery.html">Concept B →</a>
+  <span class="flag">Sample data. Times as published on the current site. ← → turn the page.</span>
+</div>
+
+<script>
+/* Sample data for the concept. Times: as published on ourladyoftheatonement.org, 2026-10-27 (⚑ verify).
+   Day names, ranks, colors, and the kalendar: agent's reading of the Ordinariate calendar (⚑ verify).
+   Collects: BCP 1662 (public domain), standing in for the Divine Worship texts (Q27).
+   Inscriptions: the Coverdale Psalter and the King James Version (public domain), and the traditional English of the Requiem introit. */
+const C = {
+  trinity21:"Grant, we beseech thee, merciful Lord, to thy faithful people pardon and peace, that they may be cleansed from all their sins, and serve thee with a quiet mind; through Jesus Christ our Lord. Amen.",
+  simonJude:"O Almighty God, who hast built thy Church upon the foundation of the Apostles and Prophets, Jesus Christ himself being the head corner-stone: Grant us so to be joined together in unity of spirit by their doctrine, that we may be made an holy temple acceptable unto thee; through the same Jesus Christ our Lord. Amen.",
+  allSaints:"O Almighty God, who hast knit together thine elect in one communion and fellowship, in the mystical body of thy Son Christ our Lord: Grant us grace so to follow thy blessed Saints in all virtuous and godly living, that we may come to those unspeakable joys, which thou hast prepared for them that unfeignedly love thee; through Jesus Christ our Lord. Amen.",
+  advent1:"Almighty God, give us grace that we may cast away the works of darkness, and put upon us the armour of light, now in the time of this mortal life, in which thy Son Jesus Christ came to visit us in great humility; that in the last day, when he shall come again in his glorious majesty to judge both the quick and the dead, we may rise to the life immortal; through him who liveth and reigneth with thee and the Holy Ghost, now and ever. Amen.",
+  lent2:"Almighty God, who seest that we have no power of ourselves to help ourselves: Keep us both outwardly in our bodies, and inwardly in our souls; that we may be defended from all adversities which may happen to the body, and from all evil thoughts which may assault and hurt the soul; through Jesus Christ our Lord. Amen."
+};
+const T21 = {rank:"feria", rankLabel:"Feria", season:"Time after Trinity", color:"green", colorLabel:"Green", collectFor:"The Collect for the Twenty-first Sunday after Trinity", collect:C.trinity21};
+const DAYS = [
+  { d:"2026-10-27", title:"Tuesday after the Twenty-first Sunday after Trinity", ...T21,
+    about:"No feast today. The weekday keeps Sunday’s collect, and the page stays plain." },
+  { d:"2026-10-28", title:"Saints Simon and Jude, Apostles", rank:"feast", rankLabel:"Feast", season:"Time after Trinity", color:"red", colorLabel:"Red",
+    about:"Two of the Twelve, kept on one day. By tradition they preached together in Persia and were martyred there.",
+    collectFor:"The Collect", collect:C.simonJude,
+    emblems:[["saw","Saint Simon: a saw"],["ship","Saint Jude: a ship"]], ins:"Their sound is gone out into all lands", insSrc:"Psalm 19.4, Coverdale" },
+  { d:"2026-10-29", title:"Thursday after the Twenty-first Sunday after Trinity", ...T21,
+    about:"An ordinary weekday in the long green season after Trinity." },
+  { d:"2026-10-30", title:"Friday after the Twenty-first Sunday after Trinity", ...T21,
+    about:"No feast today. Friday is kept as a day of penance." },
+  { d:"2026-10-31", title:"Saturday after the Twenty-first Sunday after Trinity", ...T21,
+    about:"All Hallows’ Eve: the eve of All Saints." },
+  { d:"2026-11-01", title:"All Saints", rank:"solemnity", rankLabel:"Solemnity", season:"Time after Trinity", color:"white", colorLabel:"White and gold",
+    about:"The whole company of heaven, known and unknown. A Holy Day of Obligation; this year it falls on a Sunday.",
+    collectFor:"The Collect", collect:C.allSaints,
+    emblems:[["crown","The crown of glory"]], ins:"A great multitude, which no man could number", insSrc:"Revelation 7.9, King James Version" },
+  { d:"2026-11-02", title:"All Souls", rank:"commemoration", rankLabel:"Commemoration", season:"Time after Trinity", color:"black", colorLabel:"Black",
+    about:"The Commemoration of All the Faithful Departed. The Church prays for the dead.",
+    collectFor:"The Collect", collect:null,
+    emblems:[["crosslet","The cross"]], ins:"Rest eternal grant unto them, O Lord", insSrc:"The Requiem introit, traditional English" },
+  { d:"2026-11-29", title:"The First Sunday in Advent", rank:"sunday", rankLabel:"Sunday", season:"Advent", color:"violet", colorLabel:"Violet",
+    about:"The Church’s year begins again: four weeks of watching for the coming of Christ.",
+    collectFor:"The Collect", collect:C.advent1,
+    emblems:[["paty","The cross"]], ins:"Unto thee, O Lord, will I lift up my soul", insSrc:"Psalm 25.1, Coverdale: the Introit of Advent Sunday" },
+  { d:"2027-02-26", title:"Friday after the Second Sunday in Lent", rank:"array", rankLabel:"Feria of Lent", season:"Lent", color:"array", colorLabel:"Lenten array",
+    about:"In medieval England, Lent was kept in array: unbleached linen, marked in red and black, in place of color.",
+    collectFor:"The Collect for the Second Sunday in Lent", collect:C.lent2,
+    emblems:[["thorns","The crown of thorns"]], ins:"Have mercy upon me, O God", insSrc:"Psalm 51.1, Coverdale" }
+];
+// A few fixed days for the kalendar (⚑ verify against the Ordinariate calendar). Days not listed are left blank, as in a medieval kalendar.
+const SANCT = {
+  "10-28":["Saints Simon and Jude, Apostles","Feast","red"], "10-31":["All Hallows’ Eve","",""], "11-01":["All Saints","Solemnity","white"],
+  "11-02":["All Souls","Commemoration","black"], "11-04":["Saint Charles Borromeo","Memorial","white"], "11-09":["The Dedication of the Lateran Basilica","Feast","white"],
+  "11-30":["Saint Andrew, Apostle","Feast","red"], "12-03":["Saint Francis Xavier","Memorial","white"], "12-08":["The Immaculate Conception","Solemnity","white"],
+  "03-19":["Saint Joseph","Solemnity","white"]
+};
+// Weekly schedule as published (⚑ verify). [start, end|null, label]
+const WEEK = {
+  office:[["06:30",null,"Mattins"],["16:30",null,"Evensong"]],
+  mass:{0:[["07:00",null,"Said Mass"],["09:00",null,"Sung Mass"],["11:00",null,"Sung Mass"],["17:00",null,"Said Mass"]],
+        1:[["07:00",null,"Said Mass"]],2:[["07:00",null,"Said Mass"]],3:[["07:00",null,"Said Mass"]],4:[["07:00",null,"Said Mass"]],5:[["07:00",null,"Said Mass"]],
+        6:[["07:00",null,"Said Mass"],["17:00",null,"Said Mass"]]},
+  confession:{0:[["07:50","08:50","Confession"]],3:[["15:30","16:30","Confession"]],5:[["07:50","08:50","Confession"]],6:[["15:30","16:30","Confession"]]}
+};
+const SW = {green:"#3F6447",red:"#B03A2C",white:"#B8963F",violet:"#56406F",black:"#232023",rose:"#B76E7C",array:"#A3352A"};
+const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+const WD=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const DAY=864e5, U=(y,m,d)=>Date.UTC(y,m-1,d);
+const parse = s => { const [y,m,d]=s.split("-").map(Number); const t=U(y,m,d); return {y,m,d,t,wd:new Date(t).getUTCDay()}; };
+const iso = t => new Date(t).toISOString().slice(0,10);
+const keep = s => s.replace(/(\S+-\S+)/g,'<span style="white-space:nowrap">$1</span>');
+const mins = t => { const [h,m]=t.split(":").map(Number); return h*60+m; };
+const fmt = t => { let [h,m]=t.split(":").map(Number); const ap=h<12?"am":"pm"; h=h%12||12; return `${h}:${String(m).padStart(2,"0")}<span class="ampm">${ap}</span>`; };
+const fmtPlain = t => { let [h,m]=t.split(":").map(Number); const ap=h<12?"a.m.":"p.m."; h=h%12||12; return `${h}:${String(m).padStart(2,"0")} ${ap}`; };
+const short = s => { const p=parse(s); return `${WD[p.wd].slice(0,3)} ${p.d} ${MONTHS[p.m-1].slice(0,3)}`; };
+const swatch = c => c==="white"
+  ? `<svg class="swatch" viewBox="0 0 100 100" aria-hidden="true"><use href="#qf" fill="#FAF7EF" stroke="#B8963F" stroke-width="8"/></svg>`
+  : `<svg class="swatch" viewBox="0 0 100 100" aria-hidden="true"><use href="#qf" fill="${SW[c]}"/></svg>`;
+
+/* ── Just enough calendar to name the Sundays (⚑ the real engine is Phase 3) ── */
+const ORD=["","First","Second","Third","Fourth","Fifth","Sixth","Seventh","Eighth","Ninth","Tenth","Eleventh","Twelfth","Thirteenth","Fourteenth","Fifteenth","Sixteenth","Seventeenth","Eighteenth","Nineteenth","Twentieth"];
+const ord=n=>n<=20?ORD[n]:"Twenty-"+ORD[n-20].toLowerCase();
+function easter(y){const a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),mo=Math.floor((h+l-7*m+114)/31),da=((h+l-7*m+114)%31)+1;return U(y,mo,da)}
+function adventSunday(y){const c=U(y,12,25),w=new Date(c).getUTCDay();return c-(w===0?7:w)*DAY-21*DAY}
+function sundayName(t){
+  const y=new Date(t).getUTCFullYear();let s=adventSunday(y);if(t<s)s=adventSunday(y-1);const ey=new Date(s).getUTCFullYear()+1,E=easter(ey);
+  if(t<U(ey-1,12,25))return [`The ${ord(1+Math.round((t-s)/7/DAY))} Sunday in Advent`,"violet"];
+  if(t<U(ey,1,6))return [`The ${ord(t<U(ey,1,1)?1:2)} Sunday after Christmas`,"white"];
+  if(t<E-63*DAY){const j6=U(ey,1,6),first=j6+((7-new Date(j6).getUTCDay())%7||7)*DAY;return [`The ${ord(1+Math.round((t-first)/7/DAY))} Sunday after Epiphany`,"green"]}
+  const k=Math.round((t-E)/7/DAY);
+  const named={"-9":["Septuagesima","violet"],"-8":["Sexagesima","violet"],"-7":["Quinquagesima","violet"],"-6":["The First Sunday in Lent","violet"],"-5":["The Second Sunday in Lent","violet"],"-4":["The Third Sunday in Lent","violet"],"-3":["The Fourth Sunday in Lent","rose"],"-2":["Passion Sunday","violet"],"-1":["Palm Sunday","red"],"0":["Easter Day","white"],"6":["The Sunday after Ascension","white"],"7":["Pentecost","red"],"8":["Trinity Sunday","white"]};
+  if(named[k])return named[k];
+  if(k>0&&k<6)return [`The ${ord(k)} Sunday after Easter`,"white"];
+  return [`The ${ord(k-8)} Sunday after Trinity`,"green"];
+}
+function observance(t){
+  const x=new Date(t),key=String(x.getUTCMonth()+1).padStart(2,"0")+"-"+String(x.getUTCDate()).padStart(2,"0");
+  if(SANCT[key])return {name:SANCT[key][0],rank:SANCT[key][1],color:SANCT[key][2]};
+  if(x.getUTCDay()===0){const [n,c]=sundayName(t);return {name:n,rank:"Sunday",color:c}}
+  return null;
+}
+
+/* ── The frontal: drawn for the day, after plates 07 and 74 ── */
+const P={gold:"#B8963F",goldHi:"#D6BD72",blue:"#2F4F94",red:"#B03A2C",green:"#3F6447",paper:"#FAF7EF",pall:"#232023",linen:"#E4D9C2",arrayRed:"#A3352A",violet:"#56406F",ink:"#1E1A16"};
+function frontalSVG(day,W){
+  const H=300,top=48,bot=282,rk=day.rank,c=day.color,O=46;
+  const field={red:P.red,green:P.green,violet:P.violet,white:P.paper,black:P.pall,array:P.linen}[c];
+  const band=c==="red"?P.blue:c==="black"?P.pall:c==="array"?P.linen:P.red;
+  const ink=c==="array"?P.arrayRed:c==="black"?P.paper:P.goldHi;
+  const rule=c==="array"?P.ink:P.gold;
+  const box=(x,y,w,h,fill)=>`<svg x="${x}" y="${y}" width="${w}" height="${h}"><rect width="100%" height="100%" fill="${fill}"/></svg>`;
+  let s=`<rect width="${W}" height="${bot}" fill="${field}"/>`;
+  const pow={feast:"url(#pow-gold)",solemnity:"url(#diaper-white)",commemoration:"url(#pow-pall)",array:"url(#array)"}[rk];
+  if(pow)s+=box(O,top,W-2*O,bot-top,pow);
+  const orph=rk==="array"?"url(#array-v)":rk==="commemoration"?"url(#orph-pall)":"url(#orph)";
+  s+=box(0,top,O,bot-top,orph)+box(W-O,top,O,bot-top,orph);
+  // the inscription band, as on Pugin's palls
+  s+=`<rect width="${W}" height="${top}" fill="${band}"/>`;
+  s+=`<rect y="0" width="${W}" height="2.5" fill="${rule}"/><rect y="${top-2.5}" width="${W}" height="2.5" fill="${rule}"/><rect y="${bot-2.5}" width="${W}" height="2.5" fill="${rule}"/>`;
+  s+=`<text x="${W/2}" y="${top/2+8.5}" text-anchor="middle" font-family="Texturina, serif" font-size="25" font-weight="500" letter-spacing=".6" fill="${ink}">${day.ins}</text>`;
+  s+=`<use href="#paty" x="${O/2-7}" y="${top/2-7}" width="14" height="14" fill="${ink}"/><use href="#paty" x="${W-O/2-7}" y="${top/2-7}" width="14" height="14" fill="${ink}"/>`;
+  if(rk!=="array")s+=box(0,bot,W,H-bot,"url(#fringe)");
+  // the roundel(s)
+  const cy=(top+bot)/2, r=Math.min(84,(bot-top)/2-16), ems=day.emblems||[];
+  const ground={red:P.blue,white:P.blue,violet:P.red,black:P.pall}[c], foil={red:P.green,white:P.red,violet:P.blue,black:null}[c];
+  const emc=c==="black"?P.paper:P.goldHi;
+  const roundel=(cx,id)=>`<circle cx="${cx}" cy="${cy}" r="${r}" fill="${P.gold}"/><circle cx="${cx}" cy="${cy}" r="${r-4}" fill="${P.paper}"/><circle cx="${cx}" cy="${cy}" r="${r-7}" fill="${ground}"/>`+
+    (foil?`<use href="#qf" x="${cx-(r-13)}" y="${cy-(r-13)}" width="${2*(r-13)}" height="${2*(r-13)}" fill="${foil}"/>`:"")+
+    `<use href="#${id}" x="${cx-r*.52}" y="${cy-r*.52}" width="${r*1.04}" height="${r*1.04}" fill="${emc}" style="color:${emc}"/>`;
+  if(rk==="array"){
+    const R=r*1.15;s+=`<use href="#thorns" x="${W/2-R}" y="${cy-R}" width="${2*R}" height="${2*R}" fill="${P.arrayRed}" style="color:${P.arrayRed}"/>`+
+      `<use href="#paty" x="${W/2-R*.32}" y="${cy-R*.32}" width="${R*.64}" height="${R*.64}" fill="${P.ink}"/>`;
+  } else if(ems.length===2){
+    const dx=Math.min(r+26,(W-2*O)/4);s+=roundel(W/2-dx,ems[0][0])+roundel(W/2+dx,ems[1][0]);
+  } else if(ems.length===1){ s+=roundel(W/2,ems[0][0]); }
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">${s}</svg>`;
+}
+function drawFrontal(day){
+  const el=document.getElementById("frontal");
+  if(day.rank==="feria"){el.innerHTML="";return}
+  const W=Math.round(300*el.clientWidth/Math.max(1,el.clientHeight));
+  el.innerHTML=frontalSVG(day,W);
+  document.getElementById("frontal-src").innerHTML=`<span class="vh">Inscribed: ${day.ins}. </span><i>${day.insSrc}</i> · ${(day.emblems||[]).map(e=>e[1]).join("; ")}`;
+}
+
+/* ── Today ── */
+function parishNow(){
+  const p=Object.fromEntries(new Intl.DateTimeFormat("en-CA",{timeZone:"America/Chicago",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(new Date()).map(x=>[x.type,x.value]));
+  return {date:`${p.year}-${p.month}-${p.day}`, mins:(+p.hour)*60+(+p.minute)};
+}
+function hoursFor(dt){
+  const wd=parse(dt).wd;
+  return [...WEEK.office,...(WEEK.mass[wd]||[]),...(WEEK.confession[wd]||[])].sort((a,b)=>mins(a[0])-mins(b[0]));
+}
+
+/* ── Render ── */
+let cur=0;
+function render(day){
+  const r=document.documentElement; r.dataset.color=day.color; r.dataset.rank=day.rank;
+  const p=parse(day.d), now=parishNow(), isToday=now.date===day.d;
+  document.getElementById("date").textContent=`${WD[p.wd]} · ${p.d} ${MONTHS[p.m-1]} ${p.y}`;
+  document.getElementById("folio").textContent=p.d;
+  const t=day.title, h=document.getElementById("feast");
+  h.innerHTML = day.rank==="feria"||day.rank==="array" ? keep(t) : `<span class="initial">${t[0]}</span>${keep(t.slice(1))}`;
+  document.getElementById("meta").innerHTML=`${swatch(day.color)}<span>${day.rankLabel}</span><span class="sep">·</span><span>${day.season}</span><span class="sep">·</span><span>${day.colorLabel}</span>`;
+  document.getElementById("about").textContent=day.about;
+  document.getElementById("collect-label").textContent=day.collectFor;
+  const col=document.getElementById("collect");
+  if(day.collect){col.textContent=day.collect;col.className="collect-text";document.getElementById("source").hidden=false}
+  else{col.textContent="[The collect for All Souls. The 1662 Prayer Book has none; the Divine Worship text waits on licensing (Q27).]";col.className="collect-text ph-block";document.getElementById("source").hidden=true}
+  document.getElementById("cap").textContent = day.season.startsWith("Time") ? `The ${day.season}` : day.season;
+  document.getElementById("today-h").textContent = isToday ? "Today at the Atonement" : `${WD[p.wd]} at the Atonement`;
+
+  const list=hoursFor(day.d);
+  let nextIdx=-1;
+  if(isToday) nextIdx=list.findIndex(([s,e])=>mins(e||s)>=now.mins);
+  document.getElementById("hours").innerHTML=list.map(([s,e,l],i)=>{
+    const cls = isToday ? (nextIdx===-1||i<nextIdx ? "past" : i===nextIdx ? "next" : "") : "";
+    return `<li class="${cls}"><time datetime="${day.d}T${s}">${fmt(s)}</time><span class="what">${l}${e?`<span class="until">until ${fmtPlain(e)}</span>`:""}</span></li>`;
+  }).join("");
+  const st=document.getElementById("status");
+  st.textContent = isToday ? (nextIdx===-1 ? "That is all for today. Mattins tomorrow at 6:30 a.m." : `Next: ${list[nextIdx][2]}, ${fmtPlain(list[nextIdx][0])}`) : "";
+  st.hidden=!isToday;
+
+  // the kalendar: this day and the six after it
+  let rows="";
+  for(let k=0;k<7;k++){
+    const t=p.t+k*DAY, d=iso(t), x=new Date(t), o=observance(t), i=DAYS.findIndex(z=>z.d===d);
+    const red=o&&(o.rank==="Feast"||o.rank==="Solemnity"), sun=x.getUTCDay()===0;
+    const cls=[k===0?"cur":"",red?"red":"",o?"":"blank",sun?"sun":""].join(" ");
+    const inner=`<span class="n">${x.getUTCDate()}</span><span class="w">${WD[x.getUTCDay()].slice(0,3)}</span><span class="o">${o?`${o.color?swatch(o.color):""}${keep(o.name)}${o.rank?`<span class="rk">${o.rank}</span>`:""}`:""}</span>`;
+    rows+= i>=0&&k>0 ? `<li><button type="button" class="row ${cls}" data-i="${i}" aria-label="Turn to ${short(d)}${o?": "+o.name:""}">${inner}</button></li>` : `<li><div class="row ${cls}"${k===0?' aria-current="date"':""}>${inner}</div></li>`;
+  }
+  const kal=document.getElementById("kal"); kal.innerHTML=rows;
+  kal.querySelectorAll("button[data-i]").forEach(b=>b.onclick=()=>go(+b.dataset.i));
+  const end=new Date(p.t+6*DAY);
+  document.getElementById("kal-month").textContent = end.getUTCMonth()+1===p.m ? MONTHS[p.m-1] : `${MONTHS[p.m-1].slice(0,3)}–${MONTHS[end.getUTCMonth()].slice(0,3)}`;
+
+  // turning
+  const prev=document.getElementById("prev"), next=document.getElementById("next");
+  prev.disabled=cur<=0; next.disabled=cur>=DAYS.length-1;
+  prev.setAttribute("aria-label", cur>0 ? `Turn back to ${short(DAYS[cur-1].d)}` : "No earlier sample day");
+  next.setAttribute("aria-label", cur<DAYS.length-1 ? `Turn to ${short(DAYS[cur+1].d)}` : "No later sample day");
+
+  drawFrontal(day);
+  document.title = `${day.title} · Our Lady of the Atonement (concept A)`;
+}
+function go(i){
+  if(i<0||i>=DAYS.length||i===cur)return;
+  document.documentElement.style.setProperty("--dir", i>cur?1:-1);
+  cur=i; pick.value=i;
+  const run=()=>render(DAYS[i]);
+  if(document.startViewTransition && !matchMedia("(prefers-reduced-motion: reduce)").matches) document.startViewTransition(run); else run();
+}
+const pick=document.getElementById("pick");
+pick.innerHTML=DAYS.map((d,i)=>`<option value="${i}">${short(d.d)} ${d.d.slice(0,4)} · ${d.rankLabel}${d.rank==="array"?" (proposal)":""}</option>`).join("");
+cur = Math.max(0, DAYS.findIndex(d=>d.d===(new URLSearchParams(location.search).get("day")||parishNow().date)));
+pick.value=cur; render(DAYS[cur]);
+pick.addEventListener("change",()=>go(+pick.value));
+document.getElementById("prev").onclick=()=>go(cur-1);
+document.getElementById("next").onclick=()=>go(cur+1);
+addEventListener("keydown",e=>{ if(e.target.closest("select,input,textarea")||e.metaKey||e.ctrlKey||e.altKey)return;
+  if(e.key==="ArrowLeft")go(cur-1); if(e.key==="ArrowRight")go(cur+1); });
+let rz; addEventListener("resize",()=>{clearTimeout(rz);rz=setTimeout(()=>drawFrontal(DAYS[cur]),80)});
+document.fonts && document.fonts.ready.then(()=>drawFrontal(DAYS[cur]));
+</script>
+</body>
+</html>

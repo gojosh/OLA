@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en" data-color="green" data-rank="feria">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tracery — home page concept B</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wdth,wght@75..100,400..700&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=Texturina:opsz,wght@12..72,400..700&display=swap" rel="stylesheet">
+<style>
+/* Liturgical colors: sampled from the Pugin Glossary plates and white-balanced (see NOTES.md). */
+:root{
+  --stone:#FAF8F3; --ink:#141312; --ink-2:#5F5A52; --hair:#DCD6CA; --line:#1A1918;
+  --vermilion:#C4503B; --rubric:#A8382A; --gold:#B8963F;
+  --g-green:#4A824D; --g-red:#C4503B; --g-white:#EBDDAA; --g-violet:#5E4679; --g-rose:#C77D8A; --g-black:#2A2729; --g-linen:#E4D9C2;
+  --day:var(--g-green); --day-ink:#3F6447;
+  --sans:'Instrument Sans', system-ui, sans-serif;
+  --serif:'Newsreader', Georgia, serif;
+  --text:'Texturina', 'Newsreader', serif;
+  --gutter:clamp(16px,4vw,64px);
+}
+html[data-color=red]    {--day:var(--g-red);    --day-ink:#A33A2B}
+html[data-color=white]  {--day:var(--g-white);  --day-ink:#8A6D22}
+html[data-color=violet] {--day:var(--g-violet); --day-ink:#56406F}
+html[data-color=array]  {--day:var(--g-linen);  --day-ink:#A3352A}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--stone);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+a:focus-visible,select:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:-999px;top:8px;background:var(--ink);color:#fff;padding:.5rem 1rem;z-index:9}.skip:focus{left:8px}
+.wrap{max-width:1360px;margin:0 auto;padding:0 var(--gutter)}
+.eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;font-stretch:90%}
+.stole{height:4px;background:var(--day);transition:background .4s}
+html[data-color=white] .stole{background:linear-gradient(90deg,var(--gold),var(--g-white),var(--gold))}
+html[data-color=array] .stole{background:repeating-linear-gradient(90deg,var(--g-linen) 0 18px,var(--rubric) 18px 21px,var(--g-linen) 21px 39px,var(--ink) 39px 42px)}
+
+/* ── Header ─────────────────────────────────────────── */
+.mast{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:20px 48px;padding-top:22px;padding-bottom:22px;border-bottom:1px solid var(--hair)}
+.name{text-decoration:none;display:flex;align-items:center;gap:12px}
+.name svg{width:18px;height:18px;fill:var(--ink);flex:none}
+.name b{display:block;font-weight:600;font-size:17px;letter-spacing:-.005em}
+.name span{display:block;font-size:12px;color:var(--ink-2)}
+.doors-nav ul{list-style:none;margin:0;padding:0;display:flex;gap:clamp(14px,2.4vw,36px);justify-content:center}
+.doors-nav a{text-decoration:none;font-size:15px;font-weight:500}
+.doors-nav a:hover{text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:1px}
+.always{display:flex;align-items:center;gap:10px}
+.btn{font-size:14px;font-weight:600;text-decoration:none;padding:9px 16px;border-radius:999px;white-space:nowrap}
+.priest{border:1px solid var(--ink);display:flex;align-items:center;gap:8px}
+.priest i{width:7px;height:7px;border-radius:50%;background:var(--vermilion);display:block}
+.give{background:var(--ink);color:var(--stone)}
+
+/* ── Hero ───────────────────────────────────────────── */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,5vw,88px);align-items:center;padding-top:clamp(40px,6vw,96px);padding-bottom:clamp(48px,6vw,96px)}
+.dateline{display:flex;align-items:center;gap:12px;margin:0 0 28px;color:var(--ink-2)}
+.dateline .chip{width:22px;height:8px;border-radius:2px;background:var(--day);box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+.feast{margin:0 0 32px;font-weight:400;text-wrap:balance}
+.feast.named{font-family:var(--text);font-variation-settings:"opsz" 72;font-weight:500;font-size:clamp(3.1rem,6.6vw,6.6rem);line-height:.94;letter-spacing:-.012em}
+.feast.plain{font-family:var(--serif);font-variation-settings:"opsz" 60;font-weight:300;font-size:clamp(2.1rem,3.7vw,3.5rem);line-height:1.06;letter-spacing:-.01em;max-width:18ch}
+html[data-rank=solemnity] .feast.named{font-weight:640}
+.feast .first{color:var(--day-ink)}
+.facts{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:0;margin:0 0 32px;border-top:1px solid var(--line)}
+.facts div{padding:10px 28px 0 0}
+.facts div+div{padding-left:18px;border-left:1px solid var(--hair)}
+.facts dt{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);margin-bottom:2px}
+.facts dd{margin:0;font-size:15px;font-weight:500;display:flex;align-items:center;gap:8px}
+.facts dd i{width:10px;height:10px;border-radius:50%;background:var(--day);box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)}
+.todayline{margin:-14px 0 30px;font-size:14px;color:var(--ink-2);display:flex;flex-wrap:wrap;gap:4px 14px}
+.todayline b{color:var(--ink);font-weight:600}
+.todayline a{color:var(--ink);font-weight:600}
+.about{font-family:var(--serif);font-size:clamp(1.15rem,1.5vw,1.35rem);line-height:1.45;max-width:31rem;margin:0 0 36px;text-wrap:pretty}
+.collect{max-width:31rem;margin:0 0 28px}
+.collect .eyebrow{color:var(--day-ink);margin:0 0 10px}
+html[data-color=white] .collect .eyebrow{color:var(--rubric)}
+.collect p.text{font-family:var(--serif);font-variation-settings:"opsz" 16;font-size:1.08rem;line-height:1.6;margin:0;text-wrap:pretty}
+.collect .src{font-size:12.5px;color:var(--ink-2);margin:10px 0 0}
+.link{font-weight:600;font-size:15px;text-decoration:none;border-bottom:1px solid var(--ink);padding-bottom:2px}
+
+.rosebox{margin:0;justify-self:center;width:100%;max-width:620px}
+.rosebox svg{display:block;width:100%;height:auto;overflow:visible}
+.rosebox figcaption{display:flex;justify-content:space-between;gap:16px;margin-top:14px;padding-top:10px;border-top:1px solid var(--hair);font-size:12.5px;color:var(--ink-2)}
+.tr{stroke:var(--line);fill:none;stroke-width:.9;vector-effect:non-scaling-stroke}
+.tr-thin{stroke:var(--line);fill:none;stroke-width:.55;vector-effect:non-scaling-stroke}
+.light{stroke:var(--line);stroke-width:.8;vector-effect:non-scaling-stroke;transition:opacity .3s}
+.light.cur{stroke-width:2.4}
+.season-label{font-family:var(--sans);font-size:10.5px;letter-spacing:.16em;font-weight:600;text-transform:uppercase}
+.hand{stroke:var(--ink);stroke-width:1.4;vector-effect:non-scaling-stroke}
+.hand-label{font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;fill:var(--ink)}
+
+/* ── Today ──────────────────────────────────────────── */
+.today{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,9fr);gap:clamp(24px,4vw,64px);padding-top:40px;padding-bottom:56px}
+.today,.section{position:relative}
+.today::before,.section::before{content:"";position:absolute;top:0;left:var(--gutter);right:var(--gutter);border-top:1px solid var(--line)}
+.today h2,.section h2{font-family:var(--serif);font-weight:300;font-variation-settings:"opsz" 48;font-size:clamp(1.8rem,2.6vw,2.4rem);line-height:1.1;margin:0 0 12px;letter-spacing:-.01em}
+.status{font-size:15px;margin:0 0 18px}
+.status b{font-weight:600}
+.timeline{position:relative;height:var(--h,150px);margin-top:8px}
+.axis{position:absolute;left:0;right:0;bottom:30px;height:1px;background:var(--line)}
+.tick{position:absolute;bottom:14px;transform:translateX(-50%);font-size:11px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.tick::before{content:"";position:absolute;left:50%;bottom:16px;width:1px;height:6px;background:var(--line)}
+.ev{position:absolute;transform:translateX(-4px);white-space:nowrap}
+.ev .dot{position:absolute;left:0;width:9px;height:9px;border-radius:50%;background:var(--ink);border:2px solid var(--stone);box-sizing:content-box;margin-left:-2px}
+.ev .stem{position:absolute;left:3.5px;width:1px;background:var(--hair)}
+.ev .lbl{position:absolute;left:12px;font-size:14px;line-height:1.25}
+.ev .lbl b{display:block;font-weight:600;font-variant-numeric:tabular-nums}
+.ev.range .bar{position:absolute;height:5px;border-radius:3px;background:var(--day);opacity:.9}
+html[data-color=white] .ev.range .bar{background:var(--gold)}
+.ev.past{opacity:.38}
+.ev.next .dot{background:var(--vermilion)}
+.ev.next .lbl b::after{content:"Next";margin-left:8px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;background:var(--vermilion);color:#fff;padding:2px 6px;border-radius:999px;vertical-align:2px}
+.now{position:absolute;bottom:22px;width:1px;height:calc(100% - 22px);background:var(--vermilion)}
+.now span{position:absolute;top:-2px;left:6px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--vermilion);font-weight:600}
+.hours-list{list-style:none;margin:0;padding:0}
+.hours-list li{display:grid;grid-template-columns:6.5rem 1fr;padding:10px 0;border-top:1px solid var(--hair);font-size:16px}
+.hours-list b{font-weight:600;font-variant-numeric:tabular-nums}
+.hours-list .past{opacity:.4}
+
+/* ── Sections ───────────────────────────────────────── */
+.section{padding-top:40px;padding-bottom:64px}
+.section-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:28px}
+.coming{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2.4vw,32px)}
+.coming li{border-top:4px solid var(--c);padding-top:16px}
+.coming .when{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+.coming .nm{display:block;margin:8px 0 6px;font-family:var(--serif);font-weight:400;font-size:1.5rem;line-height:1.15;font-variation-settings:"opsz" 36}
+.coming .nm.named{font-family:var(--text);font-weight:500;font-size:1.65rem;font-variation-settings:"opsz" 48}
+.coming .rk{font-size:14px;color:var(--ink-2)}
+.notices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2.4vw,32px)}
+.notice{background:#fff;border:1px solid var(--hair);border-radius:4px;padding:22px 22px 26px}
+.notice h3{font-family:var(--serif);font-weight:400;font-size:1.35rem;line-height:1.2;margin:10px 0 8px;font-variation-settings:"opsz" 30}
+.notice p{margin:0;font-size:15px}
+.ph{color:#8C857A;border-bottom:1px dotted #BDB5A7}
+.doors{list-style:none;margin:0;padding:0;border-bottom:1px solid var(--line)}
+.doors a{display:grid;grid-template-columns:3.4rem minmax(0,5fr) minmax(0,6fr) 2rem;align-items:baseline;gap:16px;padding:22px 0;border-top:1px solid var(--hair);text-decoration:none}
+.doors li:first-child a{border-top:0}
+.doors .n{font-size:13px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.doors .t{font-family:var(--serif);font-weight:300;font-size:clamp(2rem,3.6vw,3.4rem);line-height:1;letter-spacing:-.015em;font-variation-settings:"opsz" 72}
+.doors .d{font-size:15px;color:var(--ink-2);max-width:30rem}
+.doors .arr{justify-self:end;font-size:22px;transition:transform .2s}
+.doors a:hover .arr{transform:translateX(6px)}
+.doors a:hover .t{font-style:italic}
+
+footer{border-top:1px solid var(--line);padding:40px 0 120px;font-size:14px;color:var(--ink-2)}
+.foot{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px}
+.foot p{margin:0 0 4px}
+.foot b{color:var(--ink);font-weight:600}
+
+/* concept controls */
+.sampler{position:fixed;left:12px;bottom:12px;z-index:20;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font:13px/1.3 system-ui,-apple-system,sans-serif;background:#141312;color:#FAF8F3;padding:9px 14px;border-radius:12px;max-width:calc(100vw - 24px);box-shadow:0 6px 24px rgba(0,0,0,.18)}
+.sampler b{font-weight:600}.sampler a{color:#FAF8F3}.sampler .flag{opacity:.7}
+.sampler select{font:inherit;background:#FAF8F3;color:#141312;border:0;border-radius:6px;padding:4px 6px;max-width:62vw}
+
+@media (max-width:1020px){
+  .mast{grid-template-columns:1fr auto}
+  .doors-nav{grid-column:1/-1;grid-row:2}
+  .doors-nav ul{justify-content:flex-start;flex-wrap:wrap;gap:8px 20px}
+  .hero{grid-template-columns:1fr}
+  .rosebox{max-width:520px}
+  .today{grid-template-columns:1fr}
+}
+@media (max-width:760px){
+  .timeline{display:none}
+  .coming,.notices,.foot{grid-template-columns:1fr}
+  .doors a{grid-template-columns:2.4rem 1fr 1.4rem;row-gap:4px}
+  .doors .d{grid-column:2;grid-row:2}
+  .doors .arr{grid-column:3;grid-row:1}
+}
+@media (min-width:761px){ .hours-list{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)} }
+@media (max-width:520px){
+  .name b{font-size:15px}.name span{font-size:11px}
+  .always{flex-direction:column;align-items:stretch;gap:6px}
+  .btn{padding:7px 12px;font-size:13px;text-align:center;justify-content:center}
+  .facts{grid-template-columns:1fr 1fr}
+  .facts div:nth-child(3){grid-column:1/-1;border-left:0;padding-left:0;border-top:1px solid var(--hair);margin-top:10px}
+  .sampler{font-size:12px}
+  .sampler .flag{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <symbol id="paty" viewBox="0 0 100 100"><path d="M39 0H61L55 45L100 39V61L55 55L61 100H39L45 55L0 61V39L45 45Z"/></symbol>
+  <symbol id="crosslet" viewBox="0 0 100 100"><path d="M44 14H56V44H86V56H56V86H44V56H14V44H44Z"/><circle cx="50" cy="9" r="8"/><circle cx="50" cy="91" r="8"/><circle cx="9" cy="50" r="8"/><circle cx="91" cy="50" r="8"/></symbol>
+</defs></svg>
+
+<div class="stole" aria-hidden="true"></div>
+<header class="wrap mast">
+  <a class="name" href="#"><svg aria-hidden="true"><use href="#paty"/></svg><span><b>Our Lady of the Atonement</b><span>Catholic Church · San Antonio, Texas</span></span></a>
+  <nav class="doors-nav" aria-label="Sections"><ul><li><a href="#">Visit</a></li><li><a href="#">Worship</a></li><li><a href="#">Sacraments</a></li><li><a href="#">Parish Life</a></li><li><a href="#">About</a></li></ul></nav>
+  <div class="always"><a class="btn priest" href="#"><i aria-hidden="true"></i>Need a priest?</a><a class="btn give" href="#">Give</a></div>
+</header>
+
+<main id="main">
+  <section class="wrap hero" aria-labelledby="feast">
+    <div>
+      <p class="dateline eyebrow"><span class="chip" aria-hidden="true"></span><span id="date"></span></p>
+      <h1 class="feast" id="feast"></h1>
+      <dl class="facts" id="facts"></dl>
+      <p class="todayline" id="todayline"></p>
+      <p class="about" id="about"></p>
+      <div class="collect">
+        <p class="eyebrow" id="collect-for">The Collect</p>
+        <p class="text" id="collect"></p>
+        <p class="src">Book of Common Prayer, 1662</p>
+      </div>
+      <a class="link" href="#">The readings for today →</a>
+    </div>
+    <figure class="rosebox">
+      <svg id="rose" viewBox="-345 -345 690 690" role="img" aria-labelledby="rose-t"><title id="rose-t">The Christian year as a rose window</title></svg>
+      <figcaption><span id="rose-cap"></span><span>Each light is a week, glazed in its season’s color.</span></figcaption>
+    </figure>
+  </section>
+
+  <section class="wrap today" aria-labelledby="today-h">
+    <div>
+      <h2 id="today-h">Today at the Atonement</h2>
+      <p class="status" id="status"></p>
+      <a class="link" href="#">All Mass and Confession times</a>
+    </div>
+    <div>
+      <div class="timeline" id="timeline" aria-hidden="true"></div>
+      <ol class="hours-list" id="hours"></ol>
+    </div>
+  </section>
+
+  <section class="wrap section" aria-labelledby="coming-h">
+    <div class="section-head"><h2 id="coming-h">Days to come</h2><a class="link" href="#">The Christian year</a></div>
+    <ol class="coming" id="coming"></ol>
+  </section>
+
+  <section class="wrap section" aria-labelledby="parish-h">
+    <div class="section-head"><h2 id="parish-h">In the parish this week</h2><a class="link" href="#">The bulletin</a></div>
+    <div class="notices">
+      <article class="notice"><p class="eyebrow"><span class="ph">[Day, date]</span></p><h3><span class="ph">[Notice or event title]</span></h3><p><span class="ph">[One or two sentences: what it is, when, and who to ask.]</span></p></article>
+      <article class="notice"><p class="eyebrow"><span class="ph">[Day, date]</span></p><h3><span class="ph">[Notice or event title]</span></h3><p><span class="ph">[One or two sentences: what it is, when, and who to ask.]</span></p></article>
+      <article class="notice"><p class="eyebrow"><span class="ph">[Until date]</span></p><h3><span class="ph">[Standing notice]</span></h3><p><span class="ph">[One or two sentences. Every notice carries an expiry date.]</span></p></article>
+    </div>
+  </section>
+
+  <nav class="wrap section" aria-labelledby="doors-h">
+    <div class="section-head"><h2 id="doors-h" class="vh">Sections</h2></div>
+    <ol class="doors">
+      <li><a href="#"><span class="n">01</span><span class="t">Visit</span><span class="d">Times, directions, and what to expect at Holy Mass in this tradition.</span><span class="arr" aria-hidden="true">→</span></a></li>
+      <li><a href="#"><span class="n">02</span><span class="t">Worship</span><span class="d">Holy Mass, Mattins and Evensong, Confession, music, the Christian year.</span><span class="arr" aria-hidden="true">→</span></a></li>
+      <li><a href="#"><span class="n">03</span><span class="t">Sacraments</span><span class="d">From Holy Baptism to the Requiem: how to arrange each one here.</span><span class="arr" aria-hidden="true">→</span></a></li>
+      <li><a href="#"><span class="n">04</span><span class="t">Parish Life</span><span class="d">Join the parish, the bulletin, groups and ministries, giving.</span><span class="arr" aria-hidden="true">→</span></a></li>
+      <li><a href="#"><span class="n">05</span><span class="t">About</span><span class="d">Our story since 1983, the Ordinariate, and the church itself.</span><span class="arr" aria-hidden="true">→</span></a></li>
+    </ol>
+  </nav>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div><p><b>Our Lady of the Atonement Catholic Church</b></p><p>15415 Red Robin Road<br>San Antonio, Texas 78255</p><p>(210) 695-2944</p></div>
+    <div><p>A parish of the Personal Ordinariate of the Chair of Saint Peter.</p></div>
+    <div><p>Set in Texturina, Newsreader, and Instrument Sans. The rose is drawn from the calendar: one light for each week of the Christian year, glazed in its season’s color, with today marked.</p></div>
+  </div>
+</footer>
+
+<div class="sampler" role="region" aria-label="Concept controls">
+  <b>Concept B · Tracery</b>
+  <label>Sample day <select id="pick"></select></label>
+  <a href="a-folio.html">← Concept A</a>
+  <span class="flag">Sample data. Times as published on the current site.</span>
+</div>
+
+<script>
+/* Sample data, as in concept A (⚑ verify; see NOTES.md). */
+const C = {
+  trinity21:"Grant, we beseech thee, merciful Lord, to thy faithful people pardon and peace, that they may be cleansed from all their sins, and serve thee with a quiet mind; through Jesus Christ our Lord. Amen.",
+  simonJude:"O Almighty God, who hast built thy Church upon the foundation of the Apostles and Prophets, Jesus Christ himself being the head corner-stone: Grant us so to be joined together in unity of spirit by their doctrine, that we may be made an holy temple acceptable unto thee; through the same Jesus Christ our Lord. Amen.",
+  allSaints:"O Almighty God, who hast knit together thine elect in one communion and fellowship, in the mystical body of thy Son Christ our Lord: Grant us grace so to follow thy blessed Saints in all virtuous and godly living, that we may come to those unspeakable joys, which thou hast prepared for them that unfeignedly love thee; through Jesus Christ our Lord. Amen.",
+  advent1:"Almighty God, give us grace that we may cast away the works of darkness, and put upon us the armour of light, now in the time of this mortal life, in which thy Son Jesus Christ came to visit us in great humility; that in the last day, when he shall come again in his glorious majesty to judge both the quick and the dead, we may rise to the life immortal; through him who liveth and reigneth with thee and the Holy Ghost, now and ever. Amen.",
+  lent2:"Almighty God, who seest that we have no power of ourselves to help ourselves: Keep us both outwardly in our bodies, and inwardly in our souls; that we may be defended from all adversities which may happen to the body, and from all evil thoughts which may assault and hurt the soul; through Jesus Christ our Lord. Amen."
+};
+const DAYS = [
+  { d:"2026-10-27", title:"Tuesday after the Twenty-first Sunday after Trinity", rank:"feria", rankLabel:"Feria", season:"Time after Trinity", color:"green", colorLabel:"Green",
+    about:"No feast today. The weekday keeps Sunday’s collect, and the page stays plain.", collectFor:"The Collect for the Twenty-first Sunday after Trinity", collect:C.trinity21,
+    coming:[["2026-10-28","Saints Simon and Jude, Apostles","Feast","red"],["2026-11-01","All Saints","Solemnity","white"],["2026-11-02","All Souls","Commemoration","black"]] },
+  { d:"2026-10-28", title:"Saints Simon and Jude, Apostles", rank:"feast", rankLabel:"Feast", season:"Time after Trinity", color:"red", colorLabel:"Red",
+    about:"Two of the Twelve, kept on one day. By tradition they preached together in Persia and were martyred there.", collectFor:"The Collect", collect:C.simonJude,
+    coming:[["2026-11-01","All Saints","Solemnity","white"],["2026-11-02","All Souls","Commemoration","black"],["2026-11-08","The Twenty-third Sunday after Trinity","Sunday","green"]] },
+  { d:"2026-11-01", title:"All Saints", rank:"solemnity", rankLabel:"Solemnity", season:"Time after Trinity", color:"white", colorLabel:"White and gold",
+    about:"The whole company of heaven, known and unknown. A Holy Day of Obligation; this year it falls on a Sunday.", collectFor:"The Collect", collect:C.allSaints,
+    coming:[["2026-11-02","All Souls","Commemoration","black"],["2026-11-08","The Twenty-third Sunday after Trinity","Sunday","green"],["2026-11-09","The Dedication of the Lateran Basilica","Feast","white"]] },
+  { d:"2026-11-29", title:"The First Sunday in Advent", rank:"sunday", rankLabel:"Sunday", season:"Advent", color:"violet", colorLabel:"Violet",
+    about:"The Church’s year begins again: four weeks of watching for the coming of Christ.", collectFor:"The Collect", collect:C.advent1,
+    coming:[["2026-11-30","Saint Andrew, Apostle","Feast","red"],["2026-12-06","The Second Sunday in Advent","Sunday","violet"],["2026-12-08","The Immaculate Conception","Solemnity","white"]] },
+  { d:"2027-02-26", title:"Friday after the Second Sunday in Lent", rank:"array", rankLabel:"Feria of Lent", season:"Lent", color:"array", colorLabel:"Lenten array",
+    about:"In medieval England, Lent was kept in array: unbleached linen, marked in red and black, in place of color.", collectFor:"The Collect for the Second Sunday in Lent", collect:C.lent2,
+    coming:[["2027-02-28","The Third Sunday in Lent","Sunday","violet"],["2027-03-07","The Fourth Sunday in Lent","Sunday","rose"],["2027-03-19","Saint Joseph","Solemnity","white"]] }
+];
+const WEEK = {
+  office:[["06:30",null,"Mattins"],["16:30",null,"Evensong"]],
+  mass:{0:[["07:00",null,"Said Mass"],["09:00",null,"Sung Mass"],["11:00",null,"Sung Mass"],["17:00",null,"Said Mass"]],1:[["07:00",null,"Said Mass"]],2:[["07:00",null,"Said Mass"]],3:[["07:00",null,"Said Mass"]],4:[["07:00",null,"Said Mass"]],5:[["07:00",null,"Said Mass"]],6:[["07:00",null,"Said Mass"],["17:00",null,"Said Mass"]]},
+  confession:{0:[["07:50","08:50","Confession"]],3:[["15:30","16:30","Confession"]],5:[["07:50","08:50","Confession"]],6:[["15:30","16:30","Confession"]]}
+};
+const GLASS={green:"#4A824D",red:"#C4503B",white:"#EBDDAA",violet:"#5E4679",rose:"#C77D8A",black:"#2A2729",array:"#E4D9C2",linen:"#E4D9C2"};
+const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+const WD=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const ORD=["","First","Second","Third","Fourth","Fifth","Sixth","Seventh","Eighth","Ninth","Tenth","Eleventh","Twelfth","Thirteenth","Fourteenth","Fifteenth","Sixteenth","Seventeenth","Eighteenth","Nineteenth","Twentieth"];
+const ord=n=>n<=20?ORD[n]:"Twenty-"+ORD[n-20].toLowerCase();
+const DAY=864e5;
+const U=(y,m,d)=>Date.UTC(y,m-1,d);
+const parse=s=>{const [y,m,d]=s.split("-").map(Number);return {y,m,d,t:U(y,m,d),wd:new Date(U(y,m,d)).getUTCDay()}};
+const fmtD=t=>{const x=new Date(t);return `${WD[x.getUTCDay()].slice(0,3)} ${x.getUTCDate()} ${MONTHS[x.getUTCMonth()].slice(0,3)} ${x.getUTCFullYear()}`};
+const mins=t=>{const [h,m]=t.split(":").map(Number);return h*60+m};
+const fmtT=t=>{let [h,m]=t.split(":").map(Number);const ap=h<12?"a.m.":"p.m.";h=h%12||12;return `${h}:${String(m).padStart(2,"0")} ${ap}`};
+
+/* ── A small calendar engine: enough to draw the year (⚑ boundaries to be checked against Divine Worship) ── */
+function easter(y){const a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),mo=Math.floor((h+l-7*m+114)/31),da=((h+l-7*m+114)%31)+1;return U(y,mo,da)}
+function adventSunday(y){const c=U(y,12,25),w=new Date(c).getUTCDay();return c-(w===0?7:w)*DAY-21*DAY}
+function litYear(t){const y=new Date(t).getUTCFullYear();let s=adventSunday(y);if(t<s)s=adventSunday(y-1);const ey=new Date(s).getUTCFullYear()+1;return {start:s,end:adventSunday(ey),E:easter(ey),ey}}
+function seasons(Y){const {start,end,E,ey}=Y;return [
+  {name:"Advent",short:"Advent",from:start,to:U(ey-1,12,25),c:"violet"},
+  {name:"Christmastide",short:"Christmas",from:U(ey-1,12,25),to:U(ey,1,6),c:"white"},
+  {name:"Time after Epiphany",short:"Epiphany",from:U(ey,1,6),to:E-63*DAY,c:"green"},
+  {name:"Pre-Lent",short:"Pre-Lent",from:E-63*DAY,to:E-46*DAY,c:"violet"},
+  {name:"Lent",short:"Lent",from:E-46*DAY,to:E-14*DAY,c:"linen"},
+  {name:"Passiontide",short:"Passiontide",from:E-14*DAY,to:E,c:"violet"},
+  {name:"Eastertide",short:"Eastertide",from:E,to:E+56*DAY,c:"white"},
+  {name:"Time after Trinity",short:"After Trinity",from:E+56*DAY,to:end,c:"green"}]}
+function sundayName(t,Y){const {start,E,ey}=Y,x=new Date(t);
+  if(x.getUTCMonth()===10&&x.getUTCDate()===1)return "All Saints";
+  if(t<U(ey-1,12,25))return `The ${ord(1+(t-start)/7/DAY)} Sunday in Advent`;
+  if(t<U(ey,1,6))return `The ${ord(t<U(ey,1,1)?1:2)} Sunday after Christmas`;
+  const sept=E-63*DAY;
+  if(t<sept){const first=U(ey,1,6)+((7-new Date(U(ey,1,6)).getUTCDay())%7||7)*DAY;return `The ${ord(1+Math.round((t-first)/7/DAY))} Sunday after Epiphany`}
+  const k=Math.round((t-E)/7/DAY);
+  const named={"-9":"Septuagesima","-8":"Sexagesima","-7":"Quinquagesima","-6":"The First Sunday in Lent","-5":"The Second Sunday in Lent","-4":"The Third Sunday in Lent","-3":"The Fourth Sunday in Lent","-2":"Passion Sunday","-1":"Palm Sunday","0":"Easter Day","6":"The Sunday after Ascension","7":"Pentecost","8":"Trinity Sunday"};
+  if(named[k])return named[k];
+  if(k>0&&k<6)return `The ${ord(k)} Sunday after Easter`;
+  return `The ${ord(k-8)} Sunday after Trinity`}
+
+/* ── The rose ── */
+const NS="http://www.w3.org/2000/svg";
+const P=(r,a)=>[r*Math.cos(a*Math.PI/180),r*Math.sin(a*Math.PI/180)];
+const f=n=>n.toFixed(2);
+function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(attrs.fill)e.style.fill=attrs.fill;parent&&parent.appendChild(e);return e}
+function arcPath(r,a0,a1,rev){const s=P(r,rev?a1:a0),e=P(r,rev?a0:a1),large=(a1-a0)>180?1:0;return `M${f(s[0])} ${f(s[1])}A${r} ${r} 0 ${large} ${rev?0:1} ${f(e[0])} ${f(e[1])}`}
+function drawRose(day){
+  const svg=document.getElementById("rose");[...svg.querySelectorAll(":scope > :not(title)")].forEach(n=>n.remove());
+  const t=parse(day.d).t,Y=litYear(t),span=Y.end-Y.start,N=Math.round(span/7/DAY);
+  const ang=x=>-90+360*(x-Y.start)/span;
+  const g=el("g",{},svg);
+  // stone: outer rings
+  el("circle",{r:318,class:"tr"},g);el("circle",{r:312,class:"tr-thin"},g);el("circle",{r:290,class:"tr-thin"},g);
+  // outer ring: one light per week, lancet-headed
+  const rIn=206,rSh=258,rAp=287,inset=360/N*.17;
+  for(let i=0;i<N;i++){
+    const wk=Y.start+i*7*DAY,a0=-90+i*360/N+inset,a1=-90+(i+1)*360/N-inset,am=(a0+a1)/2;
+    const s=seasons(Y).find(z=>wk>=z.from&&wk<z.to)||{c:"green"};
+    const p1=P(rIn,a0),p2=P(rSh,a0),c1=P(rSh+(rAp-rSh)*.5,a0),ap=P(rAp,am),c2=P(rSh+(rAp-rSh)*.5,a1),p3=P(rSh,a1),p4=P(rIn,a1);
+    const cur=t>=wk&&t<wk+7*DAY;
+    const L=el("path",{d:`M${f(p1[0])} ${f(p1[1])}L${f(p2[0])} ${f(p2[1])}Q${f(c1[0])} ${f(c1[1])} ${f(ap[0])} ${f(ap[1])}Q${f(c2[0])} ${f(c2[1])} ${f(p3[0])} ${f(p3[1])}L${f(p4[0])} ${f(p4[1])}A${rIn} ${rIn} 0 0 0 ${f(p1[0])} ${f(p1[1])}Z`,
+      fill:GLASS[s.c],class:"light"+(cur?" cur":""),opacity:cur?1:.88},g);
+    el("title",{},L).textContent=`${fmtD(wk)} · ${sundayName(wk,Y)}`;
+    // a small trefoil-like boss between the heads
+    const b=P(rAp+8,-90+i*360/N);el("circle",{cx:f(b[0]),cy:f(b[1]),r:2.2,class:"tr-thin",fill:"none"},g);
+  }
+  el("circle",{r:rIn,class:"tr"},g);el("circle",{r:198,class:"tr-thin"},g);
+  // season ring: the year's seasons, named
+  const rs0=148,rs1=192;
+  seasons(Y).forEach(z=>{
+    const a0=ang(z.from),a1=ang(z.to);if(a1<=a0)return;
+    const o0=P(rs1,a0),o1=P(rs1,a1),i1=P(rs0,a1),i0=P(rs0,a0),large=a1-a0>180?1:0;
+    el("path",{d:`M${f(o0[0])} ${f(o0[1])}A${rs1} ${rs1} 0 ${large} 1 ${f(o1[0])} ${f(o1[1])}L${f(i1[0])} ${f(i1[1])}A${rs0} ${rs0} 0 ${large} 0 ${f(i0[0])} ${f(i0[1])}Z`,fill:GLASS[z.c],class:"light",opacity:.96},g);
+    const len=(a1-a0)*Math.PI/180*170,label=z.short.toUpperCase(),need=label.length*8.6+12;
+    if(len>need){const mid=(a0+a1)/2,bottom=mid>0&&mid<180,id="sp-"+z.short.replace(/\W/g,"");
+      el("path",{id,d:arcPath(bottom?174:166,a0,a1,bottom),fill:"none"},g);
+      const tx=el("text",{class:"season-label",fill:["white","linen"].includes(z.c)?"#141312":"#FAF8F3"},g);
+      const tp=el("textPath",{href:"#"+id,startOffset:"50%","text-anchor":"middle"},tx);tp.textContent=label;}
+  });
+  // inner tracery: eight roundels, each with a quatrefoil
+  for(let i=0;i<8;i++){const a=-90+22.5+i*45,[x,y]=P(104,a);
+    el("circle",{cx:f(x),cy:f(y),r:30,class:"tr-thin",fill:"#FAF8F3"},g);
+    const q=el("path",{d:qf(x,y,11),class:"tr-thin",fill:day.rank==="solemnity"?"#E3CF8C":(day.rank==="feast"?GLASS[day.color==="array"?"linen":day.color]:"none"),"fill-opacity":day.rank==="feast"?.55:1},g);}
+  el("circle",{r:140,class:"tr"},g);el("circle",{r:68,class:"tr-thin"},g);
+  // the center: the day itself
+  const vested=day.rank!=="feria";
+  el("path",{d:qf(0,0,26),class:"tr",fill:vested?GLASS[day.color]:"#FAF8F3"},g);
+  if(day.rank==="feast"||day.rank==="solemnity"){const u=el("use",{href:"#paty",x:-17,y:-17,width:34,height:34,fill:day.rank==="solemnity"?"#B8963F":"#FAF8F3"},g);}
+  if(day.rank==="array"){el("use",{href:"#crosslet",x:-16,y:-16,width:32,height:32,fill:"#A3352A"},g);}
+  // the hand: today
+  const at=ang(t+DAY/2),h0=P(72,at),h1=P(330,at);
+  el("line",{x1:f(h0[0]),y1:f(h0[1]),x2:f(h1[0]),y2:f(h1[1]),class:"hand"},g);
+  el("circle",{cx:f(h1[0]),cy:f(h1[1]),r:4.5,fill:"#C4503B"},g);
+  const lp=P(342,at),right=Math.cos(at*Math.PI/180)>=0;
+  const lt=el("text",{x:f(lp[0]+(right?8:-8)),y:f(lp[1]+4),class:"hand-label","text-anchor":right?"start":"end"},g);lt.textContent="Today";
+  const wkNo=Math.floor((t-Y.start)/7/DAY)+1;
+  document.getElementById("rose-cap").textContent=`The Christian year ${Y.ey-1}–${String(Y.ey).slice(2)} · week ${wkNo} of ${N}`;
+  svg.setAttribute("aria-label",`The Christian year ${Y.ey-1}–${Y.ey} drawn as a rose window: ${N} lights, one for each week, colored by season. Today is in week ${wkNo}, in ${seasons(Y).find(z=>t>=z.from&&t<z.to).name}.`);
+}
+function qf(cx,cy,r){const a=r,o=[[cx-a,cy-a],[cx+a,cy-a],[cx+a,cy+a],[cx-a,cy+a]];return `M${o[0]}A${a} ${a} 0 0 1 ${o[1]}A${a} ${a} 0 0 1 ${o[2]}A${a} ${a} 0 0 1 ${o[3]}A${a} ${a} 0 0 1 ${o[0]}Z`}
+
+/* ── Today ── */
+function parishNow(){const p=Object.fromEntries(new Intl.DateTimeFormat("en-CA",{timeZone:"America/Chicago",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(new Date()).map(x=>[x.type,x.value]));return {date:`${p.year}-${p.month}-${p.day}`,mins:(+p.hour)*60+(+p.minute)}}
+function hoursFor(d){const wd=parse(d).wd;return [...WEEK.office,...(WEEK.mass[wd]||[]),...(WEEK.confession[wd]||[])].sort((a,b)=>mins(a[0])-mins(b[0]))}
+function drawToday(day){
+  const now=parishNow(),isToday=now.date===day.d,list=hoursFor(day.d);
+  const nextIdx=isToday?list.findIndex(([s,e])=>mins(e||s)>=now.mins):-2;
+  const state=i=>!isToday?"":(nextIdx===-1||i<nextIdx?"past":i===nextIdx?"next":"");
+  const st=document.getElementById("status");
+  st.innerHTML=isToday?(nextIdx===-1?"That is all for today. Mattins tomorrow at 6:30 a.m.":`Next: <b>${list[nextIdx][2]}</b>, ${fmtT(list[nextIdx][0])}`):`${list.length} services on this day.`;
+  document.getElementById("todayline").innerHTML=`<span><b>${isToday?"Today":WD[parse(day.d).wd]}</b></span>`+list.map(([s,e,l],i)=>`<span${state(i)==="past"?' style="opacity:.5"':""}>${l} ${fmtT(s).replace(":00","")}</span>`).join("")+`<a href="#today-h">All times ↓</a>`;
+  document.getElementById("hours").innerHTML=list.map(([s,e,l],i)=>`<li class="${state(i)}"><b>${fmtT(s)}</b><span>${l}${e?`, until ${fmtT(e)}`:""}</span></li>`).join("");
+  const tl=document.getElementById("timeline"),T0=6*60,T1=19*60,X=m=>((m-T0)/(T1-T0)*100);
+  let html=`<div class="axis"></div>`;
+  for(let h=6;h<=19;h++){html+=`<span class="tick" style="left:${X(h*60)}%">${h===12?"noon":(h%12||12)+(h<12?"am":"pm")}</span>`}
+  const lanes=[],LANE=40,MIN=13.5;let maxLane=0;
+  list.forEach(([s,e,l],i)=>{const x=X(mins(s));let ln=0;while(lanes[ln]!==undefined&&x-lanes[ln]<MIN)ln++;lanes[ln]=x;maxLane=Math.max(maxLane,ln);
+    const y=44+ln*LANE;
+    html+=`<div class="ev ${e?"range":""} ${state(i)}" style="left:${x}%;bottom:0">`+
+      (e?`<span class="bar" style="bottom:28px;left:0" data-pct="${X(mins(e))-x}"></span>`:"")+
+      `<span class="stem" style="bottom:30px;height:${y-30}px"></span><span class="dot" style="bottom:${y-6}px"></span>`+
+      `<span class="lbl" style="bottom:${y-10}px"><b>${fmtT(s)}</b>${l}</span></div>`});
+  if(isToday&&now.mins>T0&&now.mins<T1)html+=`<div class="now" style="left:${X(now.mins)}%"><span>Now</span></div>`;
+  tl.innerHTML=html;tl.style.setProperty("--h",(44+(maxLane+1)*LANE+16)+"px");
+  // range bars are positioned inside an .ev whose width is 0; scale by the timeline width
+  const w=tl.clientWidth/100;tl.querySelectorAll(".bar").forEach(b=>{b.style.width=(b.dataset.pct*w)+"px"});
+}
+
+/* ── Render ── */
+const keep=s=>s.replace(/(\S+-\S+)/g,'<span style="white-space:nowrap">$1</span>');
+function render(day){
+  const r=document.documentElement;r.dataset.color=day.color;r.dataset.rank=day.rank;
+  const p=parse(day.d);
+  document.getElementById("date").textContent=`${WD[p.wd]} ${p.d} ${MONTHS[p.m-1]} ${p.y}`;
+  const h=document.getElementById("feast"),named=!(day.rank==="feria"||day.rank==="array");
+  h.className="feast "+(named?"named":"plain");
+  h.innerHTML=named?`<span class="first">${day.title[0]}</span>${keep(day.title.slice(1))}`:keep(day.title);
+  const chip=day.color==="white"?`<i style="background:#EBDDAA;box-shadow:inset 0 0 0 1.5px #B8963F"></i>`:`<i></i>`;
+  document.getElementById("facts").innerHTML=`<div><dt>Rank</dt><dd>${day.rankLabel}</dd></div><div><dt>Season</dt><dd>${day.season}</dd></div><div><dt>Color</dt><dd>${chip}${day.colorLabel}</dd></div>`;
+  document.getElementById("about").textContent=day.about;
+  document.getElementById("collect-for").textContent=day.collectFor;
+  document.getElementById("collect").textContent=day.collect;
+  document.getElementById("coming").innerHTML=day.coming.map(([d,n,rk,c])=>{const q=parse(d),nm=rk!=="Commemoration";
+    const col=c==="white"?"#B8963F":(GLASS[c]);
+    return `<li style="--c:${col}"><span class="when">${fmtD(q.t)}</span><span class="nm ${nm?"named":""}">${keep(n)}</span><span class="rk">${rk}</span></li>`}).join("");
+  drawRose(day);drawToday(day);
+  document.title=`${day.title} · Our Lady of the Atonement (concept B)`;
+}
+const pick=document.getElementById("pick");
+pick.innerHTML=DAYS.map((d,i)=>{const p=parse(d.d);return `<option value="${i}">${fmtD(p.t)} · ${d.rankLabel}${d.rank==="array"?" (proposal)":""}</option>`}).join("");
+const start=Math.max(0,DAYS.findIndex(d=>d.d===(new URLSearchParams(location.search).get("day")||parishNow().date)));
+pick.value=start;render(DAYS[start]);
+pick.addEventListener("change",()=>render(DAYS[pick.value]));
+addEventListener("resize",()=>drawToday(DAYS[pick.value]));
+</script>
+</body>
+</html>

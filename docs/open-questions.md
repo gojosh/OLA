@@ -32,6 +32,7 @@ Questions that need Josh, the parish, or research. Agents: add questions here in
 ### Information architecture
 - **Q26. Sacraments: OLA's emphasis.** What does OLA particularly want to say about each sacrament that a generic answer wouldn't? (Father's voice; see `sections/sacraments.md` §7.)
 - **Q27. Sacraments: rites and licensing.** Which sacraments does OLA celebrate from *Divine Worship: Occasional Services* and which from the Roman books? May the site quote short passages of the rites?
+- **Q30. Lenten array:** does OLA veil the church in unbleached linen (Lenten array) in Lent, or use violet? The home page concepts propose that the site keep array in Lent; that only makes sense if the parish does, or wants the site to teach the custom.
 
 ### Repository
 - **Q18. Large files:** the Pugin plates (~258 MB) are in Git history and already on GitHub. Options: leave as is; move future large binaries to Git LFS; or migrate history to LFS (rewrites history and needs a force-push).
