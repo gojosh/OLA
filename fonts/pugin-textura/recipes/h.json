@@ -2,7 +2,7 @@
  "glyph": "h",
  "unicode": "U+0068",
  "construction": "textura_letters.py: h",
- "description": "The l's ascender, and on the right a leg with its own head that runs down past the baseline\nand turns out at the descender line. Pugin's leg ends in a hairline loop; plain, it turns out as\na minim's foot does.",
+ "description": "The l's ascender, and on the right a leg with its own head that runs down past the baseline\nand turns out at the descender line. The leg's head is joined to the stem by a hairline, as the\nn's second minim is (Josh: \"h and k need the same connecting spur we added to m and n\"). Pugin's\nleg ends in a hairline loop; plain, it turns out as a minim's foot does.",
  "measured": {
   "stem_x": 1045.62,
   "leg": {
@@ -20,14 +20,14 @@
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/h.png",
-  "when": "2026-10-29T09:21:59"
+  "when": "2026-10-29T17:31:51"
  },
  "fit": {
-  "mean_px": 5.59,
-  "p95_px": 19.32,
-  "max_px": 54.03,
+  "mean_px": 6.72,
+  "p95_px": 31.8,
+  "max_px": 59.27,
   "mean_px_fitted_alone": 4.78,
-  "segments": 50,
+  "segments": 51,
   "outline_checks_pass": true,
   "at_bounds": []
  }

@@ -36,6 +36,7 @@ import json
 import math
 import sys
 import time
+from pathlib import Path
 
 import cv2
 import numpy as np
@@ -243,10 +244,39 @@ class Ref:
     distance to Pugin's edge, and the edges of his letter's body (his edge within a few pixels of
     the nib's strokes, which leaves out the hairline flourishes the plain form doesn't have)."""
 
-    def __init__(self, d, r, near=5):
+    def __init__(self, d, r, near=5, keep=None):
         import construct as K
         self.alpha = cv2.imread(str(d / r["coverage"]), cv2.IMREAD_GRAYSCALE).astype(np.float32) / 255
         body = cv2.imread(str(d / r["body"]), cv2.IMREAD_GRAYSCALE)
+        hand = d / "references" / "hand" / f"{Path(r['coverage']).stem}-main.png"
+        if keep == "main" and hand.exists():
+            # the main stroke as Josh drew it over Pugin's, where his ink can't show it: the s's ends
+            # run on in his ink into the fine stems that grow out of them (Josh: "Do you need me to use
+            # a brush tool and show you the correct terminal shapes?"). On its own canvas (scale and
+            # origin in the .json beside it), brought back to the plate.
+            m = json.loads(hand.with_suffix(".json").read_text())
+            paint = 1 - cv2.imread(str(hand), cv2.IMREAD_GRAYSCALE).astype(np.float32) / 255
+            z, (hx, hy) = m["scale"], m["origin"]
+            small = cv2.resize(paint, (paint.shape[1] // z, paint.shape[0] // z), interpolation=cv2.INTER_AREA)
+            ox, oy = int(round(hx - r["box_flat_px"][0])), int(round(hy - r["box_flat_px"][1]))
+            self.alpha = np.zeros_like(self.alpha)
+            h_, w_ = min(small.shape[0], self.alpha.shape[0] - oy), min(small.shape[1], self.alpha.shape[1] - ox)
+            self.alpha[oy:oy + h_, ox:ox + w_] = small[:h_, :w_]
+            body = (self.alpha > 0.5).astype(np.uint8) * 255
+        elif keep == "main":
+            # the letter's main stroke alone: his ink within a few pixels of his body's largest piece,
+            # without the hairlines and pips drawn apart from it (Josh: "You need to drop the stems
+            # and nibs to do this analysis"). The few pixels give back what the body's opening rounded
+            # off his corners; his ink opened by a 5 px disc leaves out the first few pixels of each
+            # hairline where it leaves the body, which those few pixels would keep (Josh: "Why am I
+            # still seeing part of the stem for the pip?").
+            n, lab, stats, _ = cv2.connectedComponentsWithStats((body > 0).astype(np.uint8))
+            main = (lab == 1 + int(np.argmax(stats[1:, cv2.CC_STAT_AREA]))).astype(np.uint8)
+            ink = (self.alpha > 0.5).astype(np.uint8)
+            opened = cv2.morphologyEx(ink, cv2.MORPH_OPEN, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (11, 11)))
+            keep = cv2.dilate(main, np.ones((9, 9), np.uint8)) & (opened | main)
+            self.alpha = self.alpha * keep.astype(np.float32)
+            body = main * 255
         self.origin = np.array(r["box_flat_px"][:2], float)
         self.sd = K.signed_distance(self.alpha)
         near_body = cv2.dilate((body > 0).astype(np.uint8), np.ones((2 * near + 1,) * 2, np.uint8))
@@ -254,6 +284,280 @@ class Ref:
         xi, yi = np.clip(np.round(e).astype(int), 0, [self.alpha.shape[1] - 1, self.alpha.shape[0] - 1]).T
         e = e[near_body[yi, xi] > 0]
         self.edges = e[np.linspace(0, len(e) - 1, min(1500, len(e))).astype(int)]
+
+
+def _load_drawn(d):
+    """The letters Josh has drawn by hand, for the constructions to draw from: whole outlines drawn
+    in a drawing program (references/hand-drawn-<g>.svg, placed on the plate by the .json beside it;
+    textura_letters.OUTLINES; or, if the .json says "alternate", beside its letter rather than for it,
+    textura_letters.ALTERNATES), and strokes drawn point by point in the pen editor (a recipe's
+    "drawn" points; textura_letters.DRAWN)."""
+    import textura_letters as TL
+    TL.DRAWN.clear()
+    TL.OUTLINES.clear()
+    TL.ALTERNATES.clear()
+    for f in sorted((d / "recipes").glob("*.json")):
+        r = json.loads(f.read_text())
+        if r.get("drawn"):
+            TL.DRAWN[f.stem] = r["drawn"]["points"]
+    TL.OUTLINE_ON_PLATE.clear()
+    for f in sorted((d / "references").glob("hand-drawn-*.svg")):
+        if not f.with_suffix(".json").exists():        # a drawing not in use (an earlier one, kept)
+            continue
+        m = json.loads(f.with_suffix(".json").read_text())
+        scale = np.broadcast_to(np.asarray(m["scale"], float), (2,))         # one scale, or one for x and one for y
+        cs = [[np.asarray(q) * scale + m["offset"] for q in c] for c in G.read_svg(f)]
+        if m.get("warp_y"):        # heights mapped to heights, evenly between: some bands lengthened, the rest kept as drawn
+            ins, outs = (np.asarray(v, float) for v in zip(*m["warp_y"]))
+            cs = [[np.column_stack([q[:, 0], np.interp(q[:, 1], ins, outs)]) for q in c] for c in cs]
+        TL.OUTLINES[m["glyph"]] = cs
+        if m.get("alternate"):
+            TL.ALTERNATES[m["glyph"]] = {**m["alternate"], "of": m["glyph"].split(".")[0], "description": m.get("description", "")}
+        if m.get("on_plate"):
+            TL.OUTLINE_ON_PLATE[m["glyph"]] = tuple(m["on_plate"])
+
+
+class Workbench:
+    """What the proof page's stroke editor needs (served by `type.py serve`; decision 0012). A letter
+    is the strokes of the pen through its own named measurements: the nodes of its strokes (a pair
+    of measurements, name.x and name.y, in plate pixels) and their settings (handle lengths,
+    headings, a pip's size, how a spiral tightens). The editor moves those, and the letter is drawn
+    again here, by the same code as the build, as they move. What Josh sets is saved as the letter's
+    own held measurements in its recipe (`held`, which every fit keeps as it is), and listed in
+    `held_by_hand`, so it can be told from what he asked for in words."""
+
+    def __init__(self, fam):
+        self.fam, self.d = fam, T.family_dir(fam)
+        self.refs_meta = json.loads((self.d / "references" / "references.json").read_text())["glyphs"]
+        self._refs = {}
+        _load_drawn(self.d)
+
+    def _family(self):
+        import textura_letters as TL
+        src = T.load_source(self.fam)
+        shared = json.loads((self.d / "family.json").read_text())["shared"]
+        held = {k: float(v) for k, v in src.get("held", {}).items() if not k.endswith("_note")}
+        spur = {k: float(v) for k, v in src["spur"].items() if not k.endswith("note")}
+        return {f"family.{k}": v for k, v in {**shared, **held}.items() if k in TL.FAMILY}, spur
+
+    def _recipe(self, g):
+        return json.loads((self.d / "recipes" / f"{g}.json").read_text())
+
+    def editable(self):
+        import textura_letters as TL
+        return [g for g in TL.LETTERS if g not in TL.DERIVED and g in self.refs_meta and (self.d / "recipes" / f"{g}.json").exists()]
+
+    # ── The pen editor: a letter drawn by hand, point by point (decision 0013) ──
+
+    def _params(self, g):
+        import textura_letters as TL
+        fam, spur = self._family()
+        r = self._recipe(g)
+        import construct as K
+        mine = {f"{g}:{k}": v for k, v in K._flat({k: v for k, v in r.get("measured", {}).items() if k not in ("units", "from", "when", "family")}).items()}
+        return TL.TParams(g, {**fam, **mine}, False, True)
+
+    def pen(self, g):
+        """A letter's drawing: its points (as saved, or, before any is, taken from its construction:
+        a point every 10 px along its pen's path, with the nib's angle and pressure there, and a
+        corner where the path turns sharply), the nib's size, and where Pugin's letter and Josh's
+        drawing of it are."""
+        import nib as NB
+        import textura_letters as TL
+        r, ref = self._recipe(g), self.refs_meta[g]
+        if r.get("drawn"):
+            points = r["drawn"]["points"]
+        else:
+            saved = TL.DRAWN.pop(g, None)
+            try:
+                b = TL.LETTERS[g](self._params(g))
+            finally:
+                if saved is not None:
+                    TL.DRAWN[g] = saved
+            st = b["strokes"][0]
+            n = len(st)
+            corners = set()                         # where the construction's path turns sharply
+            for i in range(1, n):
+                v1 = np.asarray(st[i - 1], float)[3] - np.asarray(st[i - 1], float)[2]
+                v2 = np.asarray(st[i], float)[1] - np.asarray(st[i], float)[0]
+                if np.linalg.norm(v1) > 1e-9 and np.linalg.norm(v2) > 1e-9 and \
+                        np.degrees(np.arccos(np.clip(v1 @ v2 / np.linalg.norm(v1) / np.linalg.norm(v2), -1, 1))) > 15:
+                    corners.add(i)
+            # a point every 10 px along it, and at each corner: close enough to the construction to start from
+            sg = np.linspace(0, n, 40 * n + 1)
+            ls = st.length_at(sg)
+            at = sorted({round(float(v), 4) for v in np.interp(np.arange(0, ls[-1], 10.0), ls, sg)} | {float(n)} | {float(i) for i in corners})
+            points = []
+            for v in at:
+                i = min(int(v), n - 1)
+                pt = G.bez(np.asarray(st[i], float), np.array([v - i]))[0]
+                points.append({"x": round(float(pt[0]), 2), "y": round(float(pt[1]), 2), "angle": round(NB.turned_angle(st, v), 2),
+                               "pressure": round(NB.pressure_at(st, v), 3), "corner": v in corners})
+        p = self._params(g)
+        hand = self.d / "references" / "hand" / f"{g}-main.png"
+        out = {"glyph": g, "char": ref["char"], "box": ref["box_flat_px"], "ink": ref.get("ink_box_flat_px", ref["box_flat_px"]),
+               "reference": ref["coverage"], "points": points, "drawn": bool(r.get("drawn")),
+               "nib": {"width": p.fam("nib_width"), "thickness": p.fam("nib_thickness")}}
+        if hand.exists():
+            m = json.loads(hand.with_suffix(".json").read_text())
+            img = cv2.imread(str(hand), cv2.IMREAD_GRAYSCALE)
+            out["hand"] = {"src": f"references/hand/{hand.name}", "x": m["origin"][0], "y": m["origin"][1],
+                           "w": img.shape[1] / m["scale"], "h": img.shape[0] / m["scale"]}
+        return out
+
+    def pen_outline(self, g, points):
+        """The letter drawn from these points by the build's own pen: its outline, the pen's path, how
+        far Josh's drawing of its main stroke (or Pugin's main stroke) lies from it, and whether the
+        outline passes the checks in font units."""
+        import construct as K
+        import nib as NB
+        import textura_letters as TL
+        p = self._params(g)
+        st = TL.drawn_stroke(points)
+        cs = NB.outline([st], TL.pen_of(p))
+        key = (g, "main")
+        if key not in self._refs:
+            self._refs[key] = Ref(self.d, self.refs_meta[g], keep="main")
+        dev = _deviation(cs, self._refs[key]) if cs else {"mean_px": None, "p95_px": None, "max_px": None}
+        meas = json.loads((self.d / "measurements.json").read_text())
+        built = {"contours": [[(q, "stroke", f"stroke: node {k}") for k, q in enumerate(c)] for c in cs], "baseline": p.fam("bottom")}
+        units = NB.tidy_units(K.to_units(built, T.load_source(self.fam)["font"]["x_height"] / meas["x_height_px"], 0)[0])
+        chk = K.check_outline(units, [[f"stroke: node {k}" for k in range(len(c))] for c in units], smooth_deg=3.0, swell_tol=0.5)
+        return {"contours": [[np.round(np.asarray(q), 3).tolist() for q in c] for c in cs], "path": [np.round(q, 3).tolist() for q in st],
+                "mean_px": dev["mean_px"], "p95_px": dev["p95_px"], "max_px": dev["max_px"], "ok": bool(chk["ok"]), "contour_count": len(cs)}
+
+    def pen_save(self, g, points):
+        """The drawing saved in the letter's recipe ("drawn"), which the build draws the letter from."""
+        import textura_letters as TL
+        keep = ("x", "y", "angle", "pressure", "corner")
+        pts = [{k: (bool(q.get(k)) if k == "corner" else round(float(q[k]), 3)) for k in keep} for q in points]
+        r = self._recipe(g)
+        r["drawn"] = {"points": pts, "units": "plate pixels, y down; the nib's angle in degrees; pressure as a share of the nib's width",
+                      "note": "drawn by Josh, point by point, on the proof page's pen editor (decision 0013); the build draws the letter from it",
+                      "when": time.strftime("%Y-%m-%d %H:%M")}
+        (self.d / "recipes" / f"{g}.json").write_text(json.dumps(r, indent=1, ensure_ascii=False) + "\n")
+        TL.DRAWN[g] = pts
+        return {"saved": len(pts)}
+
+    def letter(self, g):
+        """The letter's measurements: each with its bounds, its value as it stands (held, or as last
+        fitted), and which are held; the nodes, as pairs of measurements; where Pugin's letter is."""
+        import construct as K
+        import textura_letters as TL
+        p0 = TL.TParams(g, None, False)
+        TL.LETTERS[g](p0)
+        TL.pen_of(p0)
+        r = self._recipe(g)
+        measured = {f"{g}:{k}": v for k, v in K._flat({k: v for k, v in r.get("measured", {}).items()
+                                                        if k not in ("units", "from", "when", "family")}).items()}
+        held = {f"{g}:{k}": float(v) for k, v in r.get("held", {}).items()}
+        spec = {k: v for k, v in p0.spec.items() if k.startswith(g + ":")}
+        values = {k: float(held.get(k, measured.get(k, v[0]))) for k, v in spec.items()}
+        names = [k[len(g) + 1:] for k in spec]
+        nodes = sorted({n[:-2] for n in names if n.endswith(".x") and n[:-2] + ".y" in names})
+        ref = self.refs_meta[g]
+        return {"glyph": g, "char": ref["char"], "box": ref["box_flat_px"], "ink": ref.get("ink_box_flat_px", ref["box_flat_px"]), "reference": ref["coverage"],
+                "spec": {k[len(g) + 1:]: {"lo": v[1], "hi": v[2]} for k, v in spec.items()},
+                "values": {k[len(g) + 1:]: round(v, 3) for k, v in values.items()},
+                "held": sorted(k[len(g) + 1:] for k in held if k in spec), "by_hand": sorted(r.get("held_by_hand", [])),
+                "nodes": nodes, "description": (TL.LETTERS[g].__doc__ or "").strip()}
+
+    GROUPS = {"split_top": {"title": "the split top", "prefix": "fork_", "letters": ["b", "d", "h", "k", "l"]}}
+
+    def outline(self, g, values, family=None):
+        """The letter drawn from these measurements (its own, by name; the family's as they stand, or
+        as `family` sets some of them), with its spurs, as the font has it: its outline, the pen's
+        paths, how far Pugin's body edge lies from it, and whether the outline passes the checks."""
+        import construct as K
+        import textura_letters as TL
+        fam, spur = self._family()
+        fam.update({f"family.{k}": float(v) for k, v in (family or {}).items()})
+        vals = {**fam, **{f"{g}:{k}": float(v) for k, v in values.items()}}
+        p = TL.TParams(g, vals, False, True)        # `fill`: anything not sent takes its starting value
+        p.spur = spur
+        cs, b = _outline(TL.LETTERS[g], p, marks=True)
+        if g not in self._refs:
+            self._refs[g] = Ref(self.d, self.refs_meta[g])
+        dev = _deviation(cs, self._refs[g], b.get("fit_affine"))
+        # checked as the build checks it: in font units, rounded and tidied
+        import nib as NB
+        meas = json.loads((self.d / "measurements.json").read_text())
+        built = {"contours": [[(q, "stroke", f"stroke: node {k}") for k, q in enumerate(c)] for c in cs], "baseline": b["baseline"]}
+        units = NB.tidy_units(K.to_units(built, T.load_source(self.fam)["font"]["x_height"] / meas["x_height_px"], 0)[0])
+        chk = K.check_outline(units, [[f"stroke: node {k}" for k in range(len(c))] for c in units], smooth_deg=3.0, swell_tol=0.5)
+        return {"contours": [[np.round(q, 3).tolist() for q in c] for c in cs],
+                "strokes": [[np.round(np.asarray(q), 3).tolist() for q in s] for s in b["strokes"] + b.get("marks", [])],
+                "affine": list(b["fit_affine"]) if b.get("fit_affine") else None,
+                "mean_px": dev["mean_px"], "ok": bool(chk["ok"]), "contour_count": len(cs)}
+
+    def group(self, name):
+        """A group of the family's held settings, such as the split top's, shared by several letters:
+        each setting with its bounds, meaning and value, which were set by hand, and its letters with
+        where Pugin's are."""
+        import textura_letters as TL
+        grp = self.GROUPS[name]
+        src = T.load_source(self.fam)
+        held = src.get("held", {})
+        keys = [k for k in TL.FAMILY if k.startswith(grp["prefix"])]
+        refs = {g: {"box": self.refs_meta[g]["box_flat_px"], "ink": self.refs_meta[g].get("ink_box_flat_px", self.refs_meta[g]["box_flat_px"]),
+                    "reference": self.refs_meta[g]["coverage"], "char": self.refs_meta[g]["char"]} for g in grp["letters"]}
+        return {"group": name, "title": grp["title"], "letters": grp["letters"], "refs": refs,
+                "spec": {k: {"lo": TL.FAMILY[k][1], "hi": TL.FAMILY[k][2], "meaning": TL.FAMILY[k][3]} for k in keys},
+                "values": {k: float(held.get(k, TL.FAMILY[k][0])) for k in keys},
+                "by_hand": sorted(k for k in src.get("held_by_hand", []) if k in keys)}
+
+    def group_outlines(self, name, values):
+        """Every letter of the group drawn with its settings as sent, each with its own measurements as
+        they stand."""
+        return {g: self.outline(g, self.letter(g)["values"], family=values) for g in self.GROUPS[name]["letters"]}
+
+    def save_group(self, name, set_):
+        """Hold the group's settings at these values in source.json, as set by hand."""
+        grp = self.group(name)
+        bad = [k for k in set_ if k not in grp["spec"]]
+        if bad:
+            raise ValueError(f"no such settings of {grp['title']}: {', '.join(bad)}")
+        path = self.d / "source.json"
+        src = json.loads(path.read_text())
+        held = src.setdefault("held", {})
+        for k, v in set_.items():
+            held[k] = round(min(max(float(v), grp["spec"][k]["lo"]), grp["spec"][k]["hi"]), 3)
+        hand = set(src.get("held_by_hand", [])) | set(set_)
+        if hand:
+            src["held_by_hand"] = sorted(hand)
+            src["held_by_hand_note"] = ("family settings set by hand in the stroke editor on the proof page (decision 0012); last saved "
+                                        + time.strftime("%Y-%m-%d %H:%M"))
+        path.write_text(json.dumps(src, indent=1, ensure_ascii=False) + "\n")
+        return {"by_hand": sorted(k for k in hand if k in grp["spec"])}
+
+    def save(self, g, set_, release):
+        """Hold these measurements at these values in the letter's recipe, as set by hand, and let
+        the released ones go back to the fit."""
+        spec = self.letter(g)["spec"]
+        bad = [k for k in [*set_, *release] if k not in spec]
+        if bad:
+            raise ValueError(f"no such measurements of {g}: {', '.join(bad)}")
+        path = self.d / "recipes" / f"{g}.json"
+        r = json.loads(path.read_text())
+        held, hand = r.get("held", {}), set(r.get("held_by_hand", []))
+        for k, v in set_.items():
+            held[k] = round(min(max(float(v), spec[k]["lo"]), spec[k]["hi"]), 3)
+            hand.add(k)
+        for k in release:
+            held.pop(k, None)
+            hand.discard(k)
+        r["held"] = held
+        if hand:
+            r["held_by_hand"] = sorted(hand)
+            r["held_by_hand_note"] = ("measurements set by hand in the stroke editor on the proof page (decision 0012), and held so every "
+                                      "fit keeps them; last saved " + time.strftime("%Y-%m-%d %H:%M"))
+        else:
+            r.pop("held_by_hand", None)
+            r.pop("held_by_hand_note", None)
+        if not held:
+            r.pop("held", None)
+        path.write_text(json.dumps(r, indent=1, ensure_ascii=False) + "\n")
+        return {"held": sorted(held), "by_hand": sorted(hand)}
 
 
 def _affine(A, pts):
@@ -264,13 +568,14 @@ def _affine(A, pts):
     return np.column_stack([a * pts[:, 0] + b * pts[:, 1] + c, d * pts[:, 0] + e * pts[:, 1] + f])
 
 
-def _outline(fn, p, marks=False):
+def _outline(fn, p, marks=False, only=None):
     """A letter's outline: its strokes, and with `marks` the strokes Pugin didn't draw (left out of
-    the fit)."""
+    the fit); with `only`, just those of its strokes (by index)."""
     import nib as NB
     import textura_letters as TL
     b = fn(p)
-    return NB.outline(b["strokes"] + (b.get("marks", []) if marks else []), TL.pen_of(p), edges=b.get("edges", ())), b
+    strokes = b["strokes"] if only is None else [b["strokes"][i] for i in only]
+    return NB.outline(strokes + (b.get("marks", []) if marks else []), TL.pen_of(p), edges=b.get("edges", ()) if only is None else ()), b
 
 
 def fit_glyph(job):
@@ -283,36 +588,57 @@ def fit_glyph(job):
     import pathops
     import textura_letters as TL
     g, (d, r), start, fixed, local = job
+    _load_drawn(d)
     ref = Ref(d, r)
     fn = TL.LETTERS[g]
     p0 = TL.TParams(g, None, local)
-    fn(p0)
+    b0 = fn(p0)
     TL.pen_of(p0)
     spec = p0.spec
     keys = [k for k in spec if k not in fixed]
-    lb, ub = np.array([spec[k][1] for k in keys]), np.array([spec[k][2] for k in keys])
-    x0 = np.clip(np.array([start.get(k, spec[k][0]) for k in keys], float), lb, ub)
+    lb_all, ub_all = {k: spec[k][1] for k in keys}, {k: spec[k][2] for k in keys}
+    cur = {**fixed, **{k: float(np.clip(start.get(k, spec[k][0]), lb_all[k], ub_all[k])) for k in keys}}
+    # A letter may be fitted in stages (b["fit_stages"]): some of its measurements at a time, against
+    # some of its strokes and a reference to suit (the s: its main stroke against his main stroke
+    # alone, then its stems and pips against his whole letter, the main stroke held). And it may add
+    # residuals of its own (b["smooth"]: how sharply its pen turns and presses, so it does so no more
+    # than his letter asks).
+    def wanted(k, names):
+        return any(k == f"{g}:{n}" or k.startswith(f"{g}:{n}.") for n in names)
+    for st in b0.get("fit_stages") or [{}]:
+        ks = [k for k in keys if ("keys" not in st or wanted(k, st["keys"])) and not wanted(k, st.get("exclude", ()))]
+        if not ks:
+            continue
+        rf = ref if st.get("ref") is None else Ref(d, r, keep=st["ref"])
+        only, smooth = st.get("strokes"), st.get("smooth", True)
+        lb, ub = np.array([lb_all[k] for k in ks]), np.array([ub_all[k] for k in ks])
 
-    def resid(x):
-        vals = {**fixed, **dict(zip(keys, x))}
-        try:
-            cs, b = _outline(fn, TL.TParams(g, vals, local))
-        except pathops.PathOpsError:
-            cs = []                   # geometry the union can't settle counts as a bad fit, which steers the search away
-        if not cs:
-            return np.full(700 + len(ref.edges), 50.0)
-        pts = _affine(b.get("fit_affine"), _resample(cs)) - ref.origin
-        return np.concatenate([ref.sd(pts), cKDTree(pts).query(ref.edges)[0]])
+        def resid(x):
+            vals = {**cur, **dict(zip(ks, x))}
+            try:
+                cs, b = _outline(fn, TL.TParams(g, vals, local), only=only)
+            except pathops.PathOpsError:
+                cs = []                   # geometry the union can't settle counts as a bad fit, which steers the search away
+            if not cs:
+                return np.full(700 + len(rf.edges) + len(b0.get("smooth", [])), 50.0)
+            pts = _affine(b.get("fit_affine"), _resample(cs)) - rf.origin
+            extra = np.asarray(b.get("smooth", []), float) if smooth else np.zeros(0)
+            return np.concatenate([rf.sd(pts), cKDTree(pts).query(rf.edges)[0], extra])
 
-    x, cost = x0, None
-    for _ in range(4):
-        r = least_squares(resid, x, bounds=(lb, ub), x_scale=(ub - lb) / 10, diff_step=1e-3, loss="soft_l1", f_scale=1.5, max_nfev=300)
-        x = r.x
-        if cost is not None and cost - r.cost < 1e-3 * cost:
-            break
-        cost = r.cost
-    vals = {**fixed, **dict(zip(keys, map(float, x)))}
-    at_bounds = [k for k, v, lo, hi in zip(keys, x, lb, ub) if min(v - lo, hi - v) < 1e-3 * max(1.0, hi - lo)]
+        x, cost = np.array([cur[k] for k in ks], float), None
+        for _ in range(4):
+            # each measurement stepped by half a percent of its range to find the slopes: a step
+            # relative to its value (least_squares' own) is lost in the outline's rounding for one near
+            # zero (a slide of a few pixels), and needlessly coarse for one far from it (a position)
+            step = 0.005 * (ub - lb) / np.maximum(1.0, np.abs(x))
+            res = least_squares(resid, x, bounds=(lb, ub), x_scale=(ub - lb) / 10, diff_step=step, loss="soft_l1", f_scale=1.5, max_nfev=300)
+            x = res.x
+            if cost is not None and cost - res.cost < 1e-3 * cost:
+                break
+            cost = res.cost
+        cur.update(zip(ks, map(float, x)))
+    vals = {**fixed, **{k: cur[k] for k in keys}}
+    at_bounds = [k for k in keys if min(cur[k] - lb_all[k], ub_all[k] - cur[k]) < 1e-3 * max(1.0, ub_all[k] - lb_all[k])]
     return g, vals, at_bounds
 
 
@@ -348,6 +674,7 @@ def cmd_build(fam: str, fit_only: list[str] | None = None):
     import ufo2ft
     from concurrent.futures import ProcessPoolExecutor
     d = T.family_dir(fam)
+    _load_drawn(d)
     src = T.load_source(fam)
     refs_meta = json.loads((d / "references" / "references.json").read_text())["glyphs"]
     meas = json.loads((d / "measurements.json").read_text())
@@ -434,11 +761,14 @@ def cmd_build(fam: str, fit_only: list[str] | None = None):
     chars = {g: refs_meta[g]["char"] if g in refs_meta else g for g in [*names, *derived]}
     spur = {k: float(v) for k, v in src["spur"].items() if not k.endswith("note")}
     plain_units = {}
+    nopip_units = {}        # letters with their fine stems and pips left off (ss02)
 
-    def params(g, vals, spurs):
+    def params(g, vals, spurs, top_spur=True):
         pp = TL.TParams(g, vals, False, g in derived)
         pp.spur = spur if spurs else None
+        pp.top_spur = top_spur
         return pp
+    space_units = {}        # the letters as they are spaced: without the top spurs leading into first heads
 
     for g in [*names, *derived]:
         if g in derived:
@@ -493,10 +823,51 @@ def cmd_build(fam: str, fit_only: list[str] | None = None):
             if not ck["ok"]:
                 print(f"  {g} without spurs: checks FAIL {json.dumps(ck)}")
             plain_units[g] = pu
+        if b.get("pips"):                                                           # its stems and pips can be left off
+            keep = [i for i in range(len(b["strokes"])) if i not in b["pips"]]
+            cs_np, _ = _outline(TL.LETTERS[g], params(g, vals, True), only=keep)
+            # in the same frame as the whole letter: from its leftmost point, its baseline
+            x_min = float(G.sample([np.asarray(q, float) for c in cs for q in c], 40)[:, 0].min())        # as to_units finds it
+            conv = lambda q: np.round(np.column_stack([(np.asarray(q)[:, 0] - x_min) * scale, (b["baseline"] - np.asarray(q)[:, 1]) * scale]))
+            npu = NB.tidy_units([[conv(q) for q in c] for c in cs_np])
+            ck = K.check_outline(npu, [[f"stroke: node {k}" for k in range(len(c))] for c in npu], smooth_deg=3.0, swell_tol=0.5)
+            if not ck["ok"]:
+                print(f"  {g} without stems and pips: checks FAIL {json.dumps(ck)}")
+            nopip_units[g] = npu
+        cs_sp, b_sp = _outline(TL.LETTERS[g], params(g, vals, True, top_spur=False), marks=True)
+        if sum(map(len, b_sp["strokes"])) != sum(map(len, b["strokes"])):          # it has a top spur
+            bs = {"contours": [[(q, "stroke", f"stroke: node {k}") for k, q in enumerate(c)] for c in cs_sp], "baseline": b_sp["baseline"]}
+            su = NB.tidy_units(K.to_units(bs, scale, 0)[0])
+            # each is put into units from its own leftmost point: line them up by the right, which the top spur leaves alone
+            right = lambda us: max(float(np.asarray(q)[:, 0].max()) for c in us for q in c)
+            space_units[g] = [[np.asarray(q, float) + [right(units) - right(su), 0] for q in c] for c in su]
         print(f"  {g}: {chk_u['segments']} segments in {chk_u['contours']} contour(s); checks {'pass' if chk_u['ok'] else 'FAIL ' + json.dumps(chk_u)}; "
               + (f"built from {derived[g]}'s measurements; Pugin drew no {g}" if g in derived else
                  f"Pugin's body edge from it: mean {dev['mean_px']} px (alone {dev_alone['mean_px']}), 95% within {dev['p95_px']} px")
               + (f"; at bounds: {at_bounds}" if at_bounds else ""))
+    # Josh's drawings that stand beside their letters (y.alt): drawn as they stand, in their letter's frame
+    for a, alt in TL.ALTERNATES.items():
+        g = alt["of"]
+        cs, b = _outline(TL.hand_drawn(a), params(g, refined[g][0], True), marks=True)
+        built = {"contours": [[(q, "stroke", f"stroke: node {k}") for k, q in enumerate(c)] for c in cs], "baseline": b["baseline"]}
+        chk = K.check_outline([[q for q, _, _ in c] for c in built["contours"]], [[nm for _, _, nm in c] for c in built["contours"]], swell_tol=0.2)
+        units, width, origin = K.to_units(built, scale, 0)
+        units = NB.tidy_units(units)
+        chk_u = K.check_outline(units, [[f"stroke: node {k}" for k in range(len(c))] for c in units], smooth_deg=3.0, swell_tol=0.5)
+        dev = _deviation(cs, refs[g], b.get("fit_affine")) if g in refs else None
+        report = {"glyph": a, "char": chars[g], "alternate_of": g, "feature": alt["feature"], "description": TL.hand_drawn(a).__doc__,
+                  "deviation": dev, "deviation_alone": dev, "checks_px": chk, "checks_units": chk_u,
+                  "fit_affine": list(b["fit_affine"]) if b.get("fit_affine") else None,
+                  "contours_px": [[q.tolist() for q in c] for c in cs], "strokes_px": [[q.tolist() for q in s] for s in b["strokes"]],
+                  "units": {"scale_per_px": scale, "baseline_px": b["baseline"], "origin_px": origin, "outline": [[q.tolist() for q in c] for c in units]}}
+        (out / f"{a}.json").write_text(json.dumps(report) + "\n")
+        units_all[a] = units
+        chars[a] = chars[g]
+        print(f"  {a}: {chk_u['segments']} segments in {chk_u['contours']} contour(s); checks {'pass' if chk_u['ok'] else 'FAIL ' + json.dumps(chk_u)}; "
+              f"Josh's drawing, beside {g} under {alt['feature']}" + (f"; Pugin's body edge from it: mean {dev['mean_px']} px, 95% within {dev['p95_px']} px" if dev else ""))
+    for f in out.glob("*.*.json"):          # an alternate no longer drawn
+        if f.stem not in TL.ALTERNATES:
+            f.unlink()
     famp.write_text(json.dumps({"shared": shared, "meaning": {k: v[3] for k, v in TL.FAMILY.items()},
                                 "fitted_alone": fam_before.get("fitted_alone", {}) if not refit_family else
                                 {g: {k.split(':family.')[1]: round(v, 3) for k, v in alone[g].items() if ':family.' in k} for g in names},
@@ -505,26 +876,40 @@ def cmd_build(fam: str, fit_only: list[str] | None = None):
     if "n" in refined:
         v = refined["n"][0]
         pitch = (v["n:stem_2"] - v["n:stem_1"]) * scale      # the minims' pitch inside a letter, in units
-    print(f"  spurs on {len(plain_units)} letters ({', '.join(plain_units)}); without them under ss01")
-    write_font(d, src, units_all, chars, pitch, plain_units)
+    print(f"  spurs on {len(plain_units)} letters ({', '.join(plain_units)}); without them under ss01; "
+          f"spaced without the top spurs of {', '.join(space_units)}")
+    if nopip_units:
+        print(f"  without stems and pips under ss02: {', '.join(nopip_units)}")
+    if TL.ALTERNATES:
+        print("  alternates: " + ", ".join(f"{a} under {alt['feature']} (\"{alt['name']}\")" for a, alt in TL.ALTERNATES.items()))
+    write_font(d, src, units_all, chars, pitch, plain_units, space_units, nopip_units, TL.ALTERNATES)
 
 
-def write_font(d, src, units_all, chars, pitch_units=None, plain_units=None):
-    """Space the letters (spacing.py, over the x-height), write the UFO source and compile it."""
+def write_font(d, src, units_all, chars, pitch_units=None, plain_units=None, space_units=None, nopip_units=None, alternates=None):
+    """Space the letters (spacing.py, over the x-height), write the UFO source and compile it. A
+    letter in space_units is spaced and kerned as drawn there (without the top spur that leads into
+    its first head, a hairline that tucks into the white before it), and set as units_all has it.
+    An alternate (a glyph in alternates, which says its letter and the stylistic set that reaches
+    it) is spaced after the letters, which keep their side bearings, and kerned in its own right."""
     import construct as K
     import spacing as SP
     import ufo2ft
     fc, sp = src["font"], src["spacing"]
+    alternates = alternates or {}
     names = list(units_all)
-    contours = {g: [[np.array(q, float) for q in c] for c in units_all[g]] for g in names}
+    letters = [g for g in names if g not in alternates]
+    drawn = {g: [[np.array(q, float) for q in c] for c in units_all[g]] for g in names}
+    contours = {g: [[np.array(q, float) for q in c] for c in (space_units or {}).get(g, units_all[g])] for g in names}
     profiles = {g: SP.profile(contours[g], (0, fc["x_height"])) for g in names}
     # a textura is spaced like a fence: the white between two letters is the white between a
     # letter's own minims, so two i's stand one minim's pitch apart
-    target = None
-    if pitch_units and "i" in names:
+    target = sp.get("target_white")
+    if target is None and pitch_units and "i" in names:
         xs = np.concatenate([G.sample(c, 40)[:, 0] for c in contours["i"]])
         target = pitch_units - (xs.max() - xs.min()) + SP.pair_white(profiles["i"], profiles["i"], sp["depth"])[0]
-    lsb, rsb, target, white = SP.fit(profiles, names, set(), sp.get("mean_side_bearings", 0), sp["depth"], target=target)
+    lsb, rsb, target, white = SP.fit(profiles, letters, set(), sp.get("mean_side_bearings", 0), sp["depth"], target=target)
+    if alternates:
+        lsb, rsb, white = SP.fit_more(profiles, letters, lsb, rsb, list(alternates), sp["depth"], target)
     glyphs, table, spaced = {}, {}, {}
     dxs = {}
     for g in names:
@@ -532,7 +917,8 @@ def write_font(d, src, units_all, chars, pitch_units=None, plain_units=None):
         dxs[g] = dx
         pts = np.concatenate([G.sample(c, 40) for c in moved])
         spaced[g] = (int(round(pts[:, 0].min())), int(round(width - pts[:, 0].max())))
-        glyphs[g] = {"unicode": ord(chars[g]), "width": width, "contours": moved}
+        glyphs[g] = {"unicode": None if g in alternates else ord(chars[g]), "width": width,
+                     "contours": [[np.array(q, float) + [dx, 0] for q in c] for c in drawn[g]]}
         table[g] = {"left": spaced[g][0], "right": spaced[g][1], "advance": width}
     # above the x-height (ascenders, arms) and below the baseline (descenders, tails) parts need more air
     # than heads and feet, which in a textura this tight all but touch
@@ -572,6 +958,27 @@ def write_font(d, src, units_all, chars, pitch_units=None, plain_units=None):
             kerning[(a, b)] = k
             opened += 1
     print(f"  opened {opened} pair(s) whose parts above or below the x-height came within {need} units on a slant")
+    # a top spur is left out of the spacing, so it tucks into the white before its letter; but it
+    # mustn't touch the letter before: where it comes within the clearance, that pair opens until it doesn't
+    whole = {g: np.concatenate([G.sample(c, 30) for c in glyphs[g]["contours"]]) for g in names}
+    need, tucked = sp.get("clearance_top_spur", sp["clearance"]), 0
+    for b in (space_units or {}):
+        body = cKDTree(np.concatenate([G.sample(c, 30) for c in contours[b]]) + [dxs[b], 0])
+        spur = whole[b][body.query(whole[b])[0] > 2.0]          # what the letter has that it is spaced without
+        if not len(spur):
+            continue
+        for a in names:
+            tree = cKDTree(whole[a])
+            k = kerning.get((a, b), 0)
+            dist = lambda kk: tree.query(spur + [glyphs[a]["width"] + kk, 0])[0].min()
+            if dist(k) >= need:
+                continue
+            while dist(k) < need and k < 300:
+                k += 5
+            kerning[(a, b)] = k
+            tucked += 1
+    if space_units:
+        print(f"  opened {tucked} pair(s) where a top spur came within {need} units of the letter before")
     (d / "spacing.json").write_text(json.dumps({"method": sp, "target_white": round(target, 1), "glyphs": table,
                                                 "kerning": {f"{a} {b}": k for (a, b), k in sorted(kerning.items())}}, indent=1) + "\n")
     glyphs[".notdef"] = {"unicode": None, "width": 500, "contours": K.notdef(500, fc["x_height"])}
@@ -593,14 +1000,33 @@ def write_font(d, src, units_all, chars, pitch_units=None, plain_units=None):
     if plain_units:
         fea = ("feature ss01 {\n    featureNames { name \"Without spurs\"; };\n"
                + "".join(f"    sub {g} by {g}.nospur;\n" for g in plain_units) + "} ss01;\n")
+    # the letters without their fine stems and pips (the s): likewise in the same place and width,
+    # reached through ss02, kerned as their letters are
+    nopip_units = nopip_units or {}
+    for g, pu in nopip_units.items():
+        glyphs[f"{g}.nopips"] = {"unicode": None, "width": glyphs[g]["width"],
+                                 "contours": [[np.array(q, float) + [dxs[g], 0] for q in c] for c in pu]}
+    if nopip_units:
+        fea += ("feature ss02 {\n    featureNames { name \"Without stems and pips\"; };\n"
+                + "".join(f"    sub {g} by {g}.nopips;\n" for g in nopip_units) + "} ss02;\n")
+    # Josh's drawings beside their letters (y.alt): each reached through its own stylistic set, from its
+    # letter or from what an earlier set has made of it
+    for a, alt in alternates.items():
+        g = alt["of"]
+        fea += (f"feature {alt['feature']} {{\n    featureNames {{ name \"{alt['name']}\"; }};\n"
+                + "".join(f"    sub {h} by {a};\n" for h in [g] + ([f"{g}.nospur"] if g in plain_units else []) + ([f"{g}.nopips"] if g in nopip_units else []))
+                + f"}} {alt['feature']};\n")
     groups = {}
     for g in names:
-        members = [g] + ([f"{g}.nospur"] if g in plain_units else [])
+        members = [g] + ([f"{g}.nospur"] if g in plain_units else []) + ([f"{g}.nopips"] if g in nopip_units else [])
         groups[f"public.kern1.{g}"] = members
         groups[f"public.kern2.{g}"] = members
     grouped = {(f"public.kern1.{a}", f"public.kern2.{b}"): k for (a, b), k in kerning.items()}
     font = K.write_ufo(ufo, info, glyphs, fea, grouped)
     font.groups.update(groups)
+    # the script it's for, said outright: with no capitals or figures, macOS can't tell, and its
+    # previews (Finder, Quick Look, Font Book) show only the first two letters instead of the alphabet
+    font.lib["public.openTypeMeta"] = {"dlng": ["Latn"], "slng": ["Latn"]}
     font.save(ufo, overwrite=True)
     otf = d / "build" / f"{fc['postscript_name']}.otf"
     ufo2ft.compileOTF(font).save(otf)
@@ -613,19 +1039,23 @@ def cmd_proof(fam: str):
     letter over Pugin's, with the nib's path, the outline, its nodes, and the fit's numbers."""
     import base64
     import html as H
+    import textura_letters as TL
     d = T.family_dir(fam)
     src = T.load_source(fam)
     refs = json.loads((d / "references" / "references.json").read_text())["glyphs"]
+    _load_drawn(d)
     meas = json.loads((d / "measurements.json").read_text())
     fam_j = json.loads((d / "family.json").read_text())
     otf = d / "build" / f"{src['font']['postscript_name']}.otf"
     lomb = T.FONTS / "pugin-lombardic" / "build" / "PuginLombardicDraft-Regular.otf"
     font_face = lambda name, p: f"@font-face{{font-family:'{name}';src:url(data:font/otf;base64,{base64.b64encode(p.read_bytes()).decode()}) format('opentype')}}"
-    built = [json.loads(p.read_text()) for p in sorted((d / "build").glob("*.json"))]
-    letters = "".join(b["glyph"] for b in built)
+    # each letter, then any alternate beside it (y, y.alt)
+    built = [json.loads(p.read_text()) for p in sorted((d / "build").glob("*.json"), key=lambda p: (p.stem.split(".")[0], p.stem))]
     cards = []
     for b in built:
         g = b["glyph"]
+        if b.get("alternate_of") in refs:       # Josh's drawing beside a letter: over Pugin's letter
+            g = b["alternate_of"]
         if g not in refs:          # a letter Pugin didn't draw: shown on its own
             pts = np.concatenate([G.sample([np.array(q) for q in c], 20) for c in b["contours_px"]])
             o = pts.min(0) - 24
@@ -634,6 +1064,12 @@ def cmd_proof(fam: str):
             r = refs[g]
             o = np.array(r["box_flat_px"][:2], float)
             a = cv2.imread(str(d / r["coverage"]), cv2.IMREAD_GRAYSCALE).astype(np.float32) / 255
+            # room for anything of ours outside his box (the mark over the i stands above it)
+            pts = _affine(b.get("fit_affine"), np.concatenate([G.sample([np.array(q) for q in c], 20) for c in b["contours_px"]]))
+            lo = np.minimum(0, np.floor(pts.min(0) - o - 8)).astype(int)
+            hi = np.maximum(0, np.ceil(pts.max(0) - o + 8 - a.shape[::-1])).astype(int)
+            a = np.pad(a, ((-lo[1], hi[1]), (-lo[0], hi[0])))
+            o = o + lo
         z = 2.0 if max(a.shape) < 300 else 1.4
         aff = b.get("fit_affine")      # a letter Pugin squeezed onto the second line is drawn squeezed over his
         img = cv2.cvtColor(cv2.resize((255 - a * 90).astype(np.uint8), None, fx=z, fy=z, interpolation=cv2.INTER_CUBIC), cv2.COLOR_GRAY2BGR)
@@ -649,10 +1085,14 @@ def cmd_proof(fam: str):
                 cv2.circle(img, tuple(int(v) for v in (_affine(aff, q[:1])[0] - o + .5) * z), 3, (40, 130, 40), -1)
         dv, ck = b["deviation"], b["checks_units"]
         fit = (f"<b>A proposal:</b> Pugin drew no {H.escape(b['char'])}; built from {H.escape(b['derived_from'])}'s fitted measurements." if b.get("derived_from")
+               else f"<b>An alternate</b> (<code>{H.escape(b['glyph'])}</code>, under <code>{H.escape(b['feature'])}</code>). Pugin's body edge from the outline: mean {dv['mean_px']} px, 95% within {dv['p95_px']} px." if b.get("alternate_of")
                else f"Pugin's body edge from the outline: mean {dv['mean_px']} px (fitted alone {b['deviation_alone']['mean_px']}), 95% within {dv['p95_px']} px.")
-        cards.append(f"""<figure class="card"><img src="{T._png_uri(img)}" alt="{H.escape(b['char'])}{'' if b.get('derived_from') else " over Pugin's"}">
+        edit = "" if b.get("derived_from") or b.get("alternate_of") or g in TL.DRAWN or g in TL.OUTLINES else f' <button class="edit" data-edit="{H.escape(g)}">Edit strokes</button>'
+        if g in TL.PENNABLE:
+            edit += f' <button class="edit" data-pen="{H.escape(g)}">Draw the stroke</button>'
+        cards.append(f"""<figure class="card" id="g-{H.escape(b['glyph'])}"><img src="{T._png_uri(img)}" alt="{H.escape(b['char'])}{'' if b.get('derived_from') else " over Pugin's"}">
 <figcaption><b>{H.escape(b['char'])}</b> {H.escape(b['description'])}<br>
-{fit} {ck['segments']} segments in {ck['contours']} contour(s); outline checks {'pass' if ck['ok'] else 'FAIL'}.</figcaption></figure>""")
+{fit} {ck['segments']} segments in {ck['contours']} contour(s); outline checks {'pass' if ck['ok'] else 'FAIL'}.{edit}</figcaption></figure>""")
     # phrases set with a Lombardic initial; only those whose letters are all built (Pugin drew no u, j or w)
     have = {b["char"] for b in built}
     phrases = [w for w in ("Kyrie eleison", "Gloria in excelsis deo", "Agnus dei", "Dominus vobiscum", "Te deum laudamus", "Ave maris stella",
@@ -681,6 +1121,51 @@ h1{{font-weight:normal;margin:0 0 4px}} h2{{font-weight:normal;margin:40px 0 8px
 .card img{{max-width:100%;height:auto;display:block}} figcaption{{font-size:14px;margin-top:6px}}
 table{{border-collapse:collapse}} th,td{{text-align:left;padding:3px 10px;border-bottom:1px solid var(--rule);font-weight:normal}} td{{font-variant-numeric:tabular-nums}}
 img.plate{{max-width:100%;height:auto}}
+button.edit{{display:none;margin-left:6px;font:inherit;font-size:13px}} .has-api button.edit{{display:inline}}
+#se{{position:fixed;inset:0;background:var(--paper);z-index:10;display:flex;flex-direction:column}} #se[hidden]{{display:none}}
+body.se-open{{overflow:hidden}}
+#se header{{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 14px;padding:10px 16px;border-bottom:1px solid var(--rule)}}
+#se header h3{{margin:0;font-weight:normal;font-size:22px}} #se header .sp{{flex:1}}
+#se header button{{font:inherit;font-size:14px}}
+#se-status{{font-size:14px;padding:6px 16px;border-bottom:1px solid var(--rule)}} #se-status .bad{{color:var(--red)}} #se-status pre{{white-space:pre-wrap;font-size:12px}}
+#se.busy header button{{opacity:.4;pointer-events:none}}
+#se .body{{flex:1;display:flex;min-height:0}}
+#se-svg{{flex:1;min-width:0;height:100%;background:#fff;touch-action:none;user-select:none}}
+#se aside{{width:360px;overflow:auto;padding:8px 12px;border-left:1px solid var(--rule);font-size:13px}}
+#se aside h4{{margin:12px 0 2px;font-weight:normal;font-style:italic;color:#6b6157}}
+#se-desc{{font-size:13px;color:#6b6157;margin:4px 0 6px}} #se summary{{cursor:pointer;color:#6b6157}} .se-help{{font-size:12px;color:#6b6157;margin:6px 0}}
+.se-row{{display:grid;grid-template-columns:96px 1fr 64px;gap:2px 6px;align-items:center}}
+.se-row label{{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}} .se-row input[type=number]{{width:64px;font:inherit}}
+.se-row .se-held{{grid-column:2/4;font-size:11px;color:var(--blue)}} .se-row .se-held:empty{{display:none}}
+.se-row .se-held button{{font:inherit;font-size:11px;padding:0 4px}}
+.se-row.moved label{{color:var(--red);font-weight:bold}}
+.se-ref{{filter:invert(1);opacity:.28}}
+.se-outline{{fill:rgba(184,68,47,.22);stroke:var(--red);stroke-width:1;vector-effect:non-scaling-stroke}}
+.se-pens path{{fill:none;stroke:#e09a2b;stroke-width:1;vector-effect:non-scaling-stroke}}
+.se-node{{fill:#fff;stroke:#2c7a3a;stroke-width:1.5;vector-effect:non-scaling-stroke;cursor:grab}}
+.se-node.held{{stroke:var(--blue)}} .se-node.moved{{fill:var(--red)}} .se-node.sel{{stroke-width:3}}
+.se-tag{{font-family:Georgia,serif;fill:#2c7a3a;pointer-events:none}}
+#se-many{{display:none;flex:1;min-width:0;background:#fff;gap:6px;padding:8px;overflow:auto;grid-template-columns:repeat(5,minmax(0,1fr));align-content:start}}
+#se.group #se-many{{display:grid}} #se.group #se-svg{{display:none}}
+#se-many figure{{margin:0}} #se-many svg{{width:100%;height:auto;display:block}} #se.group .se-help{{display:none}} #se-many figcaption{{text-align:center;font-size:14px}}
+.se-row.se-wide{{grid-template-columns:1fr 64px;margin-bottom:8px}} .se-row.se-wide label{{grid-column:1/3;white-space:normal}} .se-row.se-wide input[type=range]{{grid-column:1/2}}
+#pe{{position:fixed;inset:0;background:var(--paper);z-index:11;display:flex;flex-direction:column}} #pe[hidden]{{display:none}}
+#pe header{{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 14px;padding:10px 16px;border-bottom:1px solid var(--rule)}}
+#pe header h3{{margin:0;font-weight:normal;font-size:22px}} #pe header .sp{{flex:1}} #pe header button,#pe header label{{font:inherit;font-size:14px}}
+#pe-status{{font-size:14px;padding:6px 16px;border-bottom:1px solid var(--rule)}} #pe-status .bad{{color:var(--red)}}
+#pe.busy header button{{opacity:.4;pointer-events:none}}
+#pe .body{{flex:1;display:flex;min-height:0}}
+#pe-svg{{flex:1;min-width:0;height:100%;background:#fff;touch-action:none;user-select:none}}
+#pe aside{{width:380px;overflow:auto;padding:8px 12px;border-left:1px solid var(--rule);font-size:13px}}
+.pe-hand{{opacity:.22}} .pe-outline{{fill:rgba(184,68,47,.2);stroke:var(--red);stroke-width:1;vector-effect:non-scaling-stroke}}
+.pe-path{{fill:none;stroke:#e09a2b;stroke-width:1;vector-effect:non-scaling-stroke;cursor:copy}}
+.pe-nib{{stroke:#2a6fb0;stroke-width:2;vector-effect:non-scaling-stroke;opacity:.7}} .pe-nib.sel{{opacity:1;stroke-width:3}}
+.pe-turn{{fill:#2a6fb0;stroke:#fff;stroke-width:1;vector-effect:non-scaling-stroke;cursor:alias}}
+.pe-pt{{fill:#fff;stroke:#2c7a3a;stroke-width:1.5;vector-effect:non-scaling-stroke;cursor:grab}} .pe-pt.sel{{fill:#2c7a3a}}
+.pe-row{{display:grid;grid-template-columns:22px repeat(4,1fr) 22px;gap:2px 4px;align-items:center;padding:1px 2px}}
+.pe-row input[type=number]{{width:100%;font:inherit;font-size:12px}} .pe-row.sel{{background:#e9efe2}} .pe-row.head{{color:#6b6157;font-size:11px}}
+#pe.no-ref .se-ref,#pe.no-hand .pe-hand,#pe.no-nibs .pe-nibs{{display:none}}
+@media (max-width:800px){{#se .body{{flex-direction:column}} #se aside{{width:auto;height:40%;border-left:0;border-top:1px solid var(--rule)}}}}
 </style></head><body><main>
 <h1>Pugin Textura <small>(working name)</small></h1>
 <p class="lede">The small alphabet of plate 9, which Pugin dates to the latter part of the fifteenth century, written again with a simulated broad nib
@@ -691,6 +1176,12 @@ alternates on the same strokes. Built so far: <b>{H.escape(' '.join(sorted(b["ch
 <p class="lede">Free feet carry on into a <b>spur</b>, a short hairline up and to the right, as Pugin's do. They are on by default; the stylistic set
 <code>ss01</code> ("Without spurs") drops them, keeping each letter's width and kerning. The same words without spurs:</p>
 <p class="set small" style="font-feature-settings:'ss01'">{plain}</p>
+<p class="lede">The s's fine stems and pips are on by default; the stylistic set <code>ss02</code> ("Without stems and pips") leaves them off, keeping its
+width and kerning. The same words with <code>ss02</code>:</p>
+<p class="set small" style="font-feature-settings:'ss02'">{plain}</p>
+<p class="lede">Josh's own y, drawn by hand, stands beside the y built from Pugin's: the stylistic set <code>ss03</code> ("Alternate y")
+sets it, spaced and kerned in its own right. The same words with <code>ss03</code>:</p>
+<p class="set small" style="font-feature-settings:'ss03'">{plain}</p>
 <h2>Pugin's alphabet</h2>
 <img class="plate" src="{T._png_uri(row, '.jpg', 82)}" alt="The textura minuscule on plate 9">
 <h2>The pen</h2>
@@ -701,8 +1192,38 @@ Settled by the fit, shared by every letter:</p>
 <h2>The letters over Pugin's</h2>
 <p class="lede">Orange: the path the nib follows. Red: the outline it leaves. Green dots: its nodes. Grey: Pugin's letter, flourishes included; the fit
 leaves out his hairlines, which the plain forms don't have.</p>
+<p class="lede">With the local proof server running (<code>font-proofs</code>: <code>tools/type/type.py serve</code>), each letter Pugin drew has
+<b>Edit strokes</b>: drag a stroke's nodes, or set its settings, and the letter is drawn again as you go. Saving holds what you changed in the letter's
+recipe, so every build keeps it (decision 0012). <button class="edit" data-edit-group="split_top">Edit the split top</button> tunes the
+split top that b, d, h, k and l share, on all five at once.</p>
 <div class="cards">{''.join(cards)}</div>
-</main></body></html>"""
+</main>
+<div id="se" hidden>
+<header><h3 id="se-title"></h3><span class="sp"></span>
+<button data-act="undo">Undo</button><button data-act="reset">Back to saved</button><button data-act="save">Save</button>
+<button data-act="rebuild">Save and rebuild</button><button data-act="close">Close</button></header>
+<div id="se-status"></div>
+<div class="body"><svg id="se-svg" xmlns="http://www.w3.org/2000/svg"></svg><div id="se-many"></div>
+<aside><details><summary>How this letter is drawn</summary><p id="se-desc"></p></details>
+<p class="se-help">Drag a node; arrow keys nudge it (Shift for more). Set the rest with their sliders. Blue: held. Red: changed, not yet saved.</p>
+<div id="se-list"></div></aside></div>
+</div>
+<div id="pe" hidden>
+<header><h3 id="pe-title"></h3><span class="sp"></span>
+<label><input type="checkbox" data-show="ref" checked> Pugin</label><label><input type="checkbox" data-show="hand" checked> drawing</label>
+<label><input type="checkbox" data-show="nibs" checked> nibs</label>
+<button data-act="undo">Undo</button><button data-act="reset">Back to saved</button><button data-act="save">Save</button>
+<button data-act="rebuild">Save and rebuild</button><button data-act="close">Close</button></header>
+<div id="pe-status"></div>
+<div class="body"><svg id="pe-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+<aside><p class="se-help">Each point: where the pen is, the nib's angle and how hard it's pressed. Drag a point to move it, the round end of
+its nib to turn it. Double-click the path to add a point; Delete removes one; C makes it a corner. Arrow keys move it (Shift for more),
+[ and ] turn the nib, &minus; and = change the pressure.</p>
+<div id="pe-list"></div></aside></div>
+</div>
+<script>{(Path(__file__).parent / "textura_editor.js").read_text()}</script>
+<script>{(Path(__file__).parent / "textura_pen.js").read_text()}</script>
+</body></html>"""
     (d / "proof").mkdir(exist_ok=True)
     (d / "proof" / "index.html").write_text(page)
     print(f"  wrote {(d / 'proof' / 'index.html').relative_to(ROOT)} ({len(page) // 1024} KB)")

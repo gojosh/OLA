@@ -57,6 +57,41 @@ def transform(segs, M=np.eye(2), t=(0.0, 0.0)):
     return [P @ np.asarray(M).T + np.asarray(t) for P in segs]
 
 
+def read_svg(path):
+    """The closed paths of an SVG file (absolute M, L, C and Z, as a drawing program writes them),
+    as contours of cubics, in the SVG's own units (y down)."""
+    import re
+    src = open(path).read()
+    out = []
+    for d in re.findall(r'<path[^>]*\sd="([^"]+)"', src):
+        toks = re.findall(r'[MLCZ]|-?\d*\.?\d+(?:e-?\d+)?', d)
+        i, cur, start, segs, cmd = 0, None, None, [], None
+        while i < len(toks):
+            t = toks[i]
+            if t in "MLCZ":
+                cmd, i = t, i + 1
+                if cmd == "Z":
+                    if np.linalg.norm(cur - start) > 1e-9:
+                        segs.append(np.array([cur, cur + (start - cur) / 3, cur + 2 * (start - cur) / 3, start]))
+                    out.append(segs)
+                    segs, cur = [], start
+                continue
+            n = {"M": 2, "L": 2, "C": 6}[cmd]
+            v, i = np.array(toks[i:i + n], float), i + n
+            if cmd == "M":
+                cur, start, cmd = v.copy(), v.copy(), "L"
+            elif cmd == "L":
+                segs.append(np.array([cur, cur + (v - cur) / 3, cur + 2 * (v - cur) / 3, v]))
+                cur = v
+            else:
+                q = v.reshape(3, 2)
+                segs.append(np.array([cur, q[0], q[1], q[2]]))
+                cur = q[2]
+        if segs:
+            out.append(segs)
+    return out
+
+
 def reverse(segs):
     return [P[::-1].copy() for P in segs[::-1]]
 

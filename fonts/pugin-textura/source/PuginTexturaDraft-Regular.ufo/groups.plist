@@ -47,6 +47,7 @@
     <key>public.kern1.j</key>
     <array>
       <string>j</string>
+      <string>j.nospur</string>
     </array>
     <key>public.kern1.k</key>
     <array>
@@ -94,6 +95,7 @@
     <key>public.kern1.s</key>
     <array>
       <string>s</string>
+      <string>s.nopips</string>
     </array>
     <key>public.kern1.t</key>
     <array>
@@ -120,6 +122,10 @@
     <key>public.kern1.y</key>
     <array>
       <string>y</string>
+    </array>
+    <key>public.kern1.y.alt</key>
+    <array>
+      <string>y.alt</string>
     </array>
     <key>public.kern1.z</key>
     <array>
@@ -170,6 +176,7 @@
     <key>public.kern2.j</key>
     <array>
       <string>j</string>
+      <string>j.nospur</string>
     </array>
     <key>public.kern2.k</key>
     <array>
@@ -217,6 +224,7 @@
     <key>public.kern2.s</key>
     <array>
       <string>s</string>
+      <string>s.nopips</string>
     </array>
     <key>public.kern2.t</key>
     <array>
@@ -243,6 +251,10 @@
     <key>public.kern2.y</key>
     <array>
       <string>y</string>
+    </array>
+    <key>public.kern2.y.alt</key>
+    <array>
+      <string>y.alt</string>
     </array>
     <key>public.kern2.z</key>
     <array>

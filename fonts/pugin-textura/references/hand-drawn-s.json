@@ -1,0 +1,9 @@
+{
+ "glyph": "s",
+ "scale": 1.0017,
+ "offset": [
+  2350.592,
+  3321.428
+ ],
+ "note": "hand-drawn-s.svg, Josh's own drawing of the whole s (main stroke, fine stems and pips), placed on the plate: a point (u, v) of it is plate (offset + scale * (u, v)). Found by the scale and offset that overlap it best with Pugin's ink (80% overlap); 1.0017, so drawn at one unit to the plate's pixel. The build draws the s from it (decision 0014)."
+}

@@ -2,7 +2,7 @@
  "glyph": "g",
  "unicode": "U+0067",
  "construction": "textura_letters.py: g",
- "description": "o's two strokes, meeting at the upper left in one concave curve (concave_top), the right one running on past\nthe baseline and sweeping round to the left under the letter, and a small ear to the right at\nthe top. The bowl is wider than o's, so the left stroke's foot runs on to meet the right one.\nPugin's tail ends in a hairline curl; plain, it stops with the nib's cut.",
+ "description": "o's two strokes, meeting at the upper left in one concave curve (concave_top), the right one running on past\nthe baseline and sweeping round to the left under the letter, and a small ear to the right at\nthe top. The bowl is wider than o's, so the left stroke's foot runs on to meet the right one.\nPugin's tail ends in a hairline curl; plain, it stops with the nib's cut.\nJosh has since drawn it himself over Pugin's (references/hand-drawn-g.svg; decision 0014): the\nleft stroke with the arm and ear, and the right stroke with the tail, two shapes kept apart by\nthe hairlines of white Pugin leaves where they meet.",
  "measured": {
   "left": {
    "x": 900.229,
@@ -46,14 +46,14 @@
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/g.png",
-  "when": "2026-10-29T09:21:59"
+  "when": "2026-10-29T17:31:51"
  },
  "fit": {
-  "mean_px": 6.5,
-  "p95_px": 20.64,
-  "max_px": 33.6,
+  "mean_px": 1.25,
+  "p95_px": 3.47,
+  "max_px": 6.15,
   "mean_px_fitted_alone": 5.93,
-  "segments": 53,
+  "segments": 50,
   "outline_checks_pass": true,
   "at_bounds": [
    "g:tail.turn.x",

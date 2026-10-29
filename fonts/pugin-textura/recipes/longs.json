@@ -53,10 +53,10 @@
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/longs.png",
-  "when": "2026-10-29T09:21:59"
+  "when": "2026-10-29T17:31:51"
  },
  "fit": {
-  "mean_px": 2.87,
+  "mean_px": 2.88,
   "p95_px": 9.56,
   "max_px": 19.13,
   "mean_px_fitted_alone": 2.74,

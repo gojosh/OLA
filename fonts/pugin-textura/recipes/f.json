@@ -53,7 +53,7 @@
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/f.png",
-  "when": "2026-10-29T09:21:59"
+  "when": "2026-10-29T17:31:51"
  },
  "fit": {
   "mean_px": 31.25,

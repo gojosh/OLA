@@ -36,6 +36,8 @@
     <string>i.nospur.glif</string>
     <key>j</key>
     <string>j.glif</string>
+    <key>j.nospur</key>
+    <string>j.nospur.glif</string>
     <key>k</key>
     <string>k.glif</string>
     <key>k.nospur</key>
@@ -70,6 +72,8 @@
     <string>r.nospur.glif</string>
     <key>s</key>
     <string>s.glif</string>
+    <key>s.nopips</key>
+    <string>s.nopips.glif</string>
     <key>space</key>
     <string>space.glif</string>
     <key>t</key>
@@ -88,6 +92,8 @@
     <string>x.glif</string>
     <key>y</key>
     <string>y.glif</string>
+    <key>y.alt</key>
+    <string>y.alt.glif</string>
     <key>z</key>
     <string>z.glif</string>
   </dict>

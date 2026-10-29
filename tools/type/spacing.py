@@ -83,6 +83,38 @@ def fit(profiles, letters, symmetric, mean_side_bearings, depth, huber=20.0, tar
     return {g: float(sol[ix[g]]) for g in letters}, {g: float(sol[n + ix[g]]) for g in letters}, target, white
 
 
+def fit_more(profiles, letters, lsb, rsb, more, depth, target, huber=20.0):
+    """Side bearings for more letters (alternates) against letters already spaced, which keep theirs:
+    fitted as `fit` fits them, every pair's white as near as it can come to the target. Returns the
+    side bearings and the pairs' whites, the new letters' added."""
+    allg = [*letters, *more]
+    n = len(more)
+    ix = {g: i for i, g in enumerate(more)}
+    white = {(a, b): pair_white(profiles[a], profiles[b], depth) for a in allg for b in allg}
+    rows, rhs = [], []
+    for (a, b), (w, _) in white.items():          # a's right side bearing + b's left = target − white
+        if a not in ix and b not in ix:
+            continue
+        r, known = np.zeros(2 * n), 0.0
+        if a in ix:
+            r[n + ix[a]] += 1
+        else:
+            known += rsb[a]
+        if b in ix:
+            r[ix[b]] += 1
+        else:
+            known += lsb[b]
+        rows.append(r)
+        rhs.append(target - w - known)
+    A, B = np.array(rows), np.array(rhs)
+    wt = np.ones(len(B))
+    for _ in range(25):
+        sol = np.linalg.lstsq(A * wt[:, None], B * wt, rcond=None)[0]
+        off = np.abs(A @ sol - B)
+        wt = np.sqrt(np.where(off <= huber, 1.0, huber / np.maximum(off, 1e-9)))
+    return ({**lsb, **{g: float(sol[ix[g]]) for g in more}}, {**rsb, **{g: float(sol[n + ix[g]]) for g in more}}, white)
+
+
 def kern(white, letters, side_bearings, target, threshold, clearance, closest_over=None, clearance_over=None):
     """Kerning for the pairs the side bearings leave more than `threshold` off the target, in steps
     of 5 units, and for any pair that would come closer than `clearance`. side_bearings maps each

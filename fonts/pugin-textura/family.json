@@ -16,7 +16,12 @@
   "top": 3339.849,
   "nib_angle_foot": 50.0,
   "nib_light": 0.8,
-  "top_leave": 13.0
+  "top_leave": 13.0,
+  "fork_notch": 15.5,
+  "fork_flare": 70.0,
+  "fork_out": 14.0,
+  "fork_tip": 3.0,
+  "fork_lean": 32.0
  },
  "meaning": {
   "nib_width": "the nib's width (px)",
@@ -25,6 +30,11 @@
   "nib_thickness": "the nib's thickness: the width of a hairline (px)",
   "nib_light": "the nib's width in a stroke written with less pressure, as a share of its full width (c's top, e's arm, a's top bowl)",
   "top_leave": "the angle at which the concave top of c, d, e, g and s leaves the stem's top corner, rising to the right, before it steepens to the nib's own angle at the peak (degrees)",
+  "fork_notch": "the split top of b, d, h, k and l: how deep its notch runs below the tips' tops (px)",
+  "fork_flare": "the split top: how far below the tips' tops the stem begins to widen into it (px)",
+  "fork_out": "the split top: how far each tip stands out beyond the stem's edge (px)",
+  "fork_tip": "the split top: the radius of each horn's rounded tip (px)",
+  "fork_lean": "the split top: how far from upright each horn's outer edge runs into its tip (degrees)",
   "head": "how far right the head's stroke travels before the stem (px)",
   "head_angle": "the head stroke's slope, falling to the right (degrees)",
   "head_turn": "how far down the stem the pen settles out of its turn from the head (px)",

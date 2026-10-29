@@ -59,12 +59,12 @@
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/z.png",
-  "when": "2026-10-29T09:21:59"
+  "when": "2026-10-29T17:31:51"
  },
  "fit": {
   "mean_px": 8.73,
-  "p95_px": 25.01,
-  "max_px": 34.51,
+  "p95_px": 24.94,
+  "max_px": 34.53,
   "mean_px_fitted_alone": 8.64,
   "segments": 33,
   "outline_checks_pass": true,

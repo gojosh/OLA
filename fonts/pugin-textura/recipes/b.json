@@ -22,14 +22,14 @@
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/b.png",
-  "when": "2026-10-29T09:21:59"
+  "when": "2026-10-29T17:31:51"
  },
  "fit": {
-  "mean_px": 9.81,
-  "p95_px": 54.04,
-  "max_px": 68.0,
+  "mean_px": 10.44,
+  "p95_px": 55.19,
+  "max_px": 75.4,
   "mean_px_fitted_alone": 6.58,
-  "segments": 41,
+  "segments": 42,
   "outline_checks_pass": true,
   "at_bounds": []
  }

@@ -1,0 +1,22 @@
+{
+ "glyph": "y.alt",
+ "alternate": {
+  "feature": "ss03",
+  "name": "Alternate y"
+ },
+ "description": "Josh's own y, drawn by hand over Pugin's (references/hand-drawn-y-2.svg; decision 0014): an alternate to the y built from Pugin's, reached through the stylistic set ss03 (Josh: \"lets add this as an alternate to the y that you made\"). Spaced and kerned in its own right.",
+ "scale": 0.99446,
+ "offset": [
+  1264.841,
+  3321.6
+ ],
+ "on_plate": [
+  1,
+  0,
+  0,
+  0,
+  1,
+  232.0
+ ],
+ "note": "hand-drawn-y-2.svg, Josh's own y, modified from his first (hand-drawn-y.svg, traced over Pugin's on the plate's second line) and 24 units taller. In the first's units (0.9945 to the plate's pixel, its top at the same place), at its own size, its top level with the other letters' heads (Josh: \"I just saved a version I modified - try that one, same way - top aligned\"). A point (u, v) of it is (offset + scale * (u, v)). on_plate moves it back down onto Pugin's y for the proof card (a, b, c, d, e, f: x' = a x + b y + c, y' = d x + e y + f)."
+}

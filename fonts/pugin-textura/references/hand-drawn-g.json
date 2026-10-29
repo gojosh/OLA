@@ -1,0 +1,9 @@
+{
+ "glyph": "g",
+ "scale": 1.0,
+ "offset": [
+  851.819,
+  3303.358
+ ],
+ "note": "hand-drawn-g.svg, Josh's own g (Josh: \"can you export g as an svg, so I can improve it?\", then \"Ok - I dropped in hand-drawn-g\"), drawn over references/export-g.svg (the built g over Pugin's, one unit to the plate's pixel) and saved trimmed to the drawing. At one unit to the pixel, placed where it overlaps Pugin's ink best (92%; the box of his ink starts at 852, 3304). A point (u, v) of it is (offset + scale * (u, v))."
+}

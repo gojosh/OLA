@@ -2,7 +2,7 @@
  "glyph": "l",
  "unicode": "U+006C",
  "construction": "textura_letters.py: l",
- "description": "A minim rising to the ascender line, its top forked: the head stroke comes in from the upper\nleft, and a short spur leaves up and to the right. On the plate the spur runs on as a thick arm\ninto a hairline flourish; plain, it stops short, so the l can't be taken for a long s.",
+ "description": "A minim rising to the ascender line, its top split into two horns with rounded tips, the same\nsplit top as b, d, h and k have (split_top). On the plate Pugin's horns run on into hairline\nloops; those will be alternates.",
  "measured": {
   "stem_x": 1400.479,
   "arm": {
@@ -17,14 +17,14 @@
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/l.png",
-  "when": "2026-10-29T09:21:59"
+  "when": "2026-10-29T17:31:51"
  },
  "fit": {
-  "mean_px": 8.04,
-  "p95_px": 53.41,
-  "max_px": 75.72,
+  "mean_px": 9.37,
+  "p95_px": 62.46,
+  "max_px": 84.98,
   "mean_px_fitted_alone": 7.64,
-  "segments": 30,
+  "segments": 28,
   "outline_checks_pass": true,
   "at_bounds": [
    "l:arm.reach",

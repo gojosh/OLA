@@ -2,23 +2,9 @@
  "glyph": "e",
  "unicode": "U+0065",
  "construction": "textura_letters.py: e",
- "description": "A stem with a flat top, an arm (written with less pressure) leaving its top to the right, the two\nmeeting in a concave curve at the upper left as in c (concave_top), and a hairline from the stem\nup to the arm's end, closing the eye. Pugin's hairline ends in a ball inside the eye; plain, it\ndoesn't.",
+ "description": "A stem with a flat top, an arm (written with less pressure) leaving its top in a straight wedge\ndown to the right, into the crossing member's curl, as the c's top is (Josh: \"it should point\nmuch more directly downward, instead of swooping up\"), the two meeting in a concave curve at the\nupper left as in c (concave_top), and the crossing member: a thin cradling stroke drawn with the\ntip of the nib, with a pip at each end (Josh: \"for the crossing member, there is a thin cradling\nstem with a pip at each end, crafted with the tip of the nib\"). From the top pip it leaves near\nthe pip's top and curls over it, down to its rightmost point round the arm's end (Josh: \"The top\npip's cradling should originate a bit more from the top\"). Then one gentle S, heading straight\ndown at both ends (Josh: \"gentle sweeping S curve for the crossmember\"), sweeps down to the left\nunder the arm's tip to where it touches the stem. Then it turns under the bottom pip and meets it\nfrom beneath (Josh: \"The bottom pip should be cradled from the bottom\"). It meets each pip\ncradling it (cradle), so each pip lies in its curl. Where it touches the stem its ink overlaps\nthe stem's edge by a quarter of a hairline, closing the eye, as Pugin's does.",
  "measured": {
   "stem_x": 678.359,
-  "arm": {
-   "to": {
-    "x": 754.439,
-    "y": 3356.883,
-    "heading": 19.869
-   },
-   "from": {
-    "x": 697.789,
-    "y": 3336.437,
-    "heading": 42.814,
-    "t1": 0.83,
-    "t2": 0.752
-   }
-  },
   "hairline": {
    "from": {
     "x": 701.255,
@@ -30,18 +16,59 @@
    }
   },
   "stem_top": 3336.726,
+  "arm": {
+   "from": {
+    "x": 698.597,
+    "y": 3336.046
+   },
+   "to": {
+    "x": 740.915,
+    "y": 3370.998
+   }
+  },
+  "member": {
+   "top": {
+    "at": -65.0,
+    "x": 753.925,
+    "y": 3328.935,
+    "pip": 10.429
+   },
+   "end": {
+    "at": 100.0,
+    "pip": 10.0
+   },
+   "low": {
+    "y": 3408.809
+   },
+   "s": {
+    "t2": 0.426,
+    "t1": 0.612
+   },
+   "curl": {
+    "ease": 1.76
+   },
+   "turn": {
+    "ease": 4.407
+   }
+  },
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/e.png",
-  "when": "2026-10-29T09:21:59"
+  "when": "2026-10-29T17:31:51"
  },
  "fit": {
-  "mean_px": 3.73,
-  "p95_px": 10.1,
-  "max_px": 21.13,
+  "mean_px": 2.43,
+  "p95_px": 6.16,
+  "max_px": 8.6,
   "mean_px_fitted_alone": 2.91,
-  "segments": 36,
+  "segments": 70,
   "outline_checks_pass": true,
   "at_bounds": []
- }
+ },
+ "held": {
+  "member.top.at": -65.0,
+  "member.end.at": 100.0,
+  "member.end.pip": 10.0
+ },
+ "held_note": "Where the crossing member meets its pips, held at Josh's direction rather than where the fit puts them. member.top.at, -65°: near the top pip's top, so the stroke curls over it (the fit put it at -33°). Josh: \"The top pip's cradling should originate a bit more from the top, whereas right now it originates more from the right side.\" member.end.at, 100°: from beneath the bottom pip, so it rests on the curl. Josh: \"The bottom pip should be cradled from the bottom, whereas now, we punch into the right side.\" (2026-10-29) member.end.pip, 10 px: the bottom pip's radius, held at Pugin's size (about 20 px across on the plate); left free, the fit grew it to 13 to fill his stroke's ink along the stem. Josh: \"The bottom pip is too large in that render...\" (2026-10-29)"
 }

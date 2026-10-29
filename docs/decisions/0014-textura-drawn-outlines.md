@@ -1,0 +1,39 @@
+# 0014 — The textura's s and g are Josh's own outlines, drawn in a drawing program over Pugin's
+
+- **Status:** accepted
+- **Date:** 2026-10-29
+- **Decided by:** Josh Goforth
+
+## Context
+The s was modelled as one stroke of a turning, pressing pen, fitted to Pugin's letter and to Josh's painting of its main stroke, then given a pen editor for Josh to draw it point by point (decision 0013). Josh: "Ok - that ended up not being useful for the s. I drew it myself, and dropped it as an SVG in the references folder." ([brief](../brief/2026-10-29-textura-s-outline.md))
+
+## Decision
+Josh: "I drew it myself, and dropped it as an SVG in the references folder."
+
+- **The s is his outline.** `fonts/pugin-textura/references/hand-drawn-s.svg`, as he drew it: the main stroke, and each fine stem with its pip, three closed paths.
+- **Placed on the plate** by the scale and offset that overlap it best with Pugin's ink: one unit to the plate's pixel (1.0017), its corner at plate (2350.6, 3321.4), 80% overlap. Kept beside it, `hand-drawn-s.json`.
+- **Built as it stands.** Wherever such a drawing exists (`references/hand-drawn-<g>.svg` with its `.json`), the build, the fit and the editors draw the letter from it (`textura_letters.OUTLINES`), ahead of a pen editor's drawing (decision 0013) or the construction. Its paths are filled and joined, and the outline is tidied as every other is (a node at each extreme, near nodes merged), which keeps it within 0.35 px of his curves, less than a font unit. Nothing of it is fitted. It is spaced and kerned as every letter is.
+
+## Stems and pips, on or off
+Josh: "And you have the stems able to enabled and disabled (however this type of customization works with opentype)?" The s's fine stems and pips (the drawing's two smaller paths) are on by default; the stylistic set `ss02`, "Without stems and pips", swaps in `s.nopips`, the drawing's main stroke alone, in the same place and width and kerned as the s is, as `ss01` does for the spurs.
+
+## The y, drawn the same way
+Josh: "Good. I just added hand-drawn-y." He traced it over Pugin's y, which stands on the plate's second line, shorter than the first line's letters (its body about 72% of their x-height). Its stems are as wide as theirs (36–37 px against 35–36): Pugin drew it with the same pen, shorter.
+
+- Stretched upright to full height (Josh's first choice: "Stretch it all vertically"), its heads and diagonals were drawn out with it. Josh: "Vertical stretch didn't work - maybe scale up?" Scaled up evenly, its stems would be half again as heavy as the rest. Lengthening only the straight middle of its stems, with or without its tail, kept its weight. Shown all four: "hmm - I think it's none of those actually. What if we use it actual size that pugin provides, and align the top with the rest of the characters?"
+- **So the y is at its own size**, its top lifted level with the other letters' heads. Josh, of his traced y placed so: "Yeah, that's not quite it either - I just saved a version I modified - try that one, same way - top aligned." His modified y (`hand-drawn-y-2.svg`, 24 units taller) is placed the same way, in the first's units (0.9945 to the plate's pixel), its top at the heads (`hand-drawn-y-2.json`). Its tail turns about 30 px below the baseline. The first drawing is kept beside it, unused (the build reads a drawing only with a placement beside it). `on_plate` moves it back onto Pugin's y for the proof card.
+- **And it is an alternate.** Josh: "Ok - good enough for now - lets add this as an alternate to the y that you made." ([brief](../brief/2026-10-29-textura-y.md)) The y is again the construction: v's two strokes, the right running on into a tail, fitted to Pugin's y (4.3 px), exactly as it was before the drawing. Josh's is `y.alt`, reached through the stylistic set `ss03`, "Alternate y". A placement says so (`"glyph": "y.alt"` and an `alternate`: the set and its name, in `hand-drawn-y-2.json`), and the build draws the glyph from the drawing as it stands, beside its letter rather than for it (`textura_letters.ALTERNATES`). It is a different shape, not the y less a part as the `ss01` and `ss02` alternates are, so it is spaced and kerned in its own right: its side bearings are fitted against the letters, which keep theirs (`spacing.fit_more`), and it has its own kerning group. Nothing else moved.
+
+## The g, drawn over the built one
+Josh: "can you export g as an svg, so I can improve it?" Given the built g over Pugin's, one unit to the plate's pixel (`references/export-g.svg`), he drew his own: "Ok - I dropped in hand-drawn-g" ([brief](../brief/2026-10-29-textura-g.md)).
+
+- **Two shapes, as Pugin's two strokes:** the left stroke with the arm and ear, and the right stroke with the tail. They don't touch: at the top of the right stroke and at the left stroke's foot they stand 6 and 8.5 px apart, where Pugin's ink also leaves a hairline of white.
+- **Placed** at one unit to the pixel, where it overlaps Pugin's ink best: 92%, against 65% for the built g (`hand-drawn-g.json`). Its box is the box of his ink.
+- **It is the g**, as the s's drawing is the s; the construction stays in the code, unused while the drawing exists. It measures 1.25 px from Pugin's g, 95% within 3.5 px, where the construction measured 6.5 px, 95% within 21.
+
+- The s's shape is Josh's. It measures 0.96 px from Pugin's whole letter, 95% within 2.25 px, nearer than any construction came.
+- The s has no measurements, spurs or construction in play while its drawing exists; to change it, Josh changes the SVG. The construction (one stroke of a turning pen with twisted ends) stays in the code, unused.
+- The pen editor (decision 0013) stays in the code but offers no letter (`PENNABLE` is empty).
+- Another letter can be drawn the same way by putting its SVG and placement beside the s's and letting its construction use `OUTLINES`, as the s's does. Or it can stand beside its letter, as the y's does: a placement naming the glyph `<g>.alt` with an `alternate` (its stylistic set and that set's name) needs no change to the code.
+- The g is Josh's, too: it has no measurements in play, and its tail, longer than the construction's, sweeps under the letter before as Pugin's does. Pairs with a descender before the g open to keep it clear ("gg" 40 → 80 units). The other letters' side bearings moved by a unit or two through the joint fit.
+- Josh's y, as an alternate, leaves the default y as it was: after h and q it opens widely again ("hy" 145, "qy" 150, "gy" 65 units; with `ss03`, 75, 80 and 55). Q40.

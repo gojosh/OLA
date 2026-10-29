@@ -14,11 +14,11 @@
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/v.png",
-  "when": "2026-10-29T09:21:59"
+  "when": "2026-10-29T17:31:51"
  },
  "fit": {
   "mean_px": 2.19,
-  "p95_px": 6.56,
+  "p95_px": 6.57,
   "max_px": 10.0,
   "mean_px_fitted_alone": 1.28,
   "segments": 42,

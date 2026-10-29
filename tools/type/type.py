@@ -8,6 +8,7 @@
 #   "scikit-image>=0.22",
 #   "ufoLib2>=0.16",
 #   "ufo2ft>=3.3",
+#   "skia-pathops>=0.8",
 # ]
 # ///
 """Tools for building the Pugin fonts from the flattened plates (decision 0008).
@@ -1105,21 +1106,45 @@ document.querySelectorAll('.layers input').forEach(i => i.addEventListener('chan
 
 
 def cmd_serve(fam: str, port: int = 8766):
-    """Serve the proof pages (fonts/) on localhost, with a small API behind the proof page's editor:
-    POST /api/<family>/adjustments/<glyph> saves that glyph's adjustments; POST /api/<family>/rebuild
-    runs the build and the proof in the background; GET /api/<family>/status reports on it."""
+    """Serve the proof pages (fonts/) on localhost, with a small API behind the proof pages' editors.
+    For `fam` (the Lombardic's point editor, decision 0010): POST /api/<family>/adjustments/<glyph>
+    saves that glyph's adjustments. For the textura's stroke editor (decision 0012): GET
+    /api/pugin-textura/letter/<glyph> gives a letter's measurements; GET /api/pugin-textura/pen/<glyph>
+    a drawn letter's points (decision 0013), POST .../pen/<glyph>/outline draws them and .../save keeps them; POST .../outline/<glyph> draws
+    it from measurements sent; POST .../hold/<glyph> saves measurements set by hand into its recipe;
+    GET .../family/<group> gives a group of the family's held settings (the split top), POST
+    .../family/<group>/outlines draws its letters with settings sent, and POST .../family/<group>/hold
+    saves them into source.json.
+    For either, POST /api/<family>/rebuild runs the build and the proof in the background (the
+    textura's with --fit none, so every letter keeps its measurements), and GET /api/<family>/status
+    reports on it."""
     import http.server
     import subprocess
     import threading
     d = family_dir(fam)
     glyph_names = {json.loads(p.read_text())["glyph"] for p in (d / "recipes").glob("*.json")}
-    state = {"running": False, "ok": None, "log": "", "finished": None}
+    states = {}
     me = str(Path(__file__).resolve())
+    textura = Path(__file__).with_name("textura.py")
+    TEXTURA = "pugin-textura"
+    bench = {}
 
-    def rebuild():
+    def workbench():
+        if not bench:
+            import textura as TX
+            bench["w"] = TX.Workbench(TEXTURA)
+        return bench["w"]
+
+    def rebuild(f):
+        state = states[f]
         state.update(running=True, ok=None, log="")
         out, ok = [], True
-        for cmd in ([sys.executable, me, "build", fam], [sys.executable, me, "proof", fam]):
+        # the textura is rebuilt without fitting, except the measurements let go in the editor since the
+        # last rebuild, which the fit sets again
+        refit = ",".join(sorted(state.get("refit", ()))) or "none"
+        cmds = ([[sys.executable, str(textura), "build", f, "--fit", refit], [sys.executable, str(textura), "proof", f]] if f == TEXTURA
+                else [[sys.executable, me, "build", f], [sys.executable, me, "proof", f]])
+        for cmd in cmds:
             p = subprocess.run(cmd, capture_output=True, text=True, cwd=ROOT)
             out.append(p.stdout + p.stderr)
             if p.returncode:
@@ -1128,6 +1153,11 @@ def cmd_serve(fam: str, port: int = 8766):
         log = "".join(out)
         state.update(running=False, ok=ok, failures=[l.strip() for l in log.splitlines() if "FAIL" in l or "STALE" in l],
                      log=log[-6000:], finished=time.time())
+        if ok:
+            state.pop("refit", None)
+
+    for f in (fam, TEXTURA):
+        states[f] = {"running": False, "ok": None, "log": "", "finished": None}
 
     class Handler(http.server.SimpleHTTPRequestHandler):
         def __init__(self, *a, **k):
@@ -1138,20 +1168,41 @@ def cmd_serve(fam: str, port: int = 8766):
             super().end_headers()
 
         def _json(self, code, obj):
-            body = json.dumps(obj).encode()
+            body = json.dumps(obj, default=sorted).encode()       # sets (measurements waiting to be refitted) as lists
             self.send_response(code)
             self.send_header("Content-Type", "application/json")
             self.send_header("Content-Length", str(len(body)))
             self.end_headers()
             self.wfile.write(body)
 
+        def _body(self):
+            return json.loads(self.rfile.read(int(self.headers.get("Content-Length", 0))) or b"{}")
+
         def do_GET(self):
-            if self.path.split("?")[0] == f"/api/{fam}/status":
-                return self._json(200, state)
+            parts = self.path.split("?")[0].strip("/").split("/")
+            if parts[:1] == ["api"] and len(parts) == 3 and parts[2] == "status" and parts[1] in states:
+                return self._json(200, states[parts[1]])
+            if parts[:3] == ["api", TEXTURA, "family"] and len(parts) == 4:
+                w = workbench()
+                if parts[3] not in w.GROUPS:
+                    return self._json(404, {"error": f"no group of settings {parts[3]}"})
+                return self._json(200, w.group(parts[3]))
+            if parts[:3] == ["api", TEXTURA, "pen"] and len(parts) == 4:
+                import textura_letters as TL
+                if parts[3] not in TL.PENNABLE:
+                    return self._json(404, {"error": f"no letter to draw {parts[3]}"})
+                return self._json(200, workbench().pen(parts[3]))
+            if parts[:3] == ["api", TEXTURA, "letter"] and len(parts) == 4:
+                w = workbench()
+                if parts[3] not in w.editable():
+                    return self._json(404, {"error": f"no editable letter {parts[3]}"})
+                return self._json(200, w.letter(parts[3]))
             return super().do_GET()
 
         def do_POST(self):
             parts = self.path.split("?")[0].strip("/").split("/")
+            if parts[:2] == ["api", TEXTURA]:
+                return self._textura(parts[2:])
             if parts[:2] != ["api", fam]:
                 return self._json(404, {"error": "not found"})
             if parts[2:3] == ["adjustments"] and len(parts) == 4 and parts[3] in glyph_names:
@@ -1168,10 +1219,54 @@ def cmd_serve(fam: str, port: int = 8766):
                     p.unlink()
                 return self._json(200, {"saved": len(pts)})
             if parts[2:] == ["rebuild"]:
-                if state["running"]:
-                    return self._json(409, {"error": "a build is already running"})
-                threading.Thread(target=rebuild, daemon=True).start()
-                return self._json(202, {"started": True})
+                return self._rebuild(fam)
+            return self._json(404, {"error": "not found"})
+
+        def _rebuild(self, f):
+            if states[f]["running"]:
+                return self._json(409, {"error": "a build is already running"})
+            threading.Thread(target=rebuild, args=(f,), daemon=True).start()
+            return self._json(202, {"started": True})
+
+        def _textura(self, rest):
+            if rest == ["rebuild"]:
+                return self._rebuild(TEXTURA)
+            w = workbench()
+            if rest[:1] == ["family"] and len(rest) == 3 and rest[1] in w.GROUPS:
+                body = self._body()
+                try:
+                    if rest[2] == "outlines":
+                        return self._json(200, w.group_outlines(rest[1], body.get("values", {})))
+                    if rest[2] == "hold":
+                        return self._json(200, w.save_group(rest[1], body.get("set", {})))
+                except Exception as e:      # a setting the pen can't draw
+                    return self._json(422, {"error": f"{type(e).__name__}: {e}"})
+                return self._json(404, {"error": "not found"})
+            if rest[:1] == ["pen"] and len(rest) == 3:
+                import textura_letters as TL
+                if rest[1] not in TL.PENNABLE:
+                    return self._json(404, {"error": "not found"})
+                body = self._body()
+                try:
+                    if rest[2] == "outline":
+                        return self._json(200, w.pen_outline(rest[1], body.get("points", [])))
+                    if rest[2] == "save":
+                        return self._json(200, w.pen_save(rest[1], body.get("points", [])))
+                except Exception as e:      # points the pen can't draw
+                    return self._json(422, {"error": f"{type(e).__name__}: {e}"})
+                return self._json(404, {"error": "not found"})
+            if len(rest) != 2 or rest[1] not in w.editable():
+                return self._json(404, {"error": "not found"})
+            body = self._body()
+            try:
+                if rest[0] == "outline":
+                    return self._json(200, w.outline(rest[1], body.get("values", {})))
+                if rest[0] == "hold":
+                    out = w.save(rest[1], body.get("set", {}), body.get("release", []))
+                    states[TEXTURA].setdefault("refit", set()).update(f"{rest[1]}:{k}" for k in body.get("release", []))
+                    return self._json(200, out)
+            except Exception as e:          # a measurement out of reach, or geometry the pen can't draw
+                return self._json(422, {"error": f"{type(e).__name__}: {e}"})
             return self._json(404, {"error": "not found"})
 
         def log_message(self, fmt, *args):
@@ -1179,7 +1274,8 @@ def cmd_serve(fam: str, port: int = 8766):
                 super().log_message(fmt, *args)
 
     srv = http.server.ThreadingHTTPServer(("127.0.0.1", port), Handler)
-    print(f"  serving fonts/ at http://localhost:{port}/{fam}/proof/ (saves to fonts/{fam}/adjustments/)")
+    print(f"  serving fonts/ at http://localhost:{port}/{fam}/proof/ (saves to fonts/{fam}/adjustments/), "
+          f"and http://localhost:{port}/{TEXTURA}/proof/ (saves to its recipes' held measurements)")
     srv.serve_forever()
 
 

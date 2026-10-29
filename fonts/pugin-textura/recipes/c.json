@@ -19,14 +19,14 @@
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/c.png",
-  "when": "2026-10-29T09:21:59"
+  "when": "2026-10-29T17:31:51"
  },
  "fit": {
   "mean_px": 3.55,
   "p95_px": 14.34,
   "max_px": 25.11,
   "mean_px_fitted_alone": 3.11,
-  "segments": 26,
+  "segments": 24,
   "outline_checks_pass": true,
   "at_bounds": [
    "c:top.from.x"

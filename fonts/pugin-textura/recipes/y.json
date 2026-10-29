@@ -2,7 +2,7 @@
  "glyph": "y",
  "unicode": "U+0079",
  "construction": "textura_letters.py: y",
- "description": "v's two strokes, the right one running on past the baseline and sweeping round to the left; the\nleft one's foot runs on to meet it. Pugin's tail ends in a ball; plain, it stops with the nib's\ncut. Pugin drew it on the plate's second line, squeezed; the plain y stands at the full x-height.",
+ "description": "v's two strokes, the right one running on past the baseline and sweeping round to the left; the\nleft one's foot runs on to meet it. Pugin's tail ends in a ball; plain, it stops with the nib's\ncut. Pugin drew it on the plate's second line, squeezed; the plain y stands at the full x-height.\nJosh's own y, drawn by hand, stands beside it as an alternate (y.alt, under ss03; decision 0014).",
  "measured": {
   "left": {
    "x": 1341.672
@@ -31,7 +31,7 @@
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/y.png",
-  "when": "2026-10-29T09:21:59"
+  "when": "2026-10-29T17:31:51"
  },
  "fit": {
   "mean_px": 4.28,

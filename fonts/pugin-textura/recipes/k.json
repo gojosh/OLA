@@ -2,7 +2,7 @@
  "glyph": "k",
  "unicode": "U+006B",
  "construction": "textura_letters.py: k",
- "description": "The l's ascender, a small closed loop at the x-height against its right side, and a leg with\nits own head coming down from under the loop to a foot on the baseline.",
+ "description": "The l's ascender, a small closed loop at the x-height against its right side, and a leg with\nits own head coming down from under the loop to a foot on the baseline. As Pugin's, the loop is\njoined to the stem at the top by a hairline, as the n's second minim is, and its lower stroke runs\non into the stem; the leg's head starts in that lower stroke, so the leg comes out of the bowl\n(Josh: \"h and k need the same connecting spur we added to m and n, and k needs the bottom of the\nk bowl to fully connect into the stem, and the lower k stem to fully connect with the bowl\").",
  "measured": {
   "stem_x": 1258.472,
   "loop": {
@@ -10,12 +10,12 @@
     "x": 1304.577,
     "y": 3335.53,
     "heading": 14.342,
-    "t1": 0.286,
-    "t2": 0.367
+    "t1": 0.87,
+    "t2": 0.6
    },
    "right": {
-    "x": 1338.825,
-    "y": 3367.791,
+    "x": 1337.756,
+    "y": 3379.295,
     "heading": 77.276,
     "t1": 0.207,
     "t2": 0.386
@@ -23,13 +23,13 @@
    "low": {
     "x": 1300.71,
     "y": 3412.299,
-    "heading": 158.345
+    "heading": 138.2
    }
   },
   "leg": {
-   "x": 1329.631,
-   "top": 3426.732,
-   "head": 12.387
+   "x": 1330.4,
+   "top": 3424.4,
+   "head": 12.7
   },
   "arm": {
    "from": 35.444,
@@ -43,15 +43,36 @@
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/k.png",
-  "when": "2026-10-29T09:21:59"
+  "when": "2026-10-29T17:31:51"
  },
  "fit": {
-  "mean_px": 2.49,
-  "p95_px": 8.39,
-  "max_px": 24.95,
+  "mean_px": 2.82,
+  "p95_px": 7.64,
+  "max_px": 35.08,
   "mean_px_fitted_alone": 2.15,
-  "segments": 76,
+  "segments": 71,
   "outline_checks_pass": true,
   "at_bounds": []
- }
+ },
+ "held": {
+  "loop.low.heading": 138.2,
+  "loop.right.x": 1337.756,
+  "loop.right.y": 3379.295,
+  "loop.top.t1": 0.87,
+  "loop.top.t2": 0.6,
+  "leg.x": 1330.4,
+  "leg.top": 3424.4,
+  "leg.head": 12.7
+ },
+ "held_by_hand": [
+  "leg.head",
+  "leg.top",
+  "leg.x",
+  "loop.low.heading",
+  "loop.right.x",
+  "loop.right.y",
+  "loop.top.t1",
+  "loop.top.t2"
+ ],
+ "held_by_hand_note": "measurements set by hand in the stroke editor on the proof page (decision 0012), and held so every fit keeps them; last saved 2026-10-29 11:07"
 }

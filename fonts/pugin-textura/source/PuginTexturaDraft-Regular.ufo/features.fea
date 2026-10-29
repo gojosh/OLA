@@ -15,4 +15,13 @@ feature ss01 {
     sub q by q.nospur;
     sub a by a.nospur;
     sub u by u.nospur;
+    sub j by j.nospur;
 } ss01;
+feature ss02 {
+    featureNames { name "Without stems and pips"; };
+    sub s by s.nopips;
+} ss02;
+feature ss03 {
+    featureNames { name "Alternate y"; };
+    sub y by y.alt;
+} ss03;

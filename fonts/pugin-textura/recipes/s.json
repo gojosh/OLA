@@ -2,78 +2,396 @@
  "glyph": "s",
  "unicode": "U+0073",
  "construction": "textura_letters.py: s",
- "description": "The textura s: an upper stroke with a flat top, coming down the left, and an arm running from\nits top to the right, the two meeting in a concave curve at the upper left (concave_top); a spine\ndown to the right; a lower stroke down the right, cut off by the nib; and a foot stroke under the\nleft. Pugin's s hangs a hairline and ball from the arm and another under the spine; plain, it\ndoesn't.",
+ "description": "The textura s: a single stroke of the pen (Josh: \"The s is a single stroke of the pen\"), the\nscribe turning the nib as it goes (Josh: \"Reproducing it accurately will require thoughtful nib\nrotation. notice the concave curves created by the sweep of the nib during rotation\"). From the\nhorn at the top right the pen goes left along the top to the peak, the nib turning flatter, which\nscoops the top edge; at the peak it turns down to the left stem, the nib's sweep leaving the\nconcave edge at the upper left, and the scribe pressing harder round the shoulder, which spreads\nthe nib and pushes out the point there (Josh: \"I suspect a bit of pressure pushes the nib of the\npen out at the points\"); down the stem, across the spine (the nib flatter, so the spine is\nthinner than the stems) and down the right stem, the turns' sweeps leaving the concave corners of\nthe counters; then down to the foot, the bottom point, and left along the bottom to the tail,\nthe nib turning steeper again, as at the horn. Nearly the same turned half round. At each end,\na fine stem of the nib's tip winds into a pip (Josh: \"the s also has two pips off of stems at\neach terminal\"): from under the top down and round under its pip, and from the bottom up and\nround over its pip.",
  "measured": {
-  "upper": {
-   "x": 2372.457,
-   "end": 3445.213,
-   "top": 3353.683
-  },
-  "lower": {
-   "x": 2428.974,
-   "end": 3495.117
-  },
-  "arm": {
-   "to": {
-    "x": 2446.952,
-    "y": 3366.488,
-    "heading": 26.85
-   },
-   "from": {
-    "x": 2388.884,
-    "y": 3349.839,
-    "heading": 9.666,
-    "t1": 0.962,
-    "t2": 0.954
-   }
-  },
-  "spine": {
-   "from": {
-    "x": 2363.097,
-    "y": 3432.651,
-    "heading": 16.86,
-    "t1": 0.327,
-    "t2": 0.717
-   },
-   "to": {
-    "x": 2433.598,
-    "y": 3454.017,
-    "heading": 61.006
-   }
+  "peak": {
+   "x": 2393.492,
+   "y": 3342.0,
+   "in": 231.225,
+   "out": 134.491
   },
   "foot": {
-   "from": {
-    "x": 2438.229,
-    "y": 3494.808,
-    "heading": 135.677,
-    "t1": 0.516,
-    "t2": 0.498
+   "x": 2408.436,
+   "y": 3511.694,
+   "in": 130.699,
+   "out": 217.674
+  },
+  "left": {
+   "x": 2368.791,
+   "top": 3386.774,
+   "low": 3399.649
+  },
+  "right": {
+   "x": 2424.305,
+   "top": 3438.248,
+   "low": 3489.452
+  },
+  "turn1": 29.623,
+  "turn2": 8.761,
+  "nib": {
+   "level": 0.758,
+   "horn": {
+    "angle": 86.028
+   },
+   "peak": {
+    "angle": 55.879
+   },
+   "shoulder": {
+    "angle": 20.747
+   },
+   "stem": {
+    "angle": 39.316
+   },
+   "spine": {
+    "angle": 11.372
+   },
+   "right": {
+    "angle": 30.815
+   },
+   "haunch": {
+    "angle": 22.247
+   },
+   "foot": {
+    "angle": 70.764
+   },
+   "tail": {
+    "angle": 103.301
+   }
+  },
+  "pivot": {
+   "top": {
+    "x": 2413.272,
+    "y": 3342.528,
+    "from": 190.153,
+    "to": 94.861
    },
    "bottom": {
-    "x": 2400.904,
-    "y": 3517.278,
-    "heading": 180.352,
-    "t1": 0.491,
-    "t2": 0.49
+    "x": 2387.16,
+    "y": 3512.517,
+    "from": 116.354,
+    "to": 190.132
+   }
+  },
+  "top": {
+   "t1": 0.201,
+   "t2": 0.862
+  },
+  "shoulder": {
+   "t1": 0.859,
+   "t2": 0.998
+  },
+  "haunch": {
+   "t1": 0.958,
+   "t2": 0.946
+  },
+  "bottom": {
+   "t1": 0.407,
+   "t2": 0.425
+  },
+  "bump": {
+   "peak": {
+    "height": 0.019,
+    "reach": 7.204
    },
-   "end": {
-    "x": 2356.901,
-    "y": 3491.272,
-    "heading": 211.984
+   "shoulder": {
+    "height": 0.252,
+    "reach": 15.846
+   },
+   "turn1": {
+    "height": 0.288,
+    "reach": 21.275
+   },
+   "turn2": {
+    "height": 0.269,
+    "reach": 21.154
+   },
+   "haunch": {
+    "height": 0.333,
+    "reach": 13.422
+   },
+   "foot": {
+    "height": 0.002,
+    "reach": 2.313
    }
   },
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/s.png",
-  "when": "2026-10-29T09:21:59"
+  "when": "2026-10-29T17:31:51"
  },
  "fit": {
-  "mean_px": 5.09,
-  "p95_px": 15.24,
-  "max_px": 20.36,
+  "mean_px": 0.96,
+  "p95_px": 2.25,
+  "max_px": 3.41,
   "mean_px_fitted_alone": 5.68,
-  "segments": 45,
+  "segments": 62,
   "outline_checks_pass": true,
   "at_bounds": []
+ },
+ "drawn": {
+  "points": [
+   {
+    "x": 2438.83,
+    "y": 3348.32,
+    "angle": 254.17,
+    "pressure": 0.758,
+    "corner": false
+   },
+   {
+    "x": 2430.72,
+    "y": 3358.13,
+    "angle": 216.88,
+    "pressure": 0.758,
+    "corner": false
+   },
+   {
+    "x": 2422.15,
+    "y": 3356.78,
+    "angle": 121.87,
+    "pressure": 0.758,
+    "corner": false
+   },
+   {
+    "x": 2412.69,
+    "y": 3358.83,
+    "angle": 88.24,
+    "pressure": 0.758,
+    "corner": false
+   },
+   {
+    "x": 2404.31,
+    "y": 3353.46,
+    "angle": 72.29,
+    "pressure": 0.763,
+    "corner": false
+   },
+   {
+    "x": 2397.22,
+    "y": 3346.42,
+    "angle": 62.02,
+    "pressure": 0.789,
+    "corner": false
+   },
+   {
+    "x": 2393.49,
+    "y": 3342.0,
+    "angle": 55.88,
+    "pressure": 0.815,
+    "corner": true
+   },
+   {
+    "x": 2390.53,
+    "y": 3345.02,
+    "angle": 50.38,
+    "pressure": 0.836,
+    "corner": false
+   },
+   {
+    "x": 2383.58,
+    "y": 3352.21,
+    "angle": 35.5,
+    "pressure": 0.907,
+    "corner": false
+   },
+   {
+    "x": 2376.97,
+    "y": 3359.71,
+    "angle": 23.6,
+    "pressure": 0.992,
+    "corner": false
+   },
+   {
+    "x": 2371.65,
+    "y": 3368.14,
+    "angle": 21.88,
+    "pressure": 1.015,
+    "corner": false
+   },
+   {
+    "x": 2369.19,
+    "y": 3377.79,
+    "angle": 32.72,
+    "pressure": 0.965,
+    "corner": false
+   },
+   {
+    "x": 2368.79,
+    "y": 3387.77,
+    "angle": 39.32,
+    "pressure": 0.918,
+    "corner": false
+   },
+   {
+    "x": 2368.79,
+    "y": 3397.77,
+    "angle": 39.32,
+    "pressure": 0.931,
+    "corner": false
+   },
+   {
+    "x": 2369.93,
+    "y": 3407.67,
+    "angle": 37.67,
+    "pressure": 0.992,
+    "corner": false
+   },
+   {
+    "x": 2374.27,
+    "y": 3416.62,
+    "angle": 32.2,
+    "pressure": 1.052,
+    "corner": false
+   },
+   {
+    "x": 2381.31,
+    "y": 3423.66,
+    "angle": 24.86,
+    "pressure": 1.075,
+    "corner": false
+   },
+   {
+    "x": 2390.26,
+    "y": 3428.03,
+    "angle": 17.64,
+    "pressure": 1.066,
+    "corner": false
+   },
+   {
+    "x": 2400.14,
+    "y": 3429.29,
+    "angle": 12.56,
+    "pressure": 1.057,
+    "corner": false
+   },
+   {
+    "x": 2410.13,
+    "y": 3429.42,
+    "angle": 12.43,
+    "pressure": 1.059,
+    "corner": false
+   },
+   {
+    "x": 2422.15,
+    "y": 3432.9,
+    "angle": 23.7,
+    "pressure": 1.056,
+    "corner": false
+   },
+   {
+    "x": 2424.3,
+    "y": 3439.11,
+    "angle": 30.82,
+    "pressure": 1.02,
+    "corner": false
+   },
+   {
+    "x": 2424.31,
+    "y": 3449.11,
+    "angle": 30.82,
+    "pressure": 0.951,
+    "corner": false
+   },
+   {
+    "x": 2424.31,
+    "y": 3459.11,
+    "angle": 30.81,
+    "pressure": 0.88,
+    "corner": false
+   },
+   {
+    "x": 2424.3,
+    "y": 3469.11,
+    "angle": 30.82,
+    "pressure": 0.858,
+    "corner": false
+   },
+   {
+    "x": 2424.3,
+    "y": 3479.11,
+    "angle": 30.82,
+    "pressure": 0.931,
+    "corner": false
+   },
+   {
+    "x": 2424.3,
+    "y": 3489.11,
+    "angle": 30.82,
+    "pressure": 1.057,
+    "corner": false
+   },
+   {
+    "x": 2420.09,
+    "y": 3497.9,
+    "angle": 24.51,
+    "pressure": 1.084,
+    "corner": false
+   },
+   {
+    "x": 2413.69,
+    "y": 3505.57,
+    "angle": 50.08,
+    "pressure": 0.964,
+    "corner": false
+   },
+   {
+    "x": 2408.44,
+    "y": 3511.69,
+    "angle": 70.76,
+    "pressure": 0.856,
+    "corner": true
+   },
+   {
+    "x": 2406.88,
+    "y": 3510.53,
+    "angle": 73.73,
+    "pressure": 0.835,
+    "corner": false
+   },
+   {
+    "x": 2398.47,
+    "y": 3505.12,
+    "angle": 85.43,
+    "pressure": 0.774,
+    "corner": false
+   },
+   {
+    "x": 2389.62,
+    "y": 3500.46,
+    "angle": 96.43,
+    "pressure": 0.76,
+    "corner": false
+   },
+   {
+    "x": 2380.19,
+    "y": 3497.34,
+    "angle": 115.01,
+    "pressure": 0.758,
+    "corner": false
+   },
+   {
+    "x": 2372.81,
+    "y": 3503.8,
+    "angle": 148.73,
+    "pressure": 0.758,
+    "corner": false
+   },
+   {
+    "x": 2370.39,
+    "y": 3513.35,
+    "angle": 182.85,
+    "pressure": 0.758,
+    "corner": false
+   },
+   {
+    "x": 2370.63,
+    "y": 3515.47,
+    "angle": 190.13,
+    "pressure": 0.758,
+    "corner": false
+   }
+  ],
+  "units": "plate pixels, y down; the nib's angle in degrees; pressure as a share of the nib's width",
+  "note": "drawn by Josh, point by point, on the proof page's pen editor (decision 0013); the build draws the letter from it",
+  "when": "2026-10-29 15:25"
  }
 }
