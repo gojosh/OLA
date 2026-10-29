@@ -1,0 +1,67 @@
+{
+ "glyph": "d",
+ "unicode": "U+0064",
+ "construction": "textura_letters.py: d",
+ "description": "The uncial d: a bowl's left stroke with a long head, and on the right a stem whose top leans\nback over the bowl as a thick arm, cut off by the nib at its left end. Pugin's arm ends in a\nsmall ball and runs on into a flourish at the top; plain, it doesn't.",
+ "measured": {
+  "left": {
+   "x": 537.727,
+   "head": 12.0
+  },
+  "stem_x": 611.032,
+  "bowl_top": {
+   "from": {
+    "x": 555.786,
+    "y": 3331.928,
+    "heading": 33.54,
+    "t1": 0.986,
+    "t2": 0.389
+   },
+   "to": {
+    "x": 608.544,
+    "y": 3367.541,
+    "heading": 33.288
+   }
+  },
+  "arm": {
+   "end": {
+    "x": 529.136,
+    "y": 3240.067,
+    "heading": 359.333,
+    "t1": 0.963,
+    "t2": 0.601
+   },
+   "over": {
+    "x": 589.443,
+    "y": 3252.549,
+    "heading": -19.982,
+    "t1": 1.0,
+    "t2": 0.992
+   },
+   "into": {
+    "x": 632.0,
+    "y": 3260.154,
+    "heading": 115.0
+   }
+  },
+  "units": "plate pixels, y down; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/d.png",
+  "when": "2026-10-28T23:14:14"
+ },
+ "fit": {
+  "mean_px": 3.85,
+  "p95_px": 13.18,
+  "max_px": 32.98,
+  "mean_px_fitted_alone": 3.08,
+  "segments": 49,
+  "outline_checks_pass": true,
+  "at_bounds": [
+   "d:left.head",
+   "d:arm.over.heading",
+   "d:arm.into.x",
+   "d:arm.into.heading",
+   "d:arm.over.t1"
+  ]
+ }
+}

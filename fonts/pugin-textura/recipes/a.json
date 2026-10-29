@@ -1,0 +1,67 @@
+{
+ "glyph": "a",
+ "unicode": "U+0061",
+ "construction": "textura_letters.py: a",
+ "description": "The two-storey a: a stem on the right whose long head starts well to the left, a short wall\ndown the left side under that head, and a lower bowl that leaves the stem at the waist, comes\ndown the left and turns out into a foot against the stem's.",
+ "measured": {
+  "stem_x": 248.388,
+  "head": 40.449,
+  "wall": {
+   "top": {
+    "x": 176.223,
+    "y": 3373.458
+   },
+   "low": {
+    "x": 193.0,
+    "y": 3429.155
+   }
+  },
+  "bowl": {
+   "waist": {
+    "x": 215.455,
+    "y": 3423.11,
+    "heading": 137.908,
+    "t1": 0.319,
+    "t2": 0.222
+   },
+   "left": {
+    "x": 180.129,
+    "y": 3451.394,
+    "heading": 114.996,
+    "t1": 1.0,
+    "t2": 1.0
+   },
+   "low": {
+    "x": 184.347,
+    "y": 3483.979,
+    "heading": 65.006,
+    "t1": 0.641,
+    "t2": 0.763
+   },
+   "foot": {
+    "x": 209.011,
+    "y": 3508.092,
+    "heading": 40.199
+   }
+  },
+  "units": "plate pixels, y down; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/a.png",
+  "when": "2026-10-28T23:14:14"
+ },
+ "fit": {
+  "mean_px": 2.43,
+  "p95_px": 7.0,
+  "max_px": 11.4,
+  "mean_px_fitted_alone": 1.92,
+  "segments": 45,
+  "outline_checks_pass": true,
+  "at_bounds": [
+   "a:wall.low.x",
+   "a:bowl.left.heading",
+   "a:bowl.low.heading",
+   "a:bowl.left.t1",
+   "a:bowl.left.t2"
+  ]
+ }
+}

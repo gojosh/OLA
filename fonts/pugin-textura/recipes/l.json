@@ -1,0 +1,35 @@
+{
+ "glyph": "l",
+ "unicode": "U+006C",
+ "construction": "textura_letters.py: l",
+ "description": "A minim rising to the ascender line, its top forked: the head stroke comes in from the upper\nleft, and a short spur leaves up and to the right. On the plate the spur runs on as a thick arm\ninto a hairline flourish; plain, it stops short, so the l can't be taken for a long s.",
+ "measured": {
+  "stem_x": 1400.42,
+  "arm": {
+   "from": 41.432,
+   "reach": 20.0,
+   "end_dy": -4.91,
+   "leave": 318.248,
+   "arrive": 318.831,
+   "t1": 1.0,
+   "t2": 0.2
+  },
+  "units": "plate pixels, y down; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/l.png",
+  "when": "2026-10-28T23:14:14"
+ },
+ "fit": {
+  "mean_px": 7.91,
+  "p95_px": 52.85,
+  "max_px": 75.14,
+  "mean_px_fitted_alone": 7.24,
+  "segments": 20,
+  "outline_checks_pass": true,
+  "at_bounds": [
+   "l:arm.reach",
+   "l:arm.t1",
+   "l:arm.t2"
+  ]
+ }
+}

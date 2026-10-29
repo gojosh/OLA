@@ -1,0 +1,40 @@
+{
+ "glyph": "p",
+ "unicode": "U+0070",
+ "construction": "textura_letters.py: p",
+ "description": "A stem with its own head running down past the baseline to turn out at the descender line,\nand a bowl on its right: a stroke with a head, coming down and turning back in to the stem at\nthe baseline. Pugin's bowl sweeps on across the stem into a curl, and the descender into a long\nswash; plain, neither does.",
+ "measured": {
+  "stem_x": 1951.07,
+  "right": {
+   "x": 2028.038,
+   "end": 3481.28
+  },
+  "bowl_foot": {
+   "from": {
+    "x": 2040.144,
+    "y": 3479.363,
+    "heading": 105.36,
+    "t1": 0.951,
+    "t2": 0.328
+   },
+   "to": {
+    "x": 1960.085,
+    "y": 3512.729,
+    "heading": 176.343
+   }
+  },
+  "units": "plate pixels, y down; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/p.png",
+  "when": "2026-10-28T23:14:14"
+ },
+ "fit": {
+  "mean_px": 26.72,
+  "p95_px": 141.98,
+  "max_px": 180.47,
+  "mean_px_fitted_alone": 24.65,
+  "segments": 39,
+  "outline_checks_pass": true,
+  "at_bounds": []
+ }
+}

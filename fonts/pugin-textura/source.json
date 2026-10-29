@@ -1,0 +1,264 @@
+{
+ "family": "Pugin Textura",
+ "note": "Working name (Q33). The small alphabet of A. W. N. Pugin, Glossary of Ecclesiastical Ornament (1844), plate 9 ('Alphabets No. 1'; the book's Plate X), which Pugin dates to the latter part of the fifteenth century. A textura minuscule written with a broad nib, every letter drawn with hairline flourishes. Plain forms are built from the same nib strokes and are the defaults; Pugin's flourished forms are alternates (decision 0008, decision 0011, brief 2026-10-28-textura-start).",
+ "plate": "09-alphabets-no-1",
+ "image": "reference/pugin-glossary/flattened/09-alphabets-no-1.deshaded.png",
+ "params": "reference/pugin-glossary/flatten/09-alphabets-no-1.json",
+ "zone_flat_px": [
+  115,
+  3150,
+  2755,
+  3772
+ ],
+ "zone_note": "the lowercase rows on the flattened plate, inside the frame and below the capitals",
+ "body_opening_px": 13,
+ "body_note": "an opening this wide removes the hairlines (about 7 px) and keeps the nib's strokes (38 px and more): what is left is each letter's body",
+ "glyphs": [
+  {
+   "glyph": "a",
+   "box": [
+    150,
+    3290,
+    290,
+    3560
+   ]
+  },
+  {
+   "glyph": "b",
+   "box": [
+    262,
+    3170,
+    406,
+    3560
+   ]
+  },
+  {
+   "glyph": "c",
+   "box": [
+    408,
+    3300,
+    510,
+    3560
+   ]
+  },
+  {
+   "glyph": "d",
+   "box": [
+    510,
+    3200,
+    656,
+    3560
+   ]
+  },
+  {
+   "glyph": "e",
+   "box": [
+    654,
+    3300,
+    760,
+    3560
+   ]
+  },
+  {
+   "glyph": "f",
+   "box": [
+    770,
+    3200,
+    900,
+    3640
+   ]
+  },
+  {
+   "glyph": "g",
+   "box": [
+    862,
+    3300,
+    1032,
+    3620
+   ]
+  },
+  {
+   "glyph": "h",
+   "box": [
+    1008,
+    3200,
+    1146,
+    3560
+   ]
+  },
+  {
+   "glyph": "i",
+   "box": [
+    1148,
+    3300,
+    1230,
+    3560
+   ]
+  },
+  {
+   "glyph": "k",
+   "box": [
+    1231,
+    3200,
+    1368,
+    3560
+   ]
+  },
+  {
+   "glyph": "l",
+   "box": [
+    1369,
+    3200,
+    1443,
+    3560
+   ]
+  },
+  {
+   "glyph": "m",
+   "box": [
+    1443,
+    3300,
+    1650,
+    3560
+   ]
+  },
+  {
+   "glyph": "n",
+   "box": [
+    1650,
+    3300,
+    1792,
+    3560
+   ]
+  },
+  {
+   "glyph": "o",
+   "box": [
+    1792,
+    3300,
+    1900,
+    3560
+   ]
+  },
+  {
+   "glyph": "p",
+   "box": [
+    1880,
+    3300,
+    2062,
+    3660
+   ]
+  },
+  {
+   "glyph": "q",
+   "box": [
+    2062,
+    3300,
+    2196,
+    3660
+   ]
+  },
+  {
+   "glyph": "r",
+   "box": [
+    2182,
+    3300,
+    2276,
+    3560
+   ]
+  },
+  {
+   "glyph": "longs",
+   "char": "ſ",
+   "box": [
+    2272,
+    3230,
+    2380,
+    3660
+   ]
+  },
+  {
+   "glyph": "s",
+   "box": [
+    2380,
+    3300,
+    2452,
+    3560
+   ]
+  },
+  {
+   "glyph": "t",
+   "box": [
+    2453,
+    3250,
+    2521,
+    3560
+   ]
+  },
+  {
+   "glyph": "v",
+   "box": [
+    2511,
+    3300,
+    2634,
+    3560
+   ]
+  },
+  {
+   "glyph": "x",
+   "box": [
+    2634,
+    3300,
+    2728,
+    3660
+   ]
+  },
+  {
+   "glyph": "y",
+   "box": [
+    1258,
+    3540,
+    1426,
+    3772
+   ]
+  },
+  {
+   "glyph": "z",
+   "box": [
+    1426,
+    3540,
+    1556,
+    3772
+   ]
+  },
+  {
+   "glyph": "ampersand",
+   "char": "&",
+   "box": [
+    1556,
+    3540,
+    1700,
+    3772
+   ],
+   "hairline_only": true
+  }
+ ],
+ "glyphs_note": "Each box (flattened-plate pixels) holds the centre of the letter's larger body pieces, which seed it; every other piece of ink, hairlines and swashes included, goes to the letter it is joined to by the shortest way along the ink. The ampersand is hairline only: the middle of its box seeds it.",
+ "font": {
+  "name": "Pugin Textura Draft",
+  "postscript_name": "PuginTexturaDraft-Regular",
+  "note": "Working name (Q33).",
+  "units_per_em": 1000,
+  "x_height": 470,
+  "ascender": 760,
+  "descender": -250
+ },
+ "seed_min_area_px": 1000,
+ "spacing": {
+  "note": "As the Lombardic's (tools/type/spacing.py), over the x-height, but with the target white set so two i's stand one minim's pitch apart (the pitch of n's stems): a textura is spaced like a fence. The pairs still off are kerned; nothing may come closer than the clearance over the whole height, ascenders and descenders included. Provisional.",
+  "depth": 120,
+  "kern_threshold": 15,
+  "clearance": 10,
+  "word_space": 200
+ }
+}

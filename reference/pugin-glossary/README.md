@@ -59,6 +59,19 @@ Plate numbers match the filename prefixes.
 | 74 | Funeral palls | Requiem / All Souls |
 | 75 | The End | Colophon |
 
+## The alphabet plates, in Pugin's words
+
+The Glossary's entry **Inscriptions** describes the four alphabet plates and dates each alphabet. The book numbers them X–XIII, as printed at each plate's top right; the files here are 09–12. Quoted from the Internet Archive scan [`glossaryofeccles00pugi`](https://archive.org/details/glossaryofeccles00pugi) (OCR text, checked against the sense; ⚑ verify the wording and page against the page images; the running head nearby reads p. 149).
+
+| File | Plate | Pugin | What it shows |
+|---|---|---|---|
+| 09 | X | "an alphabet of letters used in the thirteenth and fourteenth centuries, all the letters in church inscriptions of this period are what are usually termed capitals. The small alphabet at the bottom of the Plate is of the latter part of the fifteenth century." | The Lombardic capitals (now `fonts/pugin-lombardic`), and below them a flourished textura minuscule |
+| 10 | XI | "an alphabet of capitals used in the fifteenth century, and a small alphabet of an earlier date." | Large Gothic (black-letter) capitals, and below them a second, smaller set of Lombardic capitals |
+| 11 | XII | "a black letter alphabet of the sixteenth century." | A large textura minuscule, with no capitals |
+| 12 | XIII | "three alphabets of the same date." | A condensed textura minuscule, decorated Gothic capitals in red, and a smaller, rounder minuscule |
+
+He adds that "The letters in these plates have been selected principally with a view to their imitation at the present time": models to work from. Nothing he says makes a plate's alphabets a set. So plate X's two alphabets are a century or more apart, set on one plate. By date, the capitals that belong with its textura are plate XI's fifteenth-century capitals; the sixteenth-century minuscules of plates XII and XIII have plate XIII's capitals.
+
 ## Observations
 
 - **The palette is bright, flat, and heraldic:** vermilion, ultramarine, emerald, gold, and black on cream. Nothing like the muddy "olde" palette of the AI-image concepts.

@@ -1,0 +1,33 @@
+{
+ "glyph": "t",
+ "unicode": "U+0074",
+ "construction": "textura_letters.py: t",
+ "description": "A stem rising a little above the x-height, cut to a point by the nib, turning out at the foot,\nwith a short crossbar at the x-height.",
+ "measured": {
+  "stem_x": 2479.906,
+  "bar": {
+   "left": {
+    "x": 2468.272,
+    "y": 3339.066
+   },
+   "right": {
+    "x": 2510.413,
+    "y": 3333.959
+   }
+  },
+  "stem_top": 3275.118,
+  "units": "plate pixels, y down; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/t.png",
+  "when": "2026-10-28T23:14:14"
+ },
+ "fit": {
+  "mean_px": 1.84,
+  "p95_px": 6.25,
+  "max_px": 12.05,
+  "mean_px_fitted_alone": 1.38,
+  "segments": 20,
+  "outline_checks_pass": true,
+  "at_bounds": []
+ }
+}

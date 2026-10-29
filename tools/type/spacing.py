@@ -51,14 +51,16 @@ def pair_white(a, b, depth):
     return float(np.minimum(np.where(ok, gap, np.inf), closest + depth).mean()), closest
 
 
-def fit(profiles, letters, symmetric, mean_side_bearings, depth, huber=20.0):
+def fit(profiles, letters, symmetric, mean_side_bearings, depth, huber=20.0, target=None):
     """Side bearings for the letters, fitted so every pair's white comes as near as it can to one
-    target. Symmetric letters keep equal side bearings. Returns the left and right side bearings,
-    the target, and each pair's (white with no side bearings, closest approach)."""
+    target: given, or set by `mean_side_bearings`. Symmetric letters keep equal side bearings.
+    Returns the left and right side bearings, the target, and each pair's (white with no side
+    bearings, closest approach)."""
     n = len(letters)
     ix = {g: i for i, g in enumerate(letters)}
     white = {(a, b): pair_white(profiles[a], profiles[b], depth) for a in letters for b in letters}
-    target = mean_side_bearings + float(np.mean([w for w, _ in white.values()]))
+    if target is None:
+        target = mean_side_bearings + float(np.mean([w for w, _ in white.values()]))
     rows, rhs = [], []
     for (a, b), (w, _) in white.items():          # a's right side bearing + b's left = target − white
         r = np.zeros(2 * n)
@@ -81,14 +83,18 @@ def fit(profiles, letters, symmetric, mean_side_bearings, depth, huber=20.0):
     return {g: float(sol[ix[g]]) for g in letters}, {g: float(sol[n + ix[g]]) for g in letters}, target, white
 
 
-def kern(white, letters, side_bearings, target, threshold, clearance):
+def kern(white, letters, side_bearings, target, threshold, clearance, closest_over=None):
     """Kerning for the pairs the side bearings leave more than `threshold` off the target, in steps
     of 5 units, and for any pair that would come closer than `clearance`. side_bearings maps each
-    letter to its (left, right) side bearing as spaced."""
+    letter to its (left, right) side bearing as spaced. closest_over, if given, maps each pair to its
+    closest approach over a taller zone than the white is judged on (a minuscule's ascenders and
+    descenders), so parts above or below that zone never touch either."""
     out = {}
     for a in letters:
         for b in letters:
             w, closest = white[(a, b)]
+            if closest_over is not None:
+                closest = min(closest, closest_over[(a, b)])
             sb = side_bearings[a][1] + side_bearings[b][0]
             off = target - (sb + w)
             floor = clearance - (sb + closest)        # how much the pair must open to keep clear

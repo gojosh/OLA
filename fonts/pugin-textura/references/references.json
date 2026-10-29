@@ -1,0 +1,499 @@
+{
+ "family": "Pugin Textura",
+ "plate": "09-alphabets-no-1",
+ "image": "reference/pugin-glossary/flattened/09-alphabets-no-1.deshaded.png",
+ "zone_flat_px": [
+  115,
+  3150,
+  2755,
+  3772
+ ],
+ "paper_bgr": [
+  197.0,
+  218.0,
+  224.0
+ ],
+ "ink_bgr": [
+  63.0,
+  82.0,
+  200.0
+ ],
+ "when": "2026-10-28T22:31:17",
+ "glyphs": {
+  "a": {
+   "char": "a",
+   "coverage": "references/a.png",
+   "body": "references/a.body.png",
+   "box_flat_px": [
+    137,
+    3299,
+    311,
+    3550
+   ],
+   "ink_box_flat_px": [
+    161,
+    3323,
+    287,
+    3526
+   ],
+   "ink_area_px": 12117.4,
+   "body_area_px": 12746
+  },
+  "b": {
+   "char": "b",
+   "coverage": "references/b.png",
+   "body": "references/b.body.png",
+   "box_flat_px": [
+    191,
+    3156,
+    476,
+    3553
+   ],
+   "ink_box_flat_px": [
+    215,
+    3180,
+    452,
+    3529
+   ],
+   "ink_area_px": 23023.6,
+   "body_area_px": 22239
+  },
+  "c": {
+   "char": "c",
+   "coverage": "references/c.png",
+   "body": "references/c.body.png",
+   "box_flat_px": [
+    387,
+    3294,
+    536,
+    3551
+   ],
+   "ink_box_flat_px": [
+    411,
+    3318,
+    512,
+    3527
+   ],
+   "ink_area_px": 8985.0,
+   "body_area_px": 9053
+  },
+  "d": {
+   "char": "d",
+   "coverage": "references/d.png",
+   "body": "references/d.body.png",
+   "box_flat_px": [
+    484,
+    3194,
+    800,
+    3552
+   ],
+   "ink_box_flat_px": [
+    508,
+    3218,
+    776,
+    3528
+   ],
+   "ink_area_px": 25452.0,
+   "body_area_px": 23413
+  },
+  "e": {
+   "char": "e",
+   "coverage": "references/e.png",
+   "body": "references/e.body.png",
+   "box_flat_px": [
+    626,
+    3296,
+    793,
+    3553
+   ],
+   "ink_box_flat_px": [
+    650,
+    3320,
+    769,
+    3529
+   ],
+   "ink_area_px": 11063.0,
+   "body_area_px": 10507
+  },
+  "f": {
+   "char": "f",
+   "coverage": "references/f.png",
+   "body": "references/f.body.png",
+   "box_flat_px": [
+    496,
+    3187,
+    1017,
+    3677
+   ],
+   "ink_box_flat_px": [
+    520,
+    3211,
+    993,
+    3653
+   ],
+   "ink_area_px": 31762.5,
+   "body_area_px": 29867
+  },
+  "g": {
+   "char": "g",
+   "coverage": "references/g.png",
+   "body": "references/g.body.png",
+   "box_flat_px": [
+    828,
+    3280,
+    1050,
+    3631
+   ],
+   "ink_box_flat_px": [
+    852,
+    3304,
+    1026,
+    3607
+   ],
+   "ink_area_px": 24368.1,
+   "body_area_px": 24361
+  },
+  "h": {
+   "char": "h",
+   "coverage": "references/h.png",
+   "body": "references/h.body.png",
+   "box_flat_px": [
+    965,
+    3185,
+    1229,
+    3621
+   ],
+   "ink_box_flat_px": [
+    989,
+    3209,
+    1205,
+    3597
+   ],
+   "ink_area_px": 24198.7,
+   "body_area_px": 22023
+  },
+  "i": {
+   "char": "i",
+   "coverage": "references/i.png",
+   "body": "references/i.body.png",
+   "box_flat_px": [
+    1114,
+    3295,
+    1255,
+    3554
+   ],
+   "ink_box_flat_px": [
+    1138,
+    3319,
+    1231,
+    3530
+   ],
+   "ink_area_px": 7468.2,
+   "body_area_px": 7769
+  },
+  "k": {
+   "char": "k",
+   "coverage": "references/k.png",
+   "body": "references/k.body.png",
+   "box_flat_px": [
+    1203,
+    3196,
+    1396,
+    3555
+   ],
+   "ink_box_flat_px": [
+    1227,
+    3220,
+    1372,
+    3531
+   ],
+   "ink_area_px": 20135.9,
+   "body_area_px": 19844
+  },
+  "l": {
+   "char": "l",
+   "coverage": "references/l.png",
+   "body": "references/l.body.png",
+   "box_flat_px": [
+    1330,
+    3179,
+    1590,
+    3558
+   ],
+   "ink_box_flat_px": [
+    1354,
+    3203,
+    1566,
+    3534
+   ],
+   "ink_area_px": 14366.1,
+   "body_area_px": 13589
+  },
+  "m": {
+   "char": "m",
+   "coverage": "references/m.png",
+   "body": "references/m.body.png",
+   "box_flat_px": [
+    1407,
+    3298,
+    1684,
+    3556
+   ],
+   "ink_box_flat_px": [
+    1431,
+    3322,
+    1660,
+    3532
+   ],
+   "ink_area_px": 22145.2,
+   "body_area_px": 23754
+  },
+  "n": {
+   "char": "n",
+   "coverage": "references/n.png",
+   "body": "references/n.body.png",
+   "box_flat_px": [
+    1619,
+    3299,
+    1817,
+    3554
+   ],
+   "ink_box_flat_px": [
+    1643,
+    3323,
+    1793,
+    3530
+   ],
+   "ink_area_px": 14182.1,
+   "body_area_px": 15586
+  },
+  "o": {
+   "char": "o",
+   "coverage": "references/o.png",
+   "body": "references/o.body.png",
+   "box_flat_px": [
+    1771,
+    3299,
+    1922,
+    3555
+   ],
+   "ink_box_flat_px": [
+    1795,
+    3323,
+    1898,
+    3531
+   ],
+   "ink_area_px": 11994.1,
+   "body_area_px": 13179
+  },
+  "p": {
+   "char": "p",
+   "coverage": "references/p.png",
+   "body": "references/p.body.png",
+   "box_flat_px": [
+    1664,
+    3300,
+    2074,
+    3674
+   ],
+   "ink_box_flat_px": [
+    1688,
+    3324,
+    2050,
+    3650
+   ],
+   "ink_area_px": 25349.3,
+   "body_area_px": 24852
+  },
+  "q": {
+   "char": "q",
+   "coverage": "references/q.png",
+   "body": "references/q.body.png",
+   "box_flat_px": [
+    2017,
+    3302,
+    2264,
+    3643
+   ],
+   "ink_box_flat_px": [
+    2041,
+    3326,
+    2240,
+    3619
+   ],
+   "ink_area_px": 18904.0,
+   "body_area_px": 20176
+  },
+  "r": {
+   "char": "r",
+   "coverage": "references/r.png",
+   "body": "references/r.body.png",
+   "box_flat_px": [
+    2150,
+    3303,
+    2302,
+    3559
+   ],
+   "ink_box_flat_px": [
+    2174,
+    3327,
+    2278,
+    3535
+   ],
+   "ink_area_px": 8538.7,
+   "body_area_px": 9022
+  },
+  "longs": {
+   "char": "ſ",
+   "coverage": "references/longs.png",
+   "body": "references/longs.body.png",
+   "box_flat_px": [
+    2215,
+    3218,
+    2433,
+    3640
+   ],
+   "ink_box_flat_px": [
+    2239,
+    3242,
+    2409,
+    3616
+   ],
+   "ink_area_px": 14034.8,
+   "body_area_px": 15772
+  },
+  "s": {
+   "char": "s",
+   "coverage": "references/s.png",
+   "body": "references/s.body.png",
+   "box_flat_px": [
+    2325,
+    3302,
+    2477,
+    3557
+   ],
+   "ink_box_flat_px": [
+    2349,
+    3326,
+    2453,
+    3533
+   ],
+   "ink_area_px": 10581.1,
+   "body_area_px": 11265
+  },
+  "t": {
+   "char": "t",
+   "coverage": "references/t.png",
+   "body": "references/t.body.png",
+   "box_flat_px": [
+    2425,
+    3231,
+    2548,
+    3558
+   ],
+   "ink_box_flat_px": [
+    2449,
+    3255,
+    2524,
+    3534
+   ],
+   "ink_area_px": 9041.9,
+   "body_area_px": 10056
+  },
+  "v": {
+   "char": "v",
+   "coverage": "references/v.png",
+   "body": "references/v.body.png",
+   "box_flat_px": [
+    2480,
+    3304,
+    2655,
+    3558
+   ],
+   "ink_box_flat_px": [
+    2504,
+    3328,
+    2631,
+    3534
+   ],
+   "ink_area_px": 11823.3,
+   "body_area_px": 13375
+  },
+  "x": {
+   "char": "x",
+   "coverage": "references/x.png",
+   "body": "references/x.body.png",
+   "box_flat_px": [
+    2579,
+    3303,
+    2745,
+    3661
+   ],
+   "ink_box_flat_px": [
+    2603,
+    3327,
+    2745,
+    3637
+   ],
+   "ink_area_px": 10946.7,
+   "body_area_px": 11767
+  },
+  "y": {
+   "char": "y",
+   "coverage": "references/y.png",
+   "body": "references/y.body.png",
+   "box_flat_px": [
+    1243,
+    3530,
+    1446,
+    3758
+   ],
+   "ink_box_flat_px": [
+    1267,
+    3554,
+    1422,
+    3749
+   ],
+   "ink_area_px": 11313.2,
+   "body_area_px": 10894
+  },
+  "z": {
+   "char": "z",
+   "coverage": "references/z.png",
+   "body": "references/z.body.png",
+   "box_flat_px": [
+    1394,
+    3524,
+    1581,
+    3758
+   ],
+   "ink_box_flat_px": [
+    1418,
+    3548,
+    1557,
+    3758
+   ],
+   "ink_area_px": 12112.9,
+   "body_area_px": 11921
+  },
+  "ampersand": {
+   "char": "&",
+   "coverage": "references/ampersand.png",
+   "body": "references/ampersand.body.png",
+   "box_flat_px": [
+    1497,
+    3544,
+    1679,
+    3758
+   ],
+   "ink_box_flat_px": [
+    1521,
+    3568,
+    1655,
+    3756
+   ],
+   "ink_area_px": 3393.3,
+   "body_area_px": 286
+  }
+ }
+}

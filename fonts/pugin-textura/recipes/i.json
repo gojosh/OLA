@@ -1,0 +1,22 @@
+{
+ "glyph": "i",
+ "unicode": "U+0069",
+ "construction": "textura_letters.py: i",
+ "description": "A single minim, with a hairline stroke above it (proposed: Pugin's i has none).",
+ "measured": {
+  "stem_x": 1189.896,
+  "units": "plate pixels, y down; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/i.png",
+  "when": "2026-10-28T23:14:14"
+ },
+ "fit": {
+  "mean_px": 2.04,
+  "p95_px": 6.36,
+  "max_px": 8.3,
+  "mean_px_fitted_alone": 0.9,
+  "segments": 24,
+  "outline_checks_pass": true,
+  "at_bounds": []
+ }
+}

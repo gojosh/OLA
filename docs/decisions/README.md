@@ -18,6 +18,7 @@ Only Josh can accept a decision. An agent may draft a record with status `propos
 | [0008](0008-font-approach.md) | How the Pugin fonts are made | Accepted |
 | [0009](0009-lombardic-stem-weights.md) | Two stem weights in Pugin Lombardic | Accepted |
 | [0010](0010-adjustments-by-hand.md) | Adjustments by hand: recorded moves on top of the construction | Accepted |
+| [0011](0011-textura-capitals.md) | The plate 9 textura: minuscule first, then plate 10's capitals | Accepted |
 
 ## Template
 

@@ -1,0 +1,67 @@
+{
+ "glyph": "longs",
+ "unicode": "U+017F",
+ "construction": "textura_letters.py: longs",
+ "description": "The long s: an arm at the top curving over to the right to a point, the stem coming down from\nit past the baseline, and a tail turning left at the descender line; a short spur on the left at\nthe x-height. Pugin's tail is a swash; plain, it stops where it turns.",
+ "measured": {
+  "stem_x": 2313.475,
+  "stroke": {
+   "arm_end": {
+    "x": 2396.433,
+    "y": 3279.788,
+    "heading": 178.883,
+    "t1": 0.763,
+    "t2": 0.975
+   },
+   "arm_top": {
+    "x": 2346.11,
+    "y": 3259.583,
+    "heading": 165.863,
+    "t1": 0.291,
+    "t2": 0.662
+   },
+   "stem_top": {
+    "x": 2318.069,
+    "y": 3304.196,
+    "heading": 86.763,
+    "t1": 0.727,
+    "t2": 0.784
+   },
+   "stem_low": {
+    "x": 2314.278,
+    "y": 3561.065,
+    "heading": 105.163,
+    "t1": 0.774,
+    "t2": 0.854
+   },
+   "tail": {
+    "x": 2261.788,
+    "y": 3598.077,
+    "heading": 177.407
+   }
+  },
+  "spur": {
+   "from": {
+    "x": 2275.028,
+    "y": 3353.358
+   },
+   "to": {
+    "x": 2299.086,
+    "y": 3359.548
+   }
+  },
+  "units": "plate pixels, y down; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/longs.png",
+  "when": "2026-10-28T23:14:14"
+ },
+ "fit": {
+  "mean_px": 2.35,
+  "p95_px": 8.99,
+  "max_px": 19.66,
+  "mean_px_fitted_alone": 2.3,
+  "segments": 32,
+  "outline_checks_pass": true,
+  "at_bounds": []
+ }
+}

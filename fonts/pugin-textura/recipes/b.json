@@ -1,0 +1,39 @@
+{
+ "glyph": "b",
+ "unicode": "U+0062",
+ "construction": "textura_letters.py: b",
+ "description": "The l's ascender, and on the right a bowl's second stroke, with its own head, stopping at the\nbottom with the nib's cut against the stem's foot.",
+ "measured": {
+  "stem_x": 315.976,
+  "right": {
+   "x": 380.171,
+   "end": 3489.491
+  },
+  "arm": {
+   "from": 26.395,
+   "reach": 19.996,
+   "end_dy": -21.016,
+   "leave": 308.616,
+   "arrive": 364.235,
+   "t1": 1.0,
+   "t2": 0.2
+  },
+  "units": "plate pixels, y down; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/b.png",
+  "when": "2026-10-28T23:14:14"
+ },
+ "fit": {
+  "mean_px": 9.46,
+  "p95_px": 51.75,
+  "max_px": 65.33,
+  "mean_px_fitted_alone": 6.38,
+  "segments": 35,
+  "outline_checks_pass": true,
+  "at_bounds": [
+   "b:arm.reach",
+   "b:arm.t1",
+   "b:arm.t2"
+  ]
+ }
+}

@@ -1,0 +1,46 @@
+{
+ "glyph": "e",
+ "unicode": "U+0065",
+ "construction": "textura_letters.py: e",
+ "description": "A minim with an arm leaving its head to the right, and a hairline from the stem up to the arm's\nend, closing the eye. Pugin's hairline ends in a ball inside the eye; plain, it doesn't.",
+ "measured": {
+  "stem_x": 677.94,
+  "arm": {
+   "from": {
+    "x": 693.666,
+    "y": 3336.993,
+    "heading": 25.772,
+    "t1": 0.729,
+    "t2": 0.409
+   },
+   "to": {
+    "x": 752.08,
+    "y": 3362.952,
+    "heading": 60.005
+   }
+  },
+  "hairline": {
+   "from": {
+    "x": 700.341,
+    "y": 3435.269
+   },
+   "to": {
+    "x": 732.78,
+    "y": 3386.952
+   }
+  },
+  "units": "plate pixels, y down; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/e.png",
+  "when": "2026-10-28T23:14:14"
+ },
+ "fit": {
+  "mean_px": 4.46,
+  "p95_px": 14.92,
+  "max_px": 19.83,
+  "mean_px_fitted_alone": 3.14,
+  "segments": 31,
+  "outline_checks_pass": true,
+  "at_bounds": []
+ }
+}

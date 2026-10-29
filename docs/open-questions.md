@@ -47,6 +47,7 @@ Questions that need Josh, the parish, or research. Agents: add questions here in
 
 ## Answered
 
+- **Q36. Which capitals go with the plate 9 textura?** *Josh, 2026-10-28:* "Go with your proposal: build the plate 9 textura minuscule first, set it with Lombardic initials meanwhile, and give it plate 10's 15th-century capitals afterwards." → Decision 0011.
 - **Q29. Terms needing a call** (usage list in `glossary.md`, decision 0005). *Josh, 2026-10-27:* **Anointing of the Sick** stays: "'Holy Unction' is archaic, and no longer in use… Half the time, we'll pick the older term, some are no longer in use." For the Daily Office: "Use 'Mattins and Evensong' for the Daily Office." The agent's reading of "communion vs eucharist" (*Holy Communion* for what is received, *the Blessed Sacrament* for the Sacrament reserved and adored) was put to Josh twice without objection; treat it as settled unless he says otherwise.
 - **Q28. Witness.** *Josh, 2026-10-27:* "we can skip #4 for now." → Deferred; not part of the initial sacrament pages (decision 0006).
 - **Q17. Gallery.** *Josh, 2026-10-27:* "Gallery inside The church is fine for now." (Decision 0004.)

@@ -1,0 +1,73 @@
+{
+ "glyph": "z",
+ "unicode": "U+007A",
+ "construction": "textura_letters.py: z",
+ "description": "The textura z: a bar along the top rising to the right, a diagonal down to the left, and a\nlower stroke turning back along the baseline and away to the left. Pugin's tail is a hairline\nswash; plain, it stops. Pugin drew it on the plate's second line, squeezed; the plain z stands\nat the full x-height.",
+ "measured": {
+  "top": {
+   "left": {
+    "x": 1439.421,
+    "y": 3343.493
+   },
+   "right": {
+    "x": 1519.369,
+    "y": 3341.44
+   }
+  },
+  "diagonal": {
+   "from": {
+    "x": 1513.841,
+    "y": 3353.042
+   },
+   "to": {
+    "x": 1465.583,
+    "y": 3435.139
+   }
+  },
+  "lower": {
+   "from": {
+    "x": 1448.84,
+    "y": 3444.048,
+    "heading": 28.197,
+    "t1": 0.207,
+    "t2": 0.688
+   },
+   "right": {
+    "x": 1525.277,
+    "y": 3469.771,
+    "heading": 81.17,
+    "t1": 0.669,
+    "t2": 0.674
+   },
+   "bottom": {
+    "x": 1495.971,
+    "y": 3513.876,
+    "heading": 179.574,
+    "t1": 0.351,
+    "t2": 0.357
+   },
+   "end": {
+    "x": 1434.128,
+    "y": 3514.347,
+    "heading": 174.98
+   }
+  },
+  "line2": {
+   "squeeze": 0.732,
+   "baseline": 3705.588
+  },
+  "units": "plate pixels, y down; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/z.png",
+  "when": "2026-10-28T23:14:14"
+ },
+ "fit": {
+  "mean_px": 9.44,
+  "p95_px": 27.09,
+  "max_px": 43.21,
+  "mean_px_fitted_alone": 9.58,
+  "segments": 29,
+  "outline_checks_pass": true,
+  "at_bounds": []
+ }
+}
