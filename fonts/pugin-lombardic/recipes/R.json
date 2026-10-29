@@ -16,70 +16,70 @@
  },
  "corrections": [],
  "measured": {
-  "axis_x": 122.41,
+  "axis_x": 122.405,
   "bottom": {
-   "half_width": 66.578,
-   "outer_y": 459.883,
-   "neck_deg": 13.552,
-   "flare_t1": 0.441,
-   "flare_t2": 0.602,
-   "right_x": 243.562,
+   "half_width": 66.59,
+   "outer_y": 459.859,
+   "neck_deg": 12.369,
+   "flare_t1": 0.448,
+   "flare_t2": 0.584,
+   "right_x": 243.552,
    "right_y": 458.0,
-   "fillet_t1": 0.24,
-   "fillet_t2": 0.721,
-   "high_x": 135.745,
-   "high_y": 445.431,
-   "edge_t1": 0.627,
-   "edge_t2": 0.621,
-   "edge_t3": 0.499,
+   "fillet_t1": 0.233,
+   "fillet_t2": 0.729,
+   "high_x": 136.094,
+   "high_y": 445.411,
+   "edge_t1": 0.628,
+   "edge_t2": 0.609,
+   "edge_t3": 0.5,
    "edge_t4": 0.2
   },
   "stem": {
-   "foot_y": 353.093,
-   "head_y": 140.855,
+   "foot_y": 353.169,
+   "head_y": 140.833,
    "foot_y_right": 350.0
   },
   "top": {
-   "half_width": 64.358,
-   "outer_y": 22.677,
-   "neck_deg": 39.925,
+   "half_width": 64.347,
+   "outer_y": 22.673,
+   "neck_deg": 39.961,
    "flare_t1": 0.708,
    "flare_t2": 0.328,
-   "low_x": 140.028,
-   "low_y": 35.906,
-   "edge_t1": 0.287,
+   "low_x": 140.047,
+   "low_y": 35.907,
+   "edge_t1": 0.286,
    "edge_t2": 0.897,
-   "edge_t3": 0.268,
-   "edge_t4": 0.662
+   "edge_t3": 0.266,
+   "edge_t4": 0.658
   },
   "bowl": {
-   "top_x": 238.185,
-   "top_y": 23.387,
-   "right_x": 383.946,
-   "right_y": 130.711,
-   "t1": 0.508,
+   "top_x": 238.147,
+   "top_y": 23.385,
+   "right_x": 383.943,
+   "right_y": 130.708,
+   "t1": 0.509,
    "t2": 0.486,
-   "t3": 0.898,
+   "t3": 0.897,
    "t4": 0.596
   },
   "notch": {
-   "x": 292.941,
-   "y": 223.112,
+   "x": 292.948,
+   "y": 223.11,
    "in": 157.871,
-   "out": 4.84
+   "out": 4.845
   },
   "leg": {
-   "right_x": 409.591,
-   "right_y": 304.546,
+   "right_x": 409.592,
+   "right_y": 304.55,
    "t1": 0.532,
    "t2": 0.581,
    "t3": 0.522,
-   "t4": 0.532
+   "t4": 0.531
   },
   "pocket": {
    "x": 351.153,
-   "y": 416.667,
-   "t1": 0.805,
+   "y": 416.663,
+   "t1": 0.806,
    "t2": 0.999
   },
   "foot": {
@@ -87,54 +87,54 @@
    "curl_y": 457.0,
    "neck_deg": 0.0,
    "t1": 0.653,
-   "t2": 0.514
+   "t2": 0.513
   },
   "inside": {
    "left_x": 313.166,
-   "left_y": 397.906,
-   "right_x": 327.829,
-   "right_y": 325.553,
-   "t1": 0.446,
-   "t2": 0.714
+   "left_y": 397.933,
+   "right_x": 327.802,
+   "right_y": 325.608,
+   "t1": 0.447,
+   "t2": 0.717
   },
   "trefoil": {
-   "x": 216.348,
-   "y": 232.606,
-   "axis": 178.142,
-   "enter": -135.611,
-   "leave": 117.65
+   "x": 216.447,
+   "y": 232.423,
+   "axis": 177.923,
+   "enter": -137.327,
+   "leave": 121.356
   },
   "under": {
    "enter_heading": 180.0,
-   "t1": 0.62,
-   "t2": 0.707
+   "t1": 0.627,
+   "t2": 0.711
   },
   "counter": {
-   "right_x": 301.221,
-   "right_y": 139.565,
-   "top_x": 220.003,
-   "top_y": 48.751,
+   "right_x": 301.188,
+   "right_y": 138.7,
+   "top_x": 219.942,
+   "top_y": 48.747,
    "stem_top_y": 125.0,
-   "floor_heading": 347.959,
-   "t1": 0.415,
-   "t2": 0.899,
-   "t3": 0.43,
-   "t4": 0.648,
-   "t5": 0.383,
+   "floor_heading": 346.714,
+   "t1": 0.366,
+   "t2": 0.988,
+   "t3": 0.412,
+   "t4": 0.657,
+   "t5": 0.382,
    "t6": 0.759
   },
   "bottom_right": {
-   "neck_deg": 2.997
+   "neck_deg": 3.201
   },
   "units": "plate pixels, y down; tensions 0–1; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/R.png",
-  "when": "2026-10-28T18:20:16"
+  "when": "2026-10-28T19:17:26"
  },
  "fit": {
-  "mean_px": 1.05,
-  "p95_px": 3.59,
-  "max_px": 9.81,
+  "mean_px": 1.01,
+  "p95_px": 3.21,
+  "max_px": 9.33,
   "mean_px_fitted_alone": 0.8,
   "wobble_of_pugins_edge_mean_px": 0.28,
   "segments": 45,

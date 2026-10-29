@@ -82,11 +82,14 @@
   "sidebearing": 50
  },
  "spacing": {
-  "note": "Area-based side bearings (construct.side_bearings), measured in font units over the zone from the baseline to the cap height. Provisional values, to be judged on the proof page; no kerning yet.",
-  "flat": 130,
-  "depth": 120,
-  "minimum": 35,
-  "word_space": 250,
-  "maximum": 75
+  "note": "Spacing and kerning judged a pair at a time (tools/type/spacing.py), in font units over the zone from the baseline to the cap height. Side bearings are fitted so every pair of letters comes as near as it can to one target white; the pairs still off are kerned. Provisional values, to be judged on the proof page.",
+  "depth": 200,
+  "depth_note": "each line's gap counts no further than this beyond the pair's closest approach",
+  "mean_side_bearings": 60,
+  "mean_side_bearings_note": "a letter's two side bearings together, on average over the letters: lower sets tighter (the first pass set about 103)",
+  "kern_threshold": 15,
+  "clearance": 30,
+  "clearance_note": "no pair comes closer than this at its closest approach, so curls never touch",
+  "word_space": 200
  }
 }

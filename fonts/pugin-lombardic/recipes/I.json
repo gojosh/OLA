@@ -13,40 +13,40 @@
  },
  "corrections": [],
  "measured": {
-  "axis_x": 178.618,
+  "axis_x": 178.623,
   "bottom": {
-   "centre_y": 432.388,
-   "half_width": 113.11,
+   "centre_y": 432.394,
+   "half_width": 113.111,
    "outer_y": 444.25,
-   "edge_t1": 0.496,
-   "edge_t2": 0.916,
+   "edge_t1": 0.494,
+   "edge_t2": 0.909,
    "neck_deg": 0.0,
    "flare_t1": 0.693,
-   "flare_t2": 0.627
+   "flare_t2": 0.625
   },
   "stem": {
-   "foot_y": 301.125,
-   "head_y": 153.27
+   "foot_y": 301.489,
+   "head_y": 152.602
   },
   "top": {
-   "half_width": 102.167,
-   "outer_y": 24.681,
-   "neck_deg": 0.001,
-   "flare_t1": 0.578,
-   "flare_t2": 0.799,
-   "centre_y": 38.596,
-   "edge_t2": 0.263,
-   "edge_t1": 0.496
+   "half_width": 102.144,
+   "outer_y": 24.691,
+   "neck_deg": 0.0,
+   "flare_t1": 0.545,
+   "flare_t2": 0.824,
+   "centre_y": 38.594,
+   "edge_t2": 0.271,
+   "edge_t1": 0.509
   },
   "units": "plate pixels, y down; tensions 0–1; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/I.png",
-  "when": "2026-10-28T18:20:16"
+  "when": "2026-10-28T19:17:26"
  },
  "fit": {
   "mean_px": 1.08,
-  "p95_px": 2.62,
-  "max_px": 5.99,
+  "p95_px": 2.63,
+  "max_px": 6.0,
   "mean_px_fitted_alone": 0.89,
   "wobble_of_pugins_edge_mean_px": 0.29,
   "segments": 22,

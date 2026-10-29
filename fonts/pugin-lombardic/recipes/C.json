@@ -12,55 +12,55 @@
  "corrections": [],
  "measured": {
   "bowl": {
-   "left_x": 24.254,
-   "left_y": 226.668,
-   "top_x": 227.1,
-   "top_y": 23.595,
-   "bottom_x": 221.757,
-   "bottom_y": 455.402,
+   "left_x": 24.255,
+   "left_y": 226.661,
+   "top_x": 227.189,
+   "top_y": 23.591,
+   "bottom_x": 221.731,
+   "bottom_y": 455.401,
    "t1": 0.423,
-   "t2": 0.38,
+   "t2": 0.381,
    "t3": 1.0,
-   "t4": 0.776,
-   "t7": 0.89,
-   "t8": 0.773,
+   "t4": 0.775,
+   "t7": 0.889,
+   "t8": 0.777,
    "t5": 0.482,
    "t6": 0.444
   },
   "notch": {
-   "x": 326.989,
-   "y": 59.248,
-   "in": 31.191,
-   "out": 307.461
+   "x": 327.07,
+   "y": 59.208,
+   "in": 31.081,
+   "out": 307.325
   },
   "stroke": {
    "right_x": 348.672,
-   "top_y": 195.928,
-   "foot_y": 308.74
+   "top_y": 195.99,
+   "foot_y": 308.747
   },
   "top": {
-   "curl_x": 383.537,
-   "curl_y": 24.345,
-   "edge_t1": 0.353,
+   "curl_x": 383.52,
+   "curl_y": 24.358,
+   "edge_t1": 0.352,
    "edge_t2": 0.2,
-   "neck_deg": 58.342,
-   "flare_t1": 0.561,
-   "flare_t2": 0.51
+   "neck_deg": 59.207,
+   "flare_t1": 0.597,
+   "flare_t2": 0.495
   },
   "bottom": {
-   "curl_x": 383.425,
+   "curl_x": 383.42,
    "curl_y": 454.347,
-   "neck_deg": 39.92,
-   "flare_t1": 0.514,
+   "neck_deg": 39.958,
+   "flare_t1": 0.512,
    "flare_t2": 0.365,
-   "edge_t1": 0.376,
-   "edge_t2": 0.824
+   "edge_t1": 0.399,
+   "edge_t2": 0.82
   },
   "notch_b": {
-   "x": 326.368,
-   "y": 418.686,
-   "in": 228.951,
-   "out": 142.395
+   "x": 326.282,
+   "y": 418.751,
+   "in": 228.354,
+   "out": 142.466
   },
   "counter": {
    "top_x": 231.259,
@@ -83,12 +83,12 @@
   "units": "plate pixels, y down; tensions 0–1; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/C.png",
-  "when": "2026-10-28T18:20:16"
+  "when": "2026-10-28T19:17:26"
  },
  "fit": {
   "mean_px": 0.68,
   "p95_px": 1.53,
-  "max_px": 4.2,
+  "max_px": 4.22,
   "mean_px_fitted_alone": 0.67,
   "wobble_of_pugins_edge_mean_px": 0.21,
   "segments": 19,

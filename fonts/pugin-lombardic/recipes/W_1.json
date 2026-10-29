@@ -11,99 +11,99 @@
  },
  "corrections": [],
  "measured": {
-  "curl": 0.778,
-  "axis_x": 239.422,
+  "curl": 0.779,
+  "axis_x": 239.415,
   "point": {
-   "x": 169.217,
-   "y": 442.831,
-   "out": 250.29
+   "x": 169.181,
+   "y": 442.892,
+   "out": 250.278
   },
   "crotch": {
-   "x": 196.922,
-   "y": 299.246,
-   "in": 65.773
+   "x": 197.008,
+   "y": 299.313,
+   "in": 63.969
   },
   "bars": {
-   "y": 27.317,
-   "crowns_apart": 16.417
+   "y": 27.288,
+   "crowns_apart": 16.467
   },
   "thin_bar": {
-   "clear_of_axis": 6.817,
-   "length": 37.521
+   "clear_of_axis": 6.28,
+   "length": 37.522
   },
   "thick_bar": {
-   "left_x": 29.079
+   "left_x": 29.091
   },
   "thick_arm": {
    "outer": {
-    "x": 55.863,
-    "y": 114.764,
-    "heading": 251.953
+    "x": 55.949,
+    "y": 114.949,
+    "heading": 252.0
    },
    "inner": {
-    "x": 129.12,
-    "y": 107.284,
-    "heading": 76.582
+    "x": 128.896,
+    "y": 103.089,
+    "heading": 76.481
    },
-   "t1": 0.721,
-   "t2": 0.662,
-   "t3": 0.304,
-   "t4": 0.235
+   "t1": 0.731,
+   "t2": 0.674,
+   "t3": 0.312,
+   "t4": 0.308
   },
   "thick bar": {
-   "low_at": 0.387,
-   "low_dy": 5.511,
-   "neck_l": 37.239,
-   "neck_r": 99.088,
-   "flare_l1": 0.377,
+   "low_at": 0.384,
+   "low_dy": 5.559,
+   "neck_l": 37.247,
+   "neck_r": 98.795,
+   "flare_l1": 0.384,
    "flare_l2": 0.257,
-   "edge_t1": 0.444,
-   "edge_t2": 0.398,
-   "edge_t3": 0.451,
+   "edge_t1": 0.456,
+   "edge_t2": 0.395,
+   "edge_t3": 0.44,
    "edge_t4": 0.259,
-   "flare_r1": 0.351,
-   "flare_r2": 0.207
+   "flare_r1": 0.358,
+   "flare_r2": 0.208
   },
   "thin_arm": {
    "outer": {
-    "x": 179.236,
-    "y": 86.074,
-    "heading": 249.242
+    "x": 179.8,
+    "y": 87.508,
+    "heading": 249.243
    },
    "inner": {
-    "x": 201.743,
-    "y": 80.758
+    "x": 201.941,
+    "y": 81.348
    },
-   "point_out": 248.469,
-   "t1": 0.633,
-   "t2": 0.441,
-   "crotch_in": 69.837,
+   "point_out": 248.478,
+   "t1": 0.643,
+   "t2": 0.436,
+   "crotch_in": 69.814,
    "t3": 0.582,
-   "t4": 0.297
+   "t4": 0.308
   },
   "thin bar": {
-   "low_at": 0.326,
-   "low_dy": 2.601,
-   "neck_l": 23.414,
-   "neck_r": 9.11,
+   "low_at": 0.332,
+   "low_dy": 2.706,
+   "neck_l": 23.64,
+   "neck_r": 8.275,
    "flare_l1": 0.201,
-   "flare_l2": 0.669,
-   "edge_t1": 0.3,
-   "edge_t2": 0.66,
-   "edge_t3": 0.532,
+   "flare_l2": 0.671,
+   "edge_t1": 0.306,
+   "edge_t2": 0.659,
+   "edge_t3": 0.529,
    "edge_t4": 0.285,
-   "flare_r1": 0.542,
+   "flare_r1": 0.537,
    "flare_r2": 0.2
   },
   "units": "plate pixels, y down; tensions 0–1; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/W_1.png",
-  "when": "2026-10-28T18:20:16"
+  "when": "2026-10-28T19:17:26"
  },
  "fit": {
-  "mean_px": 1.47,
+  "mean_px": 1.48,
   "p95_px": 4.29,
-  "max_px": 8.26,
+  "max_px": 8.24,
   "mean_px_fitted_alone": 1.48,
   "wobble_of_pugins_edge_mean_px": 0.29,
   "segments": 52,

@@ -15,61 +15,61 @@
  "measured": {
   "axis_x": 232.199,
   "bottom": {
-   "centre_y": 442.209,
-   "half_width": 154.614,
-   "outer_y": 457.326,
-   "edge_t1": 0.391,
-   "edge_t2": 0.42,
-   "neck_deg": 0.226,
-   "flare_t1": 0.734,
-   "flare_t2": 0.4
+   "centre_y": 442.23,
+   "half_width": 154.616,
+   "outer_y": 457.288,
+   "edge_t1": 0.387,
+   "edge_t2": 0.407,
+   "neck_deg": 0.004,
+   "flare_t1": 0.732,
+   "flare_t2": 0.403
   },
   "stem": {
-   "foot_y": 303.886,
-   "head_y": 67.286
+   "foot_y": 303.288,
+   "head_y": 67.446
   },
   "arm": {
-   "inner_x": 94.203,
-   "inner_y": 209.187,
-   "inner_heading": 98.359,
-   "curl_x": 85.498,
+   "inner_x": 94.162,
+   "inner_y": 209.466,
+   "inner_heading": 98.13,
+   "curl_x": 85.416,
    "gap": 16.3,
-   "inner_t1": 0.385,
-   "inner_t2": 0.467,
-   "neck_deg": -24.736,
-   "waist_dx": 4.713,
-   "waist_y": 315.601,
+   "inner_t1": 0.361,
+   "inner_t2": 0.476,
+   "neck_deg": -25.83,
+   "waist_dx": 4.977,
+   "waist_y": 318.737,
    "outer_t1": 1.0,
-   "outer_t2": 0.342,
-   "outer_t3": 0.24,
-   "outer_t4": 0.378
+   "outer_t2": 0.202,
+   "outer_t3": 0.245,
+   "outer_t4": 0.374
   },
   "arch": {
-   "spring_heading": 163.904,
-   "t1": 0.513,
-   "t2": 0.596
+   "spring_heading": 164.196,
+   "t1": 0.506,
+   "t2": 0.597
   },
   "knob": {
-   "x": 44.998,
-   "y": 48.23,
-   "r": 20.798,
-   "neck_at": 46.029
+   "x": 44.979,
+   "y": 48.237,
+   "r": 20.781,
+   "neck_at": 46.158
   },
   "top": {
-   "centre_y": 28.011,
-   "neck_out": -0.385,
-   "edge_t1": 0.521,
+   "centre_y": 28.026,
+   "neck_out": -0.39,
+   "edge_t1": 0.522,
    "edge_t2": 1.0
   },
   "units": "plate pixels, y down; tensions 0–1; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/T_1.png",
-  "when": "2026-10-28T18:20:16"
+  "when": "2026-10-28T19:17:26"
  },
  "fit": {
-  "mean_px": 1.95,
-  "p95_px": 7.1,
-  "max_px": 19.86,
+  "mean_px": 1.94,
+  "p95_px": 7.11,
+  "max_px": 19.91,
   "mean_px_fitted_alone": 1.86,
   "wobble_of_pugins_edge_mean_px": 0.25,
   "segments": 34,

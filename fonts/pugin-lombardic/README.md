@@ -26,9 +26,9 @@ Letters alternate red and blue on the plate. Which form of M, T, and W is the de
 | Glyphs | **The whole plate:** A–Z without J (U and V separate), both forms of M, T and W, the cross and the dot ornament, with a modern Y of our own: 31 glyphs, built, spaced and compiled into a draft font. The uncial T, M and W are reached through the stylistic set `ss01`, the modern Y through `ss02`. See below. |
 | Primitive: the trefoil | Drawn as an exact, regularized shape (below), sized from all five letters that carry it (B, F, G, P, R); the uncial T's joins when it is built. |
 | Primitive: the two-lobe terminal | Drawn as an exact, regularized shape (below), sized from H and K. |
-| Still to build | Nothing from the plate. Next: the family-wide look at terminal lobe sizes, and kerning. |
-| Spacing | First pass: area-based side bearings (below). No kerning yet. |
-| More glyphs, kerning, features, automated font checks | Later |
+| Still to build | Nothing from the plate. Next: the family-wide look at terminal lobe sizes. |
+| Spacing and kerning | Judged a pair at a time: side bearings fitted so every pair of letters leaves about the same white, and the pairs still off kerned (below). |
+| More glyphs (punctuation, figures), automated font checks | Later |
 
 ### The curl terminal
 
@@ -153,13 +153,14 @@ His curls run from 0.84 (H) to 1.15 (Z) of the averaged curl; the cross's, drawn
 
 **In the font.** Cap height 700 units equals the plate's median letter height (1.639 units per plate pixel). The baseline is the bottom curls' outer edge. Until Q34 is answered, the straight T, the straight M and the W of two Vs have the keys, and the stylistic set `ss01` swaps in the uncial forms of all three; `ss02` gives the modern Y.
 
-**Spacing** (first pass, `spacing` in `source.json`; the results are in `spacing.json`). Side bearings are set by area, after the method of HT Letterspacer:
-- Along each side of a letter, on every line from the baseline to the cap height, the build measures the white between the letter's outermost point and its edge on that line, counting no deeper than 120 units.
-- The side bearing is 130 units less that mean depth. A flat side gets the full 130; a side its curls or bowl stand out from gets less. So each letter carries about the same white beside it.
-- No side bearing goes below 35 units, so curls never crowd. None goes above 75 units: T's white is inside the letter, under its arms, where the profile can't see it.
-- Symmetric letters keep equal side bearings. The word space is 250 units.
+**Spacing and kerning** (`tools/type/spacing.py`; the settings are `spacing` in `source.json`, the results `spacing.json`). Spacing is judged a pair at a time, because nearly every letter has curls at its corners: a round side beside a curled one leaves more white than either side suggests alone, which a letter-by-letter method can't see.
+- **A pair's white.** On every line from the baseline to the cap height, the build measures the gap between the left letter's right edge and the right letter's left edge. It counts each gap no further than 200 units (`depth`) beyond the pair's closest approach, so a deep bay reads about as open as a shallow one, and takes the mean.
+- **Side bearings** are fitted so every pair of letters (alternates included) comes as near as it can to one target white. The fit is robust: the few pairs far off don't drag the rest. Symmetric letters keep equal side bearings.
+- **How tight:** a letter carries 60 units of side bearing on average, both sides together (`mean_side_bearings`; the first pass averaged about 103). Lower sets tighter. At 45, neighbouring curls start to crowd.
+- **Kerning:** the pairs the side bearings leave more than 15 units off the target are kerned to it, in steps of 5. No pair may come closer than 30 units at its closest approach (`clearance`), so curls never touch. About 400 pairs are kerned. The largest close a round letter into the open middle of Z, X or the modern Y. Others open: diagonals beside diagonals (V–V), whose capped tops would otherwise meet, and round sides facing each other (D–O).
+- **The cross and the dot ornament** take the letters' median side bearing and no kerning. The word space is 200 units.
 
-There is no kerning yet. Pairs where the profiles don't tell the whole story (T and L next to round letters, for example) will want it. `uv run tools/type/type.py space pugin-lombardic` respaces and rewrites the font without fitting again.
+`uv run tools/type/type.py space pugin-lombardic` respaces, rekerns and rewrites the font in about a second, without fitting again. The proof page sets its specimen with kerning and without.
 
 ## Adjusting by hand
 

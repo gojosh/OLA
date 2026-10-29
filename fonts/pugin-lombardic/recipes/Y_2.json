@@ -92,7 +92,7 @@
   },
   "units": "plate pixels, y down; tensions 0–1; angles in degrees",
   "from": "V's fitted measurements; the rest are the construction's own",
-  "when": "2026-10-28T18:20:16"
+  "when": "2026-10-28T19:17:26"
  },
  "fit": {
   "segments": 36,

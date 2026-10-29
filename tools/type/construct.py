@@ -680,47 +680,6 @@ def to_units(built, scale, lsb):
     return contours, int(round((x_max - x_min) * scale + 2 * lsb)), x_min - lsb / scale
 
 
-def side_bearings(contours, zone, flat, depth, minimum, maximum=None, step=4.0):
-    """Area-based spacing, after the method of HT Letterspacer. Along each side, the white between
-    the letter's outermost point and the rest of its profile is measured on every line of the zone
-    (baseline to cap height), counting no deeper than `depth`. The side bearing is `flat` less that
-    mean depth, never under `minimum`: a flat side gets `flat`, and a side the letter's curls or bowl
-    stand out from gets less, so each letter carries about the same white beside it. `maximum` caps
-    a side whose white is inside the letter rather than at its edge, like T's arms, which the
-    profile can't see.
-    Returns (left, right) side bearings and the mean depths, in font units."""
-    pts = np.concatenate([G.sample(c, 120) for c in contours])
-    x_min, x_max = pts[:, 0].min(), pts[:, 0].max()
-    left, right = [], []
-    for y in np.arange(zone[0] + step / 2, zone[1], step):
-        row = pts[np.abs(pts[:, 1] - y) <= step / 2]
-        if len(row):
-            left.append(row[:, 0].min() - x_min)
-            right.append(x_max - row[:, 0].max())
-        else:
-            left.append(depth)
-            right.append(depth)
-    dl, dr = float(np.minimum(left, depth).mean()), float(np.minimum(right, depth).mean())
-    hi = maximum if maximum is not None else float("inf")
-    return min(hi, max(minimum, flat - dl)), min(hi, max(minimum, flat - dr)), dl, dr
-
-
-def respace(contours, lsb, rsb, symmetric=False):
-    """Move the outline so its left edge sits lsb from the origin; return it with its advance width.
-    A symmetric letter keeps equal side bearings."""
-    pts = np.concatenate([G.sample(c, 40) for c in contours])
-    x_min, x_max = pts[:, 0].min(), pts[:, 0].max()
-    if symmetric:
-        lsb = rsb = (lsb + rsb) / 2
-    lsb, rsb = int(round(lsb)), int(round(rsb))
-    dx = lsb - int(round(x_min))
-    moved = [[q + [dx, 0] for q in c] for c in contours]
-    width = int(round(x_max)) + dx + rsb
-    if symmetric:                       # keep the axis on a whole unit: the same white both sides
-        width = 2 * int(round((int(round(x_min)) + int(round(x_max))) / 2 + dx))
-    return moved, width, dx
-
-
 # ── Adjustments by hand ───────────────────────────────────────────────────────
 
 def mirrored_counts(built):
@@ -911,12 +870,13 @@ def is_line(P):
     return max(off) < 1e-6
 
 
-def write_ufo(path, info: dict, glyphs: dict, features: str = ""):
+def write_ufo(path, info: dict, glyphs: dict, features: str = "", kerning: dict | None = None):
     """glyphs: name → {"unicode": int | None, "width": int, "contours": [[4×2 segments]]}; features
-    is OpenType feature code (the stylistic sets)."""
+    is OpenType feature code (the stylistic sets); kerning maps (left, right) glyph names to units."""
     import ufoLib2
     font = ufoLib2.Font()
     font.features.text = features
+    font.kerning.update(kerning or {})
     for k, v in info.items():
         setattr(font.info, k, v)
     for name, g in glyphs.items():

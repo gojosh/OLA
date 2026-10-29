@@ -11,63 +11,63 @@
  },
  "corrections": [],
  "measured": {
-  "axis_x": 226.474,
+  "axis_x": 226.475,
   "outer": {
-   "bottom_y": 451.674,
-   "left_x": 25.437,
-   "left_y": 233.432,
-   "top_y": 23.454,
+   "bottom_y": 451.675,
+   "left_x": 25.436,
+   "left_y": 233.426,
+   "top_y": 23.453,
    "t1": 0.529,
    "t2": 0.523,
    "t3": 0.513,
    "t4": 0.514
   },
   "ball_top": {
-   "y": 52.287,
-   "meets_at": 200.945
+   "y": 52.297,
+   "meets_at": 200.932
   },
   "counter": {
-   "left_x": 120.99,
-   "left_y": 241.38,
-   "right_x": 336.51,
-   "right_y": 235.605,
-   "top_out": 173.247,
-   "t1": 0.657,
-   "t2": 0.41,
-   "t3": 0.371,
-   "t4": 0.377,
-   "t5": 0.902,
-   "t6": 0.999,
-   "t7": 0.537,
-   "t8": 0.482,
-   "top_in": 196.215,
-   "t9": 0.522,
-   "t10": 0.474
+   "left_x": 120.951,
+   "left_y": 241.108,
+   "right_x": 336.548,
+   "right_y": 235.591,
+   "top_out": 173.983,
+   "t1": 0.659,
+   "t2": 0.396,
+   "t3": 0.373,
+   "t4": 0.375,
+   "t5": 0.746,
+   "t6": 1.0,
+   "t7": 0.52,
+   "t8": 0.487,
+   "top_in": 196.165,
+   "t9": 0.521,
+   "t10": 0.473
   },
   "curl": {
-   "x": 223.503,
-   "y": 402.655,
+   "x": 223.626,
+   "y": 402.64,
    "notch_at": 87.047
   },
   "floor": {
-   "low_dx": 2.002,
-   "low_dy": 19.933
+   "low_dx": 2.001,
+   "low_dy": 20.045
   },
   "pocket": {
-   "dx": 18.548,
-   "dy": 7.859,
-   "out": 38.057,
-   "t1": 0.91,
-   "t2": 0.679
+   "dx": 19.564,
+   "dy": 7.768,
+   "out": 43.235,
+   "t1": 0.886,
+   "t2": 0.577
   },
   "units": "plate pixels, y down; tensions 0–1; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/O.png",
-  "when": "2026-10-28T18:20:16"
+  "when": "2026-10-28T19:17:26"
  },
  "fit": {
-  "mean_px": 0.86,
-  "p95_px": 1.8,
+  "mean_px": 0.85,
+  "p95_px": 1.78,
   "max_px": 2.75,
   "mean_px_fitted_alone": 0.81,
   "wobble_of_pugins_edge_mean_px": 0.24,

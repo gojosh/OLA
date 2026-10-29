@@ -24,7 +24,7 @@ Usage (from the repository root; uv installs the dependencies):
   uv run tools/type/type.py measure pugin-lombardic     # measurements.json
   uv run tools/type/type.py curls   pugin-lombardic     # primitives/: the curl terminals, averaged
   uv run tools/type/type.py build   pugin-lombardic     # recipes → source/*.ufo and build/*.otf (--fresh: from scratch)
-  uv run tools/type/type.py space   pugin-lombardic     # respace the built letters and rewrite the font
+  uv run tools/type/type.py space   pugin-lombardic     # respace and rekern the built letters and rewrite the font
   uv run tools/type/type.py proof   pugin-lombardic     # proof/index.html
   uv run tools/type/type.py serve   pugin-lombardic     # the proof page with its editor, at localhost:8766
 """
@@ -612,33 +612,48 @@ def cmd_build(fam: str, fresh: bool = False):
 
 
 def write_font(d: Path, src: dict, names: list[str]):
-    """Space the built letters (construct.side_bearings), write the UFO source and compile it.
-    Reads each letter's outline in font units from build/<glyph>.json and records its spacing there."""
+    """Space and kern the built glyphs (spacing.py), write the UFO source and compile it. Reads
+    each glyph's outline in font units from build/<glyph>.json and records its spacing there. The
+    letters are spaced and kerned against each other; other glyphs (the cross, the ornament) take
+    the letters' median side bearing and no kerning."""
+    import unicodedata
+
     import construct as K
+    import spacing as SP
     import ufo2ft
     fc, sp = src["font"], src["spacing"]
     out = d / "build"
     cap = fc["cap_height"]
-    glyphs, table, features = {}, {}, {}
+    builds, contours, profiles = {}, {}, {}
     for g in names:
         bp = out / f"{g.replace('.', '_')}.json"
-        b = json.loads(bp.read_text())
+        builds[g] = (bp, json.loads(bp.read_text()))
+        contours[g] = [[np.array(q, float) for q in c] for c in builds[g][1]["units"]["outline"]]
+        profiles[g] = SP.profile(contours[g], (0, cap))
+    letters = [g for g in names if unicodedata.category(builds[g][1]["char"][0]).startswith("L")]
+    symmetric = {g for g in names if builds[g][1].get("symmetric")}
+    lsb, rsb, target, white = SP.fit(profiles, letters, symmetric, sp["mean_side_bearings"], sp["depth"])
+    median = float(np.median(list(lsb.values()) + list(rsb.values())))
+    glyphs, table, features, spaced = {}, {}, {}, {}
+    for g in names:
+        bp, b = builds[g]
         u = b["units"]
-        contours = [[np.array(q, float) for q in c] for c in u["outline"]]
-        sym = bool(b.get("symmetric"))
-        lsb, rsb, dl, dr = K.side_bearings(contours, (0, cap), sp["flat"], sp["depth"], sp["minimum"], sp.get("maximum"))
-        moved, width, dx = K.respace(contours, lsb, rsb, sym)
+        moved, width, dx = SP.respace(contours[g], lsb.get(g, median), rsb.get(g, median), g in symmetric)
         pts = np.concatenate([G.sample(c, 40) for c in moved])
         lsb_u, rsb_u = int(round(pts[:, 0].min())), int(round(width - pts[:, 0].max()))
+        spaced[g] = (lsb_u, rsb_u)
+        u.pop("profile_depth", None)
         u.update({"spaced_outline": [[q.tolist() for q in c] for c in moved], "advance": width, "lsb": lsb_u, "rsb": rsb_u,
-                  "spaced_origin_px": u["origin_px"] - dx / u["scale_per_px"],
-                  "profile_depth": {"left": round(dl, 1), "right": round(dr, 1)}})
+                  "spaced_origin_px": u["origin_px"] - dx / u["scale_per_px"]})
         bp.write_text(json.dumps(b) + "\n")
         glyphs[g] = {"unicode": ord(b["char"]) if len(b["char"]) == 1 and not b.get("feature") else None, "width": width, "contours": moved}
         if b.get("feature"):
             features.setdefault(b["feature"], []).append((b["alternate_of"], g))
         table[g] = {"left": lsb_u, "right": rsb_u, "advance": width}
-    (d / "spacing.json").write_text(json.dumps({"method": sp, "glyphs": table}, indent=1) + "\n")
+    kerning = SP.kern(white, letters, spaced, target, sp["kern_threshold"], sp["clearance"])
+    (d / "spacing.json").write_text(json.dumps({"method": sp, "target_white": round(target, 1), "glyphs": table,
+                                                "kerning": {f"{a} {b}": k for (a, b), k in sorted(kerning.items())}},
+                                               indent=1, ensure_ascii=False) + "\n")
     glyphs[".notdef"] = {"unicode": None, "width": 500, "contours": K.notdef(500, cap)}
     glyphs["space"] = {"unicode": 0x20, "width": sp["word_space"], "contours": []}
     info = {"familyName": fc["name"], "styleName": "Regular", "unitsPerEm": fc["units_per_em"], "capHeight": cap,
@@ -651,18 +666,21 @@ def write_font(d: Path, src: dict, names: list[str]):
     # stylistic sets: each alternate replaces its base letter when its feature is on
     fea = "".join(f"feature {tag} {{\n" + "".join(f"    sub {a} by {b};\n" for a, b in pairs) + f"}} {tag};\n"
                   for tag, pairs in sorted(features.items()))
-    font = K.write_ufo(ufo, info, glyphs, fea)
+    font = K.write_ufo(ufo, info, glyphs, fea, kerning)
     otf_path = out / f"{fc['postscript_name']}.otf"
     ufo2ft.compileOTF(font).save(otf_path)
     print("  spacing: " + ", ".join(f"{g} {v['left']}|{v['right']}" for g, v in table.items()))
+    big = sorted(kerning.items(), key=lambda kv: kv[1])
+    print(f"  kerning: {len(kerning)} pairs; most closed " + ", ".join(f"{a}{b} {k}" for (a, b), k in big[:6])
+          + "; most opened " + ", ".join(f"{a}{b} {k}" for (a, b), k in big[::-1][:3]))
     print(f"  wrote {ufo.relative_to(ROOT)} and {otf_path.relative_to(ROOT)} ({otf_path.stat().st_size} bytes)")
 
 
 def cmd_space(fam: str):
     """Respace the built letters and rewrite the font, without fitting again."""
     d = family_dir(fam)
-    names = [json.loads(p.read_text())["glyph"] for p in sorted((d / "build").glob("*.json"))]
-    write_font(d, load_source(fam), [g for g in names])
+    reports = [json.loads(p.read_text()) for p in sorted((d / "build").glob("*.json"))]
+    write_font(d, load_source(fam), [r["glyph"] for r in reports if "glyph" in r])     # not the fit caches
 
 
 # ── Measurements ──────────────────────────────────────────────────────────────
@@ -883,7 +901,7 @@ A neck angle of 0° means the bar leaves the neck flat; it can't dip lower witho
 .spec{font-family:'Draft';line-height:1;display:flex;align-items:baseline;gap:28px;margin:28px 0;flex-wrap:wrap}
 details{margin-top:12px} summary{cursor:pointer;color:var(--muted)}
 .fam .sh th,.fam .sh td{font-weight:700;border-top:2px solid var(--ink)}
-.words{font-family:'Draft';font-size:72px;line-height:1.25;margin:24px 0;word-spacing:.3em}
+.words{font-family:'Draft';font-size:72px;line-height:1.25;margin:24px 0;font-kerning:normal}
 @media (max-width:860px){.ov-grid{grid-template-columns:1fr} .tri{grid-template-columns:1fr 1fr}}
 """
     return "".join(out), css
@@ -925,6 +943,8 @@ def _family_html(d: Path, meta: dict) -> str:
     words = ["✠ KYRIE", "GLORIA", "CREDO", "ALLELUIA", "VENI CREATOR", "MAGNIFICAT", "LAUDATE", "BENEDICTE", "MISERERE",
              "WHITSUN", "AVE", "AMEN ⁙"]
     spec = " ".join(f'<span style="color:{inks["red" if i % 2 else "blue"]}">{w}</span>' for i, w in enumerate(words))
+    sp_p = d / "spacing.json"
+    n_kern = len(json.loads(sp_p.read_text()).get("kerning", {})) if sp_p.exists() else 0
     return f"""
 <section class="family"><h2>The letters together</h2>
 <p class="lede">The letters were fitted to Pugin's in one solve, sharing two stem weights, one curl, one ball, one trefoil and one two-lobe terminal, so those
@@ -935,7 +955,9 @@ arms of a cross, and the two-lobe terminal two equal overlapping lobes: each is 
 <p class="words">{spec}</p>
 <p class="lede">With the stylistic sets on: <code>ss01</code> gives the uncial forms of T, M and W, <code>ss02</code> the modern Y (drawn on Pugin's V).</p>
 <p class="words" style="font-feature-settings:'ss01','ss02'">{spec}</p>
-<p class="lede">Spacing is a first pass: each side bearing is set by the white beside the letter's profile (see the README). No kerning yet.</p>
+<p class="lede">Spacing and kerning are judged a pair at a time: the side bearings are fitted so every pair of letters leaves as nearly as it can
+the same white between them, and the {n_kern} pairs still off are kerned (see the README). The same words without kerning:</p>
+<p class="words" style="font-kerning:none">{spec}</p>
 </section>"""
 
 
