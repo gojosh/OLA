@@ -1,0 +1,112 @@
+{
+ "glyph": "W.1",
+ "unicode": "U+0057",
+ "unicode_note": "Provisional: the W of two interlaced Vs has the W key until Q34 decides the default.",
+ "construction": "letters.py: W_1",
+ "description": "Two interlaced Vs. The left V is drawn as the V is, its left arm thick and its right arm thin, each headed by a bar with a curl at both ends; the right V is its mirror image, and the two thin arms cross on the axis. On each side the thick arm's bar runs into the thin arm's, the curls between them overlapping like two balls close together. A counter each side under the bars; the space between the thin arms' bars opens to the top, and the space under the crossing to the foot.",
+ "primitives": {
+  "curl": [
+   "four on each side: two on each bar, the inner two overlapping"
+  ]
+ },
+ "corrections": [],
+ "measured": {
+  "curl": 0.778,
+  "axis_x": 239.422,
+  "point": {
+   "x": 169.217,
+   "y": 442.831,
+   "out": 250.29
+  },
+  "crotch": {
+   "x": 196.922,
+   "y": 299.246,
+   "in": 65.773
+  },
+  "bars": {
+   "y": 27.317,
+   "crowns_apart": 16.417
+  },
+  "thin_bar": {
+   "clear_of_axis": 6.817,
+   "length": 37.521
+  },
+  "thick_bar": {
+   "left_x": 29.079
+  },
+  "thick_arm": {
+   "outer": {
+    "x": 55.863,
+    "y": 114.764,
+    "heading": 251.953
+   },
+   "inner": {
+    "x": 129.12,
+    "y": 107.284,
+    "heading": 76.582
+   },
+   "t1": 0.721,
+   "t2": 0.662,
+   "t3": 0.304,
+   "t4": 0.235
+  },
+  "thick bar": {
+   "low_at": 0.387,
+   "low_dy": 5.511,
+   "neck_l": 37.239,
+   "neck_r": 99.088,
+   "flare_l1": 0.377,
+   "flare_l2": 0.257,
+   "edge_t1": 0.444,
+   "edge_t2": 0.398,
+   "edge_t3": 0.451,
+   "edge_t4": 0.259,
+   "flare_r1": 0.351,
+   "flare_r2": 0.207
+  },
+  "thin_arm": {
+   "outer": {
+    "x": 179.236,
+    "y": 86.074,
+    "heading": 249.242
+   },
+   "inner": {
+    "x": 201.743,
+    "y": 80.758
+   },
+   "point_out": 248.469,
+   "t1": 0.633,
+   "t2": 0.441,
+   "crotch_in": 69.837,
+   "t3": 0.582,
+   "t4": 0.297
+  },
+  "thin bar": {
+   "low_at": 0.326,
+   "low_dy": 2.601,
+   "neck_l": 23.414,
+   "neck_r": 9.11,
+   "flare_l1": 0.201,
+   "flare_l2": 0.669,
+   "edge_t1": 0.3,
+   "edge_t2": 0.66,
+   "edge_t3": 0.532,
+   "edge_t4": 0.285,
+   "flare_r1": 0.542,
+   "flare_r2": 0.2
+  },
+  "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/W_1.png",
+  "when": "2026-10-28T18:20:16"
+ },
+ "fit": {
+  "mean_px": 1.47,
+  "p95_px": 4.29,
+  "max_px": 8.26,
+  "mean_px_fitted_alone": 1.48,
+  "wobble_of_pugins_edge_mean_px": 0.29,
+  "segments": 52,
+  "outline_checks_pass": true
+ }
+}

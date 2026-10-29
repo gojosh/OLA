@@ -1,0 +1,104 @@
+{
+ "glyph": "M.2",
+ "unicode": "U+004D",
+ "unicode_note": "Provisional: the straight M has the M key until Q34 decides the default.",
+ "construction": "letters.py: M_2",
+ "description": "The straight M: two legs, splayed a little, each standing on a foot with a curl at both sides; across their heads a bar with a curl at each end, rising to a crest over the middle; and from under the bar between the legs a V, its arms thinner than the legs, coming to a point well above the baseline. Under the bar, between the V's arms, a counter like a teardrop. Symmetric about its axis.",
+ "primitives": {
+  "curl": [
+   "top-left",
+   "top-right",
+   "two on each foot"
+  ]
+ },
+ "corrections": [],
+ "measured": {
+  "axis_x": 259.876,
+  "point": {
+   "y": 359.707,
+   "out": 249.298
+  },
+  "crotch": {
+   "x": 181.378,
+   "y": 164.8,
+   "in": 246.262,
+   "out": 100.072
+  },
+  "leg": {
+   "inner": {
+    "x": 160.916,
+    "y": 367.253
+   },
+   "outer": {
+    "x": 97.603,
+    "y": 333.981,
+    "heading": 277.527
+   },
+   "outer_right_x": 119.127,
+   "outer_right_y": 126.793,
+   "t1": 0.544,
+   "t2": 0.421,
+   "t3": 0.268,
+   "t4": 0.802,
+   "t5": 0.491,
+   "t6": 1.0
+  },
+  "top": {
+   "left_x": 101.366,
+   "y": 23.859,
+   "neck": 39.937,
+   "low_x": 171.417,
+   "low_y": 35.736,
+   "crest_y": 22.696,
+   "t1": 0.321,
+   "t2": 0.453,
+   "t3": 0.202,
+   "t4": 0.416
+  },
+  "v_arm": {
+   "t1": 0.749,
+   "t2": 0.793
+  },
+  "foot": {
+   "y": 445.338,
+   "left_x": 68.729,
+   "right_x": 192.534,
+   "high_x": 128.113,
+   "high_dy": 11.548,
+   "neck_r": 31.493,
+   "neck_l": 39.977,
+   "flare_r1": 0.948,
+   "flare_r2": 0.902,
+   "edge_t1": 0.271,
+   "edge_t2": 0.619,
+   "edge_t3": 0.338,
+   "edge_t4": 0.38,
+   "flare_l1": 0.614,
+   "flare_l2": 0.624
+  },
+  "counter": {
+   "top_y": 43.293,
+   "left_x": 196.93,
+   "left_y": 72.55,
+   "point_y": 274.154,
+   "t1": 0.544,
+   "t2": 0.482,
+   "point_in": 66.57,
+   "t3": 0.858,
+   "t4": 0.621
+  },
+  "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/M_2.png",
+  "when": "2026-10-28T18:20:16"
+ },
+ "fit": {
+  "mean_px": 1.72,
+  "p95_px": 4.74,
+  "max_px": 9.25,
+  "mean_px_fitted_alone": 1.66,
+  "wobble_of_pugins_edge_mean_px": 0.3,
+  "segments": 42,
+  "outline_checks_pass": true
+ }
+}

@@ -1,0 +1,375 @@
+{
+ "glyph": "S",
+ "units": "plate pixels, y down; each a move of one control point from the construction, made by hand on the proof page",
+ "points": [
+  {
+   "contour": 0,
+   "segment": 16,
+   "point": 0,
+   "node": "notch, bottom",
+   "dx": -6.872,
+   "dy": 9.857
+  },
+  {
+   "contour": 0,
+   "segment": 15,
+   "point": 3,
+   "node": "lower bowl: bottom",
+   "dx": -6.872,
+   "dy": 9.857
+  },
+  {
+   "contour": 0,
+   "segment": 16,
+   "point": 1,
+   "node": "notch, bottom",
+   "dx": 6.554,
+   "dy": 1.924
+  },
+  {
+   "contour": 0,
+   "segment": 15,
+   "point": 2,
+   "node": "lower bowl: bottom",
+   "dx": -0.754,
+   "dy": -21.283
+  },
+  {
+   "contour": 0,
+   "segment": 15,
+   "point": 1,
+   "node": "lower bowl: bottom",
+   "dx": -58.576,
+   "dy": 0.0
+  },
+  {
+   "contour": 0,
+   "segment": 19,
+   "point": 2,
+   "node": "left stroke: outside, rightmost",
+   "dx": 10.311,
+   "dy": 4.175
+  },
+  {
+   "contour": 0,
+   "segment": 20,
+   "point": 1,
+   "node": "ball, head of the left stroke: notch",
+   "dx": 3.649,
+   "dy": -3.134
+  },
+  {
+   "contour": 0,
+   "segment": 20,
+   "point": 0,
+   "node": "ball, head of the left stroke: notch",
+   "dx": 0.97,
+   "dy": 5.098
+  },
+  {
+   "contour": 0,
+   "segment": 19,
+   "point": 3,
+   "node": "left stroke: outside, rightmost",
+   "dx": 0.97,
+   "dy": 5.098
+  },
+  {
+   "contour": 0,
+   "segment": 20,
+   "point": 2,
+   "node": "ball, head of the left stroke: notch",
+   "dx": 0.0,
+   "dy": 3.266
+  },
+  {
+   "contour": 0,
+   "segment": 18,
+   "point": 2,
+   "node": "foot: leftmost",
+   "dx": 0.0,
+   "dy": 4.186
+  },
+  {
+   "contour": 0,
+   "segment": 6,
+   "point": 0,
+   "node": "ball, foot of the flag: notch",
+   "dx": -0.108,
+   "dy": 4.28
+  },
+  {
+   "contour": 0,
+   "segment": 5,
+   "point": 3,
+   "node": "flag: head, end",
+   "dx": -0.108,
+   "dy": 4.28
+  },
+  {
+   "contour": 0,
+   "segment": 6,
+   "point": 1,
+   "node": "ball, foot of the flag: notch",
+   "dx": -0.108,
+   "dy": 4.28
+  },
+  {
+   "contour": 0,
+   "segment": 5,
+   "point": 2,
+   "node": "flag: head, end",
+   "dx": 1.041,
+   "dy": -26.883
+  },
+  {
+   "contour": 0,
+   "segment": 7,
+   "point": 0,
+   "node": "ball, foot of the flag",
+   "dx": 8.122,
+   "dy": 1.691
+  },
+  {
+   "contour": 0,
+   "segment": 6,
+   "point": 3,
+   "node": "ball, foot of the flag: notch",
+   "dx": 8.122,
+   "dy": 1.691
+  },
+  {
+   "contour": 0,
+   "segment": 7,
+   "point": 1,
+   "node": "ball, foot of the flag",
+   "dx": 6.558,
+   "dy": 1.691
+  },
+  {
+   "contour": 0,
+   "segment": 6,
+   "point": 2,
+   "node": "ball, foot of the flag: notch",
+   "dx": 2.292,
+   "dy": 1.691
+  },
+  {
+   "contour": 0,
+   "segment": 8,
+   "point": 0,
+   "node": "ball, foot of the flag",
+   "dx": 1.815,
+   "dy": 1.398
+  },
+  {
+   "contour": 0,
+   "segment": 7,
+   "point": 3,
+   "node": "ball, foot of the flag",
+   "dx": 1.815,
+   "dy": 1.398
+  },
+  {
+   "contour": 0,
+   "segment": 8,
+   "point": 1,
+   "node": "ball, foot of the flag",
+   "dx": 1.815,
+   "dy": 1.398
+  },
+  {
+   "contour": 0,
+   "segment": 7,
+   "point": 2,
+   "node": "ball, foot of the flag",
+   "dx": 1.815,
+   "dy": 1.398
+  },
+  {
+   "contour": 0,
+   "segment": 5,
+   "point": 0,
+   "node": "flag: head, end",
+   "dx": 2.471,
+   "dy": 2.579
+  },
+  {
+   "contour": 0,
+   "segment": 4,
+   "point": 3,
+   "node": "flag: head, extreme",
+   "dx": 2.471,
+   "dy": 2.579
+  },
+  {
+   "contour": 0,
+   "segment": 5,
+   "point": 1,
+   "node": "flag: head, end",
+   "dx": 2.471,
+   "dy": -7.295
+  },
+  {
+   "contour": 0,
+   "segment": 4,
+   "point": 2,
+   "node": "flag: head, extreme",
+   "dx": 2.471,
+   "dy": 2.579
+  },
+  {
+   "contour": 0,
+   "segment": 10,
+   "point": 0,
+   "node": "ball, foot of the flag: leaves",
+   "dx": -16.979,
+   "dy": -20.881
+  },
+  {
+   "contour": 0,
+   "segment": 9,
+   "point": 3,
+   "node": "ball, foot of the flag",
+   "dx": -16.979,
+   "dy": -20.881
+  },
+  {
+   "contour": 0,
+   "segment": 10,
+   "point": 1,
+   "node": "ball, foot of the flag: leaves",
+   "dx": 12.903,
+   "dy": 14.046
+  },
+  {
+   "contour": 0,
+   "segment": 9,
+   "point": 2,
+   "node": "ball, foot of the flag",
+   "dx": -14.725,
+   "dy": -9.104
+  },
+  {
+   "contour": 0,
+   "segment": 9,
+   "point": 1,
+   "node": "ball, foot of the flag",
+   "dx": -3.043,
+   "dy": 0.0
+  },
+  {
+   "contour": 0,
+   "segment": 13,
+   "point": 0,
+   "node": "spine: top",
+   "dx": -6.243,
+   "dy": -1.54
+  },
+  {
+   "contour": 0,
+   "segment": 12,
+   "point": 3,
+   "node": "upper counter: leftmost",
+   "dx": -6.243,
+   "dy": -1.54
+  },
+  {
+   "contour": 0,
+   "segment": 13,
+   "point": 1,
+   "node": "spine: top",
+   "dx": -10.184,
+   "dy": -1.517
+  },
+  {
+   "contour": 0,
+   "segment": 12,
+   "point": 2,
+   "node": "upper counter: leftmost",
+   "dx": -12.32,
+   "dy": -3.277
+  },
+  {
+   "contour": 0,
+   "segment": 12,
+   "point": 0,
+   "node": "upper counter: leftmost",
+   "dx": 1.095,
+   "dy": 0.0
+  },
+  {
+   "contour": 0,
+   "segment": 11,
+   "point": 3,
+   "node": "upper counter: top",
+   "dx": 1.095,
+   "dy": 0.0
+  },
+  {
+   "contour": 0,
+   "segment": 12,
+   "point": 1,
+   "node": "upper counter: leftmost",
+   "dx": 1.095,
+   "dy": 0.0
+  },
+  {
+   "contour": 0,
+   "segment": 11,
+   "point": 2,
+   "node": "upper counter: top",
+   "dx": 1.095,
+   "dy": 0.0
+  },
+  {
+   "contour": 0,
+   "segment": 13,
+   "point": 2,
+   "node": "spine: top",
+   "dx": 0.0,
+   "dy": -11.91
+  },
+  {
+   "contour": 0,
+   "segment": 23,
+   "point": 0,
+   "node": "ball, head of the left stroke: leaves",
+   "dx": 20.21,
+   "dy": 22.783
+  },
+  {
+   "contour": 0,
+   "segment": 22,
+   "point": 3,
+   "node": "ball, head of the left stroke",
+   "dx": 20.21,
+   "dy": 22.783
+  },
+  {
+   "contour": 0,
+   "segment": 23,
+   "point": 1,
+   "node": "ball, head of the left stroke: leaves",
+   "dx": 4.441,
+   "dy": 12.999
+  },
+  {
+   "contour": 0,
+   "segment": 22,
+   "point": 2,
+   "node": "ball, head of the left stroke",
+   "dx": 10.316,
+   "dy": 3.296
+  },
+  {
+   "contour": 0,
+   "segment": 23,
+   "point": 2,
+   "node": "ball, head of the left stroke: leaves",
+   "dx": 9.355,
+   "dy": 0.0
+  }
+ ],
+ "when": "2026-10-28T17:18:49"
+}

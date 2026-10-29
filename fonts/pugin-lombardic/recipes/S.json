@@ -125,15 +125,15 @@
   "units": "plate pixels, y down; tensions 0–1; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/S.png",
-  "when": "2026-10-28T15:44:01"
+  "when": "2026-10-28T18:20:16"
  },
  "fit": {
-  "mean_px": 0.99,
-  "p95_px": 3.09,
-  "max_px": 6.41,
-  "mean_px_fitted_alone": 0.96,
+  "mean_px": 0.74,
+  "p95_px": 1.86,
+  "max_px": 3.25,
+  "mean_px_fitted_alone": 0.99,
   "wobble_of_pugins_edge_mean_px": 0.22,
-  "segments": 27,
+  "segments": 29,
   "outline_checks_pass": true
  }
 }

@@ -1,0 +1,39 @@
+{
+ "glyph": "R",
+ "units": "plate pixels, y down; each a move of one control point from the construction, made by hand on the proof page",
+ "points": [
+  {
+   "contour": 0,
+   "segment": 16,
+   "point": 0,
+   "node": "curl, foot of the leg: neck",
+   "dx": 6.572,
+   "dy": 6.227
+  },
+  {
+   "contour": 0,
+   "segment": 15,
+   "point": 3,
+   "node": "pocket: leftmost",
+   "dx": 6.572,
+   "dy": 6.227
+  },
+  {
+   "contour": 0,
+   "segment": 16,
+   "point": 1,
+   "node": "curl, foot of the leg: neck",
+   "dx": -3.376,
+   "dy": 7.648
+  },
+  {
+   "contour": 0,
+   "segment": 15,
+   "point": 2,
+   "node": "pocket: leftmost",
+   "dx": 8.041,
+   "dy": 6.227
+  }
+ ],
+ "when": "2026-10-28T17:14:31"
+}

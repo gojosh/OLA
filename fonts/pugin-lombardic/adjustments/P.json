@@ -1,0 +1,111 @@
+{
+ "glyph": "P",
+ "units": "plate pixels, y down; each a move of one control point from the construction, made by hand on the proof page",
+ "points": [
+  {
+   "contour": 0,
+   "segment": 35,
+   "point": 2,
+   "node": "bottom bar: high point",
+   "dx": 17.187,
+   "dy": 0.0
+  },
+  {
+   "contour": 0,
+   "segment": 34,
+   "point": 0,
+   "node": "curl, bottom-right: outer",
+   "dx": -11.785,
+   "dy": 2.395
+  },
+  {
+   "contour": 0,
+   "segment": 33,
+   "point": 3,
+   "node": "curl, bottom-right: back",
+   "dx": -11.785,
+   "dy": 2.395
+  },
+  {
+   "contour": 0,
+   "segment": 34,
+   "point": 1,
+   "node": "curl, bottom-right: outer",
+   "dx": 17.994,
+   "dy": 2.395
+  },
+  {
+   "contour": 0,
+   "segment": 33,
+   "point": 2,
+   "node": "curl, bottom-right: back",
+   "dx": -11.785,
+   "dy": 2.395
+  },
+  {
+   "contour": 0,
+   "segment": 34,
+   "point": 2,
+   "node": "curl, bottom-right: outer",
+   "dx": 11.89,
+   "dy": 0.408
+  },
+  {
+   "contour": 0,
+   "segment": 35,
+   "point": 0,
+   "node": "bottom bar: high point",
+   "dx": -9.307,
+   "dy": 0.408
+  },
+  {
+   "contour": 0,
+   "segment": 34,
+   "point": 3,
+   "node": "curl, bottom-right: outer",
+   "dx": -9.307,
+   "dy": 0.408
+  },
+  {
+   "contour": 0,
+   "segment": 35,
+   "point": 1,
+   "node": "bottom bar: high point",
+   "dx": -5.346,
+   "dy": 0.408
+  },
+  {
+   "contour": 0,
+   "segment": 31,
+   "point": 0,
+   "node": "curl, bottom-right: neck",
+   "dx": 1.905,
+   "dy": -0.443
+  },
+  {
+   "contour": 0,
+   "segment": 30,
+   "point": 3,
+   "node": "stem: right, foot of straight",
+   "dx": 1.905,
+   "dy": -0.443
+  },
+  {
+   "contour": 0,
+   "segment": 31,
+   "point": 1,
+   "node": "curl, bottom-right: neck",
+   "dx": 1.905,
+   "dy": -0.443
+  },
+  {
+   "contour": 0,
+   "segment": 30,
+   "point": 2,
+   "node": "stem: right, foot of straight",
+   "dx": 42.257,
+   "dy": 18.171
+  }
+ ],
+ "when": "2026-10-28T17:08:41"
+}

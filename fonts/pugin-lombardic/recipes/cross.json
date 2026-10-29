@@ -1,0 +1,45 @@
+{
+ "glyph": "cross",
+ "unicode": "U+2720",
+ "unicode_note": "Provisional: U+2720 MALTESE CROSS is the character liturgical books use for the sign of the cross (Q35).",
+ "construction": "letters.py: cross",
+ "description": "A cross of four equal arms, narrow where they meet and widening to their ends, each end a bar with a curl at both corners rolling back toward the centre, its edge dipping a little between them. The arms' sides are hollow curves meeting at sharp inside corners. Built on half of one arm, mirrored and turned through the four quarters, so it has the square's symmetry. Its curls take their own size.",
+ "primitives": {
+  "curl": [
+   "two on each arm's end, at their own size"
+  ]
+ },
+ "corrections": [],
+ "measured": {
+  "centre_x": 219.177,
+  "centre_y": 244.888,
+  "curl": 1.154,
+  "crotch": 36.033,
+  "end": {
+   "half_width": 83.96,
+   "reach": 212.207,
+   "neck": 40.0,
+   "dip": 11.795,
+   "t1": 0.305,
+   "t2": 0.429
+  },
+  "side": {
+   "leave": 269.591,
+   "t1": 0.437,
+   "t2": 0.2
+  },
+  "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/cross.png",
+  "when": "2026-10-28T18:20:16"
+ },
+ "fit": {
+  "mean_px": 2.93,
+  "p95_px": 7.64,
+  "max_px": 14.92,
+  "mean_px_fitted_alone": 2.93,
+  "wobble_of_pugins_edge_mean_px": 0.28,
+  "segments": 40,
+  "outline_checks_pass": true
+ }
+}

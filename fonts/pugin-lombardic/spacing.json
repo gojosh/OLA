@@ -19,8 +19,8 @@
    "advance": 786
   },
   "C": {
-   "left": 64,
-   "right": 38,
+   "left": 63,
+   "right": 39,
    "advance": 758
   },
   "D": {
@@ -31,22 +31,22 @@
   "E": {
    "left": 65,
    "right": 38,
-   "advance": 761
+   "advance": 762
   },
   "F": {
    "left": 35,
-   "right": 68,
-   "advance": 782
+   "right": 69,
+   "advance": 781
   },
   "G": {
-   "left": 63,
+   "left": 64,
    "right": 75,
-   "advance": 822
+   "advance": 823
   },
   "H": {
    "left": 35,
-   "right": 62,
-   "advance": 778
+   "right": 60,
+   "advance": 780
   },
   "I": {
    "left": 35,
@@ -55,18 +55,28 @@
   },
   "K": {
    "left": 35,
-   "right": 41,
+   "right": 39,
    "advance": 774
   },
   "L": {
    "left": 42,
-   "right": 48,
-   "advance": 751
+   "right": 53,
+   "advance": 755
+  },
+  "M.1": {
+   "left": 75,
+   "right": 75,
+   "advance": 848
+  },
+  "M.2": {
+   "left": 35,
+   "right": 35,
+   "advance": 830
   },
   "N": {
    "left": 35,
    "right": 75,
-   "advance": 773
+   "advance": 774
   },
   "O": {
    "left": 68,
@@ -80,18 +90,18 @@
   },
   "Q": {
    "left": 67,
-   "right": 55,
-   "advance": 782
+   "right": 53,
+   "advance": 784
   },
   "R": {
    "left": 36,
-   "right": 71,
+   "right": 70,
    "advance": 761
   },
   "S": {
-   "left": 74,
+   "left": 73,
    "right": 75,
-   "advance": 759
+   "advance": 758
   },
   "T.1": {
    "left": 75,
@@ -99,9 +109,9 @@
    "advance": 832
   },
   "T.2": {
-   "left": 66,
+   "left": 64,
    "right": 67,
-   "advance": 816
+   "advance": 814
   },
   "U": {
    "left": 70,
@@ -111,7 +121,17 @@
   "V": {
    "left": 35,
    "right": 35,
-   "advance": 845
+   "advance": 849
+  },
+  "W.1": {
+   "left": 35,
+   "right": 35,
+   "advance": 870
+  },
+  "W.2": {
+   "left": 75,
+   "right": 57,
+   "advance": 868
   },
   "X": {
    "left": 35,
@@ -123,10 +143,25 @@
    "right": 35,
    "advance": 801
   },
-  "Z": {
-   "left": 48,
+  "Y.2": {
+   "left": 35,
    "right": 35,
-   "advance": 681
+   "advance": 849
+  },
+  "Z": {
+   "left": 49,
+   "right": 35,
+   "advance": 683
+  },
+  "cross": {
+   "left": 75,
+   "right": 75,
+   "advance": 846
+  },
+  "ornament.dots": {
+   "left": 56,
+   "right": 57,
+   "advance": 577
   }
  }
 }

@@ -1,0 +1,199 @@
+{
+ "glyph": "O",
+ "units": "plate pixels, y down; each a move of one control point from the construction, made by hand on the proof page",
+ "points": [
+  {
+   "contour": 1,
+   "segment": 7,
+   "point": 0,
+   "node": "curl, floor: back",
+   "dx": -3.54,
+   "dy": -0.325
+  },
+  {
+   "contour": 1,
+   "segment": 6,
+   "point": 3,
+   "node": "counter: floor, lowest",
+   "dx": -3.54,
+   "dy": -0.325
+  },
+  {
+   "contour": 1,
+   "segment": 7,
+   "point": 1,
+   "node": "curl, floor: back",
+   "dx": -3.54,
+   "dy": -0.325
+  },
+  {
+   "contour": 1,
+   "segment": 6,
+   "point": 2,
+   "node": "counter: floor, lowest",
+   "dx": -3.54,
+   "dy": -0.325
+  },
+  {
+   "contour": 1,
+   "segment": 6,
+   "point": 0,
+   "node": "counter: floor, lowest",
+   "dx": 3.281,
+   "dy": 1.9
+  },
+  {
+   "contour": 1,
+   "segment": 5,
+   "point": 3,
+   "node": "counter: left",
+   "dx": 3.281,
+   "dy": 1.9
+  },
+  {
+   "contour": 1,
+   "segment": 6,
+   "point": 1,
+   "node": "counter: floor, lowest",
+   "dx": 3.281,
+   "dy": 1.9
+  },
+  {
+   "contour": 1,
+   "segment": 5,
+   "point": 2,
+   "node": "counter: left",
+   "dx": 3.281,
+   "dy": 1.9
+  },
+  {
+   "contour": 1,
+   "segment": 0,
+   "point": 0,
+   "node": "ball, top: meets the ring",
+   "dx": -3.189,
+   "dy": -0.264
+  },
+  {
+   "contour": 1,
+   "segment": 12,
+   "point": 3,
+   "node": "counter: right",
+   "dx": -3.189,
+   "dy": -0.264
+  },
+  {
+   "contour": 1,
+   "segment": 0,
+   "point": 1,
+   "node": "ball, top: meets the ring",
+   "dx": -3.189,
+   "dy": -0.264
+  },
+  {
+   "contour": 1,
+   "segment": 12,
+   "point": 2,
+   "node": "counter: right",
+   "dx": 0.407,
+   "dy": -0.264
+  },
+  {
+   "contour": 1,
+   "segment": 1,
+   "point": 0,
+   "node": "ball, top",
+   "dx": -0.117,
+   "dy": 1.671
+  },
+  {
+   "contour": 1,
+   "segment": 0,
+   "point": 3,
+   "node": "ball, top: meets the ring",
+   "dx": -0.117,
+   "dy": 1.671
+  },
+  {
+   "contour": 1,
+   "segment": 1,
+   "point": 1,
+   "node": "ball, top",
+   "dx": -0.117,
+   "dy": 1.671
+  },
+  {
+   "contour": 1,
+   "segment": 0,
+   "point": 2,
+   "node": "ball, top: meets the ring",
+   "dx": -0.117,
+   "dy": 1.671
+  },
+  {
+   "contour": 1,
+   "segment": 3,
+   "point": 0,
+   "node": "ball, top",
+   "dx": 0.178,
+   "dy": 2.942
+  },
+  {
+   "contour": 1,
+   "segment": 2,
+   "point": 3,
+   "node": "ball, top",
+   "dx": 0.178,
+   "dy": 2.942
+  },
+  {
+   "contour": 1,
+   "segment": 3,
+   "point": 1,
+   "node": "ball, top",
+   "dx": 0.178,
+   "dy": 2.942
+  },
+  {
+   "contour": 1,
+   "segment": 2,
+   "point": 2,
+   "node": "ball, top",
+   "dx": 0.178,
+   "dy": 2.942
+  },
+  {
+   "contour": 1,
+   "segment": 4,
+   "point": 0,
+   "node": "ball, top: meets the ring, left",
+   "dx": 2.854,
+   "dy": 1.163
+  },
+  {
+   "contour": 1,
+   "segment": 3,
+   "point": 3,
+   "node": "ball, top",
+   "dx": 2.854,
+   "dy": 1.163
+  },
+  {
+   "contour": 1,
+   "segment": 4,
+   "point": 1,
+   "node": "ball, top: meets the ring, left",
+   "dx": -1.044,
+   "dy": 1.163
+  },
+  {
+   "contour": 1,
+   "segment": 3,
+   "point": 2,
+   "node": "ball, top",
+   "dx": 2.854,
+   "dy": 1.163
+  }
+ ],
+ "when": "2026-10-28T17:06:25"
+}

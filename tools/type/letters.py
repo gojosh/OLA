@@ -12,9 +12,15 @@ edge of the bottom curls), and, for a symmetric letter, the left half and the ax
 the letter's reference image, in plate pixels, y down."""
 from __future__ import annotations
 
+import math
+
 import numpy as np
 
-from construct import E, N, ORIENT, S, W, arc, cubic, ends, line, mirror_half, trefoil, two_lobe
+import geom as G
+from construct import (E, N, ORIENT, S, W, arc, cross_x, crossings, cubic, cut, ends, line, mirror_copy, mirror_half,
+                       trefoil, two_lobe)
+
+CAP_PX = 427.0     # the plate's median letter height (measurements.json), for glyphs that sit by it rather than on the baseline
 
 
 # ── Shared parts ──────────────────────────────────────────────────────────────
@@ -129,24 +135,32 @@ def rounded_corner(p, pre, c, r, a_from, a_to, label, name):
     return (run, *ends(segs))
 
 
-def cap_top(p, K, k, pre, Ls, hL, Rs, hR, i):
+def cap_top(p, K, k, pre, Ls, hL, Rs, hR, i, at=None, neck_l=(0, 0, 40), neck_r=(0, 0, 40)):
     """The head of a stroke at any slant: a short bar along the top line with a curl at each end,
     flaring down into the stroke's two edges, as the I's top does into its stem. Clockwise: from Ls
     on the stroke's left edge (leaving it on heading hL, up the edge), up the flare into the top-left
     curl, along the bar's top (dipping to a low point between the curls) to the top-right curl, and
-    down its flare to Rs on the right edge (arriving on heading hR, down the edge)."""
-    y = p.x(f"{pre}.y", i["y"], 15)
-    O_l = np.array([p.x(f"{pre}.left_x", i["left"], 20), y])
-    O_r = np.array([p.x(f"{pre}.right_x", i["right"], 20), y])
-    D = np.array([p.x(f"{pre}.low_x", (i["left"] + i["right"]) / 2, 40), y + p.length(f"{pre}.low_dy", 8, 0, 25)])
-    segs_l, names_l, neck_l, arrive_l = K.curl(O_l, "tl", k, p.ang(f"{pre}.neck_l", 0, 0, 40), place=f"curl, {pre}, left")
-    segs_r, names_r, neck_r, leave_r = K.curl(O_r, "tr", k, p.ang(f"{pre}.neck_r", 0, 0, 40), place=f"curl, {pre}, right")
-    run = [(cubic(Ls, hL, neck_l, arrive_l, p.t(f"{pre}.flare_l1"), p.t(f"{pre}.flare_l2")), "flare", f"{pre}: left edge, top")]
+    down its flare to Rs on the right edge (arriving on heading hR, down the edge). `at` gives the
+    curls' outer nodes (left x, right x, y) where the construction has worked them out; the low point
+    then sits a fraction of the way between them. `neck_l` and `neck_r` give the range of each flare's
+    angle out of its curl's neck (start, low, high), for a curl that sits over its stroke's edge."""
+    if at:
+        y = at[2]
+        O_l, O_r = np.array([at[0], y]), np.array([at[1], y])
+        D = np.array([at[0] + p.length(f"{pre}.low_at", 0.5, 0.2, 0.8) * (at[1] - at[0]), y + p.length(f"{pre}.low_dy", 8, 0, 25)])
+    else:
+        y = p.x(f"{pre}.y", i["y"], 15)
+        O_l = np.array([p.x(f"{pre}.left_x", i["left"], 20), y])
+        O_r = np.array([p.x(f"{pre}.right_x", i["right"], 20), y])
+        D = np.array([p.x(f"{pre}.low_x", (i["left"] + i["right"]) / 2, 40), y + p.length(f"{pre}.low_dy", 8, 0, 25)])
+    segs_l, names_l, nk_l, arrive_l = K.curl(O_l, "tl", k, p.ang(f"{pre}.neck_l", *neck_l), place=f"curl, {pre}, left")
+    segs_r, names_r, nk_r, leave_r = K.curl(O_r, "tr", k, p.ang(f"{pre}.neck_r", *neck_r), place=f"curl, {pre}, right")
+    run = [(cubic(Ls, hL, nk_l, arrive_l, p.t(f"{pre}.flare_l1"), p.t(f"{pre}.flare_l2")), "flare", f"{pre}: left edge, top")]
     run += [(s, "curl", nm) for s, nm in zip(segs_l, names_l)]
     run += [(cubic(O_l, E, D, E, p.t(f"{pre}.edge_t1"), p.t(f"{pre}.edge_t2")), "bar", f"curl, {pre}, left: outer"),
             (cubic(D, E, O_r, E, p.t(f"{pre}.edge_t3"), p.t(f"{pre}.edge_t4")), "bar", f"{pre}: low point")]
     run += [(s, "curl", nm) for s, nm in zip(segs_r, names_r)]
-    run.append((cubic(neck_r, leave_r, Rs, hR, p.t(f"{pre}.flare_r1"), p.t(f"{pre}.flare_r2")), "flare", f"curl, {pre}, right: neck"))
+    run.append((cubic(nk_r, leave_r, Rs, hR, p.t(f"{pre}.flare_r1"), p.t(f"{pre}.flare_r2")), "flare", f"curl, {pre}, right: neck"))
     return run
 
 
@@ -238,8 +252,8 @@ def T_1(p, K):
 
 def L(p, K):
     """The I's top and stem with its bottom-left curl. The base runs right into an arm that tapers
-    as it rises and turns over into a curl. Pugin's curl here is lumpy, as if drawn twice; the
-    construction uses the alphabet's curl."""
+    as it rises and ends in two lobes close together: the arm runs up into the upper one, which
+    rolls over to the second just below it. The base comes to a rounded point under the arm."""
     ax, w, k = p.x("axis_x", 137.5, 20), p.fam("stem_plain"), p.fam("curl")
     O_bl = np.array([ax - p.x("bottom.half_width", 66), p.x("bottom.outer_y", 450, 15)])
     segs, names, neck, leave = K.curl(O_bl, "bl", k, p.ang("bottom.neck_deg", 0, 0, 40), place="curl, bottom-left")
@@ -264,12 +278,21 @@ def L(p, K):
     A1 = np.array([p.x("arm.inner_x", 338, 25), p.x("arm.inner_y", 230, 60)])
     ha = p.ang("arm.inner_heading", 275, 250, 300)
     run.append((cubic(B1, E, A1, ha, p.t("base.rise_t1"), p.t("base.rise_t2")), "arm", "base: inside"))
-    Ot = np.array([p.x("arm.curl_x", 388, 20), p.x("arm.curl_y", 53, 20)])
-    run.append((cubic(A1, ha, Ot, E, p.t("arm.inner_t1"), p.t("arm.inner_t2")), "arm", "arm: inside"))
-    segs, names, neck, leave = K.curl(Ot, "tr", k, p.ang("arm.neck_deg", 30, -20, 80), place="curl, top of arm")
-    run += [(s, "curl", nm) for s, nm in zip(segs, names)]
+    # the arm's tip: a broad round crown, which the arm runs smoothly up into, and on its lower right
+    # a ball the size of the two-lobe terminal's, meeting the crown in a shallow waist; the arm's
+    # outside meets the ball at a notch
+    rb = p.fam("two_lobe_r")
+    c1 = np.array([p.x("arm_tip.x", 392, 15), p.x("arm_tip.y", 86, 15)])
+    rcr = p.length("arm_tip.crown_r", 34, 22, 45)
+    dist = abs(rcr - rb) + p.length("arm_tip.overhang", 6, 1, 25)
+    segs, names, e0, e1 = two_lobe(c1, rcr, dist, p.ang("arm_tip.lobe_angle", 45, 10, 85),
+                                   p.ang("arm_tip.enter", 190, 165, 215), p.ang("arm_tip.leave", 205, 170, 250), place="two-lobe tip", r2=rb)
+    names[0] = "two-lobe tip: the arm runs in"
+    _, h0, _, _ = ends(segs)
+    run.append((cubic(A1, ha, e0, h0, p.t("arm.inner_t1"), p.t("arm.inner_t2")), "arm", "arm: inside"))
+    run += [(s, "two-lobe", nm) for s, nm in zip(segs, names)]
     A2 = np.array([p.x("arm.outer_x", 365, 20), p.x("arm.outer_y", 210, 60)])
-    run.append((cubic(neck, leave, A2, S, p.t("arm.under_t1"), p.t("arm.under_t2")), "arm", "curl, top of arm: neck"))
+    run.append((cubic(e1, p.ang("arm_tip.out", 100, 75, 125), A2, S, p.t("arm.under_t1"), p.t("arm.under_t2")), "arm", "two-lobe tip: notch"))
     # the foot of the arm comes to a rounded point: a small arc, met tangentially by the arm's
     # outside and left the same way by the base's underside
     tc = np.array([p.x("tip.x", 393, 15), p.x("tip.y", 446, 15)])
@@ -306,12 +329,12 @@ def F(p, K):
     run.append((cubic(Otl, E, Tlow, E, p.t("top.edge_t1"), p.t("top.edge_t2")), "top bar", "curl, top-left: outer"))
     run.append((cubic(Tlow, E, c0, h0, p.t("top.edge_t3"), p.t("top.edge_t4")), "top bar", "top bar: low point"))
     run += corner
-    # the stroke's inside leaves the trefoil's lower lobe no further round than the lobe's leftmost
-    # point, so the edge climbs from there without swinging out and back
+    # the stroke's inside leaves the trefoil's inner lobe as far round as its top, so the lobe curls in
+    # toward the counter and the stroke reads as sweeping outward
     axis = p.ang("trefoil.axis", 45, 0, 90)
     tsegs, tnames, J1, J2 = trefoil(np.array([p.x("trefoil.x", 388, 20), p.x("trefoil.y", 330, 20)]), axis,
                                     p.fam("trefoil_r"), p.fam("trefoil_d"), p.ang("trefoil.enter", -100, -175, -5),
-                                    p.ang("trefoil.leave_at", 175, 120, 180) - (axis + 90))
+                                    p.ang("trefoil.leave_at", 230, 150, 285) - (axis + 90))
     Sw = np.array([p.x("stroke.waist_x", 368, 15), p.x("stroke.waist_y", 270, 40)])
     run.append((cubic(c1, h1, Sw, S, p.t("stroke.t1"), p.t("stroke.t2")), "right stroke", "top bar: rounded corner, end"))
     run.append((cubic(Sw, S, J1, p.ang("stroke.foot_heading", 60, 0, 90), p.t("stroke.t3"), p.t("stroke.t4")), "right stroke", "right stroke: narrowest"))
@@ -536,7 +559,7 @@ def H(p, K):
     foot_run, J = lobed_foot(p, Pl, {"x": 383, "y": 388, "angle": 26})
     run += foot_run
     # along the foot's underside, up the shoulder's inside, over the arch and down to the stem
-    FB = np.array([p.x("foot.bottom_x", 362, 25), p.x("foot.bottom_y", 447, 10)])
+    FB = np.array([p.x("foot.bottom_x", 362, 25), J[1] + p.length("foot.drop", 8, 0, 30)])    # never above the terminal's end
     run.append((cubic(J, p.ang("foot.join_out", 160, 120, 180), FB, W, p.t("foot.t1"), p.t("foot.t2")), "foot", "two-lobe terminal: join"))
     IL = np.array([p.x("inside.left_x", 308, 15), p.x("inside.left_y", 370, 30)])
     run.append((cubic(FB, W, IL, N, p.t("foot.t3"), p.t("foot.t4")), "shoulder", "foot: bottom"))
@@ -560,16 +583,18 @@ def K_(p, K):
     ax, w, k = p.x("axis_x", 141, 20), p.fam("stem_armed"), p.fam("curl")
     run, O_bl, Otl = left_side(p, K, ax, w, k, {"bottom_half_width": 73, "bottom_y": 447, "foot_y": 375, "head_y": 100,
                                                   "top_half_width": 55, "top_y": 27})
-    Tlow = np.array([p.x("top.low_x", 240, 80), p.x("top.low_y", 32, 12)])
-    corner, c0, h0, c1, h1 = rounded_corner(p, "top.corner", (395, 35), 7, (265, 245, 290), (345, 300, 360), "top bar", "top bar: rounded corner")
+    # the top edge dips over the stem before rising to the corner
+    Tlow = np.array([p.x("top.low_x", 150, 70), p.x("top.low_y", 34, 12)])
+    # the corner is rounded a little and ends at the arm's rightmost point, turned straight down
+    kc = np.array([p.x("top.corner.x", 395, 15), p.x("top.corner.y", 35, 15)])
+    kcorner = arc(kc, p.length("top.corner.r", 7, 3, 15), p.ang("top.corner.from", 265, 245, 290), 360)
+    c0, h0, c1, _ = ends(kcorner)
     run.append((cubic(Otl, E, Tlow, E, p.t("top.edge_t1"), p.t("top.edge_t2")), "top bar", "curl, top-left: outer"))
     run.append((cubic(Tlow, E, c0, h0, p.t("top.edge_t3"), p.t("top.edge_t4")), "top bar", "top bar: low point"))
-    run += corner
+    run += [(s, "top bar", "top bar: rounded corner" if j == 0 else "top bar: rounded corner, extreme") for j, s in enumerate(kcorner)]
     # down the arm's outside to the crotch, then out along the leg
-    Ar = np.array([p.x("arm.right_x", 403, 15), p.x("arm.right_y", 65, 25)])
-    run.append((cubic(c1, h1, Ar, S, p.t("arm.t1"), p.t("arm.t2")), "arm", "top bar: rounded corner, end"))
     Cr = np.array([p.x("crotch.x", 262, 15), p.x("crotch.y", 226, 15)])
-    run.append((cubic(Ar, S, Cr, p.ang("arm.crotch_in", 135, 100, 170), p.t("arm.t3"), p.t("arm.t4")), "arm", "arm: outside, rightmost"))
+    run.append((cubic(c1, S, Cr, p.ang("arm.crotch_in", 135, 100, 170), p.t("arm.t3"), p.t("arm.t4")), "arm", "arm: outside, rightmost"))
     Lt = np.array([p.x("leg.top_x", 305, 30), p.x("leg.top_y", 218, 12)])
     run.append((cubic(Cr, p.ang("leg.spring", 340, 300, 360), Lt, E, p.t("leg.t1"), p.t("leg.t2")), "leg", "crotch"))
     Lr = np.array([p.x("leg.right_x", 391, 15), p.x("leg.right_y", 330, 40)])
@@ -579,7 +604,7 @@ def K_(p, K):
     foot_run, J = lobed_foot(p, Pl, {"x": 418, "y": 410, "angle": 55})
     run += foot_run
     # along the foot's underside and up the leg's inside to the lower counter's point
-    FB = np.array([p.x("foot.bottom_x", 395, 25), p.x("foot.bottom_y", 448, 10)])
+    FB = np.array([p.x("foot.bottom_x", 395, 25), J[1] + p.length("foot.drop", 8, 0, 30)])    # never above the terminal's end
     run.append((cubic(J, p.ang("foot.join_out", 160, 120, 180), FB, W, p.t("foot.t1"), p.t("foot.t2")), "foot", "two-lobe terminal: join"))
     Li = np.array([p.x("inside.x", 335, 25), p.x("inside.y", 380, 40)])
     hli = p.ang("inside.heading", 250, 225, 268)
@@ -607,8 +632,10 @@ def Q(p, K):
     """The O's bowl, with a curl hanging into the counter from the top (its ball runs smoothly up into
     the top wall on the left and rolls on round its right side to a sharp notch over it) and a ball
     on its floor.
-    At the bottom right the bowl's base runs on past the bowl to a rounded end, and a flag rises
-    from it, parted from the bowl by a pointed notch, to a curl at its head rolling out to the right."""
+    At the bottom right the bowl's base runs on past the bowl to end in a round ball, and a flag
+    rises from it, parted from the bowl by a pointed notch: its inside runs nearly flat, then rises
+    and flows without a break into a round ball at its head; its outside meets that ball, and the
+    ball at the base, at notches."""
     k, r = p.fam("curl"), p.fam("ball_r")
     bx = p.x("axis_x", 203, 15)
     Ol = np.array([p.x("outer.left_x", 26, 15), p.x("outer.left_y", 240, 40)])
@@ -620,19 +647,24 @@ def Q(p, K):
            (cubic(Or, S, Nq, p.ang("notch.in", 120, 95, 170), p.t("outer.t5"), p.t("outer.t6")), "bowl", "bowl: right")]
     # up the flag's inside to its curl, and down its outside to the rounded end of the base
     # from the notch the flag's inside runs nearly flat to its lowest point, then rises to the curl
-    O_f = np.array([p.x("flag.curl_x", 375, 20), p.x("flag.curl_y", 338, 20)])
+    # the flag's head is a round ball (the alphabet's curl's ball): the flag's inside runs smoothly
+    # up into it, still leaning, and its outside meets it at a notch
+    rc = k * K.curl_ball_r
+    cb = np.array([p.x("flag.ball_x", 395, 15), p.x("flag.ball_y", 318, 20)])
+    ball = arc(cb, rc, p.ang("flag.enters_at", 205, 170, 245), 360 + p.ang("flag.notch_at", 85, 40, 130))
+    f0, fh0, f1, fh1 = ends(ball)
     Wb = np.array([Nq[0] + p.length("flag.low_dx", 48, 5, 110), Nq[1] + p.length("flag.low_dy", 4, 0, 20)])
     run.append((cubic(Nq, p.ang("notch.out", 10, 0, 45), Wb, E, p.t("flag.t1"), p.t("flag.t2")), "flag", "notch"))
-    run.append((cubic(Wb, E, O_f, N, p.t("flag.t7"), p.t("flag.t8")), "flag", "flag: inside, lowest"))
-    segs, names, neck, leave = K.curl(O_f, "head-right", k, p.ang("flag.neck_deg", 5, -20, 40), place="curl, head of the flag")
-    run += [(s, "curl", nm) for s, nm in zip(segs, names)]
-    Fr = np.array([p.x("flag.right_x", 398, 15), p.x("flag.right_y", 405, 20)])
-    run.append((cubic(neck, leave, Fr, S, p.t("flag.t3"), p.t("flag.t4")), "flag", "curl, head of the flag: neck"))
+    run.append((cubic(Wb, E, f0, fh0, p.t("flag.t7"), p.t("flag.t8")), "flag", "flag: inside, lowest"))
+    run += [(s, "ball", "ball, head of the flag: the flag runs in" if j == 0 else "ball, head of the flag") for j, s in enumerate(ball)]
+    Fr = np.array([p.x("flag.right_x", 398, 15), p.x("flag.right_y", 395, 25)])
+    run.append((cubic(f1, p.ang("flag.out", 100, 75, 125), Fr, S, p.t("flag.t3"), p.t("flag.t4")), "flag", "ball, head of the flag: notch"))
+    # the base ends in a round ball; the flag's outside meets it at a notch
     ce = np.array([p.x("end.x", 418, 12), p.x("end.y", 432, 10)])
-    re_ = p.length("end.r", 13, 6, 20)
-    end = arc(ce, re_, 270, 450)
-    run.append((cubic(Fr, S, end[0][0], E, p.t("flag.t5"), p.t("flag.t6")), "flag", "flag: outside, narrowest"))
-    run += [(s_, "base", nm) for s_, nm in zip(end, ["base: end, top", "base: end"])]
+    end = arc(ce, p.length("end.r", 15, 8, 24), p.ang("end.notch_at", 215, 180, 255), 450)
+    e0, eh0, _, _ = ends(end)
+    run.append((cubic(Fr, S, e0, p.ang("end.in", 90, 60, 120), p.t("flag.t5"), p.t("flag.t6")), "flag", "flag: outside, narrowest"))
+    run += [(s_, "base", "base: end, notch" if j == 0 else "base: end") for j, s_ in enumerate(end)]
     Bb = np.array([p.x("outer.bottom_x", 215, 40), p.x("outer.bottom_y", 452, 10)])
     run.append((cubic(end[-1][3], W, Bb, W, p.t("base.t1"), p.t("base.t2")), "base", "base: end, bottom"))
     run.append((cubic(Bb, W, Ol, N, p.t("outer.t7"), p.t("outer.t8")), "bowl", "bowl: bottom"))
@@ -662,11 +694,19 @@ def Q(p, K):
     return {"contours": [run, counter], "baseline": Bb[1]}
 
 
-def trefoil_at(p, c, axis, enter=-100, leave=100):
-    """The alphabet's trefoil, its centre near c and its tip on `axis` (start, low, high)."""
+def trefoil_at(p, c, axis, enter=-100, leave=100, neck=None):
+    """The alphabet's trefoil, its centre near c and its tip on `axis` (start, low, high). With
+    `neck` (start, low, high), the stem it hangs from meets it that wide, centred on its axis: the
+    stem's edges join the side lobes where lines that far apart cross them, so a spiral can thin
+    to a neck before its trefoil."""
     C = np.array([p.x("trefoil.x", c[0], 20), p.x("trefoil.y", c[1], 20)])
-    return trefoil(C, p.ang("trefoil.axis", *axis), p.fam("trefoil_r"), p.fam("trefoil_d"),
-                   p.ang("trefoil.enter", enter, -175, -5), p.ang("trefoil.leave", leave, 5, 175))
+    ax, r, d = p.ang("trefoil.axis", *axis), p.fam("trefoil_r"), p.fam("trefoil_d")
+    if neck is None:
+        return trefoil(C, ax, r, d, p.ang("trefoil.enter", enter, -175, -5), p.ang("trefoil.leave", leave, 5, 175))
+    half = p.length("trefoil.neck", *neck) / 2
+    s = -math.sqrt(max(r * r - (d - half) ** 2, 1e-6))
+    a = math.degrees(math.atan2(s, half - d))
+    return trefoil(C, ax, r, d, a, -a)
 
 
 def P(p, K):
@@ -766,13 +806,16 @@ def B(p, K):
     V = np.array([p.x("waist.x", 338, 15), p.x("waist.y", 232, 15)])
     Lr = np.array([p.x("lower.right_x", 435, 15), p.x("lower.right_y", 345, 40)])
     Lb = np.array([p.x("lower.bottom_x", 290, 40), p.x("lower.bottom_y", 461, 10)])
+    # the bar between the bottom-left curl and the bowl rises to a high point, so the curl hangs below it
+    Bh = np.array([p.x("bottom.high_x", 120, 50), p.x("bottom.high_y", 445, 12)])
     run += [(cubic(Otl, E, Tlow, E, p.t("top.edge_t1"), p.t("top.edge_t2")), "top bar", "curl, top-left: outer"),
             (cubic(Tlow, E, Ut, E, p.t("top.edge_t3"), p.t("top.edge_t4")), "top bar", "top bar: low point"),
             (cubic(Ut, E, Ur, S, p.t("upper.t1"), p.t("upper.t2")), "upper bowl", "upper bowl: top"),
             (cubic(Ur, S, V, p.ang("waist.in", 135, 100, 175), p.t("upper.t3"), p.t("upper.t4")), "upper bowl", "upper bowl: right"),
             (cubic(V, p.ang("waist.out", 40, 5, 80), Lr, S, p.t("lower.t1"), p.t("lower.t2")), "lower bowl", "waist, outside"),
             (cubic(Lr, S, Lb, W, p.t("lower.t3"), p.t("lower.t4")), "lower bowl", "lower bowl: right"),
-            (cubic(Lb, W, O_bl, W, p.t("lower.t5"), p.t("lower.t6")), "bottom bar", "lower bowl: bottom")]
+            (cubic(Lb, W, Bh, W, p.t("lower.t5"), p.t("lower.t6")), "bottom bar", "lower bowl: bottom"),
+            (cubic(Bh, W, O_bl, W, p.t("bottom.t1"), p.t("bottom.t2")), "bottom bar", "bottom bar: high point")]
     # the counter, anticlockwise: down the stem, round the lower bowl, under the waist to the
     # trefoil, round it, along the waist's top and round the upper bowl
     U1 = np.array([ax + w, p.x("counter.stem_top_y", 95, 30)])
@@ -824,7 +867,7 @@ def G_(p, K):
             (cubic(Cb, E, Rr, N, p.t("counter.t5"), p.t("counter.t6")), "counter", "counter: bottom"),
             (cubic(Rr, N, Ai, W, p.t("counter.t7"), p.t("counter.t8")), "spiral", "spiral: inside, rightmost")]
     # down the spiral's inside to the trefoil, round it, and back up the spiral's outside and over
-    tsegs, tnames, J1, J2 = trefoil_at(p, (222, 268), (90, 45, 135))
+    tsegs, tnames, J1, J2 = trefoil_at(p, (222, 268), (90, 45, 135), neck=(18, 12, 26))
     Sl = np.array([p.x("spiral.left_x", 199, 15), p.x("spiral.left_y", 205, 25)])
     Ao = np.array([p.x("arch.top_x", 285, 30), p.x("arch.top_y", 147, 12)])
     Gr = np.array([p.x("bowl.right_x", 441, 15), p.x("bowl.right_y", 295, 40)])
@@ -901,16 +944,15 @@ def Z(p, K):
     O_tr = np.array([p.x("top.right_x", 338, 20), y])
     Dt = np.array([p.x("top.low_x", 220, 50), y + p.length("top.low_dy", 10, 0, 30)])
     segs_l, names_l, neck_l, arrive_l = K.curl(O_tl, "tl", k, p.ang("top.neck_l", 0, 0, 40), place="curl, top-left")
-    segs_r, names_r, neck_r, leave_r = K.curl(O_tr, "tr", k, p.ang("top.neck_r", 20, 0, 60), place="curl, top-right")
+    # the diagonal leaves the top-right curl's neck steeply, so its right side can bow outward
+    segs_r, names_r, neck_r, leave_r = K.curl(O_tr, "tr", k, p.ang("top.neck_r", 45, 0, 85), place="curl, top-right")
     run = [(cubic(O_tl, E, Dt, E, p.t("top.t1"), p.t("top.t2")), "top bar", "curl, top-left: outer"),
            (cubic(Dt, E, O_tr, E, p.t("top.t3"), p.t("top.t4")), "top bar", "top bar: low point")]
     run += [(s, "curl", nm) for s, nm in zip(segs_r, names_r)]
-    # down the diagonal's right side to the slit at the bottom bar's root
+    # down the diagonal's right side, one convex sweep, to the slit at the bottom bar's root
     Sb = np.array([p.x("slit_bottom.x", 60, 15), p.x("slit_bottom.y", 411, 15)])
-    Dm = np.array([p.x("diagonal.right_x", 200, 30), p.x("diagonal.right_y", 230, 40)])
-    hd_r = p.ang("diagonal.right_heading", 125, 105, 145)
-    run += [(cubic(neck_r, leave_r, Dm, hd_r, p.t("diagonal.t1"), p.t("diagonal.t2")), "diagonal", "curl, top-right: neck"),
-            (cubic(Dm, hd_r, Sb, p.ang("slit_bottom.in", 135, 110, 170), p.t("diagonal.t3"), p.t("diagonal.t4")), "diagonal", "diagonal: right side")]
+    run.append((cubic(neck_r, leave_r, Sb, p.ang("slit_bottom.in", 150, 115, 175), p.t("diagonal.t1"), p.t("diagonal.t2")), "diagonal",
+                "curl, top-right: neck"))
     # the bottom bar arches up from the slit and runs right to its curl
     Bh = np.array([p.x("bottom.high_x", 160, 40), p.x("bottom.high_y", 370, 15)])
     O_br = np.array([p.x("bottom.right_x", 344, 20), p.x("bottom.y", 445, 12)])
@@ -918,14 +960,22 @@ def Z(p, K):
     run += [(cubic(Sb, p.ang("slit_bottom.out", 330, 290, 360), Bh, E, p.t("bottom.t1"), p.t("bottom.t2")), "bottom bar", "slit, bottom"),
             (cubic(Bh, E, neck_b, arrive_b, p.t("bottom.t3"), p.t("bottom.t4")), "bottom bar", "bottom bar: top")]
     run += [(s, "curl", nm) for s, nm in zip(segs_b, names_b)]
-    # back along the underside to the rounded point, and up the diagonal's left side to the top slit
-    # the underside rises steadily from the curl to the rounded point
-    corner, c0, h0, c1, h1 = rounded_corner(p, "point", (36, 428), 8, (110, 90, 135), (225, 190, 260), "diagonal", "diagonal: rounded point")
+    # back along the underside, a wave: down to its lowest under the right half, up to a crest, and
+    # down again to meet the rounded point at the point's own lowest; then up the diagonal's left
+    # side to the top slit
+    pc = np.array([p.x("point.x", 36, 15), p.x("point.y", 428, 15)])
+    pa = arc(pc, p.length("point.r", 8, 3, 15), 90, p.ang("point.to", 225, 190, 260))
+    c0, h0, c1, h1 = ends(pa)
+    corner = [(s, "diagonal", "diagonal: rounded point" if j == 0 else "diagonal: rounded point, extreme") for j, s in enumerate(pa)]
+    Bm = np.array([p.x("bottom.under_x", 288, 40), p.x("bottom.under_y", 449, 10)])
+    Bc = np.array([p.x("bottom.crest_x", 122, 40), p.x("bottom.crest_y", 429, 12)])
     St = np.array([p.x("slit_top.x", 258, 20), p.x("slit_top.y", 72, 15)])
     Dl = np.array([p.x("diagonal.left_x", 140, 30), p.x("diagonal.left_y", 220, 40)])
     hd_l = p.ang("diagonal.left_heading", 305, 285, 325)
     Ul = np.array([p.x("top.under_x", 170, 40), p.x("top.under_y", 88, 12)])
-    run.append((cubic(O_br, W, c0, h0, p.t("bottom.t5"), p.t("bottom.t6")), "bottom bar", "curl, bottom-right: outer"))
+    run += [(cubic(O_br, W, Bm, W, p.t("bottom.t5"), p.t("bottom.t6")), "bottom bar", "curl, bottom-right: outer"),
+            (cubic(Bm, W, Bc, W, p.t("bottom.t7"), p.t("bottom.t8")), "bottom bar", "bottom bar: underside, lowest"),
+            (cubic(Bc, W, c0, W, p.t("bottom.t9"), p.t("bottom.t10")), "bottom bar", "bottom bar: underside, crest")]
     run += corner
     run += [(cubic(c1, h1, Dl, hd_l, p.t("diagonal.t5"), p.t("diagonal.t6")), "diagonal", "diagonal: rounded point, end"),
             (cubic(Dl, hd_l, St, p.ang("slit_top.in", 310, 285, 340), p.t("diagonal.t7"), p.t("diagonal.t8")), "diagonal", "diagonal: left side"),
@@ -952,7 +1002,7 @@ def N_(p, K):
             (cubic(SHr, S, Pl, S, p.t("arch.t3"), p.t("arch.t4")), "arch", "arch: outside, rightmost")]
     foot_run, J = lobed_foot(p, Pl, {"x": 383, "y": 386, "angle": 35})
     run += foot_run
-    FB = np.array([p.x("foot.bottom_x", 345, 25), p.x("foot.bottom_y", 438, 10)])
+    FB = np.array([p.x("foot.bottom_x", 345, 25), J[1] + p.length("foot.drop", 8, 0, 30)])    # never above the terminal's end
     IL = np.array([p.x("inside.left_x", 289, 15), p.x("inside.left_y", 380, 25)])
     IR = np.array([p.x("inside.right_x", 331, 15), p.x("inside.right_y", 200, 40)])
     AI = np.array([p.x("arch.inside_x", 235, 30), p.x("arch.inside_y", 48, 12)])
@@ -1167,37 +1217,42 @@ def S_(p, K):
 
 def T_2(p, K):
     """The uncial T: a top bar the width of the letter with a curl at each end; from under its middle
-    a stroke comes down and sweeps left into a round bowl, which comes round the bottom and up the
-    right, and curls over at the top into a spiral that ends in a trefoil in the middle of the
-    counter. The counter opens between the stroke and the top of the spiral."""
+    a stroke comes down and sweeps left into a round bowl, the bar's underside flowing into it in one
+    curve on each side. The bowl comes round the bottom and up the right, and curls over at the top
+    into a spiral that thins to a neck and ends in a trefoil in the middle of the counter. The
+    counter opens between the stroke and the top of the spiral."""
     k = p.fam("curl")
     A0 = np.array([p.x("bowl.left_x", 31, 15), p.x("bowl.left_y", 275, 30)])
-    Nl = np.array([p.x("notch_l.x", 190, 15), p.x("notch_l.y", 66, 12)])
+    # the bowl's outside rises into the bar's underside in one curve: its rightmost point is where it
+    # turns from climbing to running left
+    Jl = np.array([p.x("join_l.x", 200, 25), p.x("join_l.y", 82, 25)])
     y = p.x("top.y", 28, 12)
     O_tl = np.array([p.x("top.left_x", 52, 20), y])
     O_tr = np.array([p.x("top.right_x", 410, 20), y])
     Tlow = np.array([p.x("top.low_x", 230, 60), y + p.length("top.low_dy", 6, 0, 25)])
     segs_l, names_l, neck_l, arrive_l = K.curl(O_tl, "tl", k, p.ang("top.neck_l", 0, 0, 40), place="curl, top-left")
     segs_r, names_r, neck_r, leave_r = K.curl(O_tr, "tr", k, p.ang("top.neck_r", 0, 0, 40), place="curl, top-right")
-    Nr = np.array([p.x("notch_r.x", 270, 15), p.x("notch_r.y", 66, 12)])
-    run = [(cubic(A0, N, Nl, p.ang("notch_l.in", 290, 255, 330), p.t("bowl.t1"), p.t("bowl.t2")), "bowl", "bowl: leftmost"),
-           (cubic(Nl, p.ang("notch_l.out", 195, 180, 225), neck_l, arrive_l, p.t("top.t5"), p.t("top.t6")), "top bar", "notch, left")]
+    # on the right the bar's underside turns down into the stroke in one curve
+    Jr = np.array([p.x("join_r.x", 268, 25), p.x("join_r.y", 80, 25)])
+    hjr = p.ang("join_r.heading", 135, 100, 175)
+    run = [(cubic(A0, N, Jl, N, p.t("bowl.t1"), p.t("bowl.t2")), "bowl", "bowl: leftmost"),
+           (cubic(Jl, N, neck_l, arrive_l, p.t("top.t5"), p.t("top.t6")), "top bar", "stroke: outside, rightmost")]
     run += [(s, "curl", nm) for s, nm in zip(segs_l, names_l)]
     run += [(cubic(O_tl, E, Tlow, E, p.t("top.t1"), p.t("top.t2")), "top bar", "curl, top-left: outer"),
             (cubic(Tlow, E, O_tr, E, p.t("top.t3"), p.t("top.t4")), "top bar", "top bar: low point")]
     run += [(s, "curl", nm) for s, nm in zip(segs_r, names_r)]
-    run.append((cubic(neck_r, leave_r, Nr, p.ang("notch_r.in", 165, 140, 180), p.t("top.t7"), p.t("top.t8")), "top bar", "curl, top-right: neck"))
+    run.append((cubic(neck_r, leave_r, Jr, hjr, p.t("top.t7"), p.t("top.t8")), "top bar", "curl, top-right: neck"))
     # down the stroke's right side, sweeping left into the bowl's inside, round the counter
     Cl = np.array([p.x("counter.left_x", 134, 15), p.x("counter.left_y", 285, 30)])
     Cb = np.array([p.x("counter.bottom_x", 245, 40), p.x("counter.bottom_y", 428, 12)])
     Cr = np.array([p.x("counter.right_x", 356, 15), p.x("counter.right_y", 300, 30)])
     Pt = np.array([p.x("pocket.x", 283, 20), p.x("pocket.y", 180, 15)])
-    run += [(cubic(Nr, p.ang("notch_r.out", 100, 70, 130), Cl, S, p.t("stroke.t1"), p.t("stroke.t2")), "stroke", "notch, right"),
+    run += [(cubic(Jr, hjr, Cl, S, p.t("stroke.t1"), p.t("stroke.t2")), "stroke", "bar: underside, into the stroke"),
             (cubic(Cl, S, Cb, E, p.t("counter.t1"), p.t("counter.t2")), "counter", "counter: leftmost"),
             (cubic(Cb, E, Cr, N, p.t("counter.t3"), p.t("counter.t4")), "counter", "counter: bottom"),
             (cubic(Cr, N, Pt, W, p.t("counter.t5"), p.t("counter.t6")), "counter", "counter: rightmost")]
     # down the spiral's inside to the trefoil, round it, up the spiral's outside and down the bowl's right
-    tsegs, tnames, J1, J2 = trefoil_at(p, (233, 290), (90, 45, 135))
+    tsegs, tnames, J1, J2 = trefoil_at(p, (233, 290), (90, 45, 135), neck=(18, 12, 26))
     St = np.array([p.x("spiral.top_x", 300, 25), p.x("spiral.top_y", 164, 12)])
     Br = np.array([p.x("bowl.right_x", 441, 15), p.x("bowl.right_y", 300, 30)])
     Bb = np.array([p.x("bowl.bottom_x", 245, 40), p.x("bowl.bottom_y", 456, 10)])
@@ -1210,6 +1265,323 @@ def T_2(p, K):
     return {"contours": [run], "baseline": Bb[1]}
 
 
+def Y_2(p, K):
+    """A modern Y, drawn by us on Pugin's V (Pugin's own Y is the uncial form): V's arms and capped
+    tops, meeting not at a point but in a stem, which comes down to a foot with a curl at each side
+    like the I's. It takes V's fitted measurements for the arms and caps; the stem is the armed weight."""
+    k, w = p.fam("curl"), p.fam("stem_armed")
+    ax = p.x("stem.x", 278, 20)
+    yj = p.x("stem.join_y", 262, 30)                # where the arms' outsides meet the stem
+    Cr = np.array([ax + p.x("crotch.dx", 6, 15), p.x("crotch.join_y", 222, 30)])
+    L1, hL1 = edge_point(p, "left_arm.outer", (107, 100), 243)
+    R1, hR1 = edge_point(p, "left_arm.inner", (197, 100), 62, upright=True)
+    L2, hL2 = edge_point(p, "right_arm.inner", (379, 100), 295, upright=True)
+    R2, hR2 = edge_point(p, "right_arm.outer", (416, 100), 114)
+    Jl, Jr = np.array([ax - w, yj]), np.array([ax + w, yj])
+    yf = p.x("stem.foot_y", 385, 30)
+    Sl, Sr = np.array([ax - w, yf]), np.array([ax + w, yf])
+    half = p.x("foot.half_width", 108, 20)
+    # where each arm's outside joins the stem: the turn sits close to the stem, and the arm runs on
+    # straight to its cap
+    run = [(cubic(Jl, N, L1, hL1, p.t("join_l.t1", 0.3), p.t("join_l.t2", 0.9)), "arm", "stem: left, top")]
+    run += cap_top(p, K, k, "left cap", L1, hL1, R1, hR1, {"y": 24, "left": 64, "right": 205})
+    run.append((cubic(R1, hR1, Cr, p.ang("crotch.in", 62, 40, 85), p.t("left_arm.t3"), p.t("left_arm.t4")), "arm", "left arm: inside"))
+    run.append((cubic(Cr, p.ang("crotch.out", 295, 275, 320), L2, hL2, p.t("right_arm.t1"), p.t("right_arm.t2")), "arm", "crotch"))
+    run += cap_top(p, K, k, "right cap", L2, hL2, R2, hR2, {"y": 29, "left": 369, "right": 456})
+    run += [(cubic(R2, hR2, Jr, S, p.t("join_r.t2", 0.9), p.t("join_r.t1", 0.3)), "arm", "right arm: outside"),
+            (line(Jr, Sr), "stem", "stem: right, top of straight")]
+    run += cap_bottom(p, K, k, "foot", Sr, S, Sl, N, {"y": 446, "left": ax - half, "right": ax + half})
+    run.append((line(Sl, Jl), "stem", "stem: left, foot of straight"))
+    return {"contours": [run], "baseline": p.x("foot.y", 446, 15)}
+
+
+def M_2(p, K):
+    """The straight M: two legs, splayed a little, each standing on a foot with a curl at both sides;
+    across their heads a bar with a curl at each end, rising to a crest over the middle; and from
+    under the bar between the legs a V, its arms thinner than the legs, coming to a point well above
+    the baseline. Under the bar, between the V's arms, a counter like a teardrop. Built symmetric about
+    its axis (Pugin's is nearly so)."""
+    k = p.fam("curl")
+    ax = p.x("axis_x", 257, 15)
+    # the half, clockwise from the V's point on the axis: up the V's left arm to the crotch, down the
+    # leg's inside, round the foot, up the leg's outside to the top-left curl, along the bar to the crest
+    Vp = np.array([ax, p.x("point.y", 354, 20)])
+    Cr = np.array([p.x("crotch.x", 182, 15), p.x("crotch.y", 166, 25)])
+    Rs, hR = edge_point(p, "leg.inner", (161, 365), 90, upright=True)      # the leg's inside, at its leftmost
+    Ls, hL = edge_point(p, "leg.outer", (96, 360), 282)                     # its outside, going up
+    Lr = np.array([p.x("leg.outer_right_x", 119.5, 12), p.x("leg.outer_right_y", 125, 40)])
+    O_tl = np.array([p.x("top.left_x", 97, 20), p.x("top.y", 24, 12)])
+    segs, names, neck, arrive = K.curl(O_tl, "tl", k, p.ang("top.neck", 0, 0, 40), place="curl, top-left")
+    Dl = np.array([p.x("top.low_x", 170, 30), p.x("top.low_y", 37, 12)])
+    Ct = np.array([ax, p.x("top.crest_y", 24, 12)])
+    half = [(cubic(Vp, p.ang("point.out", 250, 230, 270), Cr, p.ang("crotch.in", 250, 225, 275), p.t("v_arm.t1"), p.t("v_arm.t2")), "V", "V: point"),
+            (cubic(Cr, p.ang("crotch.out", 96, 80, 120), Rs, hR, p.t("leg.t1"), p.t("leg.t2")), "leg", "crotch, left")]
+    half += cap_bottom(p, K, k, "foot", Rs, hR, Ls, hL, {"y": 446, "left": 66, "right": 191})
+    half += [(cubic(Ls, hL, Lr, N, p.t("leg.t3"), p.t("leg.t4")), "leg", "leg: outside"),
+             (cubic(Lr, N, neck, arrive, p.t("leg.t5"), p.t("leg.t6")), "flare", "leg: outside, rightmost")]
+    half += [(s, "curl", nm) for s, nm in zip(segs, names)]
+    half += [(cubic(O_tl, E, Dl, E, p.t("top.t1"), p.t("top.t2")), "top bar", "curl, top-left: outer"),
+             (cubic(Dl, E, Ct, E, p.t("top.t3"), p.t("top.t4")), "top bar", "top bar: low point")]
+    # the counter, anticlockwise from its top on the axis to its point
+    Cc = np.array([ax, p.x("counter.top_y", 44, 12)])
+    Cl = np.array([p.x("counter.left_x", 199, 15), p.x("counter.left_y", 82, 30)])
+    Cb = np.array([ax, p.x("counter.point_y", 267, 20)])
+    chalf = [(cubic(Cc, W, Cl, S, p.t("counter.t1"), p.t("counter.t2")), "counter", "counter: top"),
+             (cubic(Cl, S, Cb, p.ang("counter.point_in", 70, 45, 88), p.t("counter.t3"), p.t("counter.t4")), "counter", "counter: left")]
+    return {"contours": [mirror_half(half, ax, "top bar: crest"), mirror_half(chalf, ax, "counter: point")],
+            "halves": [half, chalf], "axis": ax, "baseline": p.x("foot.y", 446, 15)}
+
+
+def M_1(p, K):
+    """The uncial M: two round bowls side by side, joined by a straight stem between their counters,
+    standing on a thin bar that runs under both with a curl at each end. Each bowl's outside comes
+    down into the bar at a notch inside its curl; the bar's underside rises between the curls. On
+    top, the stem rises between the bowls to a pointed peak, with a notch each side where a bowl
+    meets it. The counters are tall ovals, narrowing at the foot toward the outside. Built symmetric
+    about its axis (Pugin's is nearly so)."""
+    k = p.fam("curl")
+    ax = p.x("axis_x", 230, 15)
+    # the half, clockwise from the bar's underside on the axis to the peak
+    Bh = np.array([ax, p.x("bar.high_y", 434, 12)])
+    O_bl = np.array([p.x("bar.left_x", 60, 20), p.x("bar.y", 452, 12)])
+    segs, names, neck, leave = K.curl(O_bl, "bl", k, p.ang("bar.neck", 0, 0, 40), place="curl, bottom-left")
+    Np = np.array([p.x("pocket.x", 88, 15), p.x("pocket.y", 422, 12)])
+    Bl = np.array([p.x("bowl.left_x", 18.5, 15), p.x("bowl.left_y", 215, 40)])
+    Bt = np.array([p.x("bowl.top_x", 140, 30), p.x("bowl.top_y", 27, 12)])
+    Nt = np.array([p.x("notch.x", 201, 15), p.x("notch.y", 50, 15)])
+    Pk = np.array([ax, p.x("peak.y", 24, 12)])
+    half = [(cubic(Bh, W, O_bl, W, p.t("bar.t1"), p.t("bar.t2")), "bar", "bar: underside, highest")]
+    half += [(s, "curl", nm) for s, nm in zip(segs, names)]
+    half += [(cubic(neck, leave, Np, p.ang("pocket.in", 340, 300, 380), p.t("pocket.t1"), p.t("pocket.t2")), "bar", "curl, bottom-left: neck"),
+             (cubic(Np, p.ang("pocket.out", 246, 220, 270), Bl, N, p.t("bowl.t1"), p.t("bowl.t2")), "bowl", "pocket"),
+             (cubic(Bl, N, Bt, E, p.t("bowl.t3"), p.t("bowl.t4")), "bowl", "bowl: leftmost"),
+             (cubic(Bt, E, Nt, p.ang("notch.in", 50, 20, 80), p.t("bowl.t5"), p.t("bowl.t6")), "bowl", "bowl: top"),
+             (cubic(Nt, p.ang("notch.out", 305, 270, 340), Pk, p.ang("peak.in", 335, 290, 359), p.t("peak.t1"), p.t("peak.t2")), "peak", "notch, left")]
+    counter = [(q, l, nm.replace("counter", "left counter")) for q, l, nm in
+               oval_counter(p, {"top": (152, 52), "left": (93, 270), "bottom": (119, 412), "right": (201, 270)})]
+    return {"contours": [mirror_half(half, ax, "peak"), counter, mirror_copy(counter, ax)], "halves": [half, None, None],
+            "axis": ax, "baseline": O_bl[1]}
+
+
+def _named(run, name):
+    """A run whose first node is given a name (a run that starts where a cut made a new node)."""
+    return [(run[0][0], run[0][1], name)] + run[1:] if run else run
+
+
+def W_1(p, K):
+    """The W of two interlaced Vs. The left V is drawn as the V is, its left arm thick and its right
+    arm thin, each headed by a bar with a curl at both ends; the right V is its mirror image, and the
+    two thin arms cross on the axis. On each side the thick arm's bar runs into the thin arm's, the
+    curls between them overlapping like two balls close together. Under the bars, between the thick
+    arm and the crossing arms, is a counter each side; between the thin arms' bars the space opens to
+    the top, and under the crossing to the foot. With eight curls along its top line where a letter
+    has two or four, Pugin drew them smaller: they take their own size, fitted to this letter."""
+    k = p.length("curl", 0.82, 0.6, 1.0)
+    ball = -K.curl_nodes["back"][0] * k            # how far a curl's ball reaches past its outer node
+    ax = p.x("axis_x", 240, 15)
+    mx = lambda q: np.asarray(q, float) * [-1, 1] + [2 * ax, 0]
+    Pt = np.array([p.x("point.x", 170, 15), p.x("point.y", 437, 12)])
+    Cr = np.array([p.x("crotch.x", 197, 15), p.x("crotch.y", 293, 25)])
+    y = p.x("bars.y", 27, 12)
+    # the bars, placed inward from the axis: the thin bar's last curl keeps clear of its mirror image,
+    # the bar has some length, and its first curl overlaps the thick bar's last, their crowns far
+    # enough apart that they read as two balls (and the balls always meet)
+    crown = -K.curl_nodes["crown"][0] * k
+    tr = ax - ball - p.length("thin_bar.clear_of_axis", 12, 3, 40)
+    tl = tr - p.length("thin_bar.length", 14, 4, 60)
+    xr = tl - 2 * crown - k * p.length("bars.crowns_apart", 28, 14, 34)
+    xl = p.x("thick_bar.left_x", 32, 25)
+    # the thick arm and its bar, as the V's left arm
+    L1, hL1 = edge_point(p, "thick_arm.outer", (52, 110), 247)
+    # its bar's last curl sits over the arm's inside, which runs straight up into the curl's neck
+    R1, hR1 = edge_point(p, "thick_arm.inner", (124, 90), 72)
+    thick = cap_top(p, K, k, "thick bar", L1, hL1, R1, hR1, {}, at=(xl, xr, y), neck_r=(100, 0, 125))
+    thick_out = cubic(Pt, p.ang("point.out", 247, 230, 265), L1, hL1, p.t("thick_arm.t1"), p.t("thick_arm.t2"))
+    thick_in = cubic(R1, hR1, Cr, p.ang("crotch.in", 70, 50, 90), p.t("thick_arm.t3"), p.t("thick_arm.t4"))
+    # the thin arm: the right V's left arm, from its bar down across the axis to that V's point (its
+    # outside) and its crotch (its inside); the left V's thin arm is its mirror image
+    Ls, hLs = edge_point(p, "thin_arm.outer", (172, 75), 248)
+    Rs, hRs = edge_point(p, "thin_arm.inner", (198, 75), 70, upright=True)
+    thin = cap_top(p, K, k, "thin bar", Ls, hLs, Rs, hRs, {}, at=(tl, tr, y))
+    Eo = cubic(mx(Pt), p.ang("thin_arm.point_out", 248, 230, 265), Ls, hLs, p.t("thin_arm.t1"), p.t("thin_arm.t2"))
+    Ei = cubic(Rs, hRs, mx(Cr), p.ang("thin_arm.crotch_in", 70, 50, 90), p.t("thin_arm.t3"), p.t("thin_arm.t4"))
+    Vout, Vin = mx(Eo)[::-1], mx(Ei)[::-1]        # the left V's thin arm: outside down to the point, inside up from the crotch
+    # the crossing: the crotches over and under it are on the axis; the counter's corner is where the
+    # left V's thin arm's inside meets the right V's thin arm's outside
+    _, under = cut([(Vout, "thin arm", None)], 0, cross_x(Vout, ax))
+    over, _ = cut([(Ei, "thin arm", "thin bar: right edge, top")], 0, cross_x(Ei, ax))
+    hit = crossings([Vin], [Eo])
+    ta, tb = (hit[0][1], hit[0][3]) if hit else (0.5, 0.5)
+    vin, _ = cut([(Vin, "thin arm", "crotch")], 0, ta)
+    _, eo = cut([(Eo, "thin arm", None)], 0, tb)
+    # where the two bars meet, the thick bar's last curl and the thin bar's first cross twice: above,
+    # on the outline, and below, on the counter
+    t_curl, f_curl = thick[6:9], thin[1:4]
+    hits = sorted(crossings([q for q, _, _ in t_curl], [q for q, _, _ in f_curl]), key=lambda h: h[4][1])
+    if len(hits) >= 2:
+        (i1, a1, j1, b1, _), (i2, a2, j2, b2, _) = hits[0], hits[-1]
+        top = cut(t_curl, i1, a1)[0] + _named(cut(f_curl, j1, b1)[1], "bars: notch, top")
+        under_bars = cut(f_curl, j2, b2)[0] + _named(cut(t_curl, i2, a2)[1], "bars: notch, underneath")
+    else:      # the balls don't meet: bridge them at their backs (a fit never ends here)
+        top = t_curl[:1] + [(line(t_curl[0][0][3], f_curl[2][0][0]), "bar", "bars: bridge")] + f_curl[2:]
+        under_bars = f_curl[:2] + [(line(f_curl[1][0][3], t_curl[1][0][0]), "bar", "bars: bridge, underneath")] + t_curl[1:]
+    half = _named(under, "crossing: under") + [(thick_out, "thick arm", "point")] + thick[:6] + top + thin[4:] + over
+    counter = (vin + _named(eo, "crossing: corner") + thin[:1] + under_bars + thick[9:] +
+               [(thick_in, "thick arm", "thick bar: right edge, top")])
+    return {"contours": [mirror_half(half, ax, "crossing: over"), counter, mirror_copy(counter, ax)],
+            "halves": [half, None, None], "axis": ax, "baseline": Pt[1]}
+
+
+def hooked_foot(p, pre, S2, i):
+    """The foot of a straight stem that flicks out into a pointed hook, as the U's does, with a small
+    round heel on its left, parted from the hook below by a notch. Clockwise from S2, the foot of the
+    stem's right side: the hook's inside dips and rises to its tip, its underside comes down to its
+    lowest point and up to the notch, and the heel's underside runs round to its leftmost point,
+    where the run ends. `pre` names its parts; its measurements go under the same name in snake case."""
+    m = pre.replace(" ", "_")
+    Hl = np.array([p.x(f"{m}.hook.low_x", i["low"][0], 15), p.x(f"{m}.hook.low_y", i["low"][1], 10)])
+    Tip = np.array([p.x(f"{m}.hook.x", i["tip"][0], 15), p.x(f"{m}.hook.y", i["tip"][1], 12)])
+    Hb = np.array([p.x(f"{m}.hook.bottom_x", i["bottom"][0], 20), p.x(f"{m}.hook.bottom_y", i["bottom"][1], 10)])
+    Nb = np.array([p.x(f"{m}.notch.x", i["notch"][0], 15), p.x(f"{m}.notch.y", i["notch"][1], 12)])
+    Hh = np.array([p.x(f"{m}.heel.bottom_x", i["heel"][0], 15), p.x(f"{m}.heel.bottom_y", i["heel"][1], 10)])
+    Hx = np.array([p.x(f"{m}.heel.left_x", i["heel_left"][0], 15), p.x(f"{m}.heel.left_y", i["heel_left"][1], 12)])
+    run = [(cubic(S2, S, Hl, E, p.t(f"{m}.hook.t1"), p.t(f"{m}.hook.t2")), "hook", f"{pre}: right, foot of straight"),
+           (cubic(Hl, E, Tip, p.ang(f"{m}.hook.in", 315, 280, 350), p.t(f"{m}.hook.t3"), p.t(f"{m}.hook.t4")), "hook", f"{pre}, hook: inside, lowest"),
+           (cubic(Tip, p.ang(f"{m}.hook.out", 120, 90, 160), Hb, W, p.t(f"{m}.hook.t5"), p.t(f"{m}.hook.t6")), "hook", f"{pre}, hook: tip"),
+           (cubic(Hb, W, Nb, p.ang(f"{m}.notch.in", 225, 195, 255), p.t(f"{m}.hook.t7"), p.t(f"{m}.hook.t8")), "hook", f"{pre}, hook: lowest"),
+           (cubic(Nb, p.ang(f"{m}.notch.out", 150, 115, 180), Hh, W, p.t(f"{m}.heel.t1"), p.t(f"{m}.heel.t2")), "heel", f"{pre}: notch"),
+           (cubic(Hh, W, Hx, N, p.t(f"{m}.heel.t3"), p.t(f"{m}.heel.t4")), "heel", f"{pre}, heel: lowest")]
+    return run, Hx
+
+
+def W_2(p, K):
+    """The W as a rounded double U: a top bar the width of the letter with a curl at each end, and
+    under it four strokes. The first two are bowls: the outer one comes down the left from a notch
+    under the first curl, the inner one from under the bar, and each sweeps round at its foot into a
+    pointed tail tucked under the next stroke. The last two are straight stems, each flicking out at
+    its foot into a pointed hook, as the U's stem does, with a small round heel on its left, parted
+    from the hook below by a notch. The inner bowl meets the first stem in a notch under the bar; the
+    spaces between the strokes open at the foot."""
+    k = p.fam("curl")
+    A0 = np.array([p.x("outer_bowl.left_x", 24.5, 15), p.x("outer_bowl.left_y", 270, 40)])
+    Nt = np.array([p.x("notch.x", 113, 15), p.x("notch.y", 48, 12)])
+    y = p.x("top.y", 27, 12)
+    O_tl = np.array([p.x("top.left_x", 97, 20), y])
+    O_tr = np.array([p.x("top.right_x", 432, 20), y])
+    Tlow = np.array([p.x("top.low_x", 260, 60), y + p.length("top.low_dy", 3, 0, 20)])
+    segs_l, names_l, neck_l, arrive_l = K.curl(O_tl, "tl", k, p.ang("top.neck_l", 0, 0, 40), place="curl, top-left")
+    segs_r, names_r, neck_r, leave_r = K.curl(O_tr, "tr", k, p.ang("top.neck_r", 0, 0, 40), place="curl, top-right")
+    run = [(cubic(A0, N, Nt, p.ang("notch.in", 305, 270, 340), p.t("outer_bowl.t1"), p.t("outer_bowl.t2")), "outer bowl", "outer bowl: leftmost"),
+           (cubic(Nt, p.ang("notch.out", 185, 160, 215), neck_l, arrive_l, p.t("top.t5"), p.t("top.t6")), "top bar", "notch")]
+    run += [(s, "curl", nm) for s, nm in zip(segs_l, names_l)]
+    run += [(cubic(O_tl, E, Tlow, E, p.t("top.t1"), p.t("top.t2")), "top bar", "curl, top-left: outer"),
+            (cubic(Tlow, E, O_tr, E, p.t("top.t3"), p.t("top.t4")), "top bar", "top bar: low point")]
+    run += [(s, "curl", nm) for s, nm in zip(segs_r, names_r)]
+    # the last stem, down its right side to its hook, round its heel and up its left side
+    xd, xdl = p.x("last_stem.right_x", 422, 12), p.x("last_stem.left_x", 361.5, 12)
+    D1 = np.array([xd, p.x("last_stem.head_y", 100, 40)])
+    D2 = np.array([xd, p.x("last_stem.foot_y", 360, 40)])
+    run += [(cubic(neck_r, leave_r, D1, S, p.t("last_stem.t1"), p.t("last_stem.t2")), "flare", "curl, top-right: neck"),
+            (line(D1, D2), "last stem", "last stem: right, top of straight")]
+    foot, Hx = hooked_foot(p, "last stem", D2, {"low": (445, 413), "tip": (459, 407), "bottom": (434, 434), "notch": (381, 394),
+                                                 "heel": (361, 408), "heel_left": (340.5, 389)})
+    run += foot
+    D3 = np.array([xdl, p.x("last_stem.left_foot_y", 330, 30)])
+    D4 = np.array([xdl, p.x("last_stem.left_head_y", 62, 15)])
+    # the space between the stems, closed at the top by the bar's underside
+    Gt = np.array([p.x("gap.x", 343, 12), p.x("gap.y", 47, 10)])
+    xc, xcl = p.x("first_stem.right_x", 324.5, 12), p.x("first_stem.left_x", 269.7, 12)
+    C1 = np.array([xc, p.x("first_stem.head_y", 62, 15)])
+    C2 = np.array([xc, p.x("first_stem.foot_y", 350, 40)])
+    run += [(cubic(Hx, N, D3, N, p.t("last_stem.t3"), p.t("last_stem.t4")), "heel", "last stem, heel: leftmost"),
+            (line(D3, D4), "last stem", "last stem: left, foot of straight"),
+            (cubic(D4, N, Gt, W, p.t("gap.t1"), p.t("gap.t2")), "top bar", "last stem: left, top of straight"),
+            (cubic(Gt, W, C1, S, p.t("gap.t3"), p.t("gap.t4")), "top bar", "between the stems: top"),
+            (line(C1, C2), "first stem", "first stem: right, top of straight")]
+    foot, Hx = hooked_foot(p, "first stem", C2, {"low": (362, 413), "tip": (378, 408), "bottom": (343, 434), "notch": (289, 391),
+                                                  "heel": (256, 408), "heel_left": (231, 391)})
+    run += foot
+    C3 = np.array([xcl, p.x("first_stem.left_foot_y", 285, 30)])
+    Nc = np.array([xcl, p.x("notch_b.y", 77, 15)])    # where the inner bowl's right side meets the stem
+    run += [(cubic(Hx, N, C3, N, p.t("first_stem.t3"), p.t("first_stem.t4")), "heel", "first stem, heel: leftmost"),
+            (line(C3, Nc), "first stem", "first stem: left, foot of straight")]
+    # the inner bowl: down its right side and round into its tail, back under it and up its left side
+    Br = np.array([p.x("inner_bowl.inside_x", 214.5, 15), p.x("inner_bowl.inside_y", 320, 40)])
+    Tb = np.array([p.x("inner_bowl.tail_x", 311, 15), p.x("inner_bowl.tail_y", 426, 10)])
+    Bb = np.array([p.x("inner_bowl.bottom_x", 272, 25), p.x("inner_bowl.bottom_y", 436, 10)])
+    Bl = np.array([p.x("inner_bowl.left_x", 138.5, 15), p.x("inner_bowl.left_y", 285, 40)])
+    yg = p.x("gap_b.y", 47, 10)
+    Gr = np.array([p.x("gap_b.right_x", 239, 12), yg])
+    Gl = np.array([p.x("gap_b.left_x", 169, 12), yg])
+    run += [(cubic(Nc, p.ang("notch_b.out", 112, 95, 140), Br, S, p.t("inner_bowl.t1"), p.t("inner_bowl.t2")), "inner bowl", "notch, between the inner bowl and the first stem"),
+            (cubic(Br, S, Tb, p.ang("inner_bowl.tail_in", 25, 0, 60), p.t("inner_bowl.t3"), p.t("inner_bowl.t4")), "inner bowl", "inner bowl: inside, leftmost"),
+            (cubic(Tb, p.ang("inner_bowl.tail_out", 160, 130, 190), Bb, W, p.t("inner_bowl.t5"), p.t("inner_bowl.t6")), "inner bowl", "inner bowl: tail"),
+            (cubic(Bb, W, Bl, N, p.t("inner_bowl.t7"), p.t("inner_bowl.t8")), "inner bowl", "inner bowl: lowest"),
+            (cubic(Bl, N, Gr, p.ang("gap_b.right_in", 293, 270, 320), p.t("inner_bowl.t9"), p.t("inner_bowl.t10")), "inner bowl", "inner bowl: leftmost"),
+            (line(Gr, Gl), "top bar", "between the bowls: top, right")]
+    # the outer bowl: down its inside and round into its tail, back under it and up to the start
+    Ai = np.array([p.x("outer_bowl.inside_x", 109.5, 15), p.x("outer_bowl.inside_y", 265, 40)])
+    Ta = np.array([p.x("outer_bowl.tail_x", 208, 15), p.x("outer_bowl.tail_y", 426, 10)])
+    Ab = np.array([p.x("outer_bowl.bottom_x", 172, 25), p.x("outer_bowl.bottom_y", 434, 10)])
+    run += [(cubic(Gl, p.ang("gap_b.left_out", 120, 95, 145), Ai, S, p.t("outer_bowl.t3"), p.t("outer_bowl.t4")), "outer bowl", "between the bowls: top, left"),
+            (cubic(Ai, S, Ta, p.ang("outer_bowl.tail_in", 30, 0, 60), p.t("outer_bowl.t5"), p.t("outer_bowl.t6")), "outer bowl", "outer bowl: inside, leftmost"),
+            (cubic(Ta, p.ang("outer_bowl.tail_out", 155, 125, 185), Ab, W, p.t("outer_bowl.t7"), p.t("outer_bowl.t8")), "outer bowl", "outer bowl: tail"),
+            (cubic(Ab, W, A0, N, p.t("outer_bowl.t9"), p.t("outer_bowl.t10")), "outer bowl", "outer bowl: lowest")]
+    return {"contours": [run], "baseline": Ab[1]}
+
+
+def _turn(q, c, n):
+    """Points turned about c by n quarter turns, clockwise on the page."""
+    d = np.asarray(q, float) - c
+    for _ in range(n % 4):
+        d = np.column_stack([-d[:, 1], d[:, 0]])
+    return d + c
+
+
+def cross(p, K):
+    """The cross: four equal arms, narrow where they meet and widening to their ends, each end a bar
+    with a curl at both corners rolling back toward the centre, its edge dipping a little between
+    them. The arms' sides are hollow curves meeting at sharp inside corners. It is built on half of one
+    arm, mirrored and turned through the four quarters, so it has the square's symmetry (Pugin's,
+    drawn by hand, nearly has it). Its curls take their own size."""
+    c = np.array([p.x("centre_x", 220, 15), p.x("centre_y", 243, 15)])
+    k = p.length("curl", 0.95, 0.6, 1.5)
+    X = c + p.length("crotch", 36, 15, 60) / math.sqrt(2) * np.array([-1.0, -1.0])
+    O = c + np.array([-p.length("end.half_width", 96, 60, 140), -p.length("end.reach", 216, 180, 250)])
+    segs, names, neck, arrive = K.curl(O, "tl", k, p.ang("end.neck", 0, 0, 40), place="curl, top arm, left")
+    Ce = np.array([c[0], O[1] + p.length("end.dip", 18, 0, 35)])
+    # an eighth: from the crotch up the arm's side, round the curl, and along the end to the axis
+    eighth = [(cubic(X, p.ang("side.leave", 268, 240, 290), neck, arrive, p.t("side.t1"), p.t("side.t2")), "arm", "crotch, top arm, left")]
+    eighth += [(s, "curl", nm) for s, nm in zip(segs, names)]
+    eighth.append((cubic(O, E, Ce, E, p.t("end.t1"), p.t("end.t2")), "arm end", "curl, top arm, left: outer"))
+    quarter = mirror_half(eighth, c[0], "top arm: end, centre")
+    turn = lambda run, n, arm: [(_turn(q, c, n), l, nm.replace("top arm", arm)) for q, l, nm in run]
+    m = len(eighth)
+    half = turn(quarter[m:], 2, "bottom arm") + turn(quarter, 3, "left arm") + quarter[:m]
+    return {"contours": [mirror_half(half, c[0], "top arm: end, centre")], "half": half, "axis": c[0], "baseline": 2 * c[1] - O[1]}
+
+
+def ornament_dots(p, K):
+    """Seventeen round dots: four squares of four about a dot in the middle. Pugin set his by hand;
+    here they are all one size, on a square grid. It stands centred on half the cap height, as
+    Pugin's does among the letters of its row."""
+    c = np.array([p.x("centre_x", 167, 12), p.x("centre_y", 165, 12)])
+    r = p.length("r", 20.8, 14, 28)
+    a = p.length("pitch", 55.5, 40, 70)          # between the dots of a square
+    b = p.length("spread", 185, 150, 220)        # between the squares' centres
+    spots = [("middle", c)]
+    for sy, row in ((-1, "upper"), (1, "lower")):
+        for sx, col in ((-1, "left"), (1, "right")):
+            for iy in (-1, 1):
+                for ix in (-1, 1):
+                    at = c + np.array([sx * b / 2 + ix * a / 2, sy * b / 2 + iy * a / 2])
+                    spots.append((f"{row} {col} square, {'top' if iy < 0 else 'bottom'} {'left' if ix < 0 else 'right'}", at))
+    contours = [[(s, "dot", f"dot, {nm}: {e}") for s, e in zip(arc(o, r, 0, 360), ("rightmost", "lowest", "leftmost", "highest"))]
+                for nm, o in spots]
+    return {"contours": contours, "baseline": c[1] + CAP_PX / 2}
+
+
 LETTERS = {"I": I, "T.1": T_1, "L": L, "F": F, "E": E_, "H": H, "K": K_, "C": C, "O": O, "D": D, "Q": Q,
            "P": P, "R": R, "B": B, "G": G_, "V": V, "X": X, "Z": Z, "N": N_, "Y": Y, "U": U, "A": A,
-           "S": S_, "T.2": T_2}
+           "S": S_, "T.2": T_2, "Y.2": Y_2, "M.2": M_2, "M.1": M_1, "W.1": W_1, "W.2": W_2,
+           "cross": cross, "ornament.dots": ornament_dots}

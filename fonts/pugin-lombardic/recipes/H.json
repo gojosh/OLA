@@ -16,121 +16,121 @@
  },
  "corrections": [],
  "measured": {
-  "axis_x": 136.614,
+  "axis_x": 136.691,
   "bottom": {
-   "half_width": 74.27,
-   "outer_y": 444.12,
-   "neck_deg": 0.336,
-   "flare_t1": 0.684,
-   "flare_t2": 0.489,
-   "right_x": 253.303,
-   "right_y": 446.231,
-   "fillet_t1": 0.999,
-   "fillet_t2": 0.574,
-   "high_x": 132.986,
-   "high_y": 433.219,
-   "edge_t1": 0.739,
-   "edge_t2": 0.919,
-   "edge_t3": 0.466,
-   "edge_t4": 0.962
+   "half_width": 74.307,
+   "outer_y": 443.979,
+   "neck_deg": 0.002,
+   "flare_t1": 0.943,
+   "flare_t2": 0.291,
+   "right_x": 253.074,
+   "right_y": 446.162,
+   "fillet_t1": 1.0,
+   "fillet_t2": 0.585,
+   "high_x": 137.217,
+   "high_y": 433.094,
+   "edge_t1": 0.755,
+   "edge_t2": 0.719,
+   "edge_t3": 0.485,
+   "edge_t4": 0.967
   },
   "stem": {
-   "foot_y": 352.077,
-   "head_y": 142.495,
-   "foot_y_right": 347.648
+   "foot_y": 336.414,
+   "head_y": 154.354,
+   "foot_y_right": 347.207
   },
   "top": {
-   "half_width": 71.982,
-   "outer_y": 19.824,
-   "neck_deg": 7.848,
-   "flare_t1": 0.464,
-   "flare_t2": 0.518,
-   "low_x": 149.497,
-   "low_y": 32.769,
-   "right_x": 348.052,
-   "edge_t1": 0.201,
-   "edge_t2": 0.94,
-   "edge_t3": 0.245,
-   "edge_t4": 0.476
+   "half_width": 72.123,
+   "outer_y": 19.976,
+   "neck_deg": 17.861,
+   "flare_t1": 0.369,
+   "flare_t2": 0.759,
+   "low_x": 144.254,
+   "low_y": 33.292,
+   "right_x": 347.964,
+   "edge_t1": 0.2,
+   "edge_t2": 0.765,
+   "edge_t3": 0.22,
+   "edge_t4": 0.538
   },
   "top_right": {
    "neck_deg": 0.0
   },
   "sliver": {
-   "y": 171.253,
-   "t1": 0.809,
-   "t2": 0.858
+   "y": 170.267,
+   "t1": 0.76,
+   "t2": 0.906
   },
   "shoulder": {
-   "top_x": 300.266,
-   "top_y": 71.974,
-   "spring": 280.863,
-   "t1": 0.642,
-   "t2": 0.524,
-   "right_x": 418.705,
-   "right_y": 200.542,
-   "t3": 0.513,
-   "t4": 0.534,
-   "t5": 0.431,
-   "t6": 0.411
+   "top_x": 303.234,
+   "top_y": 72.244,
+   "spring": 282.622,
+   "t1": 0.666,
+   "t2": 0.557,
+   "right_x": 419.224,
+   "right_y": 201.21,
+   "t3": 0.554,
+   "t4": 0.464,
+   "t5": 0.407,
+   "t6": 0.35
   },
   "pocket": {
-   "x": 343.623,
-   "y": 383.655,
-   "f": 0.561,
-   "dip": 7.347,
-   "t1": 0.572,
-   "t2": 0.615,
-   "t3": 0.979,
-   "t4": 0.782
+   "x": 343.907,
+   "y": 381.279,
+   "f": 0.644,
+   "dip": 6.521,
+   "t1": 0.95,
+   "t2": 0.393,
+   "t3": 0.833,
+   "t4": 0.941
   },
   "terminal": {
-   "x": 385.9,
-   "y": 391.493,
-   "lobe_angle": 29.304,
+   "x": 386.277,
+   "y": 391.521,
+   "lobe_angle": 28.432,
    "neck_at": 89.871,
-   "join_at": 123.879,
-   "neck_rise": 330.554
+   "join_at": 128.534,
+   "neck_rise": 336.575
   },
   "foot": {
-   "bottom_x": 361.836,
-   "bottom_y": 445.222,
-   "join_out": 129.275,
-   "t1": 0.827,
-   "t2": 0.786,
-   "t3": 0.607,
-   "t4": 0.588
+   "bottom_x": 362.606,
+   "drop": 20.122,
+   "join_out": 126.313,
+   "t1": 0.841,
+   "t2": 0.667,
+   "t3": 0.714,
+   "t4": 0.42
   },
   "inside": {
-   "left_x": 307.273,
-   "left_y": 370.646,
-   "right_x": 328.725,
-   "right_y": 234.729,
-   "t1": 0.288,
-   "t2": 0.636
+   "left_x": 307.171,
+   "left_y": 375.025,
+   "right_x": 328.659,
+   "right_y": 233.755,
+   "t1": 0.32,
+   "t2": 0.679
   },
   "arch": {
-   "top_x": 256.805,
-   "top_y": 126.244,
-   "t1": 0.667,
-   "t2": 0.803,
-   "foot_y": 229.99,
-   "t3": 0.55,
-   "t4": 0.573
+   "top_x": 257.087,
+   "top_y": 126.234,
+   "t1": 0.66,
+   "t2": 0.799,
+   "foot_y": 230.0,
+   "t3": 0.573,
+   "t4": 0.555
   },
   "bottom_right": {
-   "neck_deg": 0.008
+   "neck_deg": 0.0
   },
   "units": "plate pixels, y down; tensions 0–1; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/H.png",
-  "when": "2026-10-28T15:44:01"
+  "when": "2026-10-28T18:20:16"
  },
  "fit": {
-  "mean_px": 1.12,
-  "p95_px": 4.1,
-  "max_px": 10.99,
-  "mean_px_fitted_alone": 0.95,
+  "mean_px": 1.07,
+  "p95_px": 3.97,
+  "max_px": 11.22,
+  "mean_px_fitted_alone": 0.9,
   "wobble_of_pugins_edge_mean_px": 0.26,
   "segments": 39,
   "outline_checks_pass": true

@@ -1,0 +1,71 @@
+{
+ "glyph": "G",
+ "units": "plate pixels, y down; each a move of one control point from the construction, made by hand on the proof page",
+ "points": [
+  {
+   "contour": 0,
+   "segment": 13,
+   "point": 2,
+   "node": "spiral: under the arch",
+   "dx": -13.812,
+   "dy": 14.917
+  },
+  {
+   "contour": 0,
+   "segment": 25,
+   "point": 0,
+   "node": "spiral: outside, leftmost",
+   "dx": 0.641,
+   "dy": 4.368
+  },
+  {
+   "contour": 0,
+   "segment": 24,
+   "point": 3,
+   "node": "trefoil: join, outside",
+   "dx": 0.641,
+   "dy": 4.368
+  },
+  {
+   "contour": 0,
+   "segment": 25,
+   "point": 1,
+   "node": "spiral: outside, leftmost",
+   "dx": 0.641,
+   "dy": -0.313
+  },
+  {
+   "contour": 0,
+   "segment": 24,
+   "point": 2,
+   "node": "trefoil: join, outside",
+   "dx": 0.641,
+   "dy": 4.368
+  },
+  {
+   "contour": 0,
+   "segment": 4,
+   "point": 1,
+   "node": "nub: right, into the beak",
+   "dx": 7.309,
+   "dy": 9.158
+  },
+  {
+   "contour": 0,
+   "segment": 3,
+   "point": 2,
+   "node": "nub",
+   "dx": -2.002,
+   "dy": 0.147
+  },
+  {
+   "contour": 0,
+   "segment": 4,
+   "point": 2,
+   "node": "nub: right, into the beak",
+   "dx": -9.166,
+   "dy": 29.462
+  }
+ ],
+ "when": "2026-10-28T16:53:51"
+}

@@ -18,6 +18,7 @@ dist/
 build/
 .cache/
 *.log
+__pycache__/
 
 # Full-resolution flattened plates (about 10 MB each; regenerate with tools/flatten, see Q18)
 reference/pugin-glossary/flattened/*.png

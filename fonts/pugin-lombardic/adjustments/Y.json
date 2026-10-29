@@ -1,0 +1,159 @@
+{
+ "glyph": "Y",
+ "units": "plate pixels, y down; each a move of one control point from the construction, made by hand on the proof page",
+ "points": [
+  {
+   "contour": 0,
+   "segment": 10,
+   "point": 0,
+   "node": "top bar: low point",
+   "dx": 38.117,
+   "dy": -7.016
+  },
+  {
+   "contour": 0,
+   "segment": 9,
+   "point": 3,
+   "node": "curl, top-left: outer",
+   "dx": 38.117,
+   "dy": -7.016
+  },
+  {
+   "contour": 0,
+   "segment": 10,
+   "point": 1,
+   "node": "top bar: low point",
+   "dx": -131.994,
+   "dy": -7.016
+  },
+  {
+   "contour": 0,
+   "segment": 9,
+   "point": 2,
+   "node": "curl, top-left: outer",
+   "dx": 84.238,
+   "dy": -7.016
+  },
+  {
+   "contour": 0,
+   "segment": 9,
+   "point": 0,
+   "node": "curl, top-left: outer",
+   "dx": 93.993,
+   "dy": 9.211
+  },
+  {
+   "contour": 0,
+   "segment": 8,
+   "point": 3,
+   "node": "curl, top-left: back",
+   "dx": 93.993,
+   "dy": 9.211
+  },
+  {
+   "contour": 0,
+   "segment": 9,
+   "point": 1,
+   "node": "curl, top-left: outer",
+   "dx": 70.981,
+   "dy": 9.211
+  },
+  {
+   "contour": 0,
+   "segment": 8,
+   "point": 2,
+   "node": "curl, top-left: back",
+   "dx": 93.993,
+   "dy": 9.211
+  },
+  {
+   "contour": 0,
+   "segment": 8,
+   "point": 1,
+   "node": "curl, top-left: back",
+   "dx": 0.0,
+   "dy": -27.904
+  },
+  {
+   "contour": 0,
+   "segment": 11,
+   "point": 0,
+   "node": "curl, top-right: outer",
+   "dx": -77.06,
+   "dy": 13.654
+  },
+  {
+   "contour": 0,
+   "segment": 10,
+   "point": 3,
+   "node": "top bar: low point",
+   "dx": -77.06,
+   "dy": 13.654
+  },
+  {
+   "contour": 0,
+   "segment": 11,
+   "point": 1,
+   "node": "curl, top-right: outer",
+   "dx": -62.586,
+   "dy": 13.654
+  },
+  {
+   "contour": 0,
+   "segment": 10,
+   "point": 2,
+   "node": "top bar: low point",
+   "dx": -105.76,
+   "dy": 13.654
+  },
+  {
+   "contour": 0,
+   "segment": 11,
+   "point": 2,
+   "node": "curl, top-right: outer",
+   "dx": 0.0,
+   "dy": -25.35
+  },
+  {
+   "contour": 1,
+   "segment": 2,
+   "point": 0,
+   "node": "counter: bottom",
+   "dx": -0.079,
+   "dy": 4.874
+  },
+  {
+   "contour": 1,
+   "segment": 1,
+   "point": 3,
+   "node": "counter: stem, foot of straight",
+   "dx": -0.079,
+   "dy": 4.874
+  },
+  {
+   "contour": 1,
+   "segment": 2,
+   "point": 1,
+   "node": "counter: bottom",
+   "dx": -7.105,
+   "dy": -8.807
+  },
+  {
+   "contour": 1,
+   "segment": 1,
+   "point": 2,
+   "node": "counter: stem, foot of straight",
+   "dx": -0.077,
+   "dy": 4.897
+  },
+  {
+   "contour": 1,
+   "segment": 2,
+   "point": 2,
+   "node": "counter: bottom",
+   "dx": 0.0,
+   "dy": 30.404
+  }
+ ],
+ "when": "2026-10-28T17:24:50"
+}

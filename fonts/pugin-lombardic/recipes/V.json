@@ -11,91 +11,91 @@
  "corrections": [],
  "measured": {
   "point": {
-   "x": 269.319,
-   "y": 438.853,
-   "out": 250.069,
-   "in": 112.442
+   "x": 268.883,
+   "y": 437.45,
+   "out": 249.28,
+   "in": 113.082
   },
   "crotch": {
-   "x": 295.073,
-   "y": 288.838,
-   "in": 72.441,
-   "out": 289.867
+   "x": 295.149,
+   "y": 288.803,
+   "in": 72.327,
+   "out": 289.796
   },
   "left_arm": {
    "outer": {
-    "x": 112.599,
-    "y": 110.016,
-    "heading": 243.838
+    "x": 118.675,
+    "y": 121.815,
+    "heading": 243.927
    },
    "inner": {
-    "x": 188.86,
+    "x": 188.795,
     "y": 70.0
    },
    "t1": 1.0,
-   "t2": 0.346,
+   "t2": 0.309,
    "t3": 0.2,
-   "t4": 0.233
+   "t4": 0.232
   },
   "right_arm": {
    "inner": {
-    "x": 385.702,
-    "y": 77.096
+    "x": 385.959,
+    "y": 76.197
    },
    "outer": {
-    "x": 417.13,
-    "y": 98.509,
-    "heading": 115.042
+    "x": 418.322,
+    "y": 96.008,
+    "heading": 115.142
    },
-   "t1": 0.448,
+   "t1": 0.446,
    "t2": 0.2,
-   "t3": 0.735,
-   "t4": 0.493
+   "t3": 0.985,
+   "t4": 0.502
   },
   "left cap": {
-   "y": 23.205,
-   "left_x": 62.559,
-   "right_x": 202.212,
-   "low_x": 123.013,
-   "low_dy": 12.619,
-   "neck_l": 0.01,
-   "neck_r": 14.268,
-   "flare_l1": 0.404,
-   "flare_l2": 0.776,
-   "edge_t1": 0.2,
-   "edge_t2": 0.805,
-   "edge_t3": 0.539,
-   "edge_t4": 0.229,
-   "flare_r1": 1.0,
-   "flare_r2": 0.977
-  },
-  "right cap": {
-   "y": 26.463,
-   "left_x": 370.969,
-   "right_x": 453.627,
-   "low_x": 404.499,
-   "low_dy": 14.581,
-   "neck_l": 38.662,
-   "neck_r": 40.0,
-   "flare_l1": 0.854,
-   "flare_l2": 0.891,
-   "edge_t1": 0.2,
-   "edge_t2": 0.515,
-   "edge_t3": 0.75,
+   "y": 23.464,
+   "left_x": 61.273,
+   "right_x": 202.256,
+   "low_x": 123.895,
+   "low_dy": 12.438,
+   "neck_l": 0.101,
+   "neck_r": 8.766,
+   "flare_l1": 0.442,
+   "flare_l2": 0.878,
+   "edge_t1": 0.206,
+   "edge_t2": 0.779,
+   "edge_t3": 0.487,
    "edge_t4": 0.201,
    "flare_r1": 1.0,
-   "flare_r2": 0.907
+   "flare_r2": 1.0
+  },
+  "right cap": {
+   "y": 27.665,
+   "left_x": 369.597,
+   "right_x": 454.981,
+   "low_x": 406.785,
+   "low_dy": 13.241,
+   "neck_l": 27.256,
+   "neck_r": 37.586,
+   "flare_l1": 0.727,
+   "flare_l2": 0.97,
+   "edge_t1": 0.2,
+   "edge_t2": 0.545,
+   "edge_t3": 0.67,
+   "edge_t4": 0.2,
+   "flare_r1": 1.0,
+   "flare_r2": 0.898
   },
   "units": "plate pixels, y down; tensions 0–1; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/V.png",
-  "when": "2026-10-28T15:44:01"
+  "when": "2026-10-28T18:20:16"
  },
  "fit": {
-  "mean_px": 1.13,
-  "p95_px": 3.54,
-  "max_px": 7.03,
-  "mean_px_fitted_alone": 0.93,
+  "mean_px": 1.17,
+  "p95_px": 3.74,
+  "max_px": 8.19,
+  "mean_px_fitted_alone": 1.17,
   "wobble_of_pugins_edge_mean_px": 0.26,
   "segments": 24,
   "outline_checks_pass": true

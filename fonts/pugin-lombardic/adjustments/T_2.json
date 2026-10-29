@@ -1,0 +1,31 @@
+{
+ "glyph": "T.2",
+ "units": "plate pixels, y down; each a move of one control point from the construction, made by hand on the proof page",
+ "points": [
+  {
+   "contour": 0,
+   "segment": 25,
+   "point": 1,
+   "node": "trefoil: join, left",
+   "dx": -19.803,
+   "dy": 30.278
+  },
+  {
+   "contour": 0,
+   "segment": 15,
+   "point": 2,
+   "node": "pocket: top",
+   "dx": -14.102,
+   "dy": 17.568
+  },
+  {
+   "contour": 0,
+   "segment": 15,
+   "point": 1,
+   "node": "pocket: top",
+   "dx": 4.423,
+   "dy": 0.0
+  }
+ ],
+ "when": "2026-10-28T17:20:08"
+}

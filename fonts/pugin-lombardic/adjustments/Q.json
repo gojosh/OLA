@@ -1,0 +1,183 @@
+{
+ "glyph": "Q",
+ "units": "plate pixels, y down; each a move of one control point from the construction, made by hand on the proof page",
+ "points": [
+  {
+   "contour": 1,
+   "segment": 7,
+   "point": 0,
+   "node": "ball, floor: meets the left wall",
+   "dx": 5.334,
+   "dy": 7.511
+  },
+  {
+   "contour": 1,
+   "segment": 6,
+   "point": 3,
+   "node": "counter: left",
+   "dx": 5.334,
+   "dy": 7.511
+  },
+  {
+   "contour": 1,
+   "segment": 7,
+   "point": 1,
+   "node": "ball, floor: meets the left wall",
+   "dx": -2.697,
+   "dy": 3.054
+  },
+  {
+   "contour": 1,
+   "segment": 6,
+   "point": 2,
+   "node": "counter: left",
+   "dx": 5.334,
+   "dy": 7.511
+  },
+  {
+   "contour": 1,
+   "segment": 11,
+   "point": 0,
+   "node": "ball, floor: meets the right wall",
+   "dx": 1.203,
+   "dy": 2.767
+  },
+  {
+   "contour": 1,
+   "segment": 10,
+   "point": 3,
+   "node": "ball, floor",
+   "dx": 1.203,
+   "dy": 2.767
+  },
+  {
+   "contour": 1,
+   "segment": 11,
+   "point": 1,
+   "node": "ball, floor: meets the right wall",
+   "dx": 0.192,
+   "dy": 3.04
+  },
+  {
+   "contour": 1,
+   "segment": 10,
+   "point": 2,
+   "node": "ball, floor",
+   "dx": 1.203,
+   "dy": 2.767
+  },
+  {
+   "contour": 1,
+   "segment": 10,
+   "point": 0,
+   "node": "ball, floor",
+   "dx": 1.234,
+   "dy": -2.547
+  },
+  {
+   "contour": 1,
+   "segment": 9,
+   "point": 3,
+   "node": "ball, floor",
+   "dx": 1.234,
+   "dy": -2.547
+  },
+  {
+   "contour": 1,
+   "segment": 10,
+   "point": 1,
+   "node": "ball, floor",
+   "dx": 1.234,
+   "dy": -0.228
+  },
+  {
+   "contour": 1,
+   "segment": 9,
+   "point": 2,
+   "node": "ball, floor",
+   "dx": 1.234,
+   "dy": -2.547
+  },
+  {
+   "contour": 1,
+   "segment": 4,
+   "point": 2,
+   "node": "curl, top: back",
+   "dx": 14.366,
+   "dy": 0.0
+  },
+  {
+   "contour": 0,
+   "segment": 14,
+   "point": 1,
+   "node": "base: end, bottom",
+   "dx": 66.426,
+   "dy": -4.304
+  },
+  {
+   "contour": 0,
+   "segment": 13,
+   "point": 2,
+   "node": "base: end",
+   "dx": 0.854,
+   "dy": 3.203
+  },
+  {
+   "contour": 0,
+   "segment": 14,
+   "point": 0,
+   "node": "base: end, bottom",
+   "dx": -11.113,
+   "dy": 0.283
+  },
+  {
+   "contour": 0,
+   "segment": 13,
+   "point": 3,
+   "node": "base: end",
+   "dx": -11.113,
+   "dy": 0.283
+  },
+  {
+   "contour": 0,
+   "segment": 5,
+   "point": 0,
+   "node": "ball, head of the flag: the flag runs in",
+   "dx": -9.756,
+   "dy": 11.104
+  },
+  {
+   "contour": 0,
+   "segment": 4,
+   "point": 3,
+   "node": "flag: inside, lowest",
+   "dx": -9.756,
+   "dy": 11.104
+  },
+  {
+   "contour": 0,
+   "segment": 5,
+   "point": 1,
+   "node": "ball, head of the flag: the flag runs in",
+   "dx": -6.702,
+   "dy": 2.086
+  },
+  {
+   "contour": 0,
+   "segment": 4,
+   "point": 2,
+   "node": "flag: inside, lowest",
+   "dx": 4.053,
+   "dy": -1.382
+  },
+  {
+   "contour": 0,
+   "segment": 2,
+   "point": 2,
+   "node": "bowl: right",
+   "dx": -2.701,
+   "dy": 7.358
+  }
+ ],
+ "when": "2026-10-28T17:12:53"
+}

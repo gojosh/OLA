@@ -1,0 +1,303 @@
+{
+ "glyph": "Y.2",
+ "units": "plate pixels, y down; each a move of one control point from the construction, made by hand on the proof page",
+ "points": [
+  {
+   "contour": 0,
+   "segment": 12,
+   "point": 1,
+   "node": "crotch",
+   "dx": 36.909,
+   "dy": -0.251
+  },
+  {
+   "contour": 0,
+   "segment": 23,
+   "point": 1,
+   "node": "right arm: outside",
+   "dx": -9.958,
+   "dy": -28.443
+  },
+  {
+   "contour": 0,
+   "segment": 22,
+   "point": 2,
+   "node": "curl, right cap, right: neck",
+   "dx": 3.492,
+   "dy": 1.94
+  },
+  {
+   "contour": 0,
+   "segment": 12,
+   "point": 0,
+   "node": "crotch",
+   "dx": 13.095,
+   "dy": 1.7
+  },
+  {
+   "contour": 0,
+   "segment": 11,
+   "point": 3,
+   "node": "left arm: inside",
+   "dx": 13.095,
+   "dy": 1.7
+  },
+  {
+   "contour": 0,
+   "segment": 11,
+   "point": 2,
+   "node": "left arm: inside",
+   "dx": 0.3,
+   "dy": 5.055
+  },
+  {
+   "contour": 0,
+   "segment": 0,
+   "point": 1,
+   "node": "stem: left, top",
+   "dx": -1.173,
+   "dy": 43.394
+  },
+  {
+   "contour": 0,
+   "segment": 0,
+   "point": 0,
+   "node": "stem: left, top",
+   "dx": -1.173,
+   "dy": 0.948
+  },
+  {
+   "contour": 0,
+   "segment": 35,
+   "point": 3,
+   "node": "stem: left, foot of straight",
+   "dx": -1.173,
+   "dy": 0.948
+  },
+  {
+   "contour": 0,
+   "segment": 35,
+   "point": 2,
+   "node": "stem: left, foot of straight",
+   "dx": -1.173,
+   "dy": 0.948
+  },
+  {
+   "contour": 0,
+   "segment": 0,
+   "point": 2,
+   "node": "stem: left, top",
+   "dx": 30.982,
+   "dy": -19.514
+  },
+  {
+   "contour": 0,
+   "segment": 1,
+   "point": 1,
+   "node": "left cap: left edge, top",
+   "dx": 5.268,
+   "dy": 1.491
+  },
+  {
+   "contour": 0,
+   "segment": 1,
+   "point": 0,
+   "node": "left cap: left edge, top",
+   "dx": 11.71,
+   "dy": -2.511
+  },
+  {
+   "contour": 0,
+   "segment": 0,
+   "point": 3,
+   "node": "stem: left, top",
+   "dx": 11.71,
+   "dy": -2.511
+  },
+  {
+   "contour": 0,
+   "segment": 11,
+   "point": 1,
+   "node": "left arm: inside",
+   "dx": 0.0,
+   "dy": -16.934
+  },
+  {
+   "contour": 0,
+   "segment": 10,
+   "point": 2,
+   "node": "curl, left cap, right: neck",
+   "dx": 0.0,
+   "dy": 6.897
+  },
+  {
+   "contour": 0,
+   "segment": 17,
+   "point": 1,
+   "node": "curl, right cap, left: outer",
+   "dx": 4.65,
+   "dy": 0.447
+  },
+  {
+   "contour": 0,
+   "segment": 17,
+   "point": 0,
+   "node": "curl, right cap, left: outer",
+   "dx": -6.699,
+   "dy": 0.447
+  },
+  {
+   "contour": 0,
+   "segment": 16,
+   "point": 3,
+   "node": "curl, right cap, left: back",
+   "dx": -6.699,
+   "dy": 0.447
+  },
+  {
+   "contour": 0,
+   "segment": 16,
+   "point": 2,
+   "node": "curl, right cap, left: back",
+   "dx": -2.959,
+   "dy": 0.447
+  },
+  {
+   "contour": 0,
+   "segment": 18,
+   "point": 2,
+   "node": "right cap: low point",
+   "dx": -9.008,
+   "dy": 1.439
+  },
+  {
+   "contour": 0,
+   "segment": 18,
+   "point": 1,
+   "node": "right cap: low point",
+   "dx": -1.66,
+   "dy": -1.345
+  },
+  {
+   "contour": 0,
+   "segment": 19,
+   "point": 0,
+   "node": "curl, right cap, right: outer",
+   "dx": 6.726,
+   "dy": 1.439
+  },
+  {
+   "contour": 0,
+   "segment": 18,
+   "point": 3,
+   "node": "right cap: low point",
+   "dx": 6.726,
+   "dy": 1.439
+  },
+  {
+   "contour": 0,
+   "segment": 19,
+   "point": 1,
+   "node": "curl, right cap, right: outer",
+   "dx": 6.39,
+   "dy": 1.439
+  },
+  {
+   "contour": 0,
+   "segment": 18,
+   "point": 0,
+   "node": "right cap: low point",
+   "dx": 3.505,
+   "dy": -1.345
+  },
+  {
+   "contour": 0,
+   "segment": 17,
+   "point": 3,
+   "node": "curl, right cap, left: outer",
+   "dx": 3.505,
+   "dy": -1.345
+  },
+  {
+   "contour": 0,
+   "segment": 17,
+   "point": 2,
+   "node": "curl, right cap, left: outer",
+   "dx": -1.982,
+   "dy": -1.345
+  },
+  {
+   "contour": 0,
+   "segment": 5,
+   "point": 1,
+   "node": "curl, left cap, left: outer",
+   "dx": 6.458,
+   "dy": 0.675
+  },
+  {
+   "contour": 0,
+   "segment": 5,
+   "point": 2,
+   "node": "curl, left cap, left: outer",
+   "dx": 7.678,
+   "dy": 0.0
+  },
+  {
+   "contour": 0,
+   "segment": 5,
+   "point": 0,
+   "node": "curl, left cap, left: outer",
+   "dx": -7.197,
+   "dy": 0.675
+  },
+  {
+   "contour": 0,
+   "segment": 4,
+   "point": 3,
+   "node": "curl, left cap, left: back",
+   "dx": -7.197,
+   "dy": 0.675
+  },
+  {
+   "contour": 0,
+   "segment": 4,
+   "point": 2,
+   "node": "curl, left cap, left: back",
+   "dx": -3.173,
+   "dy": 0.675
+  },
+  {
+   "contour": 0,
+   "segment": 7,
+   "point": 0,
+   "node": "curl, left cap, right: outer",
+   "dx": 0.149,
+   "dy": 2.073
+  },
+  {
+   "contour": 0,
+   "segment": 6,
+   "point": 3,
+   "node": "left cap: low point",
+   "dx": 0.149,
+   "dy": 2.073
+  },
+  {
+   "contour": 0,
+   "segment": 7,
+   "point": 1,
+   "node": "curl, left cap, right: outer",
+   "dx": 0.149,
+   "dy": 2.073
+  },
+  {
+   "contour": 0,
+   "segment": 6,
+   "point": 2,
+   "node": "left cap: low point",
+   "dx": -13.446,
+   "dy": 2.073
+  }
+ ],
+ "when": "2026-10-28T17:30:02"
+}

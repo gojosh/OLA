@@ -278,18 +278,21 @@ def trefoil(C, axis, r, d, enter, leave, place="trefoil"):
     return segs, names, segs[0][0], segs[-1][3]
 
 
-def two_lobe(c1, r, d, angle, enter, leave, place="two-lobe"):
-    """Two equal round lobes, the second d from the first along `angle` (degrees on screen), close
+def two_lobe(c1, r, d, angle, enter, leave, place="two-lobe", r2=None):
+    """Two round lobes, the second d from the first along `angle` (degrees on screen), close
     enough to overlap so the cusp between them is crisp. Pugin draws this terminal (a curl with a
-    second ball beyond it) with lobes of uneven size and spacing; this one is exact. A clockwise
+    second ball beyond it) with lobes of uneven size and spacing; this one is exact. The lobes are
+    equal unless r2 gives the second its own radius (L's tip: a broad crown and a ball). A clockwise
     outline comes in on the first lobe at the screen angle `enter` about its centre, runs over it to
     the cusp and round the second lobe, and leaves it at `leave`. Returns segments, node names, and
     the entry and exit points."""
     c1 = np.asarray(c1, float)
+    r2 = r if r2 is None else r2
     u = hd(angle)
     c2 = c1 + d * u
-    h = math.sqrt(max(r * r - (d / 2) ** 2, 0.0))
-    cusp = (c1 + c2) / 2 + h * np.array([u[1], -u[0]])       # on the side a clockwise outline crosses over
+    a = (r * r - r2 * r2 + d * d) / (2 * d)                  # how far along u the cusp lies from c1
+    h = math.sqrt(max(r * r - a * a, 0.0))
+    cusp = c1 + a * u + h * np.array([u[1], -u[0]])          # on the side a clockwise outline crosses over
     ang = lambda c, q: math.degrees(math.atan2(q[1] - c[1], q[0] - c[0]))
     a1 = ang(c1, cusp)
     while a1 <= enter:
@@ -298,7 +301,7 @@ def two_lobe(c1, r, d, angle, enter, leave, place="two-lobe"):
     b1 = leave
     while b1 <= b0:
         b1 += 360
-    s1, s2 = arc(c1, r, enter, a1), arc(c2, r, b0, b1)
+    s1, s2 = arc(c1, r, enter, a1), arc(c2, r2, b0, b1)
     names = [f"{place}: neck"] + [f"{place}: first lobe"] * (len(s1) - 1) + [f"{place}: cusp"] + [f"{place}: second lobe"] * (len(s2) - 1)
     return s1 + s2, names, s1[0][0], s2[-1][3]
 
@@ -322,13 +325,15 @@ class Params:
     construction asks for (each with a starting value and bounds), then with the fitted values.
     Family measurements are shared by every letter unless `local` is set."""
 
-    def __init__(self, glyph: str, values: dict | None = None, local: bool = False):
-        self.glyph, self.values, self.local, self.spec = glyph, values, local, {}
+    def __init__(self, glyph: str, values: dict | None = None, local: bool = False, fill: bool = False):
+        self.glyph, self.values, self.local, self.fill, self.spec = glyph, values, local, fill, {}
 
     def _get(self, key, init, lo, hi):
         lo, hi = min(lo, init), max(hi, init)
         self.spec.setdefault(key, (float(init), float(lo), float(hi)))
-        return float(init) if self.values is None else float(self.values[key])
+        if self.values is None or (self.fill and key not in self.values):
+            return float(init)          # `fill`: a glyph built from another's values takes its own starting value for the rest
+        return float(self.values[key])
 
     def x(self, name, init, span=30.0):
         """A position or length in plate pixels."""
@@ -363,6 +368,71 @@ def mirror_half(half, axis_x, end_name):
     names = [nm for _, _, nm in half]
     r_names = [flip(nm) for nm in (names[1:] + [end_name])[::-1]]
     return list(zip(segs, labels, names)) + list(zip(right, [flip(l) for l in labels[::-1]], r_names))
+
+
+def mirror_copy(run, axis_x):
+    """A closed contour's mirror image about x = axis_x, as a contour of its own, run the same way
+    round (a counter stays a counter), with left and right swapped in its names."""
+    n = len(run)
+    segs = G.reverse([q * [-1, 1] + [2 * axis_x, 0] for q, _, _ in run])
+    flip = lambda s: s.replace("left", "\0").replace("right", "left").replace("\0", "right")
+    # the k-th reversed segment starts where the original's (n - k)-th started
+    return [(segs[k], flip(run[n - 1 - k][1]), flip(run[(n - k) % n][2])) for k in range(n)]
+
+
+def cross_x(P, x):
+    """Where a cubic crosses the upright x: its t in [0, 1] (the nearest end if it doesn't)."""
+    c = np.array([-P[0][0] + 3 * P[1][0] - 3 * P[2][0] + P[3][0], 3 * P[0][0] - 6 * P[1][0] + 3 * P[2][0],
+                  -3 * P[0][0] + 3 * P[1][0], P[0][0] - x])
+    roots = [r.real for r in np.roots(c) if abs(r.imag) < 1e-9 and -1e-9 <= r.real <= 1 + 1e-9]
+    if roots:
+        return float(np.clip(min(roots, key=lambda t: abs(t - 0.5)), 0, 1))
+    return 0.0 if abs(P[0][0] - x) < abs(P[3][0] - x) else 1.0
+
+
+def crossings(A, B, n=48):
+    """Where two runs of cubics cross: (i, ta, j, tb, point) for each crossing, A[i] at ta meeting
+    B[j] at tb. Found on their polylines and refined by Newton's method."""
+    ts = np.linspace(0, 1, n + 1)
+    out = []
+    for i, qa in enumerate(A):
+        pa = G.bez(qa, ts)
+        for j, qb in enumerate(B):
+            pb = G.bez(qb, ts)
+            if (pa.max(0) < pb.min(0)).any() or (pb.max(0) < pa.min(0)).any():
+                continue
+            q0, e = pb[:-1], pb[1:] - pb[:-1]
+            for u in range(n):
+                d, w = pa[u + 1] - pa[u], q0 - pa[u]
+                den = d[0] * e[:, 1] - d[1] * e[:, 0]
+                ok = np.abs(den) > 1e-12
+                den = np.where(ok, den, 1.0)
+                s = (w[:, 0] * e[:, 1] - w[:, 1] * e[:, 0]) / den
+                r = (w[:, 0] * d[1] - w[:, 1] * d[0]) / den
+                for v in np.nonzero(ok & (s >= 0) & (s < 1) & (r >= 0) & (r < 1))[0]:
+                    t1, t2 = ts[u] + s[v] / n, ts[v] + r[v] / n
+                    for _ in range(8):
+                        F = G.bez(qa, t1) - G.bez(qb, t2)
+                        J = np.column_stack([G.bez_d(qa, t1), -G.bez_d(qb, t2)])
+                        if abs(np.linalg.det(J)) < 1e-12:
+                            break
+                        t1, t2 = np.clip(np.array([t1, t2]) - np.linalg.solve(J, F), 0, 1)
+                    pt = G.bez(qa, t1)
+                    if all(np.linalg.norm(pt - o[4]) > 0.5 for o in out):
+                        out.append((i, float(t1), j, float(t2), pt))
+    return out
+
+
+def cut(run, i, t):
+    """A run of (segment, part, name) cut at segment i, t: the run before the cut and after it.
+    A cut within a hair of a node falls on the node, so no sliver of a segment is left."""
+    q = np.asarray(run[i][0], float)
+    if t < 1e-3:
+        return run[:i], run[i:]
+    if t > 1 - 1e-3:
+        return run[:i + 1], run[i + 1:]
+    a, b = G.split(q, t)
+    return run[:i] + [(a, run[i][1], run[i][2])], [(b, run[i][1], None)] + run[i + 1:]
 
 
 # ── Fitting letters to Pugin's ────────────────────────────────────────────────
@@ -421,13 +491,16 @@ def fit_letters(letters: dict, refs: dict, kit: Kit, local=False, edge_points=15
     data = {}
     for g in letters:
         e = np.concatenate(reference_edges(refs[g]))
-        data[g] = (signed_distance(refs[g]), e[np.linspace(0, len(e) - 1, min(edge_points, len(e))).astype(int)])
+        data[g] = (signed_distance(refs[g]), e[np.linspace(0, len(e) - 1, min(edge_points, len(e))).astype(int)], refs[g].shape)
 
     def glyph_res(g, vals):
         built = letters[g](Params(g, vals, local), kit)
         dense = sample_fixed(built)
-        sd, edge = data[g]
-        return np.concatenate([sd(dense), cKDTree(dense).query(edge)[0], 20 * swelling(built)])
+        sd, edge, (h, w) = data[g]
+        # where the frame of the plate cut a reference (W.1's first curl), the construction runs on past
+        # its edge, and there is nothing there to compare it with
+        inside = (dense[:, 0] >= 0.5) & (dense[:, 0] <= w - 1.5) & (dense[:, 1] >= 0.5) & (dense[:, 1] <= h - 1.5)
+        return np.concatenate([np.where(inside, sd(dense), 0.0), cKDTree(dense).query(edge)[0], 20 * swelling(built)])
 
     def resid(x):
         vals = {**fixed, **dict(zip(keys, x))}
@@ -646,6 +719,187 @@ def respace(contours, lsb, rsb, symmetric=False):
     if symmetric:                       # keep the axis on a whole unit: the same white both sides
         width = 2 * int(round((int(round(x_min)) + int(round(x_max))) / 2 + dx))
     return moved, width, dx
+
+
+# ── Adjustments by hand ───────────────────────────────────────────────────────
+
+def mirrored_counts(built):
+    """For each contour, how many segments its left half has if it is mirrored, else None."""
+    halves = built.get("halves") or ([built["half"]] if built.get("half") else None)
+    if not halves:
+        return [None] * len(built["contours"])
+    return [len(h) if h is not None else None for h in halves]
+
+
+def adjust(built, points):
+    """Apply recorded adjustments (moves of single control points, in plate pixels, made by hand on
+    the proof page) to a built glyph, after its fit. Each names the node of the segment it belongs
+    to; one whose node no longer matches (the construction has changed since) is skipped and
+    reported. Lines stay lines. In a mirrored contour only the left half is adjusted; the nodes on
+    the axis stay on it, their handles stay flat, and the right half is mirrored again from the left.
+    Returns (applied, stale)."""
+    if not points:
+        return 0, []
+    conts, counts, axis = built["contours"], mirrored_counts(built), built.get("axis")
+    lines = {(c, s) for c, cont in enumerate(conts) for s, (q, _, _) in enumerate(cont) if is_line(q)}
+    applied, stale = 0, []
+    for e in points:
+        c, s, k = e["contour"], e["segment"], e["point"]
+        if not (c < len(conts) and s < len(conts[c]) and conts[c][s][2] == e["node"] and (counts[c] is None or s < counts[c])):
+            stale.append(e)
+            continue
+        q, label, name = conts[c][s]
+        q = np.array(q, float)
+        q[k] += (e["dx"], e["dy"])
+        conts[c][s] = (q, label, name)
+        applied += 1
+    for c, cont in enumerate(conts):
+        for s, (q, label, name) in enumerate(cont):
+            if (c, s) in lines:
+                q = np.array(q, float)
+                q[1], q[2] = q[0] + (q[3] - q[0]) / 3, q[0] + 2 * (q[3] - q[0]) / 3
+                cont[s] = (q, label, name)
+        n = counts[c]
+        if n is None:
+            continue
+        q0, qn = np.array(cont[0][0], float), np.array(cont[n - 1][0], float)
+        q0[0][0], q0[1][1] = axis, q0[0][1]
+        qn[3][0], qn[2][1] = axis, qn[3][1]
+        cont[0], cont[n - 1] = (q0, cont[0][1], cont[0][2]), (qn, cont[n - 1][1], cont[n - 1][2])
+        for i in range(n):
+            j = 2 * n - 1 - i
+            cont[j] = ((cont[i][0] * [-1, 1] + [2 * axis, 0])[::-1].copy(), cont[j][1], cont[j][2])
+        half = built["halves"][c] if built.get("halves") else built["half"]
+        for i in range(n):
+            half[i] = (cont[i][0], half[i][1], half[i][2])
+    return applied, stale
+
+
+def add_extremes(built, tol=0.2):
+    """After moves by hand: where a curve now bulges past its nodes by more than tol pixels, split it
+    at the extremes inside it, so every extreme is a node again. The shape is unchanged; the new
+    node's handles are set exactly flat or upright. A mirrored contour is split on its left half and
+    mirrored again. Returns the names of the nodes added."""
+    added = []
+
+    def split_run(run):
+        out = []
+        for q, label, name in run:
+            q = np.array(q, float)
+            ts = [t for t in G.extrema_ts(q) if 0.02 < t < 0.98]
+            if not ts or _swell(q) <= tol:
+                out.append((q, label, name))
+                continue
+            rest, done = q, 0.0
+            pieces = []
+            for t in sorted(ts):
+                a, rest = G.split(rest, (t - done) / (1 - done))
+                d = G.bez_d(q, t)
+                k = 0 if abs(d[0]) < abs(d[1]) else 1      # an x extreme is upright, a y extreme flat
+                a[2][k] = a[3][k]
+                rest[1][k] = rest[0][k]
+                pieces.append(a)
+                done = t
+            pieces.append(rest)
+            out.append((pieces[0], label, name))
+            for p in pieces[1:]:
+                out.append((p, label, f"{name}: {ADDED}"))
+                added.append(f"{name}: {ADDED}")
+        return out
+
+    counts = mirrored_counts(built)
+    for c, n in enumerate(counts):
+        cont = built["contours"][c]
+        if n is None:
+            built["contours"][c] = split_run(cont)
+            continue
+        end_name = cont[n][2]
+        left = split_run(cont[:n])
+        if len(left) == n:
+            continue
+        built["contours"][c] = mirror_half(left, built["axis"], end_name)
+        if built.get("halves"):
+            built["halves"][c] = left
+        else:
+            built["half"] = left
+    return added
+
+
+ADDED = "extreme added after moves by hand"
+
+
+def drop_redundant(built, tol=0.35):
+    """After add_extremes: a smooth node beside an added extreme that is no longer an extreme itself
+    (a move by hand tilted its handles) is redundant. It is removed, its two curves merged into one
+    that keeps the moved shape within tol pixels (0.35 px is about half a font unit) and doesn't bulge; the added extreme takes its name.
+    So a tilted handle at an extreme comes out as the node moved to where the extreme now is.
+    Returns the names of the nodes removed."""
+    removed = []
+
+    def unit(v):
+        return v / (np.linalg.norm(v) + 1e-12)
+
+    def flat_or_upright(v):
+        a = abs(math.degrees(math.atan2(v[1], v[0]))) % 90
+        return min(a, 90 - a) < 0.5
+
+    def pass_(run, closed):
+        m = len(run)
+        for i in range(m):
+            if not run[i][2].endswith(ADDED):
+                continue
+            for k in (i - 1, i + 1):
+                if not closed and (k <= 0 or k >= m):
+                    continue
+                a, b = (k - 1) % m, k % m
+                A, B = np.array(run[a][0], float), np.array(run[b][0], float)
+                if run[b][2].endswith(ADDED) or is_line(A) or is_line(B):
+                    continue
+                tin, tout = A[3] - A[2], B[1] - B[0]
+                if np.linalg.norm(tin) < 1e-9 or np.linalg.norm(tout) < 1e-9:
+                    continue
+                turn = math.degrees(math.acos(np.clip(np.dot(unit(tin), unit(tout)), -1, 1)))
+                if turn > 1.0 or flat_or_upright(tin):
+                    continue
+                pts = np.concatenate([G.bez(A, np.linspace(0, 1, 40)), G.bez(B, np.linspace(0, 1, 41)[1:])])
+                t1 = unit(A[1] - A[0]) if np.linalg.norm(A[1] - A[0]) > 1e-9 else unit(A[2] - A[0])
+                t2 = unit(B[2] - B[3]) if np.linalg.norm(B[2] - B[3]) > 1e-9 else unit(B[1] - B[3])
+                P, err = G.fit_span(pts, t1, t2)
+                if err.max() > tol or _swell(P) > 0.2:
+                    continue
+                name_b = run[b][2]
+                merged = (P, run[a][1], run[a][2])
+                new = list(run)
+                new[a] = merged
+                del new[b]
+                j = i if i < b else i - 1                     # the added extreme's index after the merge
+                new[j] = (new[j][0], new[j][1], name_b)
+                removed.append(name_b)
+                return new, True
+        return run, False
+
+    def clean(run, closed):
+        changed = True
+        while changed:
+            run, changed = pass_(run, closed)
+        return run
+
+    counts = mirrored_counts(built)
+    for c, n in enumerate(counts):
+        cont = built["contours"][c]
+        if n is None:
+            built["contours"][c] = clean(cont, True)
+            continue
+        end_name = cont[n][2]
+        left = clean(cont[:n], False)
+        if len(left) == n:
+            continue
+        built["contours"][c] = mirror_half(left, built["axis"], end_name)
+        if built.get("halves"):
+            built["halves"][c] = left
+        else:
+            built["half"] = left
+    return removed
 
 
 def is_line(P):

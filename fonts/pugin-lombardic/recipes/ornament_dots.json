@@ -1,0 +1,29 @@
+{
+ "glyph": "ornament.dots",
+ "unicode": "U+2059",
+ "unicode_note": "Provisional: U+2059 FIVE DOT PUNCTUATION is the nearest standard character; Pugin's ornament has seventeen dots (Q35).",
+ "construction": "letters.py: ornament_dots",
+ "description": "Seventeen round dots: four squares of four about a dot in the middle, all one size, on a square grid. It stands centred on half the cap height, as Pugin's does among the letters of its row.",
+ "primitives": {},
+ "corrections": [],
+ "measured": {
+  "centre_x": 168.153,
+  "centre_y": 166.734,
+  "r": 20.571,
+  "pitch": 56.47,
+  "spread": 185.633,
+  "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/ornament_dots.png",
+  "when": "2026-10-28T18:20:16"
+ },
+ "fit": {
+  "mean_px": 2.9,
+  "p95_px": 6.8,
+  "max_px": 8.84,
+  "mean_px_fitted_alone": 2.9,
+  "wobble_of_pugins_edge_mean_px": 0.52,
+  "segments": 68,
+  "outline_checks_pass": true
+ }
+}

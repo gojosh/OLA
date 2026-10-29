@@ -1,12 +1,12 @@
 {
  "shared": {
-  "ball_r": 25.416,
+  "ball_r": 25.419,
   "curl": 0.946,
   "stem_armed": 35.93,
-  "stem_plain": 40.066,
-  "trefoil_d": 25.774,
-  "trefoil_r": 20.841,
-  "two_lobe_r": 19.848,
+  "stem_plain": 40.053,
+  "trefoil_d": 23.879,
+  "trefoil_r": 21.057,
+  "two_lobe_r": 20.556,
   "two_lobe_spread": 1.8
  },
  "meaning": {
@@ -21,244 +21,285 @@
  },
  "fitted_alone": {
   "A": {
-   "stem_armed": 37.734,
+   "stem_armed": 37.549,
    "curl": 1.131
   },
   "B": {
-   "stem_armed": 36.371,
-   "curl": 0.978,
-   "trefoil_r": 17.806,
-   "trefoil_d": 22.784
+   "stem_armed": 36.316,
+   "curl": 0.995,
+   "trefoil_r": 17.796,
+   "trefoil_d": 22.763
   },
   "C": {
-   "curl": 0.9
+   "curl": 0.901
   },
   "D": {
-   "stem_armed": 33.704,
+   "stem_armed": 33.669,
    "curl": 0.946
   },
   "E": {
-   "curl": 0.93
+   "curl": 0.934
   },
   "F": {
-   "stem_armed": 35.363,
-   "curl": 0.931,
-   "trefoil_r": 17.633,
-   "trefoil_d": 22.483
+   "stem_armed": 35.334,
+   "curl": 0.929,
+   "trefoil_r": 17.608,
+   "trefoil_d": 22.477
   },
   "G": {
-   "trefoil_r": 20.584,
-   "trefoil_d": 27.514
+   "trefoil_r": 20.993,
+   "trefoil_d": 26.951
   },
   "H": {
-   "stem_armed": 36.402,
-   "curl": 0.84,
-   "two_lobe_r": 19.848,
+   "stem_armed": 36.237,
+   "curl": 0.841,
+   "two_lobe_r": 19.846,
    "two_lobe_spread": 1.97
   },
   "I": {
-   "stem_plain": 39.793,
+   "stem_plain": 39.774,
    "curl": 1.006
   },
   "K": {
-   "stem_armed": 36.02,
-   "curl": 0.887,
-   "two_lobe_r": 17.826,
+   "stem_armed": 35.984,
+   "curl": 0.894,
+   "two_lobe_r": 17.887,
    "two_lobe_spread": 1.8
   },
   "L": {
-   "stem_plain": 40.066,
-   "curl": 1.042
+   "stem_plain": 40.053,
+   "curl": 0.95,
+   "two_lobe_r": 23.099
+  },
+  "M.1": {
+   "curl": 0.984
+  },
+  "M.2": {
+   "curl": 0.869
   },
   "N": {
-   "stem_armed": 34.739,
-   "curl": 0.879,
-   "two_lobe_r": 21.27,
+   "stem_armed": 34.659,
+   "curl": 0.882,
+   "two_lobe_r": 21.266,
    "two_lobe_spread": 1.8
   },
   "O": {
-   "ball_r": 23.313,
-   "curl": 1.025
+   "ball_r": 23.337,
+   "curl": 1.026
   },
   "P": {
-   "stem_armed": 35.481,
+   "stem_armed": 35.456,
    "curl": 0.929,
-   "trefoil_r": 21.098,
-   "trefoil_d": 25.041
+   "trefoil_r": 21.122,
+   "trefoil_d": 24.994
   },
   "Q": {
-   "curl": 1.019,
-   "ball_r": 27.519
+   "curl": 0.975,
+   "ball_r": 27.502
   },
   "R": {
-   "stem_armed": 35.497,
+   "stem_armed": 35.414,
    "curl": 0.908,
-   "trefoil_r": 23.082,
-   "trefoil_d": 26.599
+   "trefoil_r": 23.072,
+   "trefoil_d": 26.618
   },
   "S": {
-   "curl": 0.953
+   "curl": 0.946
   },
   "T.1": {
-   "stem_armed": 37.296,
-   "curl": 0.87
+   "stem_armed": 37.0,
+   "curl": 0.875
   },
   "T.2": {
-   "curl": 0.972,
-   "trefoil_r": 22.546,
-   "trefoil_d": 26.507
+   "curl": 0.995,
+   "trefoil_r": 26.69,
+   "trefoil_d": 21.848
   },
   "U": {
    "stem_armed": 35.93,
-   "curl": 1.006
+   "curl": 1.003
   },
   "V": {
-   "curl": 0.853
+   "curl": 0.946
+  },
+  "W.1": {},
+  "W.2": {
+   "curl": 0.916
   },
   "X": {
-   "curl": 0.907
+   "curl": 0.927
   },
   "Y": {
-   "stem_plain": 40.275,
-   "curl": 1.021
+   "stem_plain": 40.229,
+   "curl": 1.02
   },
   "Z": {
-   "curl": 1.113
-  }
+   "curl": 1.145
+  },
+  "cross": {},
+  "ornament.dots": {}
  },
  "mean_px": {
   "A": {
    "shared": 1.93,
-   "alone": 0.99
+   "alone": 0.97
   },
   "B": {
-   "shared": 1.14,
-   "alone": 1.01
+   "shared": 1.01,
+   "alone": 0.88
   },
   "C": {
-   "shared": 0.7,
-   "alone": 0.69
+   "shared": 0.68,
+   "alone": 0.67
   },
   "D": {
-   "shared": 1.03,
-   "alone": 0.75
+   "shared": 1.02,
+   "alone": 0.74
   },
   "E": {
    "shared": 0.77,
-   "alone": 0.77
+   "alone": 0.76
   },
   "F": {
-   "shared": 1.48,
-   "alone": 1.23
+   "shared": 1.41,
+   "alone": 1.19
   },
   "G": {
    "shared": 0.9,
-   "alone": 0.89
+   "alone": 0.88
   },
   "H": {
-   "shared": 1.12,
-   "alone": 0.95
+   "shared": 1.07,
+   "alone": 0.9
   },
   "I": {
    "shared": 1.08,
    "alone": 0.89
   },
   "K": {
-   "shared": 1.15,
-   "alone": 1.05
+   "shared": 1.09,
+   "alone": 0.98
   },
   "L": {
-   "shared": 1.61,
-   "alone": 1.5
+   "shared": 1.19,
+   "alone": 1.12
+  },
+  "M.1": {
+   "shared": 2.4,
+   "alone": 2.39
+  },
+  "M.2": {
+   "shared": 1.72,
+   "alone": 1.66
   },
   "N": {
-   "shared": 0.83,
-   "alone": 0.61
+   "shared": 0.78,
+   "alone": 0.58
   },
   "O": {
-   "shared": 0.87,
-   "alone": 0.82
+   "shared": 0.86,
+   "alone": 0.81
   },
   "P": {
-   "shared": 1.1,
-   "alone": 1.07
+   "shared": 0.93,
+   "alone": 1.06
   },
   "Q": {
-   "shared": 1.16,
-   "alone": 1.03
+   "shared": 0.93,
+   "alone": 0.89
   },
   "R": {
-   "shared": 1.04,
-   "alone": 0.82
+   "shared": 1.05,
+   "alone": 0.8
   },
   "S": {
-   "shared": 0.99,
-   "alone": 0.96
+   "shared": 0.74,
+   "alone": 0.99
   },
   "T.1": {
-   "shared": 1.98,
-   "alone": 1.89
+   "shared": 1.95,
+   "alone": 1.86
   },
   "T.2": {
-   "shared": 1.63,
-   "alone": 1.51
+   "shared": 1.31,
+   "alone": 1.07
   },
   "U": {
    "shared": 0.76,
-   "alone": 0.72
+   "alone": 0.71
   },
   "V": {
-   "shared": 1.13,
-   "alone": 0.93
+   "shared": 1.17,
+   "alone": 1.17
+  },
+  "W.1": {
+   "shared": 1.47,
+   "alone": 1.48
+  },
+  "W.2": {
+   "shared": 0.74,
+   "alone": 0.73
   },
   "X": {
-   "shared": 1.1,
-   "alone": 1.07
+   "shared": 0.92,
+   "alone": 0.87
   },
   "Y": {
-   "shared": 1.38,
-   "alone": 1.31
+   "shared": 1.04,
+   "alone": 1.3
   },
   "Z": {
-   "shared": 2.06,
-   "alone": 1.92
+   "shared": 2.01,
+   "alone": 1.57
+  },
+  "cross": {
+   "shared": 2.93,
+   "alone": 2.93
+  },
+  "ornament.dots": {
+   "shared": 2.9,
+   "alone": 2.9
   }
  },
  "at_bounds": [
   "A:left.neck",
   "A:top.low_dy",
-  "A:top.neck_l",
-  "A:left.t2",
+  "A:left.t1",
   "A:left.t5",
+  "A:top.t5",
   "A:top.t6",
+  "A:foot.edge_t2",
   "A:foot.edge_t4",
-  "A:left.bottom_x",
   "A:left.t9",
   "B:bottom.neck_deg",
-  "B:top.edge_t3",
-  "B:lower.t6",
+  "B:top.flare_t1",
   "B:counter.stem_foot_y",
   "B:counter.t1",
   "B:waist.enter_heading",
   "B:waist.top_heading",
   "C:bowl.t3",
   "C:top.edge_t2",
-  "C:top.neck_deg",
   "D:top.neck_deg",
   "D:counter.stem_foot_y",
   "D:counter.t1",
-  "E:bottom.neck_deg",
-  "E:bottom.edge_t1",
+  "E:top.edge_t2",
   "E:upper.t4",
   "E:upper.t6",
+  "F:bottom.neck_deg",
+  "F:bottom.flare_t2",
+  "F:top.edge_t1",
+  "F:stroke.foot_heading",
+  "F:stroke.t4",
   "F:lower.t5",
   "F:lower.t4",
   "F:foot.neck_deg",
   "F:counter.left_top_y",
   "G:beak.t1",
+  "G:beak.t3",
   "G:beak.t6",
   "G:spiral.enter_heading",
   "G:spiral.t1",
+  "H:bottom.neck_deg",
   "H:top.edge_t1",
   "H:top_right.neck_deg",
   "H:arch.foot_y",
@@ -267,36 +308,52 @@
   "I:bottom.neck_deg",
   "I:top.neck_deg",
   "K:bottom.neck_deg",
-  "K:top.corner.r",
+  "K:top.edge_t1",
+  "K:top.edge_t2",
   "K:crotch.x",
   "K:leg.spring",
   "K:terminal.lobe_angle",
-  "K:pocket.f",
-  "K:pocket.t4",
+  "K:lower.point_in",
   "K:inside.t2",
   "K:lower.point_out",
   "K:lower.t2",
   "K:bottom_right.neck_deg",
+  "K:bottom.edge_t2",
   "K:upper.left_top_y",
   "K:upper.t4",
   "K:upper.t6",
+  "L:bottom.neck_deg",
+  "L:top.flare_t2",
+  "L:top.edge_t1",
   "L:top.edge_t2",
+  "L:arm_tip.overhang",
+  "L:arm_tip.out",
+  "L:arm.under_t1",
+  "L:base.under_t2",
+  "M.1:bowl.t1",
+  "M.1:peak.t1",
+  "M.1:counter.t3",
+  "M.1:counter.t8",
+  "M.2:foot.neck_l",
+  "M.2:leg.t6",
+  "N:bottom.neck_deg",
   "N:top.neck_deg",
   "N:top.t1",
   "N:terminal.neck_at",
-  "N:bottom.edge_t2",
   "N:bottom.edge_t4",
   "O:floor.low_dx",
   "O:counter.t6",
   "P:bottom.neck_deg",
+  "P:top.neck_deg",
   "P:top.edge_t1",
+  "P:top.edge_t3",
   "P:counter.stem_top_y",
   "P:stem.foot_y_right",
   "P:bottom_right.neck_deg",
   "Q:flag.low_dy",
   "Q:notch.out",
-  "Q:flag.t8",
-  "Q:flag.t5",
+  "Q:flag.t1",
+  "Q:flag.t7",
   "Q:counter.top_dx",
   "Q:pocket.in",
   "Q:counter.t9",
@@ -305,6 +362,7 @@
   "Q:counter.floor_out",
   "R:foot.curl_y",
   "R:foot.neck_deg",
+  "R:pocket.t2",
   "R:under.enter_heading",
   "R:counter.stem_top_y",
   "R:stem.foot_y_right",
@@ -313,46 +371,66 @@
   "S:flag.head.r",
   "S:notch.out",
   "S:spine.t1",
-  "T.1:bottom.neck_deg",
   "T.1:arm.gap",
   "T.1:arm.outer_t1",
-  "T.2:notch_l.y",
-  "T.2:notch_r.y",
-  "T.2:notch_l.out",
+  "T.1:top.edge_t2",
+  "T.2:bowl.t2",
+  "T.2:top.t5",
   "T.2:spiral.enter_heading",
+  "T.2:spiral.t1",
   "T.2:spiral.leave_heading",
+  "T.2:spiral.t4",
   "U:hook.out",
   "V:left_arm.inner.y",
   "V:left_arm.t1",
-  "V:left cap.neck_l",
-  "V:left cap.edge_t1",
   "V:left cap.flare_r1",
+  "V:left cap.flare_r2",
   "V:left_arm.t3",
   "V:right_arm.t2",
-  "V:right cap.neck_r",
   "V:right cap.edge_t1",
   "V:right cap.edge_t4",
   "V:right cap.flare_r1",
-  "X:top-left cap.neck_r",
+  "W.1:thin bar.flare_l1",
+  "W.1:thin bar.flare_r2",
+  "W.2:top.low_dy",
+  "W.2:top.neck_r",
+  "W.2:outer_bowl.t1",
+  "W.2:top.t6",
+  "W.2:last_stem.hook.in",
+  "W.2:last_stem.t3",
+  "W.2:gap.t1",
+  "W.2:gap.t2",
+  "W.2:first_stem.hook.in",
+  "W.2:first_stem.hook.out",
+  "W.2:first_stem.t3",
+  "W.2:inner_bowl.tail_out",
+  "W.2:inner_bowl.t5",
+  "W.2:outer_bowl.tail_out",
+  "W.2:outer_bowl.t7",
+  "X:top-left cap.neck_l",
+  "X:top-left cap.edge_t1",
+  "X:top-left cap.flare_r1",
+  "X:bottom-right cap.edge_t4",
+  "X:bottom-left cap.edge_t1",
+  "X:bottom-left cap.edge_t4",
+  "X:crotch_left.in",
   "Y:bottom.flare_t1",
-  "Y:bottom.flare_t2",
-  "Y:top.neck_deg",
   "Y:top.neck_r",
-  "Y:top.t2",
-  "Y:top.t3",
   "Z:top.t4",
-  "Z:diagonal.right_x",
   "Z:diagonal.t1",
+  "Z:diagonal.t2",
   "Z:bottom.neck",
   "Z:bottom.t2",
-  "Z:bottom.t4",
-  "Z:bottom.t6",
-  "Z:slit_top.out"
+  "Z:point.to",
+  "Z:bottom.t5",
+  "Z:slit_top.out",
+  "cross:end.neck",
+  "cross:side.t2"
  ],
  "fit": {
   "method": "family = median of the letters' own fits; each letter refitted with it fixed",
-  "refitted": 1,
-  "unchanged": 23
+  "refitted": 30,
+  "unchanged": 0
  },
- "when": "2026-10-28T15:44:01"
+ "when": "2026-10-28T18:20:16"
 }

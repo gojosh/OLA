@@ -1,0 +1,203 @@
+{
+ "glyph": "W.2",
+ "alternate_of": "W.1",
+ "feature": "ss01",
+ "feature_note": "The W as a rounded double U, reached from W through the stylistic set ss01 (the uncial forms) until Q34 decides the defaults.",
+ "construction": "letters.py: W_2",
+ "description": "A rounded double U: a top bar the width of the letter with a curl at each end, and under it four strokes. The first two are bowls, each sweeping round at its foot into a pointed tail tucked under the next stroke. The last two are straight stems, each flicking out at its foot into a pointed hook, as the U's stem does, with a small round heel on its left, parted from the hook below by a notch. The spaces between the strokes open at the foot.",
+ "primitives": {
+  "curl": [
+   "top-left",
+   "top-right"
+  ]
+ },
+ "corrections": [],
+ "measured": {
+  "outer_bowl": {
+   "left_x": 23.957,
+   "left_y": 269.412,
+   "t1": 1.0,
+   "t2": 0.562,
+   "inside_x": 109.449,
+   "inside_y": 270.024,
+   "tail_x": 212.773,
+   "tail_y": 419.322,
+   "bottom_x": 165.863,
+   "bottom_y": 433.464,
+   "t3": 0.717,
+   "t4": 0.542,
+   "tail_in": 6.488,
+   "t5": 0.695,
+   "t6": 0.841,
+   "tail_out": 125.0,
+   "t7": 1.0,
+   "t8": 0.523,
+   "t9": 0.574,
+   "t10": 0.62
+  },
+  "notch": {
+   "x": 115.739,
+   "y": 49.94,
+   "in": 300.924,
+   "out": 163.53
+  },
+  "top": {
+   "y": 26.217,
+   "left_x": 96.897,
+   "right_x": 431.964,
+   "low_x": 256.662,
+   "low_dy": 0.011,
+   "neck_l": 6.908,
+   "neck_r": 40.0,
+   "t5": 0.241,
+   "t6": 1.0,
+   "t1": 0.492,
+   "t2": 0.553,
+   "t3": 0.371,
+   "t4": 0.539
+  },
+  "last_stem": {
+   "right_x": 421.539,
+   "left_x": 361.185,
+   "head_y": 104.434,
+   "foot_y": 357.78,
+   "t1": 0.487,
+   "t2": 0.785,
+   "hook": {
+    "low_x": 445.524,
+    "low_y": 411.384,
+    "x": 458.24,
+    "y": 407.066,
+    "bottom_x": 437.366,
+    "bottom_y": 432.227,
+    "t1": 0.551,
+    "t2": 0.514,
+    "in": 350.0,
+    "t3": 0.225,
+    "t4": 0.878,
+    "out": 95.901,
+    "t5": 0.851,
+    "t6": 0.402,
+    "t7": 0.331,
+    "t8": 0.92
+   },
+   "notch": {
+    "x": 380.516,
+    "y": 392.852,
+    "in": 247.62,
+    "out": 135.764
+   },
+   "heel": {
+    "bottom_x": 361.602,
+    "bottom_y": 406.749,
+    "left_x": 340.486,
+    "left_y": 389.271,
+    "t1": 0.685,
+    "t2": 0.841,
+    "t3": 0.297,
+    "t4": 0.67
+   },
+   "left_foot_y": 317.257,
+   "left_head_y": 69.023,
+   "t3": 0.2,
+   "t4": 0.623
+  },
+  "gap": {
+   "x": 346.481,
+   "y": 47.339,
+   "t1": 1.0,
+   "t2": 1.0,
+   "t3": 0.947,
+   "t4": 0.855
+  },
+  "first_stem": {
+   "right_x": 323.933,
+   "left_x": 269.252,
+   "head_y": 62.107,
+   "foot_y": 348.515,
+   "hook": {
+    "low_x": 362.29,
+    "low_y": 413.346,
+    "x": 376.888,
+    "y": 407.348,
+    "bottom_x": 343.543,
+    "bottom_y": 431.9,
+    "t1": 0.563,
+    "t2": 0.515,
+    "in": 350.0,
+    "t3": 0.408,
+    "t4": 0.797,
+    "out": 90.065,
+    "t5": 0.789,
+    "t6": 0.342,
+    "t7": 0.444,
+    "t8": 0.827
+   },
+   "notch": {
+    "x": 287.644,
+    "y": 388.596,
+    "in": 236.308,
+    "out": 137.028
+   },
+   "heel": {
+    "bottom_x": 257.355,
+    "bottom_y": 408.925,
+    "left_x": 235.205,
+    "left_y": 394.382,
+    "t1": 0.593,
+    "t2": 0.505,
+    "t3": 0.27,
+    "t4": 0.202
+   },
+   "left_foot_y": 282.739,
+   "t3": 0.2,
+   "t4": 0.949
+  },
+  "notch_b": {
+   "y": 76.823,
+   "out": 118.568
+  },
+  "inner_bowl": {
+   "inside_x": 214.42,
+   "inside_y": 322.38,
+   "tail_x": 312.846,
+   "tail_y": 422.913,
+   "bottom_x": 270.508,
+   "bottom_y": 434.668,
+   "left_x": 138.973,
+   "left_y": 280.589,
+   "t1": 0.778,
+   "t2": 0.601,
+   "tail_in": 5.424,
+   "t3": 0.966,
+   "t4": 0.796,
+   "tail_out": 130.0,
+   "t5": 1.0,
+   "t6": 0.211,
+   "t7": 0.603,
+   "t8": 0.558,
+   "t9": 0.805,
+   "t10": 0.717
+  },
+  "gap_b": {
+   "y": 48.989,
+   "right_x": 238.521,
+   "left_x": 166.034,
+   "right_in": 303.564,
+   "left_out": 120.728
+  },
+  "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/W_2.png",
+  "when": "2026-10-28T18:20:16"
+ },
+ "fit": {
+  "mean_px": 0.74,
+  "p95_px": 1.84,
+  "max_px": 7.3,
+  "mean_px_fitted_alone": 0.73,
+  "wobble_of_pugins_edge_mean_px": 0.25,
+  "segments": 41,
+  "outline_checks_pass": true
+ }
+}

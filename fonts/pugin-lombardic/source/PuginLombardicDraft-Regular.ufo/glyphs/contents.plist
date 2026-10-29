@@ -26,6 +26,10 @@
     <string>K_.glif</string>
     <key>L</key>
     <string>L_.glif</string>
+    <key>M.1</key>
+    <string>M_.1.glif</string>
+    <key>M.2</key>
+    <string>M_.2.glif</string>
     <key>N</key>
     <string>N_.glif</string>
     <key>O</key>
@@ -46,12 +50,22 @@
     <string>U_.glif</string>
     <key>V</key>
     <string>V_.glif</string>
+    <key>W.1</key>
+    <string>W_.1.glif</string>
+    <key>W.2</key>
+    <string>W_.2.glif</string>
     <key>X</key>
     <string>X_.glif</string>
     <key>Y</key>
     <string>Y_.glif</string>
+    <key>Y.2</key>
+    <string>Y_.2.glif</string>
     <key>Z</key>
     <string>Z_.glif</string>
+    <key>cross</key>
+    <string>cross.glif</string>
+    <key>ornament.dots</key>
+    <string>ornament.dots.glif</string>
     <key>space</key>
     <string>space.glif</string>
   </dict>

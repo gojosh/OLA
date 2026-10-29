@@ -1,0 +1,101 @@
+{
+ "glyph": "Y.2",
+ "alternate_of": "Y",
+ "feature": "ss02",
+ "derived_from": "V",
+ "feature_note": "A modern Y, reached from Y through the stylistic set ss02. Which Y is the default is Josh's call (Q34).",
+ "construction": "letters.py: Y_2",
+ "description": "A modern Y, drawn on Pugin's V because his own Y is the uncial form: V's arms and capped tops, meeting not at a point but in a stem (the armed weight), which comes down to a foot with a curl at each side like the I's. Pugin drew no such letter, so it is built from V's fitted measurements, not fitted to the plate.",
+ "primitives": {
+  "curl": [
+   "four on the caps",
+   "two on the foot"
+  ]
+ },
+ "corrections": [],
+ "measured": {
+  "point": {
+   "x": 268.883,
+   "y": 437.45,
+   "out": 249.28,
+   "in": 113.082
+  },
+  "crotch": {
+   "x": 295.149,
+   "y": 288.803,
+   "in": 72.327,
+   "out": 289.796
+  },
+  "left_arm": {
+   "outer": {
+    "x": 118.675,
+    "y": 121.815,
+    "heading": 243.927
+   },
+   "inner": {
+    "x": 188.795,
+    "y": 70.0
+   },
+   "t1": 1.0,
+   "t2": 0.309,
+   "t3": 0.2,
+   "t4": 0.232
+  },
+  "right_arm": {
+   "inner": {
+    "x": 385.959,
+    "y": 76.197
+   },
+   "outer": {
+    "x": 418.322,
+    "y": 96.008,
+    "heading": 115.142
+   },
+   "t1": 0.446,
+   "t2": 0.2,
+   "t3": 0.985,
+   "t4": 0.502
+  },
+  "left cap": {
+   "y": 23.464,
+   "left_x": 61.273,
+   "right_x": 202.256,
+   "low_x": 123.895,
+   "low_dy": 12.438,
+   "neck_l": 0.101,
+   "neck_r": 8.766,
+   "flare_l1": 0.442,
+   "flare_l2": 0.878,
+   "edge_t1": 0.206,
+   "edge_t2": 0.779,
+   "edge_t3": 0.487,
+   "edge_t4": 0.201,
+   "flare_r1": 1.0,
+   "flare_r2": 1.0
+  },
+  "right cap": {
+   "y": 27.665,
+   "left_x": 369.597,
+   "right_x": 454.981,
+   "low_x": 406.785,
+   "low_dy": 13.241,
+   "neck_l": 27.256,
+   "neck_r": 37.586,
+   "flare_l1": 0.727,
+   "flare_l2": 0.97,
+   "edge_t1": 0.2,
+   "edge_t2": 0.545,
+   "edge_t3": 0.67,
+   "edge_t4": 0.2,
+   "flare_r1": 1.0,
+   "flare_r2": 0.898
+  },
+  "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+  "from": "V's fitted measurements; the rest are the construction's own",
+  "when": "2026-10-28T18:20:16"
+ },
+ "fit": {
+  "segments": 36,
+  "outline_checks_pass": true
+ }
+}

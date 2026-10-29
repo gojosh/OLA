@@ -14,64 +14,64 @@
   "axis_x": 226.474,
   "outer": {
    "bottom_y": 451.674,
-   "left_x": 25.438,
+   "left_x": 25.437,
    "left_y": 233.432,
-   "top_y": 23.455,
+   "top_y": 23.454,
    "t1": 0.529,
    "t2": 0.523,
    "t3": 0.513,
    "t4": 0.514
   },
   "ball_top": {
-   "y": 52.29,
-   "meets_at": 200.61
+   "y": 52.287,
+   "meets_at": 200.945
   },
   "counter": {
-   "left_x": 120.896,
-   "left_y": 239.41,
-   "right_x": 336.422,
-   "right_y": 231.409,
-   "top_out": 174.368,
-   "t1": 0.648,
-   "t2": 0.398,
-   "t3": 0.365,
-   "t4": 0.401,
-   "t5": 0.45,
-   "t6": 1.0,
-   "t7": 0.522,
-   "t8": 0.52,
-   "top_in": 195.138,
-   "t9": 0.491,
+   "left_x": 120.99,
+   "left_y": 241.38,
+   "right_x": 336.51,
+   "right_y": 235.605,
+   "top_out": 173.247,
+   "t1": 0.657,
+   "t2": 0.41,
+   "t3": 0.371,
+   "t4": 0.377,
+   "t5": 0.902,
+   "t6": 0.999,
+   "t7": 0.537,
+   "t8": 0.482,
+   "top_in": 196.215,
+   "t9": 0.522,
    "t10": 0.474
   },
   "curl": {
-   "x": 223.804,
-   "y": 402.657,
+   "x": 223.503,
+   "y": 402.655,
    "notch_at": 87.047
   },
   "floor": {
-   "low_dx": 2.0,
-   "low_dy": 19.577
+   "low_dx": 2.002,
+   "low_dy": 19.933
   },
   "pocket": {
-   "dx": 18.264,
-   "dy": 7.673,
-   "out": 44.399,
-   "t1": 0.728,
-   "t2": 0.76
+   "dx": 18.548,
+   "dy": 7.859,
+   "out": 38.057,
+   "t1": 0.91,
+   "t2": 0.679
   },
   "units": "plate pixels, y down; tensions 0–1; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/O.png",
-  "when": "2026-10-28T15:44:01"
+  "when": "2026-10-28T18:20:16"
  },
  "fit": {
-  "mean_px": 0.87,
-  "p95_px": 1.88,
-  "max_px": 5.59,
-  "mean_px_fitted_alone": 0.82,
+  "mean_px": 0.86,
+  "p95_px": 1.8,
+  "max_px": 2.75,
+  "mean_px_fitted_alone": 0.81,
   "wobble_of_pugins_edge_mean_px": 0.24,
-  "segments": 17,
+  "segments": 18,
   "outline_checks_pass": true
  }
 }

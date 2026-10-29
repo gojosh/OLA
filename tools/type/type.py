@@ -26,6 +26,7 @@ Usage (from the repository root; uv installs the dependencies):
   uv run tools/type/type.py build   pugin-lombardic     # recipes → source/*.ufo and build/*.otf (--fresh: from scratch)
   uv run tools/type/type.py space   pugin-lombardic     # respace the built letters and rewrite the font
   uv run tools/type/type.py proof   pugin-lombardic     # proof/index.html
+  uv run tools/type/type.py serve   pugin-lombardic     # the proof page with its editor, at localhost:8766
 """
 from __future__ import annotations
 
@@ -461,7 +462,11 @@ def cmd_build(fam: str, fresh: bool = False):
     for rp in sorted((d / "recipes").glob("*.json")):
         r = json.loads(rp.read_text())
         recipes[r["glyph"]] = (rp, r)
-    letters = {g: LT.LETTERS[g] for g in recipes}
+    # Glyphs Pugin drew are fitted to his letters. A glyph he didn't draw (a modern Y) is built from
+    # the fitted measurements of the letter it is modelled on (`derived_from`) and is not fitted.
+    everything = {g: LT.LETTERS[g] for g in recipes}
+    derived = {g: r["derived_from"] for g, (_, r) in recipes.items() if r.get("derived_from")}
+    letters = {g: fn for g, fn in everything.items() if g not in derived}
     alphas = {g: cv2.imread(str(d / refs[g]["coverage"]), cv2.IMREAD_GRAYSCALE).astype(np.float32) / 255 for g in letters}
     fam_of = lambda v: {k.split("family.")[1]: round(x, 3) for k, x in v.items() if "family." in k}
     # Every fit starts where the last build left off, so letters that haven't changed settle at once.
@@ -533,12 +538,22 @@ def cmd_build(fam: str, fresh: bool = False):
     for g, (rp, r) in recipes.items():
         for c in r.get("corrections", []):
             vals[f"{g}:{c['measure']}"] += c["add"]
+    for g, srcg in derived.items():
+        vals.update({f"{g}:{k[len(srcg) + 1:]}": v for k, v in vals.items() if k.startswith(srcg + ":")})
     glyphs = {}
     when = time.strftime("%Y-%m-%dT%H:%M:%S")
-    for g, fn in letters.items():
+    for g, fn in everything.items():
         rp, r = recipes[g]
-        built = fn(K.Params(g, vals), kit)
-        dev = K.deviation(built, alphas[g])
+        built = fn(K.Params(g, vals, fill=g in derived), kit)
+        # adjustments made by hand on the proof page, recorded as moves from the construction
+        base_px = [[q.tolist() for q, _, _ in c] for c in built["contours"]]
+        base_names = [[nm for _, _, nm in c] for c in built["contours"]]
+        adj_p = d / "adjustments" / f"{g.replace('.', '_')}.json"
+        adj_points = json.loads(adj_p.read_text())["points"] if adj_p.exists() else []
+        applied, stale = K.adjust(built, adj_points)
+        added = K.add_extremes(built) if applied else []
+        dropped = K.drop_redundant(built) if added else []
+        dev = K.deviation(built, alphas[g]) if g in alphas else None
         names = [[nm for _, _, nm in c] for c in built["contours"]]
         chk = K.check_outline([[q for q, _, _ in c] for c in built["contours"]], names, swell_tol=0.2)
         units, width, origin = K.to_units(built, scale, fc["sidebearing"])
@@ -547,31 +562,46 @@ def cmd_build(fam: str, fresh: bool = False):
         uni = int(r["unicode"][2:], 16) if r.get("unicode") else None
         base = recipes.get(r.get("alternate_of", ""), (None, {}))[1]
         char = chr(uni) if uni else chr(int(base["unicode"][2:], 16)) if base.get("unicode") else g
-        r["measured"] = {**K._nest(mine), "units": "plate pixels, y down; tensions 0–1; angles in degrees",
-                         "family": "shared with the other letters: see family.json", "from": refs[g]["coverage"], "when": when}
-        r["fit"] = {"mean_px": dev["overall"]["mean_px"], "p95_px": dev["overall"]["p95_px"], "max_px": dev["overall"]["max_px"],
-                    "mean_px_fitted_alone": alone[g]["mean_px"], "wobble_of_pugins_edge_mean_px": dev["wobble_of_pugins_edge"]["mean_px"],
-                    "segments": chk_u["segments"], "outline_checks_pass": chk_u["ok"]}
+        if dev:
+            r["measured"] = {**K._nest(mine), "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+                             "family": "shared with the other letters: see family.json", "from": refs[g]["coverage"], "when": when}
+            r["fit"] = {"mean_px": dev["overall"]["mean_px"], "p95_px": dev["overall"]["p95_px"], "max_px": dev["overall"]["max_px"],
+                        "mean_px_fitted_alone": alone[g]["mean_px"], "wobble_of_pugins_edge_mean_px": dev["wobble_of_pugins_edge"]["mean_px"],
+                        "segments": chk_u["segments"], "outline_checks_pass": chk_u["ok"]}
+        else:
+            r["measured"] = {**K._nest(mine), "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+                             "from": f"{derived[g]}'s fitted measurements; the rest are the construction's own", "when": when}
+            r["fit"] = {"segments": chk_u["segments"], "outline_checks_pass": chk_u["ok"]}
         rp.write_text(json.dumps(r, indent=1, ensure_ascii=False) + "\n")
-        trace = sum(len(G.fit_with_extrema(c, tol=0.5)[0]) for c in K.reference_edges(alphas[g]))
+        trace = sum(len(G.fit_with_extrema(c, tol=0.5)[0]) for c in K.reference_edges(alphas[g])) if dev else None
         report = {"glyph": g, "char": char, "feature": r.get("feature"), "alternate_of": r.get("alternate_of"),
                   "construction": r["construction"], "description": r["description"],
                   "symmetric": bool(built.get("half") or built.get("halves")),
-                  "measured": mine, "family": shared, "alone": alone[g],
+                  "measured": mine, "family": shared, "alone": alone.get(g), "derived_from": derived.get(g),
                   "at_bounds": [k for k in at_bounds if k.startswith(g + ":") or k.startswith("family.")],
                   "direct_trace_segments": trace, "deviation": dev, "checks_px": chk, "checks_units": chk_u,
                   "contours_px": [[q.tolist() for q, _, _ in c] for c in built["contours"]],
+                  "contours_px_base": base_px, "mirrored": K.mirrored_counts(built), "axis_px": built.get("axis"),
+                  "adjustments": {"points": adj_points, "applied": applied, "stale": stale, "extremes_added": added, "nodes_moved_to_extremes": dropped},
+                  "node_names_base": base_names,
                   "labels": [[l for _, l, _ in c] for c in built["contours"]], "node_names": names,
                   "units": {"scale_per_px": scale, "baseline_px": built["baseline"], "origin_px": origin, "advance": width,
                             "cap_units": float(max(q[:, 1].max() for c in units for q in c)),
                             "outline": [[q.tolist() for q in c] for c in units]}}
         (out / f"{g.replace('.', '_')}.json").write_text(json.dumps(report) + "\n")
         glyphs[g] = {"unicode": uni, "width": width, "contours": units}
-        o = dev["overall"]
         print(f"  {g}: {chk_u['segments']} segments in {chk_u['contours']} contour(s), {len(chk_u['corners'])} corners; "
               f"checks {'pass' if chk_u['ok'] else 'FAIL ' + json.dumps(chk_u)}")
-        print(f"     Pugin's edge from the construction: mean {o['mean_px']} px (alone {alone[g]['mean_px']}), "
-              f"95% within {o['p95_px']} px, worst {o['max_px']} px")
+        if adj_points:
+            print(f"     adjusted by hand: {applied} point(s)" + (f"; {len(dropped)} node(s) moved to the extremes the moves made"
+                  if dropped else "") + (f"; {len(added) - len(dropped)} node(s) added at them" if len(added) > len(dropped) else "") + (f"; {len(stale)} STALE, skipped (the construction has changed): "
+                  + ", ".join(e['node'] for e in stale) if stale else ""))
+        if dev:
+            o = dev["overall"]
+            print(f"     Pugin's edge from the construction: mean {o['mean_px']} px (alone {alone[g]['mean_px']}), "
+                  f"95% within {o['p95_px']} px, worst {o['max_px']} px")
+        else:
+            print(f"     built from {derived[g]}'s measurements; Pugin drew no {g}")
     (d / "family.json").write_text(json.dumps({
         "shared": shared, "meaning": {k: v[3] for k, v in K.FAMILY.items()},
         "fitted_alone": {g: a["family"] for g, a in alone.items()},
@@ -721,7 +751,8 @@ def _constructed_html(d: Path, meta: dict) -> tuple[str, str]:
     out = []
     for b in reports:
         name = b["glyph"]
-        g = meta["glyphs"][name]
+        model = b.get("derived_from")              # a glyph Pugin didn't draw is shown over the letter it is modelled on
+        g = meta["glyphs"][model or name]
         a = cv2.imread(str(d / g["coverage"]), cv2.IMREAD_GRAYSCALE).astype(np.float32) / 255
         Hh, Ww = a.shape
         if plate is not None:
@@ -738,7 +769,7 @@ def _constructed_html(d: Path, meta: dict) -> tuple[str, str]:
         import construct as K
         gy, gx = np.mgrid[0:Hh, 0:Ww]
         shape = np.clip(0.5 - K.signed_distance(a)(np.column_stack([gx.ravel(), gy.ravel()]).astype(float)), 0, 1).reshape(Hh, Ww)
-        diff = shape - c
+        diff = shape - c if not model else np.zeros_like(c)
         rgba = np.zeros((Hh, Ww, 4), np.uint8)
         rgba[diff > 0, :3] = (12, 89, 232)     # orange: Pugin's ink the construction leaves out
         rgba[diff <= 0, :3] = (120, 166, 12)   # green: the construction where Pugin has no ink
@@ -763,7 +794,8 @@ def _constructed_html(d: Path, meta: dict) -> tuple[str, str]:
         ffs = f' style="font-feature-settings:\'{b["feature"]}\'"' if b.get("feature") else ""
         font_text = f'<text class="L-font" x="{fx:.2f}" y="{u["baseline_px"]:.2f}" font-size="{em:.2f}"{ffs}>{ch}</text>'
         path = G.svg_path(contours)
-        dv = b["deviation"]
+        dv = b["deviation"] or {"overall": {"mean_px": "—", "p95_px": "—", "max_px": "—"}, "by_part": {},
+                                "wobble_of_pugins_edge": {"mean_px": "—"}}
         o = dv["overall"]
         parts = "".join(f"<tr><th>{H.escape(k)}</th><td>{v['mean_px']}</td><td>{v['p95_px']}</td><td>{v['max_px']}</td></tr>"
                         for k, v in dv["by_part"].items())
@@ -777,11 +809,9 @@ def _constructed_html(d: Path, meta: dict) -> tuple[str, str]:
         vb = f"0 0 {Ww} {Hh}"
         out.append(f"""
 <section class="built"><h2>Constructed: {H.escape(name)}</h2>
-<p class="lede">{H.escape(b['description'])} Built from the kit's parts, not traced; its measurements were fitted to Pugin's letter
-together with the other letters, sharing the family's measurements (two stem weights, the curl, the balls, the trefoil and the
-two-lobe terminal). The outline below is drawn over his {H.escape(name)} on the flattened plate. Hover a node for its name.</p>
+<p class="lede">{H.escape(b['description'])} {_provenance(name, model)} Hover a node for its name.</p>
 <div class="ov-grid">
-<figure class="ov off-diff off-font" id="ov-{H.escape(name)}">
+<figure class="ov off-diff off-font off-fill" id="ov-{H.escape(name)}">
   <div class="ov-wrap"><img class="L-plate" src="{_png_uri(crop, '.jpg', 92)}" alt="Pugin's {H.escape(name)}, plate 9">
   <svg viewBox="{vb}"><image class="L-diff" href="{_png_uri(rgba)}" width="{Ww}" height="{Hh}"/>{font_text}
   <path class="L-outline" d="{path}"/><g class="L-nodes">{''.join(nodes)}</g></svg></div>
@@ -791,17 +821,24 @@ two-lobe terminal). The outline below is drawn over his {H.escape(name)} on the 
     <label><input type="checkbox" data-l="nodes" checked> Nodes and handles</label>
     <label><input type="checkbox" data-l="font"> The compiled font, in place</label>
     <label><input type="checkbox" data-l="diff"> Difference</label>
+    <label><input type="checkbox" data-l="fill"> Filled</label>
   </fieldset>
+  <div class="edit-bar"><label><input type="checkbox" data-act="edit"> Edit points</label>
+    <button type="button" data-act="undo">Undo</button><button type="button" data-act="reset">Remove all moves</button>
+    <button type="button" data-act="save">Save</button><button type="button" data-act="rebuild" class="api-only">Save and rebuild</button>
+    <span class="edit-status"></span></div>
+  <div class="edit-info"></div>
+  <script type="application/json" class="edit-data">{_edit_data(b)}</script>
   <figcaption>Circles are smooth nodes, squares are corners. Difference: <b style="color:#e8590c">orange</b> is Pugin's ink the construction leaves out;
   <b style="color:#0ca678">green</b> is the construction where he has none.</figcaption>
 </figure>
 <div class="facts">
   <table>
-  <tr><th>Outline</th><td>{ck['segments']} segments. A direct trace of the same edge needs {b.get('direct_trace_segments', '—')}.</td></tr>
+  <tr><th>Outline</th><td>{ck['segments']} segments. A direct trace of the same edge needs {b.get('direct_trace_segments') or '—'}.</td></tr>
   <tr><th>Nodes at extremes</th><td>{'Yes: no curve swells past its nodes, and every handle at an extreme lies flat or upright.' if ck['ok'] else 'No: ' + H.escape(json.dumps(ck))}</td></tr>
   <tr><th>Corners</th><td>{len(ck['corners'])}, each on purpose: {H.escape('; '.join(dict.fromkeys(c['node'].split(':')[0] for c in ck['corners'])))}</td></tr>
   <tr><th>Pugin's edge from the construction</th><td>mean {o['mean_px']} px; 95% within {o['p95_px']} px; worst {o['max_px']} px</td></tr>
-  <tr><th>Sharing the family's parts</th><td>{o['mean_px']} px mean; with its own stem, curl and trefoil it would be {b['alone']['mean_px']} px</td></tr>
+  <tr><th>Sharing the family's parts</th><td>{o['mean_px']} px mean; with its own stem, curl and trefoil it would be {(b.get('alone') or {}).get('mean_px', '—')} px</td></tr>
   <tr><th>Pugin's edge about itself</th><td>{dv['wobble_of_pugins_edge']['mean_px']} px mean wobble about its own smoothed course</td></tr>
   {_lean_row(dv)}
   <tr><th>In the font</th><td>{u['advance']} units wide, side bearings {u.get('lsb', '—')} and {u.get('rsb', '—')}; {u['cap_units']:.0f} high; 1 plate pixel = {u['scale_per_px']:.3f} units</td></tr>
@@ -825,7 +862,16 @@ A neck angle of 0° means the bar leaves the neck flat; it can't dip lower witho
 .ov-grid{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:24px;align-items:start}
 .ov{margin:0} .ov-wrap{position:relative;background:#fff;border:1px solid var(--rule)} .ov-wrap img{display:block;width:100%;height:auto}
 .ov-wrap svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.L-outline{fill:none;stroke:#ff5a1f;stroke-width:1.4px;vector-effect:non-scaling-stroke}
+.L-outline{fill:rgba(30,26,22,.55);stroke:#ff5a1f;stroke-width:1.4px;vector-effect:non-scaling-stroke} .off-fill .L-outline{fill:none}
+.edit-bar{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:.85rem;padding:6px 0;border-top:1px solid var(--rule)}
+.edit-bar button{font:inherit;padding:2px 10px;border:1px solid var(--rule);background:#fff8;border-radius:3px;cursor:pointer}
+.edit-bar .api-only{display:none} .has-api .edit-bar .api-only{display:inline-block}
+.edit-bar.dirty .edit-status{color:#a8382a} .edit-bar.busy button{opacity:.5;pointer-events:none}
+.edit-status{color:var(--muted)} .edit-info{font-size:.8rem;color:var(--muted);min-height:1.2em;white-space:pre-wrap}
+.editing .ov-wrap svg{touch-action:none} .editing .nd,.editing .hp{cursor:grab}
+.nd.sel,.hp.sel{fill:#ff5a1f;stroke:#1e1a16}
+.bulge{fill:none;stroke:#d6336c;stroke-width:3px;stroke-opacity:.55;vector-effect:non-scaling-stroke;pointer-events:none}
+.xtr{fill:#d6336c;stroke:#fff;stroke-width:1px;vector-effect:non-scaling-stroke;pointer-events:none}
 .L-font{fill:rgba(255,90,31,.35);font-family:'Draft'}
 .hl{stroke:#1e1a16;stroke-width:.8px;vector-effect:non-scaling-stroke} .hp{fill:#fff;stroke:#1e1a16;stroke-width:.8px;vector-effect:non-scaling-stroke}
 .nd{fill:#fff;stroke:#1e1a16;stroke-width:1.2px;vector-effect:non-scaling-stroke} .nd.corner{fill:#ff5a1f}
@@ -876,7 +922,8 @@ def _family_html(d: Path, meta: dict) -> str:
     rows += (f"<tr class='sh'><th>Shared</th><td>{stem(sh['stem_plain'])} plain, {stem(sh['stem_armed'])} armed</td><td>{sh['curl']:.3f}</td><td>{sh['trefoil_r']:.1f}</td>"
              f"<td>{sh['two_lobe_r']:.1f}</td><td></td><td></td></tr>")
     inks = {k: "#%02x%02x%02x" % tuple(int(v) for v in c[::-1]) for k, c in meta["inks_bgr"].items()}
-    words = ["KYRIE", "GLORIA", "CREDO", "ALLELUIA", "VENI CREATOR", "LAUDATE", "BENEDICTE", "AVE"]
+    words = ["✠ KYRIE", "GLORIA", "CREDO", "ALLELUIA", "VENI CREATOR", "MAGNIFICAT", "LAUDATE", "BENEDICTE", "MISERERE",
+             "WHITSUN", "AVE", "AMEN ⁙"]
     spec = " ".join(f'<span style="color:{inks["red" if i % 2 else "blue"]}">{w}</span>' for i, w in enumerate(words))
     return f"""
 <section class="family"><h2>The letters together</h2>
@@ -886,8 +933,34 @@ arms of a cross, and the two-lobe terminal two equal overlapping lobes: each is 
 <table class="num fam"><thead><tr><th></th><th>stem width (px)</th><th>curl size</th><th>trefoil lobe radius (px)</th><th>two-lobe radius (px)</th>
 <th>mean from Pugin, alone (px)</th><th>sharing (px)</th></tr></thead><tbody>{rows}</tbody></table>
 <p class="words">{spec}</p>
+<p class="lede">With the stylistic sets on: <code>ss01</code> gives the uncial forms of T, M and W, <code>ss02</code> the modern Y (drawn on Pugin's V).</p>
+<p class="words" style="font-feature-settings:'ss01','ss02'">{spec}</p>
 <p class="lede">Spacing is a first pass: each side bearing is set by the white beside the letter's profile (see the README). No kerning yet.</p>
 </section>"""
+
+
+def _edit_data(b: dict) -> str:
+    """What the proof page's editor needs for one glyph: its construction's outline before any moves
+    by hand, the moves saved for it, its node names, and which contours are mirrored."""
+    adj = b.get("adjustments") or {}
+    ck = b.get("checks_units") or {}
+    problems = ck.get("curves_swelling_past_nodes", []) + ck.get("nearly_flat_handles", []) + ck.get("degenerate_segments", [])
+    data = {"glyph": b["glyph"], "base": b.get("contours_px_base") or b["contours_px"],
+            "names": b.get("node_names_base") or b["node_names"], "check": problems, "moved": len(adj.get("nodes_moved_to_extremes", [])),
+            "added": len(adj.get("extremes_added", [])) - len(adj.get("nodes_moved_to_extremes", [])),
+            "mirrored": b.get("mirrored") or [None] * len(b["contours_px"]), "axis": b.get("axis_px"),
+            "scale": b["units"]["scale_per_px"], "points": adj.get("points", []), "stale": len(adj.get("stale", []))}
+    return json.dumps(data, separators=(",", ":")).replace("</", "<\\/")
+
+
+def _provenance(name: str, model: str | None) -> str:
+    import html as H
+    if model:
+        return (f"Built from the kit's parts and {H.escape(model)}'s fitted measurements; Pugin drew no {H.escape(name)}, so it "
+                f"is not fitted. The outline below is drawn over his {H.escape(model)} on the flattened plate, for comparison.")
+    return ("Built from the kit's parts, not traced; its measurements were fitted to Pugin's letter together with the other "
+            "letters, sharing the family's measurements (two stem weights, the curl, the balls, the trefoil and the two-lobe "
+            f"terminal). The outline below is drawn over his {H.escape(name)} on the flattened plate.")
 
 
 def construct_is_line(P) -> bool:
@@ -999,6 +1072,8 @@ on every curl terminal the primitive search found; then the alphabet's proportio
 {''.join(prim_html)}
 </main>
 <script>
+const FAMILY = {json.dumps(fam)};
+{(Path(__file__).parent / "editor.js").read_text()}
 document.querySelectorAll('.layers input').forEach(i => i.addEventListener('change', () =>
   i.closest('figure').classList.toggle('off-' + i.dataset.l, !i.checked)));
 </script></body></html>"""
@@ -1007,13 +1082,96 @@ document.querySelectorAll('.layers input').forEach(i => i.addEventListener('chan
     print(f"  wrote {(d / 'proof' / 'index.html').relative_to(ROOT)} ({len(page) // 1024} KB)")
 
 
+def cmd_serve(fam: str, port: int = 8766):
+    """Serve the proof pages (fonts/) on localhost, with a small API behind the proof page's editor:
+    POST /api/<family>/adjustments/<glyph> saves that glyph's adjustments; POST /api/<family>/rebuild
+    runs the build and the proof in the background; GET /api/<family>/status reports on it."""
+    import http.server
+    import subprocess
+    import threading
+    d = family_dir(fam)
+    glyph_names = {json.loads(p.read_text())["glyph"] for p in (d / "recipes").glob("*.json")}
+    state = {"running": False, "ok": None, "log": "", "finished": None}
+    me = str(Path(__file__).resolve())
+
+    def rebuild():
+        state.update(running=True, ok=None, log="")
+        out, ok = [], True
+        for cmd in ([sys.executable, me, "build", fam], [sys.executable, me, "proof", fam]):
+            p = subprocess.run(cmd, capture_output=True, text=True, cwd=ROOT)
+            out.append(p.stdout + p.stderr)
+            if p.returncode:
+                ok = False
+                break
+        log = "".join(out)
+        state.update(running=False, ok=ok, failures=[l.strip() for l in log.splitlines() if "FAIL" in l or "STALE" in l],
+                     log=log[-6000:], finished=time.time())
+
+    class Handler(http.server.SimpleHTTPRequestHandler):
+        def __init__(self, *a, **k):
+            super().__init__(*a, directory=str(FONTS), **k)
+
+        def end_headers(self):
+            self.send_header("Cache-Control", "no-store")
+            super().end_headers()
+
+        def _json(self, code, obj):
+            body = json.dumps(obj).encode()
+            self.send_response(code)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+
+        def do_GET(self):
+            if self.path.split("?")[0] == f"/api/{fam}/status":
+                return self._json(200, state)
+            return super().do_GET()
+
+        def do_POST(self):
+            parts = self.path.split("?")[0].strip("/").split("/")
+            if parts[:2] != ["api", fam]:
+                return self._json(404, {"error": "not found"})
+            if parts[2:3] == ["adjustments"] and len(parts) == 4 and parts[3] in glyph_names:
+                body = json.loads(self.rfile.read(int(self.headers.get("Content-Length", 0))) or b"{}")
+                pts = [{"contour": int(e["contour"]), "segment": int(e["segment"]), "point": int(e["point"]), "node": str(e["node"]),
+                        "dx": round(float(e["dx"]), 3), "dy": round(float(e["dy"]), 3)} for e in body.get("points", [])]
+                p = d / "adjustments" / f"{parts[3].replace('.', '_')}.json"
+                if pts:
+                    p.parent.mkdir(exist_ok=True)
+                    p.write_text(json.dumps({"glyph": parts[3], "units": "plate pixels, y down; each a move of one control point "
+                                             "from the construction, made by hand on the proof page", "points": pts,
+                                             "when": time.strftime("%Y-%m-%dT%H:%M:%S")}, indent=1) + "\n")
+                elif p.exists():
+                    p.unlink()
+                return self._json(200, {"saved": len(pts)})
+            if parts[2:] == ["rebuild"]:
+                if state["running"]:
+                    return self._json(409, {"error": "a build is already running"})
+                threading.Thread(target=rebuild, daemon=True).start()
+                return self._json(202, {"started": True})
+            return self._json(404, {"error": "not found"})
+
+        def log_message(self, fmt, *args):
+            if "/api/" in (args[0] if args else ""):
+                super().log_message(fmt, *args)
+
+    srv = http.server.ThreadingHTTPServer(("127.0.0.1", port), Handler)
+    print(f"  serving fonts/ at http://localhost:{port}/{fam}/proof/ (saves to fonts/{fam}/adjustments/)")
+    srv.serve_forever()
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("cmd", choices=["extract", "measure", "curls", "build", "space", "proof"])
+    ap.add_argument("cmd", choices=["extract", "measure", "curls", "build", "space", "proof", "serve"])
     ap.add_argument("family")
     ap.add_argument("--fresh", action="store_true",
                     help="build: start every fit from the constructions' starting values, not the last build's, and refit every letter alone")
+    ap.add_argument("--port", type=int, default=8766, help="serve: the port")
     a = ap.parse_args()
+    if a.cmd == "serve":
+        cmd_serve(a.family, a.port)
+        return
     if a.cmd == "build":
         cmd_build(a.family, fresh=a.fresh)
         return

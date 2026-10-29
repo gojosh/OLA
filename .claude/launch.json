@@ -16,15 +16,15 @@
     },
     {
       "name": "font-proofs",
-      "runtimeExecutable": "python3",
+      "runtimeExecutable": "uv",
       "runtimeArgs": [
-        "-m",
-        "http.server",
-        "8766",
-        "--bind",
-        "127.0.0.1",
-        "--directory",
-        "fonts"
+        "run",
+        "--quiet",
+        "tools/type/type.py",
+        "serve",
+        "pugin-lombardic",
+        "--port",
+        "8766"
       ],
       "port": 8766
     }

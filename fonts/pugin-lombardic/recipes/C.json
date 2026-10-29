@@ -12,55 +12,55 @@
  "corrections": [],
  "measured": {
   "bowl": {
-   "left_x": 24.138,
-   "left_y": 227.249,
-   "top_x": 229.39,
-   "top_y": 23.547,
-   "bottom_x": 221.671,
-   "bottom_y": 455.418,
-   "t1": 0.411,
-   "t2": 0.405,
+   "left_x": 24.254,
+   "left_y": 226.668,
+   "top_x": 227.1,
+   "top_y": 23.595,
+   "bottom_x": 221.757,
+   "bottom_y": 455.402,
+   "t1": 0.423,
+   "t2": 0.38,
    "t3": 1.0,
-   "t4": 0.77,
-   "t7": 0.885,
-   "t8": 0.778,
-   "t5": 0.48,
-   "t6": 0.441
+   "t4": 0.776,
+   "t7": 0.89,
+   "t8": 0.773,
+   "t5": 0.482,
+   "t6": 0.444
   },
   "notch": {
-   "x": 327.086,
-   "y": 59.19,
-   "in": 30.889,
-   "out": 307.303
+   "x": 326.989,
+   "y": 59.248,
+   "in": 31.191,
+   "out": 307.461
   },
   "stroke": {
-   "right_x": 348.915,
-   "top_y": 187.373,
-   "foot_y": 310.901
+   "right_x": 348.672,
+   "top_y": 195.928,
+   "foot_y": 308.74
   },
   "top": {
-   "curl_x": 383.53,
-   "curl_y": 24.356,
-   "edge_t1": 0.351,
+   "curl_x": 383.537,
+   "curl_y": 24.345,
+   "edge_t1": 0.353,
    "edge_t2": 0.2,
-   "neck_deg": 59.995,
-   "flare_t1": 0.379,
-   "flare_t2": 0.694
+   "neck_deg": 58.342,
+   "flare_t1": 0.561,
+   "flare_t2": 0.51
   },
   "bottom": {
-   "curl_x": 383.43,
-   "curl_y": 454.31,
-   "neck_deg": 39.885,
-   "flare_t1": 0.576,
-   "flare_t2": 0.297,
-   "edge_t1": 0.506,
-   "edge_t2": 0.813
+   "curl_x": 383.425,
+   "curl_y": 454.347,
+   "neck_deg": 39.92,
+   "flare_t1": 0.514,
+   "flare_t2": 0.365,
+   "edge_t1": 0.376,
+   "edge_t2": 0.824
   },
   "notch_b": {
-   "x": 326.084,
-   "y": 418.89,
-   "in": 226.655,
-   "out": 142.452
+   "x": 326.368,
+   "y": 418.686,
+   "in": 228.951,
+   "out": 142.395
   },
   "counter": {
    "top_x": 231.259,
@@ -83,13 +83,13 @@
   "units": "plate pixels, y down; tensions 0–1; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/C.png",
-  "when": "2026-10-28T15:44:01"
+  "when": "2026-10-28T18:20:16"
  },
  "fit": {
-  "mean_px": 0.7,
-  "p95_px": 1.57,
-  "max_px": 4.21,
-  "mean_px_fitted_alone": 0.69,
+  "mean_px": 0.68,
+  "p95_px": 1.53,
+  "max_px": 4.2,
+  "mean_px_fitted_alone": 0.67,
   "wobble_of_pugins_edge_mean_px": 0.21,
   "segments": 19,
   "outline_checks_pass": true

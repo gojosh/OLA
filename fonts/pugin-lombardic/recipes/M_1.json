@@ -1,0 +1,89 @@
+{
+ "glyph": "M.1",
+ "alternate_of": "M.2",
+ "feature": "ss01",
+ "feature_note": "The uncial M, reached from M through the stylistic set ss01 (the uncial forms) until Q34 decides the defaults.",
+ "construction": "letters.py: M_1",
+ "description": "The uncial M: two round bowls side by side, joined by a straight stem between their counters, standing on a thin bar that runs under both with a curl at each end. Each bowl's outside comes down into the bar at a notch inside its curl. On top, the stem rises between the bowls to a pointed peak, with a notch each side. The counters are tall ovals, narrowing at the foot toward the outside. Symmetric about its axis.",
+ "primitives": {
+  "curl": [
+   "bottom-left",
+   "bottom-right"
+  ]
+ },
+ "corrections": [],
+ "measured": {
+  "axis_x": 228.387,
+  "bar": {
+   "high_y": 435.296,
+   "left_x": 68.405,
+   "y": 449.902,
+   "neck": 24.345,
+   "t1": 0.31,
+   "t2": 0.327
+  },
+  "pocket": {
+   "x": 92.414,
+   "y": 423.493,
+   "in": 360.738,
+   "t1": 0.983,
+   "t2": 0.717,
+   "out": 254.272
+  },
+  "bowl": {
+   "left_x": 15.707,
+   "left_y": 208.722,
+   "top_x": 140.999,
+   "top_y": 27.378,
+   "t1": 0.2,
+   "t2": 0.733,
+   "t3": 0.544,
+   "t4": 0.42,
+   "t5": 0.636,
+   "t6": 0.459
+  },
+  "notch": {
+   "x": 195.95,
+   "y": 45.824,
+   "in": 42.974,
+   "out": 327.289
+  },
+  "peak": {
+   "y": 25.094,
+   "in": 357.785,
+   "t1": 1.0,
+   "t2": 0.287
+  },
+  "counter": {
+   "top_x": 154.373,
+   "top_y": 51.918,
+   "left_x": 94.053,
+   "left_y": 268.867,
+   "bottom_x": 128.749,
+   "bottom_y": 407.089,
+   "right_x": 198.392,
+   "right_y": 289.4,
+   "t1": 0.894,
+   "t2": 0.542,
+   "t3": 0.2,
+   "t4": 0.361,
+   "t5": 0.405,
+   "t6": 0.538,
+   "t7": 0.721,
+   "t8": 1.0
+  },
+  "units": "plate pixels, y down; tensions 0–1; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/M_1.png",
+  "when": "2026-10-28T18:20:16"
+ },
+ "fit": {
+  "mean_px": 2.4,
+  "p95_px": 7.97,
+  "max_px": 19.1,
+  "mean_px_fitted_alone": 2.39,
+  "wobble_of_pugins_edge_mean_px": 0.22,
+  "segments": 26,
+  "outline_checks_pass": true
+ }
+}

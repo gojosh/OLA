@@ -1,3 +1,8 @@
 feature ss01 {
+    sub M.2 by M.1;
     sub T.1 by T.2;
+    sub W.1 by W.2;
 } ss01;
+feature ss02 {
+    sub Y by Y.2;
+} ss02;
