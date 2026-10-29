@@ -259,6 +259,22 @@
   "depth": 120,
   "kern_threshold": 15,
   "clearance": 10,
-  "word_space": 200
+  "word_space": 200,
+  "clearance_note": "units, between heads, feet and stems in the x-height band, which in a textura this tight all but touch",
+  "clearance_outside": 20,
+  "clearance_outside_note": "units, above the x-height and below the baseline: at 10, d's arm leaning back over its bowl read as touching a preceding l's or h's spur at text size"
+ },
+ "held": {
+  "nib_angle": 45.0,
+  "nib_angle_foot": 50.0,
+  "nib_light": 0.8,
+  "top_leave": 13.0,
+  "nib_angle_note": "degrees, held rather than fitted: the nib at the heads (at the x-height line and above) and at the feet (at the baseline and below), the pen turning evenly between. Josh: \"the nib angle is too shallow - needs to be a few degrees more vertical\" (2026-10-29): the fit had settled at 40°, and one angle was held at 45°, the mean measured from the edges of Pugin's heads and feet (measurements.json). Then \"we need to push the standard nib angle to 50 degrees. We're still too shallow\", and: \"There is nib rotation going on in Pugin's original. The top connecting spurs are at 45°, but the feet are nearly all at 50°\" (2026-10-29).",
+  "nib_light_note": "share of the nib's full width in a stroke written with less pressure: c's top, e's arm, the a's top bowl. Josh: \"I think we need to introduce a narrower nib - perhaps for Pugin the was accomplished with less pressure? But take the top stroke of the c, for example - it should be about 20% thinner. Same with the e and top bowl on the a.\" (2026-10-29)",
+  "top_leave_note": "degrees: the angle at which the concave top of c, d, e, g and s leaves the stem's top corner, before steepening to the nib's angle at the peak. Measured on the plate (c 13, d 24, e 19, g 4, s 13; their peaks are met at 39-52°); the median is held. Josh: \"notice in Pugin's, the top of the c, d, e, g, and s all have a concave curve on the top left where the primary stem and top line intersect. We need to retain this. It's one of many fine features accomplished by subtle nib rotation.\" (2026-10-29)"
+ },
+ "spur": {
+  "length": 10.0,
+  "note": "plate px: the hairline a free foot carries on into, up and to the right along the nib's own edge as the pen holds it at the foot (50°), so it is exactly the nib's hairline. Pugin's are mostly 5-12 px (l's runs to about 30, tapering); set, not fitted. At 22 px and 41° they were too pronounced (Josh, 2026-10-29). On by default; the stylistic set ss01 drops them (Josh: \"it would be cool to have a setting for the spur, where it can be turned on or off\")."
  }
 }

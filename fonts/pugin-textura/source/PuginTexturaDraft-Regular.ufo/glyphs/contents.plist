@@ -6,48 +6,84 @@
     <string>_notdef.glif</string>
     <key>a</key>
     <string>a.glif</string>
+    <key>a.nospur</key>
+    <string>a.nospur.glif</string>
     <key>b</key>
     <string>b.glif</string>
     <key>c</key>
     <string>c.glif</string>
+    <key>c.nospur</key>
+    <string>c.nospur.glif</string>
     <key>d</key>
     <string>d.glif</string>
+    <key>d.nospur</key>
+    <string>d.nospur.glif</string>
     <key>e</key>
     <string>e.glif</string>
+    <key>e.nospur</key>
+    <string>e.nospur.glif</string>
     <key>f</key>
     <string>f.glif</string>
     <key>g</key>
     <string>g.glif</string>
     <key>h</key>
     <string>h.glif</string>
+    <key>h.nospur</key>
+    <string>h.nospur.glif</string>
     <key>i</key>
     <string>i.glif</string>
+    <key>i.nospur</key>
+    <string>i.nospur.glif</string>
+    <key>j</key>
+    <string>j.glif</string>
     <key>k</key>
     <string>k.glif</string>
+    <key>k.nospur</key>
+    <string>k.nospur.glif</string>
     <key>l</key>
     <string>l.glif</string>
+    <key>l.nospur</key>
+    <string>l.nospur.glif</string>
     <key>longs</key>
     <string>longs.glif</string>
     <key>m</key>
     <string>m.glif</string>
+    <key>m.nospur</key>
+    <string>m.nospur.glif</string>
     <key>n</key>
     <string>n.glif</string>
+    <key>n.nospur</key>
+    <string>n.nospur.glif</string>
     <key>o</key>
     <string>o.glif</string>
     <key>p</key>
     <string>p.glif</string>
+    <key>p.nospur</key>
+    <string>p.nospur.glif</string>
     <key>q</key>
     <string>q.glif</string>
+    <key>q.nospur</key>
+    <string>q.nospur.glif</string>
     <key>r</key>
     <string>r.glif</string>
+    <key>r.nospur</key>
+    <string>r.nospur.glif</string>
     <key>s</key>
     <string>s.glif</string>
     <key>space</key>
     <string>space.glif</string>
     <key>t</key>
     <string>t.glif</string>
+    <key>t.nospur</key>
+    <string>t.nospur.glif</string>
+    <key>u</key>
+    <string>u.glif</string>
+    <key>u.nospur</key>
+    <string>u.nospur.glif</string>
     <key>v</key>
     <string>v.glif</string>
+    <key>w</key>
+    <string>w.glif</string>
     <key>x</key>
     <string>x.glif</string>
     <key>y</key>

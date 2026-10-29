@@ -2,30 +2,30 @@
  "glyph": "g",
  "unicode": "U+0067",
  "construction": "textura_letters.py: g",
- "description": "o's two strokes, the right one running on past the baseline and sweeping round to the left\nunder the letter, and a small ear to the right at the top. Pugin's tail ends in a hairline curl;\nplain, it stops with the nib's cut.",
+ "description": "o's two strokes, meeting at the upper left in one concave curve (concave_top), the right one running on past\nthe baseline and sweeping round to the left under the letter, and a small ear to the right at\nthe top. The bowl is wider than o's, so the left stroke's foot runs on to meet the right one.\nPugin's tail ends in a hairline curl; plain, it stops with the nib's cut.",
  "measured": {
   "left": {
-   "x": 899.995,
-   "top": 3352.995
+   "x": 900.229,
+   "top": 3354.818
   },
   "right": {
-   "x": 974.635,
-   "head": 39.151
+   "x": 974.62,
+   "head": 36.591
   },
   "tail": {
    "from": {
-    "x": 955.007,
-    "y": 3500.002,
-    "heading": 114.947,
-    "t1": 0.6,
-    "t2": 1.0
+    "x": 961.107,
+    "y": 3500.023,
+    "heading": 112.607,
+    "t1": 0.741,
+    "t2": 0.716
    },
    "turn": {
     "x": 1001.0,
-    "y": 3581.131,
-    "heading": 118.631,
-    "t1": 0.999,
-    "t2": 0.782
+    "y": 3578.864,
+    "heading": 111.678,
+    "t1": 0.995,
+    "t2": 0.53
    },
    "end": {
     "x": 882.0,
@@ -35,36 +35,32 @@
   },
   "ear": {
    "from": {
-    "x": 994.267,
-    "y": 3333.897
+    "x": 994.73,
+    "y": 3335.722
    },
    "to": {
-    "x": 1012.967,
-    "y": 3347.0
+    "x": 1011.835,
+    "y": 3346.714
    }
   },
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/g.png",
-  "when": "2026-10-28T23:14:14"
+  "when": "2026-10-29T09:21:59"
  },
  "fit": {
-  "mean_px": 5.42,
-  "p95_px": 18.81,
-  "max_px": 31.38,
-  "mean_px_fitted_alone": 4.59,
+  "mean_px": 6.5,
+  "p95_px": 20.64,
+  "max_px": 33.6,
+  "mean_px_fitted_alone": 5.93,
   "segments": 53,
   "outline_checks_pass": true,
   "at_bounds": [
-   "g:tail.from.x",
-   "g:tail.from.y",
    "g:tail.turn.x",
    "g:tail.end.x",
    "g:tail.end.y",
    "g:tail.end.heading",
-   "g:tail.from.t2",
-   "g:tail.turn.t1",
-   "g:ear.to.y"
+   "g:tail.turn.t1"
   ]
  }
 }

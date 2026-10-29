@@ -2,27 +2,27 @@
  "glyph": "q",
  "unicode": "U+0071",
  "construction": "textura_letters.py: q",
- "description": "o's two strokes, the right one running on past the baseline to turn out at the descender line.\nPugin's descender ends in a swash splayed both ways; plain, it turns out as a minim's foot does.",
+ "description": "o's two strokes, meeting at the upper left in one straight edge, the right one running on past\nthe baseline to turn out at the descender line; the left stroke's foot runs on to meet it. Pugin's\ndescender ends in a swash splayed both ways; plain, it turns out as a minim's foot does.",
  "measured": {
   "left": {
-   "x": 2087.666,
-   "top": 3347.692
+   "x": 2087.559,
+   "top": 3348.925
   },
   "right": {
-   "x": 2150.901,
-   "head": 40.911
+   "x": 2150.943,
+   "head": 39.387
   },
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/q.png",
-  "when": "2026-10-28T23:14:14"
+  "when": "2026-10-29T09:21:59"
  },
  "fit": {
-  "mean_px": 11.73,
-  "p95_px": 63.64,
-  "max_px": 92.87,
-  "mean_px_fitted_alone": 10.92,
-  "segments": 31,
+  "mean_px": 12.29,
+  "p95_px": 64.86,
+  "max_px": 94.05,
+  "mean_px_fitted_alone": 11.27,
+  "segments": 35,
   "outline_checks_pass": true,
   "at_bounds": []
  }

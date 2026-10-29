@@ -2,26 +2,26 @@
  "glyph": "v",
  "unicode": "U+0076",
  "construction": "textura_letters.py: v",
- "description": "A minim on the left, and on the right a stroke with its own head that stops at the bottom with\nthe nib's cut against the left one's foot.",
+ "description": "A minim on the left, and on the right a stroke with its own head that stops at the bottom with\nthe nib's cut, meeting the left one's foot in one straight edge.",
  "measured": {
   "left": {
-   "x": 2551.084
+   "x": 2551.071
   },
   "right": {
-   "x": 2610.524,
-   "end": 3496.526
+   "x": 2610.641,
+   "end": 3494.683
   },
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/v.png",
-  "when": "2026-10-28T23:14:14"
+  "when": "2026-10-29T09:21:59"
  },
  "fit": {
-  "mean_px": 2.47,
-  "p95_px": 6.53,
-  "max_px": 8.83,
-  "mean_px_fitted_alone": 1.19,
-  "segments": 31,
+  "mean_px": 2.19,
+  "p95_px": 6.56,
+  "max_px": 10.0,
+  "mean_px_fitted_alone": 1.28,
+  "segments": 42,
   "outline_checks_pass": true,
   "at_bounds": []
  }

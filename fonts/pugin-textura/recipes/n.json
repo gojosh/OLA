@@ -4,19 +4,19 @@
  "construction": "textura_letters.py: n",
  "description": "Two minims; the second's head starts against the first's stem, so the pair joins at the top.",
  "measured": {
-  "stem_1": 1688.966,
-  "stem_2": 1753.108,
+  "stem_1": 1689.307,
+  "stem_2": 1753.208,
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/n.png",
-  "when": "2026-10-28T23:14:14"
+  "when": "2026-10-29T09:21:59"
  },
  "fit": {
-  "mean_px": 2.17,
-  "p95_px": 7.08,
-  "max_px": 9.01,
-  "mean_px_fitted_alone": 1.61,
-  "segments": 36,
+  "mean_px": 1.75,
+  "p95_px": 5.16,
+  "max_px": 7.2,
+  "mean_px_fitted_alone": 1.45,
+  "segments": 55,
   "outline_checks_pass": true,
   "at_bounds": []
  }

@@ -22,11 +22,15 @@ Usage (from the repository root; uv installs the dependencies):
   uv run tools/type/textura.py extract pugin-textura   # references/: each letter's ink, with its hairlines
   uv run tools/type/textura.py measure pugin-textura   # measurements.json: the nib, the x-height, the stems
   uv run tools/type/textura.py build   pugin-textura   # fit the letters, write source/*.ufo and build/*.otf
+  uv run tools/type/textura.py build   pugin-textura --fit b,o   # fit only b and o; the rest as they stand ('none': fit nothing;
+                                                                 #   b:right.lead: only that measurement of b; c:top.*: all c's top.*;
+                                                                 #   family: the shared measurements, the letters as they stand)
   uv run tools/type/textura.py proof   pugin-textura   # proof/index.html (served by `type.py serve` at /pugin-textura/proof/)
 """
 from __future__ import annotations
 
 import argparse
+import fnmatch
 import os
 import json
 import math
@@ -266,7 +270,7 @@ def _outline(fn, p, marks=False):
     import nib as NB
     import textura_letters as TL
     b = fn(p)
-    return NB.outline(b["strokes"] + (b.get("marks", []) if marks else []), TL.nib_of(p)), b
+    return NB.outline(b["strokes"] + (b.get("marks", []) if marks else []), TL.pen_of(p), edges=b.get("edges", ())), b
 
 
 def fit_glyph(job):
@@ -283,7 +287,7 @@ def fit_glyph(job):
     fn = TL.LETTERS[g]
     p0 = TL.TParams(g, None, local)
     fn(p0)
-    TL.nib_of(p0)
+    TL.pen_of(p0)
     spec = p0.spec
     keys = [k for k in spec if k not in fixed]
     lb, ub = np.array([spec[k][1] for k in keys]), np.array([spec[k][2] for k in keys])
@@ -321,10 +325,22 @@ def _deviation(cs, ref, aff=None):
     return {"mean_px": round(float(dd.mean()), 2), "p95_px": round(float(np.percentile(dd, 95)), 2), "max_px": round(float(dd.max()), 2)}
 
 
-def cmd_build(fam: str):
+def cmd_build(fam: str, fit_only: list[str] | None = None):
     """Fit each letter alone; set each shared measurement to the median of what the letters want
     alone; fit each letter again with those held; check the outlines; space; write the UFO source
-    and compile it."""
+    and compile it.
+
+    With fit_only, a list of letters (perhaps empty), the shared measurements stay as family.json
+    has them, every other letter keeps its own as its recipe has them, and only the letters named
+    are fitted again: for a correction to some letters that shouldn't move the rest. An item
+    letter:name (b:right.lead) fits just that measurement of the letter, the rest as they stand; the
+    name may end in * (c:top.*) for every measurement that begins so. The
+    item "family" fits the shared measurements again, as a full build does, while the letters keep
+    their own: for a change to the pen. (A full build
+    moves every letter a little: the medians drift, since each letter's fit alone starts from the
+    last family, and a fit restarted where it stopped wanders where Pugin's letter gives it little
+    to hold on to.) An empty list fits nothing, rebuilding each letter as it is now drawn from its
+    measurements as they stand. What each letter wants alone is left as the last full build found it."""
     import construct as K
     import nib as NB
     import spacing as SP
@@ -344,32 +360,96 @@ def cmd_build(fam: str):
     for g, r in recipes.items():
         start.update({f"{g}:{k}": v for k, v in K._flat({k: v for k, v in r.get("measured", {}).items() if k not in ("units", "from", "when", "family")}).items()})
     famp = d / "family.json"
-    shared_before = json.loads(famp.read_text())["shared"] if famp.exists() else {}
+    fam_before = json.loads(famp.read_text()) if famp.exists() else {}
+    shared_before = fam_before.get("shared", {})
+    refit_family = fit_only is None or "family" in fit_only or not shared_before
+    keep = fit_only is not None         # letters not named keep their measurements as their recipes have them
     t0 = time.time()
-    jobs = [(g, (d, refs_meta[g]), {**{k: v for k, v in start.items() if k.startswith(g + ":")},
-                          **{f"{g}:family.{k}": v for k, v in shared_before.items()}}, {}, True) for g in names]
-    with ProcessPoolExecutor(max_workers=min(len(jobs), max(1, (os.cpu_count() or 2) - 1))) as ex:
-        alone = {g: v for g, v, _ in ex.map(fit_glyph, jobs)}
-    wants = {}
-    for g in names:
-        for k, v in alone[g].items():
-            if ":family." in k:
-                wants.setdefault(k.split(":family.")[1], []).append(v)
-    shared = {k: round(float(np.median(v)), 3) for k, v in sorted(wants.items())}
+    # family values held at a set value rather than fitted (Josh's corrections; source.json)
+    held = {k: float(v) for k, v in src.get("held", {}).items() if not k.endswith("_note")}
+    # a letter's own measurements held at a set value (a recipe's "held": what Josh has said is right)
+    held_own = {g: {f"{g}:{k}": float(v) for k, v in r.get("held", {}).items()} for g, r in recipes.items()}
+    own = {g: {k: v for k, v in start.items() if k.startswith(g + ":")} for g in names}
+    if not refit_family:
+        alone = own
+        shared = {**shared_before, **held}
+    else:
+        jobs = [(g, (d, refs_meta[g]), {**{k: v for k, v in start.items() if k.startswith(g + ":")},
+                              **{f"{g}:family.{k}": v for k, v in shared_before.items() if k not in held}},
+                 {**{f"{g}:family.{k}": v for k, v in held.items()}, **held_own.get(g, {})}, True) for g in names]
+        with ProcessPoolExecutor(max_workers=min(len(jobs), max(1, (os.cpu_count() or 2) - 1))) as ex:
+            alone = {g: v for g, v, _ in ex.map(fit_glyph, jobs)}
+        wants = {}
+        for g in names:
+            for k, v in alone[g].items():
+                if ":family." in k:
+                    wants.setdefault(k.split(":family.")[1], []).append(v)
+        shared = {k: round(float(np.median(v)), 3) for k, v in sorted(wants.items())}
+        shared.update({k: v for k, v in shared_before.items() if k not in shared})     # what no letter Pugin drew measures (join)
+        shared.update(held)
     fixed = {f"family.{k}": v for k, v in shared.items()}
-    jobs = [(g, (d, refs_meta[g]), {k: v for k, v in alone[g].items() if ":family." not in k}, fixed, False) for g in names]
-    with ProcessPoolExecutor(max_workers=min(len(jobs), max(1, (os.cpu_count() or 2) - 1))) as ex:
-        refined = {g: (v, ab) for g, v, ab in ex.map(fit_glyph, jobs)}
-    print(f"  fitted {len(names)} letters alone and together ({time.time() - t0:.0f} s); shared {shared}")
+    fit_keys = {}                       # letter: the measurements to fit, or None for all of them
+    for item in fit_only or []:
+        g, _, k = item.partition(":")
+        if g == "family":
+            continue
+        if not k:
+            fit_keys[g] = None
+        elif fit_keys.get(g, set()) is not None:
+            fit_keys.setdefault(g, set()).add(f"{g}:{k}")
+    todo = [g for g in names if not keep or g in fit_keys]
+
+    def fixed_of(g):
+        f = dict(fixed)
+        if keep and fit_keys.get(g):    # just some of the letter's measurements: the rest as its recipe has them
+            f.update({k: v for k, v in own[g].items() if not any(fnmatch.fnmatchcase(k, pat) for pat in fit_keys[g])})
+        return {**f, **held_own.get(g, {})}
+
+    jobs = [(g, (d, refs_meta[g]), {k: v for k, v in (own if keep else alone)[g].items() if ":family." not in k}, fixed_of(g), False)
+            for g in todo]
+    refined = {}
+    if jobs:
+        with ProcessPoolExecutor(max_workers=min(len(jobs), max(1, (os.cpu_count() or 2) - 1))) as ex:
+            refined = {g: (v, ab) for g, v, ab in ex.map(fit_glyph, jobs)}
+    for g in names:
+        if g not in refined:            # kept as its recipe has it
+            p0 = TL.TParams(g, None, False)
+            TL.LETTERS[g](p0)
+            missing = [k for k in p0.spec if k.startswith(g + ":") and k not in own[g]]
+            if missing:
+                raise SystemExit(f"{g} is now drawn with measurements its recipe hasn't got ({', '.join(missing)}): fit it (--fit {g})")
+            refined[g] = ({**fixed, **own[g], **held_own.get(g, {})}, recipes.get(g, {}).get("fit", {}).get("at_bounds", []))
+    print(("  fitted " + ("the family's shared measurements, then " if refit_family else "")
+           + (", ".join(", ".join(sorted(fit_keys[g])) if fit_keys.get(g) else g for g in todo) or "no letters")
+           + ("; the other letters" if refit_family else "; the family and the rest") + " as they stand" if keep else
+           f"  fitted {len(names)} letters alone and together") + f" ({time.time() - t0:.0f} s); shared {shared}")
     fc = src["font"]
     scale = fc["x_height"] / meas["x_height_px"]
     out = d / "build"
     out.mkdir(exist_ok=True)
     when = time.strftime("%Y-%m-%dT%H:%M:%S")
     glyphs, units_all = {}, {}
-    for g in names:
-        vals, at_bounds = refined[g]
-        cs, b = _outline(TL.LETTERS[g], TL.TParams(g, vals), marks=True)
+    # letters Pugin didn't draw take the fitted measurements of the letter each is modelled on
+    derived = {g: m for g, m in TL.DERIVED.items() if m in refined}
+    chars = {g: refs_meta[g]["char"] if g in refs_meta else g for g in [*names, *derived]}
+    spur = {k: float(v) for k, v in src["spur"].items() if not k.endswith("note")}
+    plain_units = {}
+
+    def params(g, vals, spurs):
+        pp = TL.TParams(g, vals, False, g in derived)
+        pp.spur = spur if spurs else None
+        return pp
+
+    for g in [*names, *derived]:
+        if g in derived:
+            m = derived[g]
+            vals = {**fixed, **{f"{g}:{k[len(m) + 1:]}": v for k, v in refined[m][0].items() if k.startswith(m + ":")}}
+            at_bounds = []
+        else:
+            vals, at_bounds = refined[g]
+        # the letter as the font has it, with spurs; and without, for the stylistic set that drops them
+        cs, b = _outline(TL.LETTERS[g], params(g, vals, True), marks=True)
+        cs_plain, b_plain = _outline(TL.LETTERS[g], params(g, vals, False), marks=True)
         built = {"contours": [[(q, "stroke", f"stroke: node {k}") for k, q in enumerate(c)] for c in cs], "baseline": b["baseline"]}
         names_ = [[nm for _, _, nm in c] for c in built["contours"]]
         chk = K.check_outline([[q for q, _, _ in c] for c in built["contours"]], names_, swell_tol=0.2)
@@ -377,38 +457,59 @@ def cmd_build(fam: str):
         units = NB.tidy_units(units)
         names_ = [[f"stroke: node {k}" for k in range(len(c))] for c in units]
         chk_u = K.check_outline(units, names_, smooth_deg=3.0, swell_tol=0.5)
-        cs_alone, b_alone = _outline(TL.LETTERS[g], TL.TParams(g, alone[g], True))
-        dev, dev_alone = _deviation(cs, refs[g], b.get("fit_affine")), _deviation(cs_alone, refs[g], b_alone.get("fit_affine"))
         mine = {k[len(g) + 1:]: round(v, 3) for k, v in vals.items() if k.startswith(g + ":")}
-        r = recipes.get(g, {"glyph": g, "unicode": f"U+{ord(refs_meta[g]['char']):04X}", "construction": f"textura_letters.py: {g}",
-                            "description": (TL.LETTERS[g].__doc__ or "").strip()})
+        r = recipes.get(g, {"glyph": g, "unicode": f"U+{ord(chars[g]):04X}", "construction": f"textura_letters.py: {g}"})
         r["description"] = (TL.LETTERS[g].__doc__ or "").strip()
-        r["measured"] = {**K._nest(mine), "units": "plate pixels, y down; angles in degrees", "family": "shared with the other letters: see family.json",
-                         "from": refs_meta[g]["coverage"], "when": when}
-        r["fit"] = {"mean_px": dev["mean_px"], "p95_px": dev["p95_px"], "max_px": dev["max_px"], "mean_px_fitted_alone": dev_alone["mean_px"],
-                    "segments": chk_u["segments"], "outline_checks_pass": chk_u["ok"], "at_bounds": at_bounds}
+        if g in derived:
+            dev = dev_alone = None
+            r["derived_from"] = derived[g]
+            r["proposal"] = "Pugin drew no " + g + ": drafted in his idiom for Josh's judgment (decision 0008), not fitted to the plate."
+            r["measured"] = {**K._nest(mine), "units": "plate pixels, y down; angles in degrees",
+                             "from": f"{derived[g]}'s fitted measurements; the rest are the construction's own", "when": when}
+            r["fit"] = {"segments": chk_u["segments"], "outline_checks_pass": chk_u["ok"]}
+        else:
+            dev = _deviation(cs, refs[g], b.get("fit_affine"))
+            if not refit_family:        # not fitted alone this time: as the last full build found it
+                dev_alone = {"mean_px": r.get("fit", {}).get("mean_px_fitted_alone")}
+            else:
+                cs_alone, b_alone = _outline(TL.LETTERS[g], TL.TParams(g, alone[g], True))
+                dev_alone = _deviation(cs_alone, refs[g], b_alone.get("fit_affine"))
+            r["measured"] = {**K._nest(mine), "units": "plate pixels, y down; angles in degrees", "family": "shared with the other letters: see family.json",
+                             "from": refs_meta[g]["coverage"], "when": when}
+            r["fit"] = {"mean_px": dev["mean_px"], "p95_px": dev["p95_px"], "max_px": dev["max_px"], "mean_px_fitted_alone": dev_alone["mean_px"],
+                        "segments": chk_u["segments"], "outline_checks_pass": chk_u["ok"], "at_bounds": at_bounds}
         (rec_dir / f"{g}.json").write_text(json.dumps(r, indent=1, ensure_ascii=False) + "\n")
-        report = {"glyph": g, "char": refs_meta[g]["char"], "description": r["description"], "measured": mine, "family": shared,
-                  "deviation": dev, "deviation_alone": dev_alone, "checks_px": chk, "checks_units": chk_u,
+        report = {"glyph": g, "char": chars[g], "description": r["description"], "measured": mine, "family": shared,
+                  "derived_from": derived.get(g), "deviation": dev, "deviation_alone": dev_alone, "checks_px": chk, "checks_units": chk_u,
                   "fit_affine": list(b["fit_affine"]) if b.get("fit_affine") else None,
                   "contours_px": [[q.tolist() for q in c] for c in cs], "strokes_px": [[q.tolist() for q in s] for s in b["strokes"] + b.get("marks", [])],
                   "units": {"scale_per_px": scale, "baseline_px": b["baseline"], "origin_px": origin, "outline": [[q.tolist() for q in c] for c in units]}}
         (out / f"{g}.json").write_text(json.dumps(report) + "\n")
         units_all[g] = units
+        if sum(map(len, b_plain["strokes"])) != sum(map(len, b["strokes"])):       # it has a spur
+            bp = {"contours": [[(q, "stroke", f"stroke: node {k}") for k, q in enumerate(c)] for c in cs_plain], "baseline": b_plain["baseline"]}
+            pu = NB.tidy_units(K.to_units(bp, scale, 0)[0])
+            ck = K.check_outline(pu, [[f"stroke: node {k}" for k in range(len(c))] for c in pu], smooth_deg=3.0, swell_tol=0.5)
+            if not ck["ok"]:
+                print(f"  {g} without spurs: checks FAIL {json.dumps(ck)}")
+            plain_units[g] = pu
         print(f"  {g}: {chk_u['segments']} segments in {chk_u['contours']} contour(s); checks {'pass' if chk_u['ok'] else 'FAIL ' + json.dumps(chk_u)}; "
-              f"Pugin's body edge from it: mean {dev['mean_px']} px (alone {dev_alone['mean_px']}), 95% within {dev['p95_px']} px"
+              + (f"built from {derived[g]}'s measurements; Pugin drew no {g}" if g in derived else
+                 f"Pugin's body edge from it: mean {dev['mean_px']} px (alone {dev_alone['mean_px']}), 95% within {dev['p95_px']} px")
               + (f"; at bounds: {at_bounds}" if at_bounds else ""))
     famp.write_text(json.dumps({"shared": shared, "meaning": {k: v[3] for k, v in TL.FAMILY.items()},
-                                "fitted_alone": {g: {k.split(':family.')[1]: round(v, 3) for k, v in alone[g].items() if ':family.' in k} for g in names},
-                                "when": when}, indent=1) + "\n")
+                                "fitted_alone": fam_before.get("fitted_alone", {}) if not refit_family else
+                                {g: {k.split(':family.')[1]: round(v, 3) for k, v in alone[g].items() if ':family.' in k} for g in names},
+                                "when": fam_before.get("when", when) if not refit_family else when}, indent=1) + "\n")
     pitch = None
     if "n" in refined:
         v = refined["n"][0]
         pitch = (v["n:stem_2"] - v["n:stem_1"]) * scale      # the minims' pitch inside a letter, in units
-    write_font(d, src, units_all, refs_meta, pitch)
+    print(f"  spurs on {len(plain_units)} letters ({', '.join(plain_units)}); without them under ss01")
+    write_font(d, src, units_all, chars, pitch, plain_units)
 
 
-def write_font(d, src, units_all, refs_meta, pitch_units=None):
+def write_font(d, src, units_all, chars, pitch_units=None, plain_units=None):
     """Space the letters (spacing.py, over the x-height), write the UFO source and compile it."""
     import construct as K
     import spacing as SP
@@ -425,16 +526,52 @@ def write_font(d, src, units_all, refs_meta, pitch_units=None):
         target = pitch_units - (xs.max() - xs.min()) + SP.pair_white(profiles["i"], profiles["i"], sp["depth"])[0]
     lsb, rsb, target, white = SP.fit(profiles, names, set(), sp.get("mean_side_bearings", 0), sp["depth"], target=target)
     glyphs, table, spaced = {}, {}, {}
+    dxs = {}
     for g in names:
         moved, width, dx = SP.respace(contours[g], lsb[g], rsb[g])
+        dxs[g] = dx
         pts = np.concatenate([G.sample(c, 40) for c in moved])
         spaced[g] = (int(round(pts[:, 0].min())), int(round(width - pts[:, 0].max())))
-        glyphs[g] = {"unicode": ord(refs_meta[g]["char"]), "width": width, "contours": moved}
+        glyphs[g] = {"unicode": ord(chars[g]), "width": width, "contours": moved}
         table[g] = {"left": spaced[g][0], "right": spaced[g][1], "advance": width}
-    # nothing may touch above or below the x-height either: ascenders, arms, descenders
-    tall = {g: SP.profile(contours[g], (fc["descender"], fc["ascender"])) for g in names}
-    closest = {(a, b): SP.pair_white(tall[a], tall[b], sp["depth"])[1] for a in names for b in names}
-    kerning = SP.kern(white, names, spaced, target, sp["kern_threshold"], sp["clearance"], closest)
+    # above the x-height (ascenders, arms) and below the baseline (descenders, tails) parts need more air
+    # than heads and feet, which in a textura this tight all but touch
+    def closest_outside(a, b):
+        out = []
+        for zone in ((fc["x_height"], fc["ascender"]), (fc["descender"], 0)):
+            pa, pb = SP.profile(contours[a], zone), SP.profile(contours[b], zone)
+            # profiles are measured from each glyph's own extremes; refer them to the x-height ones
+            gap = (profiles[a]["x_max"] - pa["x_max"] + pa["right"]) + (pb["x_min"] - profiles[b]["x_min"] + pb["left"])
+            if np.isfinite(gap).any():
+                out.append(float(gap[np.isfinite(gap)].min()))
+        return min(out) if out else np.inf
+    closest = {(a, b): closest_outside(a, b) for a in names for b in names}
+    kerning = SP.kern(white, names, spaced, target, sp["kern_threshold"], sp["clearance"], closest, sp.get("clearance_outside"))
+    # a last check on the parts above the x-height and below the baseline, by true distance: two
+    # parts can be clear row by row and still almost meet on a slant (d's arm over a preceding l's spur)
+    from scipy.spatial import cKDTree
+    outer = {}
+    for g in names:
+        pts = np.concatenate([G.sample(c, 30) for c in glyphs[g]["contours"]])
+        outer[g] = pts[(pts[:, 1] > fc["x_height"]) | (pts[:, 1] < 0)]
+    need = sp.get("clearance_outside", sp["clearance"])
+    opened = 0
+    for a in names:
+        if not len(outer[a]):
+            continue
+        tree = cKDTree(outer[a])
+        for b in names:
+            if not len(outer[b]):
+                continue
+            k = kerning.get((a, b), 0)
+            dist = lambda kk: tree.query(outer[b] + [glyphs[a]["width"] + kk, 0])[0].min()
+            if dist(k) >= need:
+                continue
+            while dist(k) < need and k < 300:
+                k += 5
+            kerning[(a, b)] = k
+            opened += 1
+    print(f"  opened {opened} pair(s) whose parts above or below the x-height came within {need} units on a slant")
     (d / "spacing.json").write_text(json.dumps({"method": sp, "target_white": round(target, 1), "glyphs": table,
                                                 "kerning": {f"{a} {b}": k for (a, b), k in sorted(kerning.items())}}, indent=1) + "\n")
     glyphs[".notdef"] = {"unicode": None, "width": 500, "contours": K.notdef(500, fc["x_height"])}
@@ -446,7 +583,25 @@ def write_font(d, src, units_all, refs_meta, pitch_units=None):
                                        "Glossary of Ecclesiastical Ornament (1844), written again with a simulated broad nib."}
     ufo = d / "source" / f"{fc['postscript_name']}.ufo"
     ufo.parent.mkdir(exist_ok=True)
-    font = K.write_ufo(ufo, info, glyphs, "", kerning)
+    # the letters without their spurs: in the same place and width, reached through ss01, kerned as
+    # their letters are (each letter and its alternate share a kerning group)
+    plain_units = plain_units or {}
+    for g, pu in plain_units.items():
+        glyphs[f"{g}.nospur"] = {"unicode": None, "width": glyphs[g]["width"],
+                                 "contours": [[np.array(q, float) + [dxs[g], 0] for q in c] for c in pu]}
+    fea = ""
+    if plain_units:
+        fea = ("feature ss01 {\n    featureNames { name \"Without spurs\"; };\n"
+               + "".join(f"    sub {g} by {g}.nospur;\n" for g in plain_units) + "} ss01;\n")
+    groups = {}
+    for g in names:
+        members = [g] + ([f"{g}.nospur"] if g in plain_units else [])
+        groups[f"public.kern1.{g}"] = members
+        groups[f"public.kern2.{g}"] = members
+    grouped = {(f"public.kern1.{a}", f"public.kern2.{b}"): k for (a, b), k in kerning.items()}
+    font = K.write_ufo(ufo, info, glyphs, fea, grouped)
+    font.groups.update(groups)
+    font.save(ufo, overwrite=True)
     otf = d / "build" / f"{fc['postscript_name']}.otf"
     ufo2ft.compileOTF(font).save(otf)
     print("  spacing: " + ", ".join(f"{g} {v['left']}|{v['right']}" for g, v in table.items()) + f"; kerning: {len(kerning)} pairs")
@@ -470,9 +625,15 @@ def cmd_proof(fam: str):
     letters = "".join(b["glyph"] for b in built)
     cards = []
     for b in built:
-        g, r = b["glyph"], refs[b["glyph"]]
-        o = np.array(r["box_flat_px"][:2], float)
-        a = cv2.imread(str(d / r["coverage"]), cv2.IMREAD_GRAYSCALE).astype(np.float32) / 255
+        g = b["glyph"]
+        if g not in refs:          # a letter Pugin didn't draw: shown on its own
+            pts = np.concatenate([G.sample([np.array(q) for q in c], 20) for c in b["contours_px"]])
+            o = pts.min(0) - 24
+            a = np.zeros((int(pts[:, 1].max() - o[1] + 24), int(pts[:, 0].max() - o[0] + 24)), np.float32)
+        else:
+            r = refs[g]
+            o = np.array(r["box_flat_px"][:2], float)
+            a = cv2.imread(str(d / r["coverage"]), cv2.IMREAD_GRAYSCALE).astype(np.float32) / 255
         z = 2.0 if max(a.shape) < 300 else 1.4
         aff = b.get("fit_affine")      # a letter Pugin squeezed onto the second line is drawn squeezed over his
         img = cv2.cvtColor(cv2.resize((255 - a * 90).astype(np.uint8), None, fx=z, fy=z, interpolation=cv2.INTER_CUBIC), cv2.COLOR_GRAY2BGR)
@@ -487,16 +648,18 @@ def cmd_proof(fam: str):
                 cv2.polylines(img, [pts], False, (170, 50, 20), 2, cv2.LINE_AA)
                 cv2.circle(img, tuple(int(v) for v in (_affine(aff, q[:1])[0] - o + .5) * z), 3, (40, 130, 40), -1)
         dv, ck = b["deviation"], b["checks_units"]
-        cards.append(f"""<figure class="card"><img src="{T._png_uri(img)}" alt="{H.escape(g)} over Pugin's">
-<figcaption><b>{H.escape(g)}</b> {H.escape(b['description'])}<br>
-Pugin's body edge from the outline: mean {dv['mean_px']} px (fitted alone {b['deviation_alone']['mean_px']}), 95% within {dv['p95_px']} px.
-{ck['segments']} segments in {ck['contours']} contour(s); outline checks {'pass' if ck['ok'] else 'FAIL'}.</figcaption></figure>""")
+        fit = (f"<b>A proposal:</b> Pugin drew no {H.escape(b['char'])}; built from {H.escape(b['derived_from'])}'s fitted measurements." if b.get("derived_from")
+               else f"Pugin's body edge from the outline: mean {dv['mean_px']} px (fitted alone {b['deviation_alone']['mean_px']}), 95% within {dv['p95_px']} px.")
+        cards.append(f"""<figure class="card"><img src="{T._png_uri(img)}" alt="{H.escape(b['char'])}{'' if b.get('derived_from') else " over Pugin's"}">
+<figcaption><b>{H.escape(b['char'])}</b> {H.escape(b['description'])}<br>
+{fit} {ck['segments']} segments in {ck['contours']} contour(s); outline checks {'pass' if ck['ok'] else 'FAIL'}.</figcaption></figure>""")
     # phrases set with a Lombardic initial; only those whose letters are all built (Pugin drew no u, j or w)
-    have = {refs[b["glyph"]]["char"] for b in built}
-    phrases = [w for w in ("Kyrie eleison", "Christe eleison", "Gloria patri", "Ave maris stella", "Ecce ancilla domini", "Fiat mihi",
-                           "Pater noster", "Salve regina", "Minim", "Nil", "Mini") if set(w[1:].replace(" ", "")) <= have]
-    lines = " ".join(f'<span><span class="init">{w[0]}</span>{w[1:]}</span>' for w in phrases[:8])
-    plain = " ".join(w.lower() for w in phrases[:8])
+    have = {b["char"] for b in built}
+    phrases = [w for w in ("Kyrie eleison", "Gloria in excelsis deo", "Agnus dei", "Dominus vobiscum", "Te deum laudamus", "Ave maris stella",
+                           "Ecce ancilla domini", "Salve regina", "World without end", "Jubilate deo", "Pater noster")
+               if set(w[1:].replace(" ", "")) <= have]
+    lines = " ".join(f'<span><span class="init">{w[0]}</span>{w[1:]}</span>' for w in phrases[:9])
+    plain = " ".join(w.lower() for w in phrases[:9])
     fam_rows = "".join(f"<tr><th>{H.escape(fam_j['meaning'][k])}</th><td>{v}</td></tr>" for k, v in fam_j["shared"].items())
     plate = cv2.imread(str(ROOT / src["image"]))
     zx0, zy0, zx1, zy1 = src["zone_flat_px"]
@@ -522,9 +685,12 @@ img.plate{{max-width:100%;height:auto}}
 <h1>Pugin Textura <small>(working name)</small></h1>
 <p class="lede">The small alphabet of plate 9, which Pugin dates to the latter part of the fifteenth century, written again with a simulated broad nib
 (decisions 0008 and 0011). Each letter is the strokes of one pen, fitted to his. These are the <b>plain forms</b>, the defaults; his flourished forms will be
-alternates on the same strokes. Built so far: <b>{H.escape(' '.join(refs[b["glyph"]]["char"] for b in built))}</b>. Capitals are Lombardic initials for now.</p>
+alternates on the same strokes. Built so far: <b>{H.escape(' '.join(sorted(b["char"] for b in built)))}</b> (u, w and j are proposals: Pugin drew none). Capitals are Lombardic initials for now.</p>
 <p class="set">{lines}</p>
 <p class="set small">{plain}</p>
+<p class="lede">Free feet carry on into a <b>spur</b>, a short hairline up and to the right, as Pugin's do. They are on by default; the stylistic set
+<code>ss01</code> ("Without spurs") drops them, keeping each letter's width and kerning. The same words without spurs:</p>
+<p class="set small" style="font-feature-settings:'ss01'">{plain}</p>
 <h2>Pugin's alphabet</h2>
 <img class="plate" src="{T._png_uri(row, '.jpg', 82)}" alt="The textura minuscule on plate 9">
 <h2>The pen</h2>
@@ -546,8 +712,18 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("command", choices=["extract", "measure", "build", "proof"])
     ap.add_argument("family")
+    ap.add_argument("--fit", metavar="LETTERS", help="build: fit only these letters (comma-separated glyph names, or letter:measurement "
+                                                     "for one measurement; 'family' for the shared measurements; 'none' for none), leaving the rest as they stand")
     a = ap.parse_args()
-    {"extract": cmd_extract, "measure": cmd_measure, "build": cmd_build, "proof": cmd_proof}[a.command](a.family)
+    if a.command == "build":
+        only = None if a.fit is None else [g for g in a.fit.split(",") if g and g != "none"]
+        import textura_letters as TL
+        unknown = {g.partition(":")[0] for g in only or []} - set(TL.LETTERS) - {"family"}
+        if unknown:
+            ap.error(f"no such letters: {', '.join(sorted(unknown))}")
+        cmd_build(a.family, only)
+    else:
+        {"extract": cmd_extract, "measure": cmd_measure, "proof": cmd_proof}[a.command](a.family)
 
 
 if __name__ == "__main__":

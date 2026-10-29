@@ -2,32 +2,34 @@
  "glyph": "c",
  "unicode": "U+0063",
  "construction": "textura_letters.py: c",
- "description": "A stem whose head stroke carries on past it: one thick wedge across the whole top of the letter,\nfrom a point at the upper left down to a point well out to the right, as Pugin's c has. That\nwedge, not an arm added to a head, is what tells c from r. Pugin's c also hangs a hairline and a\nball under the wedge; that is left to the flourished form.",
+ "description": "A stem whose head stroke carries on past it: one wedge across the whole top of the letter, from\na point at the upper left down to a point well out to the right, as Pugin's c has, written with\nless pressure. That wedge, not an arm added to a head, is what tells c from r. Stem and wedge meet\nin a concave curve at the upper left (concave_top). Pugin's c also hangs a hairline and a ball\nunder the wedge; that is left to the flourished form.",
  "measured": {
-  "stem_x": 434.512,
+  "stem_x": 434.694,
   "top": {
-   "from": {
-    "x": 450.887,
-    "y": 3335.626
-   },
    "to": {
-    "x": 494.62,
-    "y": 3365.263
+    "x": 493.142,
+    "y": 3366.702
+   },
+   "from": {
+    "x": 452.0,
+    "y": 3332.549
    }
   },
-  "stem_top": 3349.355,
+  "stem_top": 3346.047,
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/c.png",
-  "when": "2026-10-28T23:14:14"
+  "when": "2026-10-29T09:21:59"
  },
  "fit": {
-  "mean_px": 3.4,
-  "p95_px": 13.58,
-  "max_px": 24.93,
-  "mean_px_fitted_alone": 3.56,
-  "segments": 16,
+  "mean_px": 3.55,
+  "p95_px": 14.34,
+  "max_px": 25.11,
+  "mean_px_fitted_alone": 3.11,
+  "segments": 26,
   "outline_checks_pass": true,
-  "at_bounds": []
+  "at_bounds": [
+   "c:top.from.x"
+  ]
  }
 }

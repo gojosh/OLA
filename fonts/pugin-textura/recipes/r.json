@@ -4,24 +4,24 @@
  "construction": "textura_letters.py: r",
  "description": "A minim, and off the top right of its head a small flag, set apart from the head by a notch, as\nPugin's is. Pugin's r hangs a hairline and a ball from the flag; that is left to the flourished\nform.",
  "measured": {
-  "stem_x": 2223.108,
+  "stem_x": 2223.083,
   "flag": {
-   "from": 35.347,
-   "from_dy": 4.785,
-   "run": 7.386,
-   "fall": 16.051
+   "from": 32.303,
+   "from_dy": 7.963,
+   "run": 6.216,
+   "fall": 18.187
   },
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/r.png",
-  "when": "2026-10-28T23:14:14"
+  "when": "2026-10-29T09:21:59"
  },
  "fit": {
-  "mean_px": 5.39,
-  "p95_px": 25.1,
-  "max_px": 36.02,
-  "mean_px_fitted_alone": 4.04,
-  "segments": 25,
+  "mean_px": 5.21,
+  "p95_px": 25.94,
+  "max_px": 36.92,
+  "mean_px_fitted_alone": 4.17,
+  "segments": 37,
   "outline_checks_pass": true,
   "at_bounds": []
  }

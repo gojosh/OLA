@@ -4,36 +4,36 @@
  "construction": "textura_letters.py: p",
  "description": "A stem with its own head running down past the baseline to turn out at the descender line,\nand a bowl on its right: a stroke with a head, coming down and turning back in to the stem at\nthe baseline. Pugin's bowl sweeps on across the stem into a curl, and the descender into a long\nswash; plain, neither does.",
  "measured": {
-  "stem_x": 1951.07,
+  "stem_x": 1951.356,
   "right": {
-   "x": 2028.038,
-   "end": 3481.28
+   "x": 2027.338,
+   "end": 3480.876
   },
   "bowl_foot": {
    "from": {
-    "x": 2040.144,
-    "y": 3479.363,
-    "heading": 105.36,
-    "t1": 0.951,
-    "t2": 0.328
+    "x": 2040.585,
+    "y": 3479.489,
+    "heading": 110.263,
+    "t1": 0.967,
+    "t2": 0.269
    },
    "to": {
-    "x": 1960.085,
-    "y": 3512.729,
-    "heading": 176.343
+    "x": 1964.779,
+    "y": 3517.99,
+    "heading": 162.837
    }
   },
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/p.png",
-  "when": "2026-10-28T23:14:14"
+  "when": "2026-10-29T09:21:59"
  },
  "fit": {
-  "mean_px": 26.72,
-  "p95_px": 141.98,
-  "max_px": 180.47,
-  "mean_px_fitted_alone": 24.65,
-  "segments": 39,
+  "mean_px": 27.13,
+  "p95_px": 143.11,
+  "max_px": 181.98,
+  "mean_px_fitted_alone": 24.91,
+  "segments": 51,
   "outline_checks_pass": true,
   "at_bounds": []
  }

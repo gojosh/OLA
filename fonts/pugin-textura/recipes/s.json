@@ -2,76 +2,77 @@
  "glyph": "s",
  "unicode": "U+0073",
  "construction": "textura_letters.py: s",
- "description": "The textura s: an upper stroke with a head, its arm running on to the right, coming down the\nleft; a spine down to the right; a lower stroke down the right, cut off by the nib; and a foot\nstroke under the left. Pugin's s hangs a hairline and ball from the arm and another under the\nspine; plain, it doesn't.",
+ "description": "The textura s: an upper stroke with a flat top, coming down the left, and an arm running from\nits top to the right, the two meeting in a concave curve at the upper left (concave_top); a spine\ndown to the right; a lower stroke down the right, cut off by the nib; and a foot stroke under the\nleft. Pugin's s hangs a hairline and ball from the arm and another under the spine; plain, it\ndoesn't.",
  "measured": {
   "upper": {
-   "x": 2372.474,
-   "end": 3444.626
+   "x": 2372.457,
+   "end": 3445.213,
+   "top": 3353.683
   },
   "lower": {
-   "x": 2427.38,
-   "end": 3494.14
+   "x": 2428.974,
+   "end": 3495.117
   },
   "arm": {
-   "from": {
-    "x": 2384.591,
-    "y": 3348.112,
-    "heading": 8.342,
-    "t1": 0.521,
-    "t2": 0.513
-   },
    "to": {
-    "x": 2446.73,
-    "y": 3366.27,
-    "heading": 26.673
+    "x": 2446.952,
+    "y": 3366.488,
+    "heading": 26.85
+   },
+   "from": {
+    "x": 2388.884,
+    "y": 3349.839,
+    "heading": 9.666,
+    "t1": 0.962,
+    "t2": 0.954
    }
   },
   "spine": {
    "from": {
-    "x": 2368.366,
-    "y": 3434.117,
-    "heading": 17.661,
-    "t1": 0.337,
-    "t2": 0.703
+    "x": 2363.097,
+    "y": 3432.651,
+    "heading": 16.86,
+    "t1": 0.327,
+    "t2": 0.717
    },
    "to": {
-    "x": 2433.569,
-    "y": 3454.394,
-    "heading": 61.124
+    "x": 2433.598,
+    "y": 3454.017,
+    "heading": 61.006
    }
   },
   "foot": {
    "from": {
-    "x": 2437.635,
-    "y": 3493.939,
-    "heading": 135.274,
+    "x": 2438.229,
+    "y": 3494.808,
+    "heading": 135.677,
     "t1": 0.516,
     "t2": 0.498
    },
    "bottom": {
-    "x": 2400.474,
-    "y": 3517.859,
-    "heading": 180.382,
+    "x": 2400.904,
+    "y": 3517.278,
+    "heading": 180.352,
     "t1": 0.491,
     "t2": 0.49
    },
    "end": {
-    "x": 2358.31,
-    "y": 3491.465,
-    "heading": 212.824
+    "x": 2356.901,
+    "y": 3491.272,
+    "heading": 211.984
    }
   },
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/s.png",
-  "when": "2026-10-28T23:14:14"
+  "when": "2026-10-29T09:21:59"
  },
  "fit": {
-  "mean_px": 5.52,
-  "p95_px": 16.45,
-  "max_px": 23.77,
-  "mean_px_fitted_alone": 5.52,
-  "segments": 43,
+  "mean_px": 5.09,
+  "p95_px": 15.24,
+  "max_px": 20.36,
+  "mean_px_fitted_alone": 5.68,
+  "segments": 45,
   "outline_checks_pass": true,
   "at_bounds": []
  }

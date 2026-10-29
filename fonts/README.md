@@ -11,7 +11,7 @@ The plates' dates are Pugin's own, from the Glossary's entry Inscriptions (see [
 | Family | Source | State |
 |---|---|---|
 | [`pugin-lombardic/`](pugin-lombardic/README.md) | Plate 9, the capitals (13th–14th centuries) | All 31 glyphs on the plate built, spaced and kerned in a draft font |
-| [`pugin-textura/`](pugin-textura/README.md) | Plate 9, the small alphabet (late 15th century) | References for all 25 glyphs; a simulated broad nib; all 24 plain letters on the plate fitted, spaced, kerned and compiled. Lombardic initials meanwhile; plate 10's capitals afterwards (decision 0011). |
+| [`pugin-textura/`](pugin-textura/README.md) | Plate 9, the small alphabet (late 15th century) | References for all 25 glyphs; a simulated broad nib; all 24 plain letters on the plate fitted, spaced, kerned and compiled, with proposed u, w and j. Lombardic initials meanwhile; plate 10's capitals afterwards (decision 0011). |
 | Gothic capitals | Plate 10, the large capitals (15th century) | Not started |
 | Lombardic, small | Plate 10, the small capitals (earlier) | Not started |
 | Black letter | Plates 11–12, three minuscules and one set of capitals (16th century) | Not started |

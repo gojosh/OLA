@@ -4,35 +4,31 @@
  "construction": "textura_letters.py: h",
  "description": "The l's ascender, and on the right a leg with its own head that runs down past the baseline\nand turns out at the descender line. Pugin's leg ends in a hairline loop; plain, it turns out as\na minim's foot does.",
  "measured": {
-  "stem_x": 1045.789,
+  "stem_x": 1045.62,
   "leg": {
-   "x": 1119.42
+   "x": 1119.327
   },
   "arm": {
-   "from": 38.488,
-   "reach": 20.0,
-   "end_dy": -6.46,
-   "leave": 322.266,
-   "arrive": 380.0,
-   "t1": 1.0,
-   "t2": 0.204
+   "from": 35.111,
+   "reach": 18.311,
+   "end_dy": -2.111,
+   "leave": 311.641,
+   "arrive": 376.634,
+   "t1": 0.97,
+   "t2": 0.559
   },
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/h.png",
-  "when": "2026-10-28T23:14:14"
+  "when": "2026-10-29T09:21:59"
  },
  "fit": {
-  "mean_px": 5.47,
-  "p95_px": 20.82,
-  "max_px": 49.96,
-  "mean_px_fitted_alone": 4.44,
-  "segments": 39,
+  "mean_px": 5.59,
+  "p95_px": 19.32,
+  "max_px": 54.03,
+  "mean_px_fitted_alone": 4.78,
+  "segments": 50,
   "outline_checks_pass": true,
-  "at_bounds": [
-   "h:arm.reach",
-   "h:arm.arrive",
-   "h:arm.t1"
-  ]
+  "at_bounds": []
  }
 }

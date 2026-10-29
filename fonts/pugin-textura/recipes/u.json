@@ -1,0 +1,19 @@
+{
+ "glyph": "u",
+ "unicode": "U+0075",
+ "construction": "textura_letters.py: u",
+ "description": "n turned over: two minims, the first's foot running on to end against the second's stem, so\nthe pair joins at the foot as n's joins at the head. Each has its own head. Modelled on n.",
+ "derived_from": "n",
+ "proposal": "Pugin drew no u: drafted in his idiom for Josh's judgment (decision 0008), not fitted to the plate.",
+ "measured": {
+  "stem_1": 1689.307,
+  "stem_2": 1753.208,
+  "units": "plate pixels, y down; angles in degrees",
+  "from": "n's fitted measurements; the rest are the construction's own",
+  "when": "2026-10-29T09:21:59"
+ },
+ "fit": {
+  "segments": 55,
+  "outline_checks_pass": true
+ }
+}

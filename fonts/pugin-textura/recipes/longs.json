@@ -7,61 +7,63 @@
   "stem_x": 2313.475,
   "stroke": {
    "arm_end": {
-    "x": 2396.433,
-    "y": 3279.788,
-    "heading": 178.883,
-    "t1": 0.763,
-    "t2": 0.975
+    "x": 2395.196,
+    "y": 3279.456,
+    "heading": 179.732,
+    "t1": 0.781,
+    "t2": 0.964
    },
    "arm_top": {
-    "x": 2346.11,
-    "y": 3259.583,
-    "heading": 165.863,
-    "t1": 0.291,
-    "t2": 0.662
+    "x": 2348.405,
+    "y": 3260.58,
+    "heading": 162.824,
+    "t1": 0.464,
+    "t2": 0.686
    },
    "stem_top": {
-    "x": 2318.069,
-    "y": 3304.196,
-    "heading": 86.763,
-    "t1": 0.727,
-    "t2": 0.784
+    "x": 2318.376,
+    "y": 3305.401,
+    "heading": 86.993,
+    "t1": 0.742,
+    "t2": 0.781
    },
    "stem_low": {
-    "x": 2314.278,
-    "y": 3561.065,
-    "heading": 105.163,
-    "t1": 0.774,
-    "t2": 0.854
+    "x": 2315.166,
+    "y": 3564.85,
+    "heading": 102.044,
+    "t1": 0.796,
+    "t2": 0.878
    },
    "tail": {
-    "x": 2261.788,
-    "y": 3598.077,
-    "heading": 177.407
+    "x": 2262.764,
+    "y": 3597.632,
+    "heading": 165.825
    }
   },
   "spur": {
    "from": {
-    "x": 2275.028,
-    "y": 3353.358
+    "x": 2277.054,
+    "y": 3353.776
    },
    "to": {
-    "x": 2299.086,
-    "y": 3359.548
+    "x": 2299.012,
+    "y": 3356.387
    }
   },
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/longs.png",
-  "when": "2026-10-28T23:14:14"
+  "when": "2026-10-29T09:21:59"
  },
  "fit": {
-  "mean_px": 2.35,
-  "p95_px": 8.99,
-  "max_px": 19.66,
-  "mean_px_fitted_alone": 2.3,
-  "segments": 32,
+  "mean_px": 2.87,
+  "p95_px": 9.56,
+  "max_px": 19.13,
+  "mean_px_fitted_alone": 2.74,
+  "segments": 44,
   "outline_checks_pass": true,
-  "at_bounds": []
+  "at_bounds": [
+   "longs:spur.to.x"
+  ]
  }
 }

@@ -2,20 +2,8 @@
  "glyph": "a",
  "unicode": "U+0061",
  "construction": "textura_letters.py: a",
- "description": "The two-storey a: a stem on the right whose long head starts well to the left, a short wall\ndown the left side under that head, and a lower bowl that leaves the stem at the waist, comes\ndown the left and turns out into a foot against the stem's.",
+ "description": "The two-storey a, drawn as Pugin's pen drew it, in three strokes (Josh):\n- the stem, from the top of the letter, its upper part bowing slightly in down to the waist, then\n  straight on down to its foot;\n- the bottom bowl, leaving the waist, coming down the left and turning out into a foot that ends\n  in a spur reaching up toward the stem (its measurements held: \"It was correct before\");\n- the top bowl, one smooth curve: from the stem's top, rising to the left to make the sloped top,\n  over and down the left side, and back to end exactly where the bottom bowl begins.\nEach stroke flows; where they meet they meet at a point, so the outline keeps the sharp corners\nthere that give the letter its edge. The top bowl is written with less pressure, lighter than the\nstem (Josh: \"Same with the e and top bowl on the a\").",
  "measured": {
-  "stem_x": 248.388,
-  "head": 40.449,
-  "wall": {
-   "top": {
-    "x": 176.223,
-    "y": 3373.458
-   },
-   "low": {
-    "x": 193.0,
-    "y": 3429.155
-   }
-  },
   "bowl": {
    "waist": {
     "x": 215.455,
@@ -44,24 +32,66 @@
     "heading": 40.199
    }
   },
+  "stem": {
+   "top_heading": 96.0,
+   "top_y": 3373.549,
+   "waist_y": 3453.921,
+   "t1": 0.352,
+   "t2": 0.918
+  },
+  "stem_x": 248.86,
+  "bowl_top": {
+   "top": {
+    "x": 209.616,
+    "y": 3341.333
+   },
+   "left": {
+    "x": 179.238,
+    "y": 3392.936
+   },
+   "start_heading": 225.074,
+   "t1": 0.798,
+   "t2": 0.873,
+   "t3": 0.344,
+   "t4": 0.233,
+   "end_heading": 10.157,
+   "t5": 0.248,
+   "t6": 0.786
+  },
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/a.png",
-  "when": "2026-10-28T23:14:14"
+  "when": "2026-10-29T09:21:59"
  },
  "fit": {
-  "mean_px": 2.43,
-  "p95_px": 7.0,
-  "max_px": 11.4,
-  "mean_px_fitted_alone": 1.92,
-  "segments": 45,
+  "mean_px": 2.29,
+  "p95_px": 7.56,
+  "max_px": 11.14,
+  "mean_px_fitted_alone": 2.24,
+  "segments": 63,
   "outline_checks_pass": true,
-  "at_bounds": [
-   "a:wall.low.x",
-   "a:bowl.left.heading",
-   "a:bowl.low.heading",
-   "a:bowl.left.t1",
-   "a:bowl.left.t2"
-  ]
- }
+  "at_bounds": []
+ },
+ "held": {
+  "bowl.waist.x": 215.455,
+  "bowl.waist.y": 3423.11,
+  "bowl.waist.heading": 137.908,
+  "bowl.waist.t1": 0.319,
+  "bowl.waist.t2": 0.222,
+  "bowl.left.x": 180.129,
+  "bowl.left.y": 3451.394,
+  "bowl.left.heading": 114.996,
+  "bowl.left.t1": 1.0,
+  "bowl.left.t2": 1.0,
+  "bowl.low.x": 184.347,
+  "bowl.low.y": 3483.979,
+  "bowl.low.heading": 65.006,
+  "bowl.low.t1": 0.641,
+  "bowl.low.t2": 0.763,
+  "bowl.foot.x": 209.011,
+  "bowl.foot.y": 3508.092,
+  "bowl.foot.heading": 40.199,
+  "stem.top_heading": 96.0
+ },
+ "held_note": "the lower bowl, held at its measurements as committed on 2026-10-29 (Josh: \"You changed the bottom bowl on the a, but I didn't ask for that. It was correct before.\"); and the stem's top heading, 6 degrees left of upright, so its upper part bows slightly as Pugin's does (Josh: \"The stem (which is slightly concave in the top segment)\"; measured on the plate, the upper part sits about 2 px left of the stem's line below the waist)"
 }

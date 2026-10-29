@@ -2,28 +2,28 @@
  "glyph": "o",
  "unicode": "U+006F",
  "construction": "textura_letters.py: o",
- "description": "Two strokes round a narrow counter: a flat-topped stem on the left that turns out at the foot,\nand on the right a stroke whose long head starts inside the left one and which stops at the\nbottom with the nib's cut, in line with the left stroke's foot.",
+ "description": "Two strokes round a narrow counter: a flat-topped stem on the left that turns out at the foot,\nand on the right a stroke whose long head starts inside the left one and which stops at the\nbottom with the nib's cut. Where they meet, at the upper left and at the lower right, they make\none straight edge, as Pugin's do.",
  "measured": {
   "left": {
-   "x": 1814.037,
-   "top": 3358.448
+   "x": 1814.082,
+   "top": 3359.583
   },
   "right": {
-   "x": 1877.037,
-   "end": 3490.933,
-   "head": 34.061
+   "x": 1877.045,
+   "end": 3490.011,
+   "head": 32.457
   },
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/o.png",
-  "when": "2026-10-28T23:14:14"
+  "when": "2026-10-29T09:21:59"
  },
  "fit": {
-  "mean_px": 1.5,
-  "p95_px": 6.0,
-  "max_px": 8.52,
-  "mean_px_fitted_alone": 0.82,
-  "segments": 24,
+  "mean_px": 1.64,
+  "p95_px": 4.5,
+  "max_px": 6.81,
+  "mean_px_fitted_alone": 0.74,
+  "segments": 25,
   "outline_checks_pass": true,
   "at_bounds": []
  }

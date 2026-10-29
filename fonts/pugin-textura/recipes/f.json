@@ -7,63 +7,64 @@
   "stem_x": 792.0,
   "stroke": {
    "arm_end": {
-    "x": 875.996,
-    "y": 3275.859,
-    "heading": 204.705,
-    "t1": 0.452,
-    "t2": 0.563
+    "x": 876.0,
+    "y": 3277.229,
+    "heading": 206.428,
+    "t1": 0.432,
+    "t2": 0.581
    },
    "arm_top": {
-    "x": 822.026,
-    "y": 3241.176,
-    "heading": 177.363,
-    "t1": 0.52,
-    "t2": 0.529
+    "x": 824.184,
+    "y": 3239.94,
+    "heading": 175.983,
+    "t1": 0.514,
+    "t2": 0.533
    },
    "stem_top": {
-    "x": 790.382,
-    "y": 3286.208,
-    "heading": 87.12,
-    "t1": 0.366,
-    "t2": 0.413
+    "x": 791.337,
+    "y": 3287.249,
+    "heading": 84.152,
+    "t1": 0.467,
+    "t2": 0.443
    },
    "stem_low": {
-    "x": 787.92,
-    "y": 3557.156,
-    "heading": 89.498,
-    "t1": 0.595,
-    "t2": 0.617
+    "x": 783.64,
+    "y": 3558.101,
+    "heading": 96.071,
+    "t1": 0.633,
+    "t2": 0.656
    },
    "tail": {
-    "x": 724.092,
-    "y": 3602.034,
-    "heading": 172.889
+    "x": 724.014,
+    "y": 3602.338,
+    "heading": 175.568
    }
   },
   "bar": {
    "left": {
-    "x": 737.572,
-    "y": 3391.773
+    "x": 739.792,
+    "y": 3391.487
    },
    "right": {
-    "x": 846.943,
-    "y": 3384.067
+    "x": 850.05,
+    "y": 3383.936
    }
   },
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/f.png",
-  "when": "2026-10-28T23:14:14"
+  "when": "2026-10-29T09:21:59"
  },
  "fit": {
-  "mean_px": 31.56,
-  "p95_px": 110.84,
-  "max_px": 170.88,
-  "mean_px_fitted_alone": 30.32,
-  "segments": 40,
+  "mean_px": 31.25,
+  "p95_px": 112.7,
+  "max_px": 172.58,
+  "mean_px_fitted_alone": 30.74,
+  "segments": 47,
   "outline_checks_pass": true,
   "at_bounds": [
-   "f:stroke.arm_end.x"
+   "f:stroke.arm_end.x",
+   "f:stroke.tail.x"
   ]
  }
 }

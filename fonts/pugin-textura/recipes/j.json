@@ -1,0 +1,18 @@
+{
+ "glyph": "j",
+ "unicode": "U+006A",
+ "construction": "textura_letters.py: j",
+ "description": "i running on past the baseline and turning left at the descender line, as ſ's tail does,\nstopped by the nib; with i's hairline stroke above. Modelled on i.",
+ "derived_from": "i",
+ "proposal": "Pugin drew no j: drafted in his idiom for Josh's judgment (decision 0008), not fitted to the plate.",
+ "measured": {
+  "stem_x": 1189.9,
+  "units": "plate pixels, y down; angles in degrees",
+  "from": "i's fitted measurements; the rest are the construction's own",
+  "when": "2026-10-29T09:21:59"
+ },
+ "fit": {
+  "segments": 30,
+  "outline_checks_pass": true
+ }
+}

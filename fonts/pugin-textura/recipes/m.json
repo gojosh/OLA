@@ -4,20 +4,20 @@
  "construction": "textura_letters.py: m",
  "description": "Three minims, each head starting against the stem before it.",
  "measured": {
-  "stem_1": 1480.856,
-  "stem_2": 1546.629,
-  "stem_3": 1612.374,
+  "stem_1": 1480.953,
+  "stem_2": 1546.633,
+  "stem_3": 1612.529,
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/m.png",
-  "when": "2026-10-28T23:14:14"
+  "when": "2026-10-29T09:21:59"
  },
  "fit": {
-  "mean_px": 2.79,
-  "p95_px": 8.53,
-  "max_px": 13.57,
-  "mean_px_fitted_alone": 1.94,
-  "segments": 52,
+  "mean_px": 2.1,
+  "p95_px": 5.38,
+  "max_px": 9.93,
+  "mean_px_fitted_alone": 1.61,
+  "segments": 78,
   "outline_checks_pass": true,
   "at_bounds": []
  }

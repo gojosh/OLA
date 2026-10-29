@@ -2,66 +2,67 @@
  "glyph": "d",
  "unicode": "U+0064",
  "construction": "textura_letters.py: d",
- "description": "The uncial d: a bowl's left stroke with a long head, and on the right a stem whose top leans\nback over the bowl as a thick arm, cut off by the nib at its left end. Pugin's arm ends in a\nsmall ball and runs on into a flourish at the top; plain, it doesn't.",
+ "description": "The uncial d: a bowl's left stroke with a long head, and on the right a stem whose top leans\nback over the bowl as a thick arm, cut off by the nib at its left end. Where the bowl's left\nstroke and its top meet, at the upper left, they make one concave curve (concave_top); at the bottom, the left\nstroke's foot runs on to meet the stem. Pugin's arm ends in a small ball and runs on into a\nflourish at the top; plain, it doesn't.",
  "measured": {
   "left": {
-   "x": 537.727,
+   "x": 537.989,
    "head": 12.0
   },
-  "stem_x": 611.032,
+  "stem_x": 611.091,
   "bowl_top": {
    "from": {
-    "x": 555.786,
-    "y": 3331.928,
-    "heading": 33.54,
-    "t1": 0.986,
-    "t2": 0.389
+    "x": 556.733,
+    "y": 3332.75,
+    "heading": 29.214,
+    "t1": 0.284,
+    "t2": 0.303
    },
    "to": {
-    "x": 608.544,
-    "y": 3367.541,
-    "heading": 33.288
+    "x": 608.507,
+    "y": 3369.06,
+    "heading": 34.379
    }
   },
   "arm": {
    "end": {
-    "x": 529.136,
-    "y": 3240.067,
-    "heading": 359.333,
-    "t1": 0.963,
-    "t2": 0.601
+    "x": 528.934,
+    "y": 3240.299,
+    "heading": 364.966,
+    "t1": 0.889,
+    "t2": 0.433
    },
    "over": {
-    "x": 589.443,
-    "y": 3252.549,
-    "heading": -19.982,
+    "x": 594.389,
+    "y": 3251.83,
+    "heading": -20.0,
     "t1": 1.0,
-    "t2": 0.992
+    "t2": 1.0
    },
    "into": {
     "x": 632.0,
-    "y": 3260.154,
+    "y": 3261.372,
     "heading": 115.0
    }
   },
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/d.png",
-  "when": "2026-10-28T23:14:14"
+  "when": "2026-10-29T09:21:59"
  },
  "fit": {
-  "mean_px": 3.85,
-  "p95_px": 13.18,
-  "max_px": 32.98,
-  "mean_px_fitted_alone": 3.08,
-  "segments": 49,
+  "mean_px": 3.9,
+  "p95_px": 14.0,
+  "max_px": 32.75,
+  "mean_px_fitted_alone": 3.58,
+  "segments": 55,
   "outline_checks_pass": true,
   "at_bounds": [
    "d:left.head",
    "d:arm.over.heading",
    "d:arm.into.x",
    "d:arm.into.heading",
-   "d:arm.over.t1"
+   "d:arm.over.t1",
+   "d:arm.over.t2"
   ]
  }
 }

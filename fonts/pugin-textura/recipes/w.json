@@ -1,0 +1,24 @@
+{
+ "glyph": "w",
+ "unicode": "U+0077",
+ "construction": "textura_letters.py: w",
+ "description": "u followed by v's second stroke: two minims joined at the foot, and a third stroke with its own\nhead that stops with the nib's cut, meeting the second's foot in one straight edge, as v's does.\nModelled on v, whose two strokes set the pitch.",
+ "derived_from": "v",
+ "proposal": "Pugin drew no w: drafted in his idiom for Josh's judgment (decision 0008), not fitted to the plate.",
+ "measured": {
+  "left": {
+   "x": 2551.071
+  },
+  "right": {
+   "x": 2610.641,
+   "end": 3494.683
+  },
+  "units": "plate pixels, y down; angles in degrees",
+  "from": "v's fitted measurements; the rest are the construction's own",
+  "when": "2026-10-29T09:21:59"
+ },
+ "fit": {
+  "segments": 69,
+  "outline_checks_pass": true
+ }
+}

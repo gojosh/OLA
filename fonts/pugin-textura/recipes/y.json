@@ -2,43 +2,43 @@
  "glyph": "y",
  "unicode": "U+0079",
  "construction": "textura_letters.py: y",
- "description": "v's two strokes, the right one running on past the baseline and sweeping round to the left.\nPugin's tail ends in a ball; plain, it stops with the nib's cut. Pugin drew it on the plate's\nsecond line, squeezed; the plain y stands at the full x-height.",
+ "description": "v's two strokes, the right one running on past the baseline and sweeping round to the left; the\nleft one's foot runs on to meet it. Pugin's tail ends in a ball; plain, it stops with the nib's\ncut. Pugin drew it on the plate's second line, squeezed; the plain y stands at the full x-height.",
  "measured": {
   "left": {
-   "x": 1342.278
+   "x": 1341.672
   },
   "right": {
-   "x": 1405.273
+   "x": 1404.268
   },
   "tail": {
    "from": {
-    "x": 1390.793,
-    "y": 3512.422,
-    "heading": 102.238,
-    "t1": 0.546,
-    "t2": 0.343
+    "x": 1388.836,
+    "y": 3518.036,
+    "heading": 111.887,
+    "t1": 0.348,
+    "t2": 0.538
    },
    "end": {
-    "x": 1282.001,
-    "y": 3594.009,
-    "heading": 161.928
+    "x": 1282.0,
+    "y": 3594.001,
+    "heading": 178.552
    }
   },
   "line2": {
-   "squeeze": 0.655,
-   "baseline": 3686.549
+   "squeeze": 0.633,
+   "baseline": 3682.705
   },
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/y.png",
-  "when": "2026-10-28T23:14:14"
+  "when": "2026-10-29T09:21:59"
  },
  "fit": {
-  "mean_px": 4.8,
-  "p95_px": 15.88,
-  "max_px": 24.53,
-  "mean_px_fitted_alone": 4.79,
-  "segments": 38,
+  "mean_px": 4.28,
+  "p95_px": 13.27,
+  "max_px": 19.71,
+  "mean_px_fitted_alone": 4.16,
+  "segments": 51,
   "outline_checks_pass": true,
   "at_bounds": [
    "y:tail.end.x",

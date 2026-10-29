@@ -6,67 +6,67 @@
  "measured": {
   "top": {
    "left": {
-    "x": 1439.421,
-    "y": 3343.493
+    "x": 1440.226,
+    "y": 3343.842
    },
    "right": {
-    "x": 1519.369,
-    "y": 3341.44
+    "x": 1524.063,
+    "y": 3346.593
    }
   },
   "diagonal": {
    "from": {
-    "x": 1513.841,
-    "y": 3353.042
+    "x": 1519.284,
+    "y": 3361.706
    },
    "to": {
-    "x": 1465.583,
-    "y": 3435.139
+    "x": 1465.257,
+    "y": 3434.964
    }
   },
   "lower": {
    "from": {
-    "x": 1448.84,
-    "y": 3444.048,
-    "heading": 28.197,
-    "t1": 0.207,
-    "t2": 0.688
+    "x": 1448.434,
+    "y": 3444.787,
+    "heading": 28.398,
+    "t1": 0.223,
+    "t2": 0.689
    },
    "right": {
-    "x": 1525.277,
-    "y": 3469.771,
-    "heading": 81.17,
-    "t1": 0.669,
-    "t2": 0.674
+    "x": 1527.635,
+    "y": 3469.476,
+    "heading": 80.137,
+    "t1": 0.684,
+    "t2": 0.687
    },
    "bottom": {
-    "x": 1495.971,
-    "y": 3513.876,
-    "heading": 179.574,
+    "x": 1496.431,
+    "y": 3515.011,
+    "heading": 180.366,
     "t1": 0.351,
     "t2": 0.357
    },
    "end": {
-    "x": 1434.128,
-    "y": 3514.347,
+    "x": 1434.032,
+    "y": 3515.09,
     "heading": 174.98
    }
   },
   "line2": {
-   "squeeze": 0.732,
-   "baseline": 3705.588
+   "squeeze": 0.777,
+   "baseline": 3708.383
   },
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/z.png",
-  "when": "2026-10-28T23:14:14"
+  "when": "2026-10-29T09:21:59"
  },
  "fit": {
-  "mean_px": 9.44,
-  "p95_px": 27.09,
-  "max_px": 43.21,
-  "mean_px_fitted_alone": 9.58,
-  "segments": 29,
+  "mean_px": 8.73,
+  "p95_px": 25.01,
+  "max_px": 34.51,
+  "mean_px_fitted_alone": 8.64,
+  "segments": 33,
   "outline_checks_pass": true,
   "at_bounds": []
  }

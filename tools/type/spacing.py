@@ -83,21 +83,23 @@ def fit(profiles, letters, symmetric, mean_side_bearings, depth, huber=20.0, tar
     return {g: float(sol[ix[g]]) for g in letters}, {g: float(sol[n + ix[g]]) for g in letters}, target, white
 
 
-def kern(white, letters, side_bearings, target, threshold, clearance, closest_over=None):
+def kern(white, letters, side_bearings, target, threshold, clearance, closest_over=None, clearance_over=None):
     """Kerning for the pairs the side bearings leave more than `threshold` off the target, in steps
     of 5 units, and for any pair that would come closer than `clearance`. side_bearings maps each
     letter to its (left, right) side bearing as spaced. closest_over, if given, maps each pair to its
-    closest approach over a taller zone than the white is judged on (a minuscule's ascenders and
-    descenders), so parts above or below that zone never touch either."""
+    closest approach outside the zone the white is judged on (a minuscule's ascenders and
+    descenders), which must keep `clearance_over` (default `clearance`), so parts above or below
+    that zone never touch either."""
     out = {}
+    clearance_over = clearance if clearance_over is None else clearance_over
     for a in letters:
         for b in letters:
             w, closest = white[(a, b)]
-            if closest_over is not None:
-                closest = min(closest, closest_over[(a, b)])
             sb = side_bearings[a][1] + side_bearings[b][0]
             off = target - (sb + w)
             floor = clearance - (sb + closest)        # how much the pair must open to keep clear
+            if closest_over is not None:
+                floor = max(floor, clearance_over - (sb + closest_over[(a, b)]))
             k = 5 * round(off / 5)
             if k < floor:
                 k = 5 * int(np.ceil(floor / 5))
