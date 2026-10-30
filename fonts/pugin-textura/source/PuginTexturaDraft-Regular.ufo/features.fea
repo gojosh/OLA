@@ -11,8 +11,6 @@ feature ss01 {
     sub d by d.nospur;
     sub h by h.nospur;
     sub k by k.nospur;
-    sub p by p.nospur;
-    sub q by q.nospur;
     sub a by a.nospur;
     sub u by u.nospur;
     sub j by j.nospur;

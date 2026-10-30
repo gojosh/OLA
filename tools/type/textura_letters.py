@@ -35,7 +35,8 @@ FAMILY = {  # name: (start, low, high, meaning)
                                  "e's arm, a's top bowl)"),
     "top_leave": (13.0, 0.0, 40.0, "the angle at which the concave top of c, d, e, g and s leaves the stem's top corner, rising to the "
                                    "right, before it steepens to the nib's own angle at the peak (degrees)"),
-    "fork_notch": (13.0, 4.0, 30.0, "the split top of b, d, h, k and l: how deep its notch runs below the tips' tops (px)"),
+    "fork_notch": (13.0, 4.0, 30.0, "the split top of b, d, h, k and l, and the split bottom of p and q, turned upside "
+                                     "down: how deep its notch runs below the tips' tops (px)"),
     "fork_flare": (26.0, 8.0, 100.0, "the split top: how far below the tips' tops the stem begins to widen into it (px)"),
     "fork_out": (4.0, 0.0, 24.0, "the split top: how far each tip stands out beyond the stem's edge (px)"),
     "fork_tip": (3.0, 1.0, 8.0, "the split top: the radius of each horn's rounded tip (px)"),
@@ -277,8 +278,31 @@ def split_top(p, x):
     ascender line. Returns the filled shape and where the stem below it starts."""
     import nib as NB
     nb = nib_at(p, p.fam("ascender"))
+    curves, start = _fork(p, x, nb, p.fam("ascender") + min(c[1] for c in nb.corners))
+    return NB.Shape(curves), start
+
+
+def split_bottom(p, x):
+    """The split bottom of a descender, the same on p and q: the split top (split_top) turned upside
+    down at the descender line, with the same five settings, so the stem widens down into two horns
+    pointing down, with a notch between them (Josh: "lets do splits on the bottom of p and q, in the
+    same manner we did split tops on b, d, h, k, and l"). It is as wide as the pen makes the stem
+    there, where the nib has turned to its angle at the feet, and its tips' bottoms stand where the
+    nib's bottom corner would at the descender line, as the turned-out foot's did. Pugin's
+    descenders run on into swashes, splayed both ways on q; those will be alternates. Returns the
+    filled shape and where the stem above it ends."""
+    import nib as NB
+    nb = nib_at(p, p.fam("descender"))
+    bot = p.fam("descender") + max(c[1] for c in nb.corners)
+    curves, start = _fork(p, x, nb, bot)
+    flip = lambda q: np.array([[px, 2 * bot - py] for px, py in q[::-1]])
+    return NB.Shape([flip(q) for q in reversed(curves)]), 2 * bot - start
+
+
+def _fork(p, x, nb, top):
+    """The outline of a split top whose tips' tops stand at `top`, on a stem at x written with the nib
+    `nb` (split_top), and where the stem below it starts."""
     w2 = max(c[0] for c in nb.corners)                    # half the stem's width
-    top = p.fam("ascender") + min(c[1] for c in nb.corners)
     notch, flare, out, r, lean = (p.fam(k) for k in ("fork_notch", "fork_flare", "fork_out", "fork_tip", "fork_lean"))
     tip = np.array([x - w2 - out + r, top + r])            # the left tip's centre
     nadir = np.array([x, top + notch])
@@ -296,7 +320,7 @@ def split_top(p, x):
             line(tip + r * hd(t_in), nadir)]
     mirror = lambda q: np.array([[2 * x - px, py] for px, py in q[::-1]])
     right = [mirror(q) for q in reversed(left)]
-    return NB.Shape(left + right + [line(np.array([x + w2, base]), np.array([x - w2, base]))]), start
+    return left + right + [line(np.array([x + w2, base]), np.array([x - w2, base]))], start
 
 
 def ascender(p, x, spur=True):
@@ -672,23 +696,27 @@ def f(p):
 
 
 def p_(p):
-    """A stem with its own head running down past the baseline to turn out at the descender line,
-    and a bowl on its right: a stroke with a head, coming down and turning back in to the stem at
-    the baseline. Pugin's bowl sweeps on across the stem into a curl, and the descender into a long
-    swash; plain, neither does."""
+    """A stem with its own head running down past the baseline to the split bottom at the descender
+    line (split_bottom), and a bowl on its right: a stroke with a head, coming down and turning back
+    in to the stem at the baseline. Pugin's bowl sweeps on across the stem into a curl, and the
+    descender into a long swash; plain, neither does. Until 2026-10-29 the descender turned out at
+    the descender line as a minim's foot does."""
     x1, x2 = p.x("stem_x", 1957, 12), p.x("right.x", 2028, 12)
+    split, end = split_bottom(p, x1)
     right = minim(p, x2, foot=False, end=p.x("right.end", 3470, 15))
     close = path(p, "bowl_foot", [("from", x2, 3468, 120), ("to", x1 + 10, 3508, 165)])
-    return {"strokes": [minim(p, x1, bottom=p.fam("descender")), right, close], "baseline": p.fam("bottom")}
+    return {"strokes": [minim(p, x1, foot=False, end=end), split, right, close], "baseline": p.fam("bottom")}
 
 
 def q(p):
     """o's two strokes, meeting at the upper left in one straight edge, the right one running on past
-    the baseline to turn out at the descender line; the left stroke's foot runs on to meet it. Pugin's
-    descender ends in a swash splayed both ways; plain, it turns out as a minim's foot does."""
+    the baseline to the split bottom at the descender line (split_bottom); the left stroke's foot
+    runs on to meet it. Pugin's descender ends in a swash splayed both ways; plain, it splits as p's
+    does. Until 2026-10-29 it turned out as a minim's foot does."""
     x1, x2 = p.x("left.x", 2088, 12), p.x("right.x", 2152, 12)
-    left, right = bowl_pair(p, x1, x2, p.x("left.top", 3352, 15), None, bottom2=p.fam("descender"), foot2=True, meet=True)
-    return {"strokes": [left, right], "edges": [edge_above(p, left, right)], "baseline": p.fam("bottom")}
+    split, end = split_bottom(p, x2)
+    left, right = bowl_pair(p, x1, x2, p.x("left.top", 3352, 15), end, meet=True)
+    return {"strokes": [left, right, split], "edges": [edge_above(p, left, right)], "baseline": p.fam("bottom")}
 
 
 def g(p):

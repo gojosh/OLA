@@ -80,12 +80,10 @@
     <key>public.kern1.p</key>
     <array>
       <string>p</string>
-      <string>p.nospur</string>
     </array>
     <key>public.kern1.q</key>
     <array>
       <string>q</string>
-      <string>q.nospur</string>
     </array>
     <key>public.kern1.r</key>
     <array>
@@ -209,12 +207,10 @@
     <key>public.kern2.p</key>
     <array>
       <string>p</string>
-      <string>p.nospur</string>
     </array>
     <key>public.kern2.q</key>
     <array>
       <string>q</string>
-      <string>q.nospur</string>
     </array>
     <key>public.kern2.r</key>
     <array>

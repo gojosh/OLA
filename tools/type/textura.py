@@ -462,7 +462,8 @@ class Workbench:
                 "held": sorted(k[len(g) + 1:] for k in held if k in spec), "by_hand": sorted(r.get("held_by_hand", [])),
                 "nodes": nodes, "description": (TL.LETTERS[g].__doc__ or "").strip()}
 
-    GROUPS = {"split_top": {"title": "the split top", "prefix": "fork_", "letters": ["b", "d", "h", "k", "l"]}}
+    GROUPS = {"split_top": {"title": "the split top and bottom", "prefix": "fork_", "letters": ["b", "d", "h", "k", "l", "p", "q"],
+                            "below": ["p", "q"]}}     # the letters whose split stands at the bottom, turned upside down
 
     def outline(self, g, values, family=None):
         """The letter drawn from these measurements (its own, by name; the family's as they stand, or
@@ -501,7 +502,7 @@ class Workbench:
         keys = [k for k in TL.FAMILY if k.startswith(grp["prefix"])]
         refs = {g: {"box": self.refs_meta[g]["box_flat_px"], "ink": self.refs_meta[g].get("ink_box_flat_px", self.refs_meta[g]["box_flat_px"]),
                     "reference": self.refs_meta[g]["coverage"], "char": self.refs_meta[g]["char"]} for g in grp["letters"]}
-        return {"group": name, "title": grp["title"], "letters": grp["letters"], "refs": refs,
+        return {"group": name, "title": grp["title"], "letters": grp["letters"], "below": grp.get("below", []), "refs": refs,
                 "spec": {k: {"lo": TL.FAMILY[k][1], "hi": TL.FAMILY[k][2], "meaning": TL.FAMILY[k][3]} for k in keys},
                 "values": {k: float(held.get(k, TL.FAMILY[k][0])) for k in keys},
                 "by_hand": sorted(k for k in src.get("held_by_hand", []) if k in keys)}
@@ -1195,7 +1196,7 @@ leaves out his hairlines, which the plain forms don't have.</p>
 <p class="lede">With the local proof server running (<code>font-proofs</code>: <code>tools/type/type.py serve</code>), each letter Pugin drew has
 <b>Edit strokes</b>: drag a stroke's nodes, or set its settings, and the letter is drawn again as you go. Saving holds what you changed in the letter's
 recipe, so every build keeps it (decision 0012). <button class="edit" data-edit-group="split_top">Edit the split top</button> tunes the
-split top that b, d, h, k and l share, on all five at once.</p>
+split top that b, d, h, k and l share, and the split bottom of p and q, which is the same turned upside down, on all seven at once.</p>
 <div class="cards">{''.join(cards)}</div>
 </main>
 <div id="se" hidden>

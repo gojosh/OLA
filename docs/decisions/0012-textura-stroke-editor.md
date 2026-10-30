@@ -26,6 +26,7 @@ Josh: "Yes, add a panel to the stroke editor for the split top's family settings
 
 - **Edit the split top** on the proof page opens the five settings that b, d, h, k and l share (`fork_notch`, `fork_flare`, `fork_out`, `fork_tip`, `fork_lean`), with sliders, and draws all five letters as they move.
 - Save holds them in `source.json`'s `held`, as Josh's earlier corrections were, and lists them in `held_by_hand` there. So the rule above that the family's shared measurements are not adjusted now has this one exception. Other groups of family settings can be added the same way (`Workbench.GROUPS`) if Josh asks for them.
+- Since the split bottoms of p and q (2026-10-29), which are the split top turned upside down with the same settings ([brief](../brief/2026-10-29-textura-split-bottoms.md)), the panel draws all seven letters, p and q framed at their bottoms.
 
 ## Consequences
 - Adjustments survive every rebuild and refit, since the fit never moves a held measurement, and they are reviewable in git as part of the recipe.

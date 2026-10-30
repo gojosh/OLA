@@ -8,9 +8,9 @@
 // changed in the letter's recipe (`held`, which every fit keeps as it is); a held measurement can
 // be let go back to the fit. Save and rebuild also rebuilds the font and this page.
 //
-// A group of the family's settings shared by several letters (the split top of b, d, h, k and l)
-// opens the same way: its settings with sliders, and all its letters drawn side by side as they
-// move. Saving holds them in source.json.
+// A group of the family's settings shared by several letters (the split top of b, d, h, k and l,
+// and the split bottom of p and q) opens the same way: its settings with sliders, and all its
+// letters drawn side by side as they move. Saving holds them in source.json.
 (function () {
   const API = '/api/pugin-textura';
   const NS = 'http://www.w3.org/2000/svg';
@@ -94,13 +94,14 @@
       w.shape.setAttribute('d', d.contours.map(pathD).join(''));
       if (d.affine) { const [a, b, c, dd, e, f] = d.affine; w.con.setAttribute('transform', `matrix(${a},${dd},${b},${e},${c},${f})`); }
       if (!w.framed) {                               // the same window on every letter, at the same scale: its split top, and the stem below it
-        const A = d.affine || [1, 0, 0, 0, 1, 0];
+        const A = d.affine || [1, 0, 0, 0, 1, 0];      // (or, on p and q, the split bottom, and the stem above it)
         const pts = [];
         for (const c of d.contours) for (const q of c) for (const [x, y] of q) pts.push([A[0] * x + A[1] * y + A[2], A[3] * x + A[4] * y + A[5]]);
-        const top = Math.min(...pts.map(p => p[1]));
-        const near = pts.filter(p => p[1] < top + 30).map(p => p[0]);
+        const below = (L.below || []).includes(g);
+        const end = below ? Math.max(...pts.map(p => p[1])) : Math.min(...pts.map(p => p[1]));
+        const near = pts.filter(p => Math.abs(p[1] - end) < 30).map(p => p[0]);
         const cx = (Math.min(...near) + Math.max(...near)) / 2;
-        w.svg.setAttribute('viewBox', `${cx - GROUP_W / 2} ${top - 12} ${GROUP_W} ${GROUP_H}`);
+        w.svg.setAttribute('viewBox', `${cx - GROUP_W / 2} ${below ? end + 12 - GROUP_H : end - 12} ${GROUP_W} ${GROUP_H}`);
         w.framed = true;
       }
     }
@@ -281,7 +282,7 @@
     values = { ...L.values }; saved = { ...L.values }; release = new Set(); history = []; sel = null; last = null;
     title.textContent = `${L.title[0].toUpperCase()}${L.title.slice(1)} of ${L.letters.join(', ')}`;
     summary.textContent = 'What these settings are';
-    $('#se-desc').textContent = 'Settings the family holds, shared by these letters, so every one has the same top. Saving holds them in source.json, which every build keeps.';
+    $('#se-desc').textContent = 'Settings the family holds, shared by these letters, so every one has the same split. Saving holds them in source.json, which every build keeps.';
     panel.hidden = false;
     document.body.classList.add('se-open');
     groupViews(); renderList(); draw();
