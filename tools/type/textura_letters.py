@@ -51,7 +51,8 @@ FAMILY = {  # name: (start, low, high, meaning)
                               "n's and m's heads also started this far right of the stem before; since 2026-10-29 they start clear of it, "
                               "joined by a hairline, and no letter Pugin drew measures it"),
     "top": (3336.0, 3310.0, 3360.0, "where a minim's head stroke starts: the x-height line (px on the plate)"),
-    "bottom": (3513.0, 3495.0, 3530.0, "where a minim's foot stroke ends: the baseline (px on the plate)"),
+    "bottom": (3513.0, 3495.0, 3530.0, "where a minim's foot stroke ends (px on the plate); the baseline is where the points of the feet "
+                                         "stand, below it (baseline)"),
     "ascender": (3230.0, 3190.0, 3270.0, "where an ascender's head stroke starts (px on the plate)"),
     "descender": (3612.0, 3585.0, 3640.0, "where a descender's stroke ends (px on the plate)"),
 }
@@ -76,6 +77,16 @@ def pen_of(p):
 def nib_at(p, y):
     """The nib as the pen holds it at height y."""
     return pen_of(p).at(y)
+
+
+def baseline(p):
+    """The font's baseline: where the points of the feet stand, the nib's lowest corner at the end of
+    a foot stroke (`bottom`). So the letters stand on it, as the x-height band is measured on the
+    plate (from the points of the heads to the points of the feet) and as the Lombardic capitals
+    stand on theirs. Until 2026-10-29 it was `bottom` itself, the line the foot strokes end on, and
+    every letter hung 44 units below it (Josh: "Can we fix the baseline alignment with the lombard
+    caps? Not sure which one is off (the textura or lombard) but needs fixing.")."""
+    return p.fam("bottom") + max(c[1] for c in nib_at(p, p.fam("bottom")).corners)
 
 
 def light(p, stroke):
@@ -456,28 +467,28 @@ def i(p):
     """A single minim, its head written light with the top spur leading into it (light_head), and the
     mark above (proposed: Pugin's i has no mark)."""
     x = p.x("stem_x", 1190, 15)
-    return {"strokes": light_head(p, minim(p, x)), "marks": [i_stroke(p, x)], "baseline": p.fam("bottom")}
+    return {"strokes": light_head(p, minim(p, x)), "marks": [i_stroke(p, x)], "baseline": baseline(p)}
 
 
 def n(p):
     """Two minims; the second's head starts against the first's stem, so the pair joins at the top.
     The first head has the top spur leading into it (entered)."""
     x1, x2 = p.x("stem_1", 1689, 15), p.x("stem_2", 1754, 15)
-    return {"strokes": [entered(p, minim(p, x1, spur=False)), minim(p, x2, after=x1)], "baseline": p.fam("bottom")}
+    return {"strokes": [entered(p, minim(p, x1, spur=False)), minim(p, x2, after=x1)], "baseline": baseline(p)}
 
 
 def m(p):
     """Three minims, each head starting against the stem before it. The first head has the top spur
     leading into it (entered)."""
     x1, x2, x3 = p.x("stem_1", 1478, 15), p.x("stem_2", 1545, 15), p.x("stem_3", 1612, 15)
-    return {"strokes": [entered(p, minim(p, x1, spur=False)), minim(p, x2, after=x1, spur=False), minim(p, x3, after=x2)], "baseline": p.fam("bottom")}
+    return {"strokes": [entered(p, minim(p, x1, spur=False)), minim(p, x2, after=x1, spur=False), minim(p, x3, after=x2)], "baseline": baseline(p)}
 
 
 def l(p):
     """A minim rising to the ascender line, its top split into two horns with rounded tips, the same
     split top as b, d, h and k have (split_top). On the plate Pugin's horns run on into hairline
     loops; those will be alternates."""
-    return {"strokes": ascender(p, p.x("stem_x", 1399, 15)), "baseline": p.fam("bottom")}
+    return {"strokes": ascender(p, p.x("stem_x", 1399, 15)), "baseline": baseline(p)}
 
 
 def bowl_pair(p, x1, x2, top1, end2, head2=45.0, bottom2=None, foot2=False, meet=False):
@@ -497,7 +508,7 @@ def o(p):
     bottom with the nib's cut. Where they meet, at the upper left and at the lower right, they make
     one straight edge, as Pugin's do."""
     left, right = bowl_pair(p, p.x("left.x", 1813, 12), p.x("right.x", 1877, 12), p.x("left.top", 3354, 15), p.x("right.end", 3483, 15))
-    return {"strokes": [left, right], "edges": [edge_above(p, left, right), edge_below(p, left, right)], "baseline": p.fam("bottom")}
+    return {"strokes": [left, right], "edges": [edge_above(p, left, right), edge_below(p, left, right)], "baseline": baseline(p)}
 
 
 def v(p):
@@ -505,7 +516,7 @@ def v(p):
     the nib's cut, meeting the left one's foot in one straight edge."""
     x1, x2 = p.x("left.x", 2552, 12), p.x("right.x", 2610, 12)
     left, right = minim(p, x1, spur=False), minim(p, x2, foot=False, end=p.x("right.end", 3488, 15))
-    return {"strokes": [left, right], "edges": [edge_below(p, left, right)], "baseline": p.fam("bottom")}
+    return {"strokes": [left, right], "edges": [edge_below(p, left, right)], "baseline": baseline(p)}
 
 
 def c(p):
@@ -517,7 +528,7 @@ def c(p):
     x, t = p.x("stem_x", 435, 12), p.fam("top")
     top = light(p, path(p, "top", [("from", x + 3, t + 6, None), ("to", x + 55, t + 28, None)], span=14))
     stem = minim(p, x, head=0, top=p.x("stem_top", t + 22, 15))
-    return {"strokes": [top, stem], "edges": [concave_top(p, stem, top)], "baseline": p.fam("bottom")}
+    return {"strokes": [top, stem], "edges": [concave_top(p, stem, top)], "baseline": baseline(p)}
 
 
 def e(p):
@@ -566,7 +577,7 @@ def e(p):
     member = tip(p, curl + [s_curve] + turn)
     stem = minim(p, x, head=0, top=p.x("stem_top", t, 15))
     return {"strokes": [stem, arm, member, top, end], "edges": [concave_top(p, stem, arm), under(p, s_curve, arm[-1][3], 1)],
-            "baseline": p.fam("bottom")}
+            "baseline": baseline(p)}
 
 
 def r(p):
@@ -576,11 +587,11 @@ def r(p):
     Josh has since drawn it himself over the built one (references/hand-drawn-r.svg; decision 0014),
     one shape with its spurs, and the flag with a ball curling under it."""
     if OUTLINES.get("r"):               # drawn by Josh, outline and all
-        return {"strokes": drawn(OUTLINES["r"]), "baseline": p.fam("bottom")}
+        return {"strokes": drawn(OUTLINES["r"]), "baseline": baseline(p)}
     x, t = p.x("stem_x", 2224, 12), p.fam("top")
     f0 = np.array([x + p.length("flag.from", 38, 32, 50), t + p.length("flag.from_dy", -4, -16, 8)])
     f1 = f0 + [p.length("flag.run", 10, 4, 20), p.length("flag.fall", 10, 2, 22)]
-    return {"strokes": [entered(p, minim(p, x)), [line(f0, f1)]], "baseline": p.fam("bottom")}
+    return {"strokes": [entered(p, minim(p, x)), [line(f0, f1)]], "baseline": baseline(p)}
 
 
 def t(p):
@@ -588,7 +599,7 @@ def t(p):
     with a short crossbar at the x-height."""
     x, tp = p.x("stem_x", 2482, 12), p.fam("top")
     bar = path(p, "bar", [("left", x - 25, tp + 14, None), ("right", x + 30, tp + 2, None)])
-    return {"strokes": [minim(p, x, head=0, top=p.x("stem_top", 3285, 20)), bar], "baseline": p.fam("bottom")}
+    return {"strokes": [minim(p, x, head=0, top=p.x("stem_top", 3285, 20)), bar], "baseline": baseline(p)}
 
 
 def b(p):
@@ -599,7 +610,7 @@ def b(p):
     x1, x2 = p.x("stem_x", 316, 12), p.x("right.x", 380, 12)
     stem, split = ascender(p, x1, spur=False)
     right = minim(p, x2, foot=False, end=p.x("right.end", 3480, 15), lead=p.length("right.lead", 7.5, 0.0, 25.0))
-    return {"strokes": [stem, split, right], "edges": [edge_below(p, stem, right)], "baseline": p.fam("bottom")}
+    return {"strokes": [stem, split, right], "edges": [edge_below(p, stem, right)], "baseline": baseline(p)}
 
 
 def d(p):
@@ -613,7 +624,7 @@ def d(p):
     top = path(p, "bowl_top", [("from", x1 + 6, 3342, 35), ("to", x2 - 6, 3372, 50)])
     stem, split = ascender(p, x2)
     left = minim(p, x1, head=p.length("left.head", 30, 12, 50), spur=False, run=foot_to_meet(p, x1, stem))
-    return {"strokes": [left, top, stem, split], "edges": [concave_top(p, left, top)], "baseline": p.fam("bottom")}
+    return {"strokes": [left, top, stem, split], "edges": [concave_top(p, left, top)], "baseline": baseline(p)}
 
 
 def h(p):
@@ -622,7 +633,7 @@ def h(p):
     n's second minim is (Josh: "h and k need the same connecting spur we added to m and n"). Pugin's
     leg ends in a hairline loop; plain, it turns out as a minim's foot does."""
     x1, x2 = p.x("stem_x", 1046, 12), p.x("leg.x", 1120, 12)
-    return {"strokes": ascender(p, x1) + [minim(p, x2, bottom=p.fam("descender"), after=x1)], "baseline": p.fam("bottom")}
+    return {"strokes": ascender(p, x1) + [minim(p, x2, bottom=p.fam("descender"), after=x1)], "baseline": baseline(p)}
 
 
 def into_stem(p, stroke, x):
@@ -675,7 +686,7 @@ def k(p):
     loop = [join_from(p, x1, loop[0][0])] + loop + into_stem(p, loop, x1)
     x2, top, head = p.x("leg.x", 1330, 12), p.x("leg.top", 3418, 15), p.length("leg.head", 32, 10, 55)
     leg = minim(p, x2, top=top, head=head, lead=head_to_meet(p, x2, top, head, loop))
-    return {"strokes": ascender(p, x1) + [loop, leg], "baseline": p.fam("bottom")}
+    return {"strokes": ascender(p, x1) + [loop, leg], "baseline": baseline(p)}
 
 
 def longs(p):
@@ -686,7 +697,7 @@ def longs(p):
     stroke = path(p, "stroke", [("arm_end", 2392, 3272, 200), ("arm_top", 2352, 3256, 180), ("stem_top", x, 3292, 90),
                                 ("stem_low", x - 6, 3556, 95), ("tail", 2268, 3610, 160)], span=18)
     spur = path(p, "spur", [("from", 2266, 3344, None), ("to", x - 10, 3362, None)])
-    return {"strokes": [stroke, spur], "baseline": p.fam("bottom")}
+    return {"strokes": [stroke, spur], "baseline": baseline(p)}
 
 
 def f(p):
@@ -696,7 +707,7 @@ def f(p):
     stroke = path(p, "stroke", [("arm_end", 858, 3262, 200), ("arm_top", 818, 3246, 180), ("stem_top", x, 3282, 90),
                                 ("stem_low", x - 6, 3556, 95), ("tail", 742, 3604, 160)], span=18)
     bar = path(p, "bar", [("left", 742, 3400, None), ("right", 848, 3394, None)])
-    return {"strokes": [stroke, bar], "baseline": p.fam("bottom")}
+    return {"strokes": [stroke, bar], "baseline": baseline(p)}
 
 
 def foot_from(p, x, run=None):
@@ -730,13 +741,13 @@ def p_(p):
     across the stem into a curl. Its split bottom is the built one's, as it was when he drew it; it
     no longer moves with the split's settings."""
     if OUTLINES.get("p"):               # drawn by Josh, outline and all
-        return {"strokes": drawn(OUTLINES["p"]), "baseline": p.fam("bottom")}
+        return {"strokes": drawn(OUTLINES["p"]), "baseline": baseline(p)}
     x1, x2 = p.x("stem_x", 1957, 12), p.x("right.x", 2028, 12)
     split, end = split_bottom(p, x1)
     right = minim(p, x2, foot=False, end=p.x("right.end", 3480, 25), after=x1)
     foot = foot_from(p, x1, p.length("foot.run", 27, 20, 60))
     return {"strokes": [minim(p, x1, foot=False, end=end), split, right, foot], "edges": [edge_below(p, foot, right)],
-            "baseline": p.fam("bottom")}
+            "baseline": baseline(p)}
 
 
 def q(p):
@@ -747,7 +758,7 @@ def q(p):
     x1, x2 = p.x("left.x", 2088, 12), p.x("right.x", 2152, 12)
     split, end = split_bottom(p, x2)
     left, right = bowl_pair(p, x1, x2, p.x("left.top", 3352, 15), end, meet=True)
-    return {"strokes": [left, right, split], "edges": [edge_above(p, left, right)], "baseline": p.fam("bottom")}
+    return {"strokes": [left, right, split], "edges": [edge_above(p, left, right)], "baseline": baseline(p)}
 
 
 def g(p):
@@ -759,12 +770,12 @@ def g(p):
     left stroke with the arm and ear, and the right stroke with the tail, two shapes kept apart by
     the hairlines of white Pugin leaves where they meet."""
     if OUTLINES.get("g"):               # drawn by Josh, outline and all
-        return {"strokes": drawn(OUTLINES["g"]), "baseline": p.fam("bottom")}
+        return {"strokes": drawn(OUTLINES["g"]), "baseline": baseline(p)}
     x1, x2 = p.x("left.x", 900, 12), p.x("right.x", 973, 12)
     left, right = bowl_pair(p, x1, x2, p.x("left.top", 3352, 15), 3520, meet=True)
     tail = path(p, "tail", [("from", x2, 3518, 90), ("turn", x2 + 10, 3568, 120), ("end", 900, 3592, 185)], span=18)
     ear = path(p, "ear", [("from", x2 + 8, 3340, None), ("to", 1004, 3332, None)])
-    return {"strokes": [left, right, tail, ear], "edges": [concave_top(p, left, right)], "baseline": p.fam("bottom")}
+    return {"strokes": [left, right, tail, ear], "edges": [concave_top(p, left, right)], "baseline": baseline(p)}
 
 
 def y(p):
@@ -776,7 +787,7 @@ def y(p):
     right = minim(p, x2, foot=False, end=p.fam("bottom"))
     tail = path(p, "tail", [("from", x2, p.fam("bottom") - 2, 90), ("end", x2 - 105, p.fam("descender"), 175)], span=18)
     left = minim(p, x1, spur=False, run=foot_to_meet(p, x1, right))
-    return {"strokes": [left, right, tail], "baseline": p.fam("bottom"), "fit_affine": second_line(p)}
+    return {"strokes": [left, right, tail], "baseline": baseline(p), "fit_affine": second_line(p)}
 
 
 def x(p):
@@ -789,7 +800,7 @@ def x(p):
     head = minim(p, xs, foot=False, end=3362)
     flag = path(p, "flag", [("from", xs + 10, 3346, None), ("to", 2740, 3344, None)])
     leg = path(p, "leg", [("from", xs + 8, 3462, 50), ("to", 2722, 3520, 45)])
-    return {"strokes": [head, stem, flag, leg], "baseline": p.fam("bottom")}
+    return {"strokes": [head, stem, flag, leg], "baseline": baseline(p)}
 
 
 def a(p):
@@ -824,7 +835,7 @@ def a(p):
     slope = s0 + full.corners[1] - proud * full.u                                       # the lighter nib's upper corner
     along, edge = -hd(leave), s0 + full.corners[2]                                      # the sloped top; the stem's right edge
     k = np.linalg.solve(np.column_stack([along, -hd(down)]), edge - slope)[0]
-    return {"strokes": [stem, bowl, upper], "edges": [(slope - proud * along, slope + k * along, s0)], "baseline": p.fam("bottom")}
+    return {"strokes": [stem, bowl, upper], "edges": [(slope - proud * along, slope + k * along, s0)], "baseline": baseline(p)}
 
 
 def turned(p, stroke, pre, angles, pressures=None):
@@ -931,7 +942,7 @@ def drawn(contours):
 def hand_drawn(name):
     """The letter drawn from Josh's outline as it stands (OUTLINES[name])."""
     def letter(p):
-        return {"strokes": drawn(OUTLINES[name]), "baseline": p.fam("bottom"), "fit_affine": OUTLINE_ON_PLATE.get(name)}
+        return {"strokes": drawn(OUTLINES[name]), "baseline": baseline(p), "fit_affine": OUTLINE_ON_PLATE.get(name)}
     letter.__doc__ = ALTERNATES.get(name, {}).get("description")
     return letter
 
@@ -993,9 +1004,9 @@ def s(p):
         # off (the stylistic set ss02, "Without stems and pips"; Josh: "And you have the stems able to
         # enabled and disabled")
         paths = sorted(OUTLINES["s"], key=lambda c: -abs(G.signed_area(c)))
-        return {"strokes": [NB.Shape(c) for c in paths], "pips": list(range(1, len(paths))), "baseline": p.fam("bottom")}
+        return {"strokes": [NB.Shape(c) for c in paths], "pips": list(range(1, len(paths))), "baseline": baseline(p)}
     if DRAWN.get("s"):                  # drawn by Josh, point by point
-        return {"strokes": [drawn_stroke(DRAWN["s"])], "baseline": p.fam("bottom")}
+        return {"strokes": [drawn_stroke(DRAWN["s"])], "baseline": baseline(p)}
     import nib as NB
     peak = np.array([p.x("peak.x", 2393, 15), p.x("peak.y", 3348, 15)])
     foot = np.array([p.x("foot.x", 2411, 15), p.x("foot.y", 3512, 15)])
@@ -1089,7 +1100,7 @@ def s(p):
     stages = [{"strokes": [0], "ref": "main", "exclude": ["top_hair", "low_hair"]}]
     if PIPS:
         stages.append({"keys": ["top_hair", "low_hair"], "smooth": False})
-    return {"strokes": strokes, "baseline": p.fam("bottom"), "smooth": steadiness(stroke, w_pressure=0.0), "fit_stages": stages}
+    return {"strokes": strokes, "baseline": baseline(p), "smooth": steadiness(stroke, w_pressure=0.0), "fit_stages": stages}
 
 
 # The s's stems and pips are left off while its main stroke's shape is worked out (Josh: "I want the
@@ -1106,7 +1117,7 @@ def z(p):
     top = path(p, "top", [("left", 1442, tp + 14, None), ("right", 1512, tp + 6, None)])
     diag = path(p, "diagonal", [("from", 1510, tp + 14, None), ("to", 1460, tp + 96, None)])
     lower = path(p, "lower", [("from", 1452, tp + 100, 20), ("right", 1520, tp + 140, 90), ("bottom", 1490, bt, 170), ("end", 1440, bt + 4, 185)], span=18)
-    return {"strokes": [top, diag, lower], "baseline": bt, "fit_affine": second_line(p)}
+    return {"strokes": [top, diag, lower], "baseline": baseline(p), "fit_affine": second_line(p)}
 
 
 # ── Letters Pugin didn't draw ─────────────────────────────────────────────────
@@ -1117,7 +1128,7 @@ def u(p):
     """n turned over: two minims, the first's foot running on to end against the second's stem, so
     the pair joins at the foot as n's joins at the head. Each has its own head. Modelled on n."""
     x1, x2 = p.x("stem_1", 1689, 15), p.x("stem_2", 1754, 15)
-    return {"strokes": [minim(p, x1, before=x2), minim(p, x2)], "baseline": p.fam("bottom")}
+    return {"strokes": [minim(p, x1, before=x2), minim(p, x2)], "baseline": baseline(p)}
 
 
 def w(p):
@@ -1128,7 +1139,7 @@ def w(p):
     pitch = p.x("right.x", 2610, 12) - x1
     x2, x3 = x1 + pitch, x1 + 2 * pitch
     second, third = minim(p, x2, spur=False), minim(p, x3, foot=False, end=p.x("right.end", 3488, 15))
-    return {"strokes": [minim(p, x1, before=x2), second, third], "edges": [edge_below(p, second, third)], "baseline": p.fam("bottom")}
+    return {"strokes": [minim(p, x1, before=x2), second, third], "edges": [edge_below(p, second, third)], "baseline": baseline(p)}
 
 
 def j(p):
@@ -1139,7 +1150,7 @@ def j(p):
     bt, ds = p.fam("bottom"), p.fam("descender")
     stem = minim(p, x0, foot=False, end=bt - 30)
     tail = [cubic(np.array([x0, bt - 30]), S, np.array([x0 - 52, ds]), 172, 0.6, 0.6)]
-    return {"strokes": light_head(p, stem) + [tail], "marks": [i_stroke(p, x0)], "baseline": bt}
+    return {"strokes": light_head(p, stem) + [tail], "marks": [i_stroke(p, x0)], "baseline": baseline(p)}
 
 
 LETTERS = {"i": i, "n": n, "m": m, "l": l, "o": o, "v": v, "c": c, "e": e, "r": r, "t": t, "b": b, "d": d, "h": h, "k": k,

@@ -420,7 +420,7 @@ class Workbench:
             self._refs[key] = Ref(self.d, self.refs_meta[g], keep="main")
         dev = _deviation(cs, self._refs[key]) if cs else {"mean_px": None, "p95_px": None, "max_px": None}
         meas = json.loads((self.d / "measurements.json").read_text())
-        built = {"contours": [[(q, "stroke", f"stroke: node {k}") for k, q in enumerate(c)] for c in cs], "baseline": p.fam("bottom")}
+        built = {"contours": [[(q, "stroke", f"stroke: node {k}") for k, q in enumerate(c)] for c in cs], "baseline": TL.baseline(p)}
         units = NB.tidy_units(K.to_units(built, T.load_source(self.fam)["font"]["x_height"] / meas["x_height_px"], 0)[0])
         chk = K.check_outline(units, [[f"stroke: node {k}" for k in range(len(c))] for c in units], smooth_deg=3.0, swell_tol=0.5)
         return {"contours": [[np.round(np.asarray(q), 3).tolist() for q in c] for c in cs], "path": [np.round(q, 3).tolist() for q in st],
@@ -788,6 +788,7 @@ def cmd_build(fam: str, fit_only: list[str] | None = None):
         units = NB.tidy_units(units)
         names_ = [[f"stroke: node {k}" for k in range(len(c))] for c in units]
         chk_u = K.check_outline(units, names_, smooth_deg=3.0, swell_tol=0.5)
+        band_from = (b["baseline"] - params(g, vals, True).fam("bottom")) * scale       # the same for every letter
         mine = {k[len(g) + 1:]: round(v, 3) for k, v in vals.items() if k.startswith(g + ":")}
         r = recipes.get(g, {"glyph": g, "unicode": f"U+{ord(chars[g]):04X}", "construction": f"textura_letters.py: {g}"})
         r["description"] = (TL.LETTERS[g].__doc__ or "").strip()
@@ -883,11 +884,16 @@ def cmd_build(fam: str, fit_only: list[str] | None = None):
         print(f"  without stems and pips under ss02: {', '.join(nopip_units)}")
     if TL.ALTERNATES:
         print("  alternates: " + ", ".join(f"{a} under {alt['feature']} (\"{alt['name']}\")" for a, alt in TL.ALTERNATES.items()))
-    write_font(d, src, units_all, chars, pitch, plain_units, space_units, nopip_units, TL.ALTERNATES)
+    write_font(d, src, units_all, chars, pitch, plain_units, space_units, nopip_units, TL.ALTERNATES, band_from)
 
 
-def write_font(d, src, units_all, chars, pitch_units=None, plain_units=None, space_units=None, nopip_units=None, alternates=None):
-    """Space the letters (spacing.py, over the x-height), write the UFO source and compile it. A
+def write_font(d, src, units_all, chars, pitch_units=None, plain_units=None, space_units=None, nopip_units=None, alternates=None,
+               band_from=0.0):
+    """Space the letters (spacing.py, over the x-height), write the UFO source and compile it. The
+    x-height band the letters are spaced over runs from band_from, the height of the line the foot
+    strokes end on (`bottom`), up by the x-height: so it was measured when the textura was spaced,
+    when that line was the baseline, and so it stays since the baseline moved down to the points of
+    the feet (textura_letters.baseline), so the spacing doesn't change with it. A
     letter in space_units is spaced and kerned as drawn there (without the top spur that leads into
     its first head, a hairline that tucks into the white before it), and set as units_all has it.
     An alternate (a glyph in alternates, which says its letter and the stylistic set that reaches
@@ -901,7 +907,9 @@ def write_font(d, src, units_all, chars, pitch_units=None, plain_units=None, spa
     letters = [g for g in names if g not in alternates]
     drawn = {g: [[np.array(q, float) for q in c] for c in units_all[g]] for g in names}
     contours = {g: [[np.array(q, float) for q in c] for c in (space_units or {}).get(g, units_all[g])] for g in names}
-    profiles = {g: SP.profile(contours[g], (0, fc["x_height"])) for g in names}
+    lo, hi = band_from, band_from + fc["x_height"]          # the x-height band, as the letters are spaced over it
+    print(f"  spaced over the x-height band from {lo:.1f} to {hi:.1f} units")
+    profiles = {g: SP.profile(contours[g], (lo, hi)) for g in names}
     # a textura is spaced like a fence: the white between two letters is the white between a
     # letter's own minims, so two i's stand one minim's pitch apart
     target = sp.get("target_white")
@@ -925,7 +933,7 @@ def write_font(d, src, units_all, chars, pitch_units=None, plain_units=None, spa
     # than heads and feet, which in a textura this tight all but touch
     def closest_outside(a, b):
         out = []
-        for zone in ((fc["x_height"], fc["ascender"]), (fc["descender"], 0)):
+        for zone in ((hi, fc["ascender"] + lo), (fc["descender"] + lo, lo)):
             pa, pb = SP.profile(contours[a], zone), SP.profile(contours[b], zone)
             # profiles are measured from each glyph's own extremes; refer them to the x-height ones
             gap = (profiles[a]["x_max"] - pa["x_max"] + pa["right"]) + (pb["x_min"] - profiles[b]["x_min"] + pb["left"])
@@ -940,7 +948,7 @@ def write_font(d, src, units_all, chars, pitch_units=None, plain_units=None, spa
     outer = {}
     for g in names:
         pts = np.concatenate([G.sample(c, 30) for c in glyphs[g]["contours"]])
-        outer[g] = pts[(pts[:, 1] > fc["x_height"]) | (pts[:, 1] < 0)]
+        outer[g] = pts[(pts[:, 1] > hi) | (pts[:, 1] < lo)]
     need = sp.get("clearance_outside", sp["clearance"])
     opened = 0
     for a in names:
@@ -1111,11 +1119,12 @@ def cmd_proof(fam: str):
 {font_face('Lombardic', lomb)}
 :root{{--ink:#2a2622;--paper:#f6f1e7;--red:#b8442f;--blue:#2f5596;--rule:#d8cfbf}}
 body{{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 Georgia,serif}}
-main{{max-width:1100px;margin:0 auto;padding:24px 16px 64px}}
-h1{{font-weight:normal;margin:0 0 4px}} h2{{font-weight:normal;margin:40px 0 8px;border-bottom:1px solid var(--rule)}}
-.lede{{max-width:62em}}
-.set{{font-family:'Textura';font-size:80px;line-height:1.3;color:var(--ink);margin:16px 0;font-kerning:normal}}
-.set .init{{font-family:'Lombardic';color:var(--red);font-size:1.12em}}
+main{{max-width:1100px;margin:0 auto;padding:120px 56px 128px}}
+@media (max-width:640px){{main{{padding:56px 16px 80px}}}}
+h1{{font-weight:normal;margin:0 0 16px}} h2{{font-weight:normal;margin:72px 0 20px;padding-bottom:4px;border-bottom:1px solid var(--rule)}}
+main p{{margin:0 0 1.4em}} .lede{{max-width:62em}}
+.set{{font-family:'Textura';font-size:80px;line-height:1.1;color:var(--ink);margin:32px 0;font-kerning:normal}}
+.set .init{{font-family:'Lombardic';color:var(--red);font-size:1.12em;line-height:0}}
 .set span:nth-child(even) .init{{color:var(--blue)}}
 .small{{font-size:40px}}
 .cards{{display:flex;flex-wrap:wrap;gap:16px}} .card{{margin:0;background:#fff;border:1px solid var(--rule);padding:8px;max-width:520px}}

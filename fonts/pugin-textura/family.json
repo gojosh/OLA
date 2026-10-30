@@ -43,7 +43,7 @@
   "foot_turn": "how far up the stem the pen starts its turn into the foot (px)",
   "join": "where a foot that runs on into the next minim ends, left of that minim's stem (px; u, w). It was fitted when n's and m's heads also started this far right of the stem before; since 2026-10-29 they start clear of it, joined by a hairline, and no letter Pugin drew measures it",
   "top": "where a minim's head stroke starts: the x-height line (px on the plate)",
-  "bottom": "where a minim's foot stroke ends: the baseline (px on the plate)",
+  "bottom": "where a minim's foot stroke ends (px on the plate); the baseline is where the points of the feet stand, below it (baseline)",
   "ascender": "where an ascender's head stroke starts (px on the plate)",
   "descender": "where a descender's stroke ends (px on the plate)"
  },
