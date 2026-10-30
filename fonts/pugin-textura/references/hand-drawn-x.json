@@ -1,0 +1,9 @@
+{
+ "glyph": "x.archaic",
+ "scale": 1.0,
+ "offset": [
+  2603.876,
+  3321.564
+ ],
+ "note": "hand-drawn-x.svg, Josh's own archaic x, Pugin's form (Josh: \"can you export the archaic x\", then \"My hand-drawn x is ready for import\"), drawn over references/export-x.svg (the built x over Pugin's, one unit to the plate's pixel) and saved trimmed to the drawing. At one unit to the pixel, where the parts he kept from the built x stand where they did: the head and the upper stem, 19 of the drawing's nodes, fall on the built outline's at this offset to a thousandth of a pixel. It is the font's x.archaic, reached through ss04; the x is the modern one (decision 0015). A point (u, v) of it is (offset + scale * (u, v))."
+}

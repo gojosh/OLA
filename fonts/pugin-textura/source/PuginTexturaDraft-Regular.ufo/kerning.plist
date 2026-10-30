@@ -7,7 +7,7 @@
       <key>public.kern2.a</key>
       <integer>60</integer>
       <key>public.kern2.b</key>
-      <integer>35</integer>
+      <integer>30</integer>
       <key>public.kern2.c</key>
       <integer>40</integer>
       <key>public.kern2.d</key>
@@ -15,19 +15,19 @@
       <key>public.kern2.e</key>
       <integer>40</integer>
       <key>public.kern2.f</key>
-      <integer>50</integer>
+      <integer>30</integer>
       <key>public.kern2.g</key>
       <integer>45</integer>
       <key>public.kern2.h</key>
-      <integer>35</integer>
+      <integer>30</integer>
       <key>public.kern2.i</key>
       <integer>25</integer>
       <key>public.kern2.j</key>
       <integer>25</integer>
       <key>public.kern2.k</key>
-      <integer>35</integer>
+      <integer>30</integer>
       <key>public.kern2.l</key>
-      <integer>35</integer>
+      <integer>30</integer>
       <key>public.kern2.longs</key>
       <integer>35</integer>
       <key>public.kern2.m</key>
@@ -53,13 +53,15 @@
       <key>public.kern2.w</key>
       <integer>20</integer>
       <key>public.kern2.x</key>
-      <integer>20</integer>
+      <integer>40</integer>
+      <key>public.kern2.x.archaic</key>
+      <integer>15</integer>
       <key>public.kern2.y</key>
       <integer>20</integer>
       <key>public.kern2.y.alt</key>
       <integer>95</integer>
       <key>public.kern2.z</key>
-      <integer>55</integer>
+      <integer>60</integer>
     </dict>
     <key>public.kern1.b</key>
     <dict>
@@ -68,13 +70,13 @@
       <key>public.kern2.d</key>
       <integer>5</integer>
       <key>public.kern2.f</key>
-      <integer>70</integer>
+      <integer>50</integer>
       <key>public.kern2.i</key>
       <integer>30</integer>
       <key>public.kern2.j</key>
       <integer>30</integer>
       <key>public.kern2.longs</key>
-      <integer>50</integer>
+      <integer>55</integer>
       <key>public.kern2.m</key>
       <integer>35</integer>
       <key>public.kern2.n</key>
@@ -83,27 +85,31 @@
       <integer>15</integer>
       <key>public.kern2.r</key>
       <integer>35</integer>
+      <key>public.kern2.t</key>
+      <integer>5</integer>
       <key>public.kern2.u</key>
       <integer>25</integer>
       <key>public.kern2.v</key>
-      <integer>20</integer>
+      <integer>25</integer>
       <key>public.kern2.w</key>
       <integer>25</integer>
       <key>public.kern2.x</key>
+      <integer>35</integer>
+      <key>public.kern2.x.archaic</key>
       <integer>25</integer>
       <key>public.kern2.y</key>
       <integer>25</integer>
       <key>public.kern2.y.alt</key>
       <integer>20</integer>
       <key>public.kern2.z</key>
-      <integer>45</integer>
+      <integer>5</integer>
     </dict>
     <key>public.kern1.c</key>
     <dict>
       <key>public.kern2.a</key>
       <integer>5</integer>
       <key>public.kern2.b</key>
-      <integer>35</integer>
+      <integer>30</integer>
       <key>public.kern2.c</key>
       <integer>35</integer>
       <key>public.kern2.d</key>
@@ -111,21 +117,21 @@
       <key>public.kern2.e</key>
       <integer>40</integer>
       <key>public.kern2.f</key>
-      <integer>20</integer>
+      <integer>15</integer>
       <key>public.kern2.g</key>
       <integer>40</integer>
       <key>public.kern2.h</key>
-      <integer>35</integer>
+      <integer>30</integer>
       <key>public.kern2.i</key>
       <integer>85</integer>
       <key>public.kern2.j</key>
       <integer>85</integer>
       <key>public.kern2.k</key>
-      <integer>35</integer>
+      <integer>30</integer>
       <key>public.kern2.l</key>
-      <integer>35</integer>
+      <integer>30</integer>
       <key>public.kern2.longs</key>
-      <integer>85</integer>
+      <integer>90</integer>
       <key>public.kern2.m</key>
       <integer>85</integer>
       <key>public.kern2.n</key>
@@ -133,7 +139,7 @@
       <key>public.kern2.o</key>
       <integer>10</integer>
       <key>public.kern2.p</key>
-      <integer>55</integer>
+      <integer>60</integer>
       <key>public.kern2.q</key>
       <integer>35</integer>
       <key>public.kern2.r</key>
@@ -141,36 +147,38 @@
       <key>public.kern2.s</key>
       <integer>30</integer>
       <key>public.kern2.t</key>
-      <integer>40</integer>
+      <integer>60</integer>
       <key>public.kern2.u</key>
       <integer>75</integer>
       <key>public.kern2.v</key>
-      <integer>70</integer>
+      <integer>75</integer>
       <key>public.kern2.w</key>
       <integer>75</integer>
       <key>public.kern2.x</key>
+      <integer>85</integer>
+      <key>public.kern2.x.archaic</key>
       <integer>75</integer>
       <key>public.kern2.y</key>
       <integer>75</integer>
       <key>public.kern2.y.alt</key>
-      <integer>50</integer>
+      <integer>55</integer>
       <key>public.kern2.z</key>
-      <integer>100</integer>
+      <integer>20</integer>
     </dict>
     <key>public.kern1.d</key>
     <dict>
       <key>public.kern2.a</key>
-      <integer>55</integer>
+      <integer>50</integer>
       <key>public.kern2.b</key>
       <integer>30</integer>
       <key>public.kern2.c</key>
       <integer>35</integer>
       <key>public.kern2.d</key>
-      <integer>30</integer>
+      <integer>25</integer>
       <key>public.kern2.e</key>
-      <integer>35</integer>
+      <integer>30</integer>
       <key>public.kern2.f</key>
-      <integer>45</integer>
+      <integer>20</integer>
       <key>public.kern2.g</key>
       <integer>35</integer>
       <key>public.kern2.h</key>
@@ -200,7 +208,7 @@
       <key>public.kern2.s</key>
       <integer>35</integer>
       <key>public.kern2.t</key>
-      <integer>25</integer>
+      <integer>20</integer>
       <key>public.kern2.u</key>
       <integer>15</integer>
       <key>public.kern2.v</key>
@@ -208,13 +216,15 @@
       <key>public.kern2.w</key>
       <integer>15</integer>
       <key>public.kern2.x</key>
-      <integer>15</integer>
+      <integer>35</integer>
+      <key>public.kern2.x.archaic</key>
+      <integer>5</integer>
       <key>public.kern2.y</key>
       <integer>15</integer>
       <key>public.kern2.y.alt</key>
-      <integer>85</integer>
+      <integer>90</integer>
       <key>public.kern2.z</key>
-      <integer>45</integer>
+      <integer>55</integer>
     </dict>
     <key>public.kern1.e</key>
     <dict>
@@ -227,7 +237,7 @@
       <key>public.kern2.e</key>
       <integer>35</integer>
       <key>public.kern2.f</key>
-      <integer>5</integer>
+      <integer>15</integer>
       <key>public.kern2.g</key>
       <integer>30</integer>
       <key>public.kern2.h</key>
@@ -235,27 +245,27 @@
       <key>public.kern2.i</key>
       <integer>75</integer>
       <key>public.kern2.j</key>
-      <integer>70</integer>
+      <integer>75</integer>
       <key>public.kern2.k</key>
       <integer>30</integer>
       <key>public.kern2.l</key>
       <integer>30</integer>
       <key>public.kern2.longs</key>
-      <integer>75</integer>
+      <integer>80</integer>
       <key>public.kern2.m</key>
       <integer>75</integer>
       <key>public.kern2.n</key>
-      <integer>70</integer>
+      <integer>75</integer>
       <key>public.kern2.p</key>
       <integer>45</integer>
       <key>public.kern2.q</key>
-      <integer>20</integer>
+      <integer>25</integer>
       <key>public.kern2.r</key>
       <integer>75</integer>
       <key>public.kern2.s</key>
       <integer>20</integer>
       <key>public.kern2.t</key>
-      <integer>45</integer>
+      <integer>50</integer>
       <key>public.kern2.u</key>
       <integer>70</integer>
       <key>public.kern2.v</key>
@@ -263,97 +273,103 @@
       <key>public.kern2.w</key>
       <integer>70</integer>
       <key>public.kern2.x</key>
-      <integer>70</integer>
+      <integer>85</integer>
+      <key>public.kern2.x.archaic</key>
+      <integer>75</integer>
       <key>public.kern2.y</key>
       <integer>70</integer>
       <key>public.kern2.y.alt</key>
-      <integer>40</integer>
+      <integer>45</integer>
       <key>public.kern2.z</key>
-      <integer>85</integer>
+      <integer>10</integer>
     </dict>
     <key>public.kern1.f</key>
     <dict>
       <key>public.kern2.a</key>
-      <integer>45</integer>
+      <integer>40</integer>
       <key>public.kern2.b</key>
-      <integer>125</integer>
+      <integer>40</integer>
       <key>public.kern2.c</key>
-      <integer>60</integer>
+      <integer>40</integer>
       <key>public.kern2.d</key>
-      <integer>55</integer>
+      <integer>35</integer>
       <key>public.kern2.e</key>
-      <integer>60</integer>
+      <integer>40</integer>
       <key>public.kern2.f</key>
-      <integer>75</integer>
+      <integer>65</integer>
       <key>public.kern2.g</key>
-      <integer>65</integer>
+      <integer>45</integer>
       <key>public.kern2.h</key>
-      <integer>125</integer>
+      <integer>40</integer>
       <key>public.kern2.i</key>
-      <integer>70</integer>
+      <integer>45</integer>
       <key>public.kern2.j</key>
-      <integer>70</integer>
-      <key>public.kern2.k</key>
-      <integer>125</integer>
-      <key>public.kern2.l</key>
-      <integer>125</integer>
-      <key>public.kern2.longs</key>
-      <integer>120</integer>
-      <key>public.kern2.m</key>
-      <integer>90</integer>
-      <key>public.kern2.n</key>
-      <integer>85</integer>
-      <key>public.kern2.o</key>
-      <integer>60</integer>
-      <key>public.kern2.p</key>
-      <integer>90</integer>
-      <key>public.kern2.q</key>
-      <integer>65</integer>
-      <key>public.kern2.r</key>
       <integer>50</integer>
+      <key>public.kern2.k</key>
+      <integer>40</integer>
+      <key>public.kern2.l</key>
+      <integer>40</integer>
+      <key>public.kern2.longs</key>
+      <integer>40</integer>
+      <key>public.kern2.m</key>
+      <integer>40</integer>
+      <key>public.kern2.n</key>
+      <integer>40</integer>
+      <key>public.kern2.o</key>
+      <integer>45</integer>
+      <key>public.kern2.p</key>
+      <integer>50</integer>
+      <key>public.kern2.q</key>
+      <integer>45</integer>
+      <key>public.kern2.r</key>
+      <integer>40</integer>
       <key>public.kern2.s</key>
-      <integer>75</integer>
+      <integer>55</integer>
       <key>public.kern2.t</key>
-      <integer>70</integer>
+      <integer>35</integer>
       <key>public.kern2.u</key>
-      <integer>55</integer>
+      <integer>40</integer>
       <key>public.kern2.v</key>
-      <integer>55</integer>
+      <integer>40</integer>
       <key>public.kern2.w</key>
-      <integer>55</integer>
+      <integer>40</integer>
       <key>public.kern2.x</key>
       <integer>55</integer>
+      <key>public.kern2.x.archaic</key>
+      <integer>45</integer>
       <key>public.kern2.y</key>
-      <integer>55</integer>
+      <integer>40</integer>
       <key>public.kern2.y.alt</key>
-      <integer>90</integer>
+      <integer>5</integer>
+      <key>public.kern2.z</key>
+      <integer>60</integer>
     </dict>
     <key>public.kern1.g</key>
     <dict>
       <key>public.kern2.a</key>
-      <integer>15</integer>
-      <key>public.kern2.b</key>
       <integer>10</integer>
+      <key>public.kern2.b</key>
+      <integer>5</integer>
       <key>public.kern2.c</key>
       <integer>10</integer>
       <key>public.kern2.d</key>
       <integer>20</integer>
       <key>public.kern2.e</key>
-      <integer>10</integer>
+      <integer>5</integer>
       <key>public.kern2.f</key>
-      <integer>65</integer>
+      <integer>75</integer>
       <key>public.kern2.g</key>
       <integer>80</integer>
       <key>public.kern2.h</key>
-      <integer>10</integer>
+      <integer>5</integer>
       <key>public.kern2.i</key>
       <integer>35</integer>
       <key>public.kern2.j</key>
       <integer>35</integer>
       <key>public.kern2.k</key>
-      <integer>10</integer>
+      <integer>5</integer>
       <key>public.kern2.l</key>
-      <integer>10</integer>
+      <integer>5</integer>
       <key>public.kern2.longs</key>
       <integer>55</integer>
       <key>public.kern2.m</key>
@@ -364,14 +380,12 @@
       <integer>15</integer>
       <key>public.kern2.p</key>
       <integer>80</integer>
-      <key>public.kern2.q</key>
-      <integer>5</integer>
       <key>public.kern2.r</key>
       <integer>35</integer>
       <key>public.kern2.s</key>
-      <integer>55</integer>
+      <integer>50</integer>
       <key>public.kern2.t</key>
-      <integer>15</integer>
+      <integer>10</integer>
       <key>public.kern2.u</key>
       <integer>35</integer>
       <key>public.kern2.v</key>
@@ -379,20 +393,20 @@
       <key>public.kern2.w</key>
       <integer>35</integer>
       <key>public.kern2.x</key>
-      <integer>40</integer>
+      <integer>45</integer>
+      <key>public.kern2.x.archaic</key>
+      <integer>35</integer>
       <key>public.kern2.y</key>
       <integer>75</integer>
       <key>public.kern2.y.alt</key>
       <integer>120</integer>
       <key>public.kern2.z</key>
-      <integer>110</integer>
+      <integer>80</integer>
     </dict>
     <key>public.kern1.h</key>
     <dict>
-      <key>public.kern2.a</key>
-      <integer>5</integer>
       <key>public.kern2.f</key>
-      <integer>135</integer>
+      <integer>145</integer>
       <key>public.kern2.g</key>
       <integer>135</integer>
       <key>public.kern2.i</key>
@@ -409,8 +423,6 @@
       <integer>30</integer>
       <key>public.kern2.r</key>
       <integer>30</integer>
-      <key>public.kern2.s</key>
-      <integer>5</integer>
       <key>public.kern2.u</key>
       <integer>15</integer>
       <key>public.kern2.v</key>
@@ -418,18 +430,20 @@
       <key>public.kern2.w</key>
       <integer>15</integer>
       <key>public.kern2.x</key>
-      <integer>90</integer>
+      <integer>25</integer>
+      <key>public.kern2.x.archaic</key>
+      <integer>130</integer>
       <key>public.kern2.y</key>
       <integer>150</integer>
       <key>public.kern2.y.alt</key>
       <integer>75</integer>
       <key>public.kern2.z</key>
-      <integer>60</integer>
+      <integer>35</integer>
     </dict>
     <key>public.kern1.i</key>
     <dict>
       <key>public.kern2.a</key>
-      <integer>60</integer>
+      <integer>55</integer>
       <key>public.kern2.b</key>
       <integer>30</integer>
       <key>public.kern2.c</key>
@@ -439,7 +453,7 @@
       <key>public.kern2.e</key>
       <integer>35</integer>
       <key>public.kern2.f</key>
-      <integer>50</integer>
+      <integer>25</integer>
       <key>public.kern2.g</key>
       <integer>40</integer>
       <key>public.kern2.h</key>
@@ -453,13 +467,13 @@
       <key>public.kern2.l</key>
       <integer>30</integer>
       <key>public.kern2.longs</key>
-      <integer>30</integer>
+      <integer>35</integer>
       <key>public.kern2.m</key>
       <integer>15</integer>
       <key>public.kern2.n</key>
       <integer>15</integer>
       <key>public.kern2.o</key>
-      <integer>45</integer>
+      <integer>40</integer>
       <key>public.kern2.p</key>
       <integer>55</integer>
       <key>public.kern2.q</key>
@@ -467,7 +481,7 @@
       <key>public.kern2.r</key>
       <integer>15</integer>
       <key>public.kern2.s</key>
-      <integer>40</integer>
+      <integer>35</integer>
       <key>public.kern2.t</key>
       <integer>25</integer>
       <key>public.kern2.u</key>
@@ -477,20 +491,22 @@
       <key>public.kern2.w</key>
       <integer>15</integer>
       <key>public.kern2.x</key>
-      <integer>20</integer>
+      <integer>35</integer>
+      <key>public.kern2.x.archaic</key>
+      <integer>10</integer>
       <key>public.kern2.y</key>
       <integer>15</integer>
       <key>public.kern2.y.alt</key>
       <integer>90</integer>
       <key>public.kern2.z</key>
-      <integer>50</integer>
+      <integer>60</integer>
     </dict>
     <key>public.kern1.j</key>
     <dict>
       <key>public.kern2.a</key>
       <integer>5</integer>
       <key>public.kern2.f</key>
-      <integer>65</integer>
+      <integer>45</integer>
       <key>public.kern2.i</key>
       <integer>20</integer>
       <key>public.kern2.j</key>
@@ -506,26 +522,28 @@
       <key>public.kern2.r</key>
       <integer>30</integer>
       <key>public.kern2.u</key>
-      <integer>10</integer>
+      <integer>15</integer>
       <key>public.kern2.v</key>
       <integer>10</integer>
       <key>public.kern2.w</key>
-      <integer>10</integer>
+      <integer>15</integer>
       <key>public.kern2.x</key>
+      <integer>25</integer>
+      <key>public.kern2.x.archaic</key>
       <integer>15</integer>
       <key>public.kern2.y</key>
-      <integer>10</integer>
+      <integer>15</integer>
       <key>public.kern2.y.alt</key>
-      <integer>65</integer>
+      <integer>70</integer>
       <key>public.kern2.z</key>
-      <integer>50</integer>
+      <integer>30</integer>
     </dict>
     <key>public.kern1.k</key>
     <dict>
       <key>public.kern2.a</key>
       <integer>60</integer>
       <key>public.kern2.b</key>
-      <integer>35</integer>
+      <integer>30</integer>
       <key>public.kern2.c</key>
       <integer>40</integer>
       <key>public.kern2.d</key>
@@ -533,19 +551,19 @@
       <key>public.kern2.e</key>
       <integer>40</integer>
       <key>public.kern2.f</key>
-      <integer>10</integer>
+      <integer>20</integer>
       <key>public.kern2.g</key>
-      <integer>45</integer>
+      <integer>40</integer>
       <key>public.kern2.h</key>
-      <integer>35</integer>
+      <integer>30</integer>
       <key>public.kern2.i</key>
       <integer>25</integer>
       <key>public.kern2.j</key>
       <integer>25</integer>
       <key>public.kern2.k</key>
-      <integer>35</integer>
+      <integer>30</integer>
       <key>public.kern2.l</key>
-      <integer>35</integer>
+      <integer>30</integer>
       <key>public.kern2.longs</key>
       <integer>50</integer>
       <key>public.kern2.m</key>
@@ -557,13 +575,13 @@
       <key>public.kern2.p</key>
       <integer>55</integer>
       <key>public.kern2.q</key>
-      <integer>45</integer>
+      <integer>40</integer>
       <key>public.kern2.r</key>
       <integer>30</integer>
       <key>public.kern2.s</key>
       <integer>40</integer>
       <key>public.kern2.t</key>
-      <integer>30</integer>
+      <integer>25</integer>
       <key>public.kern2.u</key>
       <integer>20</integer>
       <key>public.kern2.v</key>
@@ -571,46 +589,48 @@
       <key>public.kern2.w</key>
       <integer>20</integer>
       <key>public.kern2.x</key>
-      <integer>20</integer>
+      <integer>40</integer>
+      <key>public.kern2.x.archaic</key>
+      <integer>15</integer>
       <key>public.kern2.y</key>
       <integer>20</integer>
       <key>public.kern2.y.alt</key>
       <integer>95</integer>
       <key>public.kern2.z</key>
-      <integer>55</integer>
+      <integer>60</integer>
     </dict>
     <key>public.kern1.l</key>
     <dict>
       <key>public.kern2.a</key>
-      <integer>55</integer>
+      <integer>50</integer>
       <key>public.kern2.b</key>
-      <integer>30</integer>
+      <integer>25</integer>
       <key>public.kern2.c</key>
-      <integer>35</integer>
-      <key>public.kern2.d</key>
       <integer>30</integer>
+      <key>public.kern2.d</key>
+      <integer>25</integer>
       <key>public.kern2.e</key>
-      <integer>35</integer>
+      <integer>30</integer>
       <key>public.kern2.f</key>
-      <integer>45</integer>
+      <integer>20</integer>
       <key>public.kern2.g</key>
       <integer>35</integer>
       <key>public.kern2.h</key>
-      <integer>30</integer>
+      <integer>25</integer>
       <key>public.kern2.i</key>
       <integer>15</integer>
       <key>public.kern2.j</key>
       <integer>15</integer>
       <key>public.kern2.k</key>
-      <integer>30</integer>
+      <integer>25</integer>
       <key>public.kern2.l</key>
-      <integer>30</integer>
+      <integer>25</integer>
       <key>public.kern2.longs</key>
       <integer>30</integer>
       <key>public.kern2.m</key>
-      <integer>15</integer>
+      <integer>10</integer>
       <key>public.kern2.n</key>
-      <integer>15</integer>
+      <integer>10</integer>
       <key>public.kern2.o</key>
       <integer>40</integer>
       <key>public.kern2.p</key>
@@ -620,30 +640,32 @@
       <key>public.kern2.r</key>
       <integer>10</integer>
       <key>public.kern2.s</key>
-      <integer>35</integer>
+      <integer>30</integer>
       <key>public.kern2.t</key>
-      <integer>25</integer>
+      <integer>20</integer>
       <key>public.kern2.u</key>
-      <integer>15</integer>
+      <integer>10</integer>
       <key>public.kern2.v</key>
-      <integer>15</integer>
+      <integer>10</integer>
       <key>public.kern2.w</key>
       <integer>15</integer>
       <key>public.kern2.x</key>
-      <integer>15</integer>
+      <integer>30</integer>
+      <key>public.kern2.x.archaic</key>
+      <integer>5</integer>
       <key>public.kern2.y</key>
       <integer>15</integer>
       <key>public.kern2.y.alt</key>
       <integer>85</integer>
       <key>public.kern2.z</key>
-      <integer>45</integer>
+      <integer>55</integer>
     </dict>
     <key>public.kern1.longs</key>
     <dict>
       <key>public.kern2.b</key>
       <integer>145</integer>
       <key>public.kern2.f</key>
-      <integer>100</integer>
+      <integer>140</integer>
       <key>public.kern2.h</key>
       <integer>145</integer>
       <key>public.kern2.i</key>
@@ -663,9 +685,9 @@
       <key>public.kern2.p</key>
       <integer>20</integer>
       <key>public.kern2.r</key>
-      <integer>20</integer>
+      <integer>25</integer>
       <key>public.kern2.t</key>
-      <integer>95</integer>
+      <integer>90</integer>
       <key>public.kern2.u</key>
       <integer>10</integer>
       <key>public.kern2.v</key>
@@ -673,20 +695,22 @@
       <key>public.kern2.w</key>
       <integer>10</integer>
       <key>public.kern2.x</key>
+      <integer>20</integer>
+      <key>public.kern2.x.archaic</key>
       <integer>10</integer>
       <key>public.kern2.y</key>
       <integer>10</integer>
       <key>public.kern2.y.alt</key>
-      <integer>60</integer>
+      <integer>65</integer>
       <key>public.kern2.z</key>
-      <integer>45</integer>
+      <integer>20</integer>
     </dict>
     <key>public.kern1.m</key>
     <dict>
       <key>public.kern2.a</key>
       <integer>55</integer>
       <key>public.kern2.b</key>
-      <integer>30</integer>
+      <integer>25</integer>
       <key>public.kern2.c</key>
       <integer>35</integer>
       <key>public.kern2.d</key>
@@ -694,19 +718,19 @@
       <key>public.kern2.e</key>
       <integer>35</integer>
       <key>public.kern2.f</key>
-      <integer>50</integer>
+      <integer>25</integer>
       <key>public.kern2.g</key>
       <integer>40</integer>
       <key>public.kern2.h</key>
-      <integer>30</integer>
+      <integer>25</integer>
       <key>public.kern2.i</key>
       <integer>20</integer>
       <key>public.kern2.j</key>
       <integer>20</integer>
       <key>public.kern2.k</key>
-      <integer>30</integer>
+      <integer>25</integer>
       <key>public.kern2.l</key>
-      <integer>30</integer>
+      <integer>25</integer>
       <key>public.kern2.longs</key>
       <integer>30</integer>
       <key>public.kern2.m</key>
@@ -732,13 +756,15 @@
       <key>public.kern2.w</key>
       <integer>15</integer>
       <key>public.kern2.x</key>
-      <integer>15</integer>
+      <integer>35</integer>
+      <key>public.kern2.x.archaic</key>
+      <integer>10</integer>
       <key>public.kern2.y</key>
       <integer>15</integer>
       <key>public.kern2.y.alt</key>
       <integer>90</integer>
       <key>public.kern2.z</key>
-      <integer>50</integer>
+      <integer>55</integer>
     </dict>
     <key>public.kern1.n</key>
     <dict>
@@ -753,7 +779,7 @@
       <key>public.kern2.e</key>
       <integer>35</integer>
       <key>public.kern2.f</key>
-      <integer>50</integer>
+      <integer>25</integer>
       <key>public.kern2.g</key>
       <integer>40</integer>
       <key>public.kern2.h</key>
@@ -773,7 +799,7 @@
       <key>public.kern2.n</key>
       <integer>15</integer>
       <key>public.kern2.o</key>
-      <integer>45</integer>
+      <integer>40</integer>
       <key>public.kern2.p</key>
       <integer>55</integer>
       <key>public.kern2.q</key>
@@ -791,13 +817,15 @@
       <key>public.kern2.w</key>
       <integer>15</integer>
       <key>public.kern2.x</key>
-      <integer>20</integer>
+      <integer>35</integer>
+      <key>public.kern2.x.archaic</key>
+      <integer>10</integer>
       <key>public.kern2.y</key>
       <integer>15</integer>
       <key>public.kern2.y.alt</key>
       <integer>90</integer>
       <key>public.kern2.z</key>
-      <integer>50</integer>
+      <integer>60</integer>
     </dict>
     <key>public.kern1.o</key>
     <dict>
@@ -806,7 +834,7 @@
       <key>public.kern2.d</key>
       <integer>5</integer>
       <key>public.kern2.f</key>
-      <integer>70</integer>
+      <integer>50</integer>
       <key>public.kern2.i</key>
       <integer>30</integer>
       <key>public.kern2.j</key>
@@ -820,8 +848,10 @@
       <key>public.kern2.p</key>
       <integer>15</integer>
       <key>public.kern2.r</key>
-      <integer>35</integer>
+      <integer>40</integer>
       <key>public.kern2.s</key>
+      <integer>5</integer>
+      <key>public.kern2.t</key>
       <integer>5</integer>
       <key>public.kern2.u</key>
       <integer>20</integer>
@@ -830,30 +860,32 @@
       <key>public.kern2.w</key>
       <integer>20</integer>
       <key>public.kern2.x</key>
+      <integer>30</integer>
+      <key>public.kern2.x.archaic</key>
       <integer>20</integer>
       <key>public.kern2.y</key>
       <integer>20</integer>
       <key>public.kern2.y.alt</key>
       <integer>20</integer>
       <key>public.kern2.z</key>
-      <integer>45</integer>
+      <integer>10</integer>
     </dict>
     <key>public.kern1.p</key>
     <dict>
       <key>public.kern2.a</key>
-      <integer>10</integer>
+      <integer>5</integer>
       <key>public.kern2.d</key>
       <integer>5</integer>
       <key>public.kern2.f</key>
-      <integer>65</integer>
+      <integer>45</integer>
       <key>public.kern2.i</key>
       <integer>30</integer>
       <key>public.kern2.j</key>
-      <integer>25</integer>
+      <integer>30</integer>
       <key>public.kern2.longs</key>
       <integer>50</integer>
       <key>public.kern2.m</key>
-      <integer>30</integer>
+      <integer>35</integer>
       <key>public.kern2.n</key>
       <integer>30</integer>
       <key>public.kern2.p</key>
@@ -867,20 +899,22 @@
       <key>public.kern2.w</key>
       <integer>20</integer>
       <key>public.kern2.x</key>
+      <integer>30</integer>
+      <key>public.kern2.x.archaic</key>
       <integer>20</integer>
       <key>public.kern2.y</key>
       <integer>20</integer>
       <key>public.kern2.y.alt</key>
       <integer>15</integer>
       <key>public.kern2.z</key>
-      <integer>45</integer>
+      <integer>5</integer>
     </dict>
     <key>public.kern1.q</key>
     <dict>
       <key>public.kern2.a</key>
       <integer>5</integer>
       <key>public.kern2.f</key>
-      <integer>130</integer>
+      <integer>140</integer>
       <key>public.kern2.g</key>
       <integer>70</integer>
       <key>public.kern2.i</key>
@@ -888,15 +922,15 @@
       <key>public.kern2.j</key>
       <integer>120</integer>
       <key>public.kern2.longs</key>
-      <integer>105</integer>
+      <integer>110</integer>
       <key>public.kern2.m</key>
-      <integer>25</integer>
+      <integer>30</integer>
       <key>public.kern2.n</key>
       <integer>25</integer>
       <key>public.kern2.p</key>
       <integer>35</integer>
       <key>public.kern2.r</key>
-      <integer>25</integer>
+      <integer>30</integer>
       <key>public.kern2.s</key>
       <integer>5</integer>
       <key>public.kern2.u</key>
@@ -906,13 +940,15 @@
       <key>public.kern2.w</key>
       <integer>5</integer>
       <key>public.kern2.x</key>
+      <integer>20</integer>
+      <key>public.kern2.x.archaic</key>
       <integer>120</integer>
       <key>public.kern2.y</key>
       <integer>120</integer>
       <key>public.kern2.y.alt</key>
-      <integer>75</integer>
+      <integer>80</integer>
       <key>public.kern2.z</key>
-      <integer>60</integer>
+      <integer>35</integer>
     </dict>
     <key>public.kern1.r</key>
     <dict>
@@ -927,7 +963,7 @@
       <key>public.kern2.e</key>
       <integer>40</integer>
       <key>public.kern2.f</key>
-      <integer>20</integer>
+      <integer>15</integer>
       <key>public.kern2.g</key>
       <integer>45</integer>
       <key>public.kern2.h</key>
@@ -945,7 +981,7 @@
       <key>public.kern2.m</key>
       <integer>90</integer>
       <key>public.kern2.n</key>
-      <integer>85</integer>
+      <integer>90</integer>
       <key>public.kern2.o</key>
       <integer>10</integer>
       <key>public.kern2.p</key>
@@ -957,21 +993,23 @@
       <key>public.kern2.s</key>
       <integer>30</integer>
       <key>public.kern2.t</key>
-      <integer>30</integer>
+      <integer>55</integer>
       <key>public.kern2.u</key>
-      <integer>60</integer>
+      <integer>65</integer>
       <key>public.kern2.v</key>
       <integer>60</integer>
       <key>public.kern2.w</key>
-      <integer>60</integer>
+      <integer>65</integer>
       <key>public.kern2.x</key>
+      <integer>75</integer>
+      <key>public.kern2.x.archaic</key>
       <integer>65</integer>
       <key>public.kern2.y</key>
-      <integer>60</integer>
+      <integer>65</integer>
       <key>public.kern2.y.alt</key>
       <integer>55</integer>
       <key>public.kern2.z</key>
-      <integer>95</integer>
+      <integer>25</integer>
     </dict>
     <key>public.kern1.s</key>
     <dict>
@@ -984,23 +1022,23 @@
       <key>public.kern2.e</key>
       <integer>5</integer>
       <key>public.kern2.f</key>
-      <integer>70</integer>
+      <integer>35</integer>
       <key>public.kern2.g</key>
       <integer>10</integer>
       <key>public.kern2.i</key>
-      <integer>30</integer>
+      <integer>35</integer>
       <key>public.kern2.j</key>
-      <integer>30</integer>
+      <integer>35</integer>
       <key>public.kern2.longs</key>
       <integer>45</integer>
       <key>public.kern2.m</key>
       <integer>35</integer>
       <key>public.kern2.n</key>
-      <integer>30</integer>
+      <integer>35</integer>
       <key>public.kern2.o</key>
       <integer>10</integer>
       <key>public.kern2.p</key>
-      <integer>10</integer>
+      <integer>15</integer>
       <key>public.kern2.q</key>
       <integer>10</integer>
       <key>public.kern2.r</key>
@@ -1008,21 +1046,23 @@
       <key>public.kern2.s</key>
       <integer>20</integer>
       <key>public.kern2.t</key>
-      <integer>5</integer>
+      <integer>10</integer>
       <key>public.kern2.u</key>
       <integer>30</integer>
       <key>public.kern2.v</key>
-      <integer>25</integer>
+      <integer>30</integer>
       <key>public.kern2.w</key>
       <integer>30</integer>
       <key>public.kern2.x</key>
+      <integer>40</integer>
+      <key>public.kern2.x.archaic</key>
       <integer>30</integer>
       <key>public.kern2.y</key>
       <integer>30</integer>
       <key>public.kern2.y.alt</key>
       <integer>10</integer>
       <key>public.kern2.z</key>
-      <integer>45</integer>
+      <integer>25</integer>
     </dict>
     <key>public.kern1.t</key>
     <dict>
@@ -1035,17 +1075,17 @@
       <key>public.kern2.d</key>
       <integer>25</integer>
       <key>public.kern2.e</key>
-      <integer>30</integer>
+      <integer>25</integer>
       <key>public.kern2.f</key>
-      <integer>40</integer>
+      <integer>20</integer>
       <key>public.kern2.g</key>
       <integer>30</integer>
       <key>public.kern2.h</key>
       <integer>20</integer>
       <key>public.kern2.i</key>
-      <integer>10</integer>
+      <integer>20</integer>
       <key>public.kern2.j</key>
-      <integer>10</integer>
+      <integer>20</integer>
       <key>public.kern2.k</key>
       <integer>20</integer>
       <key>public.kern2.l</key>
@@ -1053,9 +1093,9 @@
       <key>public.kern2.longs</key>
       <integer>25</integer>
       <key>public.kern2.m</key>
-      <integer>10</integer>
+      <integer>15</integer>
       <key>public.kern2.n</key>
-      <integer>10</integer>
+      <integer>15</integer>
       <key>public.kern2.o</key>
       <integer>35</integer>
       <key>public.kern2.p</key>
@@ -1063,25 +1103,27 @@
       <key>public.kern2.q</key>
       <integer>30</integer>
       <key>public.kern2.r</key>
-      <integer>5</integer>
+      <integer>15</integer>
       <key>public.kern2.s</key>
       <integer>30</integer>
       <key>public.kern2.t</key>
-      <integer>20</integer>
+      <integer>15</integer>
       <key>public.kern2.u</key>
-      <integer>10</integer>
+      <integer>15</integer>
       <key>public.kern2.v</key>
-      <integer>10</integer>
+      <integer>15</integer>
       <key>public.kern2.w</key>
-      <integer>10</integer>
+      <integer>15</integer>
       <key>public.kern2.x</key>
-      <integer>10</integer>
+      <integer>30</integer>
+      <key>public.kern2.x.archaic</key>
+      <integer>15</integer>
       <key>public.kern2.y</key>
-      <integer>10</integer>
+      <integer>15</integer>
       <key>public.kern2.y.alt</key>
-      <integer>80</integer>
+      <integer>85</integer>
       <key>public.kern2.z</key>
-      <integer>40</integer>
+      <integer>50</integer>
     </dict>
     <key>public.kern1.u</key>
     <dict>
@@ -1096,7 +1138,7 @@
       <key>public.kern2.e</key>
       <integer>35</integer>
       <key>public.kern2.f</key>
-      <integer>50</integer>
+      <integer>25</integer>
       <key>public.kern2.g</key>
       <integer>40</integer>
       <key>public.kern2.h</key>
@@ -1116,7 +1158,7 @@
       <key>public.kern2.n</key>
       <integer>15</integer>
       <key>public.kern2.o</key>
-      <integer>45</integer>
+      <integer>40</integer>
       <key>public.kern2.p</key>
       <integer>55</integer>
       <key>public.kern2.q</key>
@@ -1134,13 +1176,15 @@
       <key>public.kern2.w</key>
       <integer>15</integer>
       <key>public.kern2.x</key>
-      <integer>20</integer>
+      <integer>35</integer>
+      <key>public.kern2.x.archaic</key>
+      <integer>10</integer>
       <key>public.kern2.y</key>
       <integer>15</integer>
       <key>public.kern2.y.alt</key>
       <integer>90</integer>
       <key>public.kern2.z</key>
-      <integer>50</integer>
+      <integer>60</integer>
     </dict>
     <key>public.kern1.v</key>
     <dict>
@@ -1149,35 +1193,39 @@
       <key>public.kern2.d</key>
       <integer>5</integer>
       <key>public.kern2.f</key>
-      <integer>65</integer>
+      <integer>45</integer>
       <key>public.kern2.i</key>
       <integer>30</integer>
       <key>public.kern2.j</key>
       <integer>30</integer>
       <key>public.kern2.longs</key>
-      <integer>50</integer>
+      <integer>55</integer>
       <key>public.kern2.m</key>
       <integer>35</integer>
       <key>public.kern2.n</key>
-      <integer>30</integer>
+      <integer>35</integer>
       <key>public.kern2.p</key>
-      <integer>10</integer>
+      <integer>15</integer>
       <key>public.kern2.r</key>
       <integer>35</integer>
+      <key>public.kern2.t</key>
+      <integer>5</integer>
       <key>public.kern2.u</key>
-      <integer>20</integer>
+      <integer>25</integer>
       <key>public.kern2.v</key>
       <integer>20</integer>
       <key>public.kern2.w</key>
-      <integer>20</integer>
+      <integer>25</integer>
       <key>public.kern2.x</key>
+      <integer>35</integer>
+      <key>public.kern2.x.archaic</key>
       <integer>25</integer>
       <key>public.kern2.y</key>
-      <integer>20</integer>
+      <integer>25</integer>
       <key>public.kern2.y.alt</key>
-      <integer>15</integer>
+      <integer>20</integer>
       <key>public.kern2.z</key>
-      <integer>45</integer>
+      <integer>5</integer>
     </dict>
     <key>public.kern1.w</key>
     <dict>
@@ -1186,103 +1234,170 @@
       <key>public.kern2.d</key>
       <integer>5</integer>
       <key>public.kern2.f</key>
-      <integer>65</integer>
+      <integer>45</integer>
       <key>public.kern2.i</key>
       <integer>30</integer>
       <key>public.kern2.j</key>
       <integer>30</integer>
       <key>public.kern2.longs</key>
-      <integer>50</integer>
+      <integer>55</integer>
       <key>public.kern2.m</key>
       <integer>35</integer>
       <key>public.kern2.n</key>
-      <integer>30</integer>
+      <integer>35</integer>
       <key>public.kern2.p</key>
-      <integer>10</integer>
+      <integer>15</integer>
       <key>public.kern2.r</key>
       <integer>35</integer>
+      <key>public.kern2.t</key>
+      <integer>5</integer>
       <key>public.kern2.u</key>
-      <integer>20</integer>
+      <integer>25</integer>
       <key>public.kern2.v</key>
       <integer>20</integer>
       <key>public.kern2.w</key>
-      <integer>20</integer>
+      <integer>25</integer>
       <key>public.kern2.x</key>
+      <integer>35</integer>
+      <key>public.kern2.x.archaic</key>
       <integer>25</integer>
       <key>public.kern2.y</key>
-      <integer>20</integer>
+      <integer>25</integer>
       <key>public.kern2.y.alt</key>
-      <integer>15</integer>
+      <integer>20</integer>
       <key>public.kern2.z</key>
-      <integer>45</integer>
+      <integer>5</integer>
     </dict>
     <key>public.kern1.x</key>
     <dict>
+      <key>public.kern2.a</key>
+      <integer>65</integer>
       <key>public.kern2.b</key>
-      <integer>45</integer>
-      <key>public.kern2.c</key>
-      <integer>20</integer>
-      <key>public.kern2.d</key>
-      <integer>55</integer>
-      <key>public.kern2.e</key>
       <integer>40</integer>
-      <key>public.kern2.f</key>
-      <integer>10</integer>
-      <key>public.kern2.g</key>
-      <integer>25</integer>
-      <key>public.kern2.h</key>
+      <key>public.kern2.c</key>
       <integer>45</integer>
+      <key>public.kern2.d</key>
+      <integer>40</integer>
+      <key>public.kern2.e</key>
+      <integer>45</integer>
+      <key>public.kern2.f</key>
+      <integer>25</integer>
+      <key>public.kern2.g</key>
+      <integer>50</integer>
+      <key>public.kern2.h</key>
+      <integer>40</integer>
+      <key>public.kern2.i</key>
+      <integer>40</integer>
+      <key>public.kern2.j</key>
+      <integer>40</integer>
+      <key>public.kern2.k</key>
+      <integer>40</integer>
+      <key>public.kern2.l</key>
+      <integer>40</integer>
+      <key>public.kern2.longs</key>
+      <integer>45</integer>
+      <key>public.kern2.m</key>
+      <integer>35</integer>
+      <key>public.kern2.n</key>
+      <integer>35</integer>
+      <key>public.kern2.o</key>
+      <integer>50</integer>
+      <key>public.kern2.p</key>
+      <integer>65</integer>
+      <key>public.kern2.q</key>
+      <integer>50</integer>
+      <key>public.kern2.r</key>
+      <integer>40</integer>
+      <key>public.kern2.s</key>
+      <integer>45</integer>
+      <key>public.kern2.t</key>
+      <integer>35</integer>
+      <key>public.kern2.u</key>
+      <integer>35</integer>
+      <key>public.kern2.v</key>
+      <integer>35</integer>
+      <key>public.kern2.w</key>
+      <integer>35</integer>
+      <key>public.kern2.x</key>
+      <integer>50</integer>
+      <key>public.kern2.x.archaic</key>
+      <integer>40</integer>
+      <key>public.kern2.y</key>
+      <integer>35</integer>
+      <key>public.kern2.y.alt</key>
+      <integer>100</integer>
+      <key>public.kern2.z</key>
+      <integer>70</integer>
+    </dict>
+    <key>public.kern1.x.archaic</key>
+    <dict>
+      <key>public.kern2.b</key>
+      <integer>25</integer>
+      <key>public.kern2.c</key>
+      <integer>25</integer>
+      <key>public.kern2.d</key>
+      <integer>50</integer>
+      <key>public.kern2.e</key>
+      <integer>35</integer>
+      <key>public.kern2.f</key>
+      <integer>25</integer>
+      <key>public.kern2.g</key>
+      <integer>30</integer>
+      <key>public.kern2.h</key>
+      <integer>25</integer>
       <key>public.kern2.i</key>
       <integer>80</integer>
       <key>public.kern2.j</key>
       <integer>80</integer>
       <key>public.kern2.k</key>
-      <integer>45</integer>
+      <integer>25</integer>
       <key>public.kern2.l</key>
-      <integer>45</integer>
+      <integer>25</integer>
       <key>public.kern2.longs</key>
-      <integer>70</integer>
+      <integer>80</integer>
       <key>public.kern2.m</key>
-      <integer>75</integer>
+      <integer>80</integer>
       <key>public.kern2.n</key>
-      <integer>75</integer>
+      <integer>80</integer>
       <key>public.kern2.p</key>
-      <integer>45</integer>
+      <integer>50</integer>
       <key>public.kern2.q</key>
-      <integer>20</integer>
+      <integer>25</integer>
       <key>public.kern2.r</key>
-      <integer>70</integer>
+      <integer>80</integer>
       <key>public.kern2.s</key>
       <integer>15</integer>
       <key>public.kern2.t</key>
-      <integer>60</integer>
+      <integer>55</integer>
       <key>public.kern2.u</key>
-      <integer>75</integer>
+      <integer>65</integer>
       <key>public.kern2.v</key>
-      <integer>75</integer>
+      <integer>65</integer>
       <key>public.kern2.w</key>
-      <integer>75</integer>
+      <integer>65</integer>
       <key>public.kern2.x</key>
-      <integer>75</integer>
+      <integer>80</integer>
+      <key>public.kern2.x.archaic</key>
+      <integer>70</integer>
       <key>public.kern2.y</key>
-      <integer>75</integer>
+      <integer>65</integer>
       <key>public.kern2.y.alt</key>
       <integer>55</integer>
       <key>public.kern2.z</key>
-      <integer>85</integer>
+      <integer>20</integer>
     </dict>
     <key>public.kern1.y</key>
     <dict>
       <key>public.kern2.a</key>
       <integer>5</integer>
       <key>public.kern2.f</key>
-      <integer>65</integer>
+      <integer>40</integer>
       <key>public.kern2.i</key>
       <integer>25</integer>
       <key>public.kern2.j</key>
       <integer>25</integer>
       <key>public.kern2.longs</key>
-      <integer>45</integer>
+      <integer>50</integer>
       <key>public.kern2.m</key>
       <integer>30</integer>
       <key>public.kern2.n</key>
@@ -1292,19 +1407,21 @@
       <key>public.kern2.r</key>
       <integer>30</integer>
       <key>public.kern2.u</key>
-      <integer>15</integer>
+      <integer>20</integer>
       <key>public.kern2.v</key>
       <integer>15</integer>
       <key>public.kern2.w</key>
-      <integer>15</integer>
+      <integer>20</integer>
       <key>public.kern2.x</key>
+      <integer>30</integer>
+      <key>public.kern2.x.archaic</key>
       <integer>20</integer>
       <key>public.kern2.y</key>
-      <integer>15</integer>
+      <integer>20</integer>
       <key>public.kern2.y.alt</key>
-      <integer>40</integer>
+      <integer>45</integer>
       <key>public.kern2.z</key>
-      <integer>40</integer>
+      <integer>5</integer>
     </dict>
     <key>public.kern1.y.alt</key>
     <dict>
@@ -1317,7 +1434,7 @@
       <key>public.kern2.e</key>
       <integer>5</integer>
       <key>public.kern2.f</key>
-      <integer>85</integer>
+      <integer>60</integer>
       <key>public.kern2.g</key>
       <integer>10</integer>
       <key>public.kern2.i</key>
@@ -1327,7 +1444,7 @@
       <key>public.kern2.longs</key>
       <integer>70</integer>
       <key>public.kern2.m</key>
-      <integer>45</integer>
+      <integer>50</integer>
       <key>public.kern2.n</key>
       <integer>45</integer>
       <key>public.kern2.o</key>
@@ -1337,82 +1454,70 @@
       <key>public.kern2.q</key>
       <integer>10</integer>
       <key>public.kern2.r</key>
-      <integer>45</integer>
+      <integer>50</integer>
       <key>public.kern2.s</key>
       <integer>20</integer>
       <key>public.kern2.t</key>
-      <integer>5</integer>
+      <integer>15</integer>
       <key>public.kern2.u</key>
-      <integer>30</integer>
+      <integer>35</integer>
       <key>public.kern2.v</key>
       <integer>30</integer>
       <key>public.kern2.w</key>
-      <integer>30</integer>
+      <integer>35</integer>
       <key>public.kern2.x</key>
+      <integer>45</integer>
+      <key>public.kern2.x.archaic</key>
       <integer>35</integer>
       <key>public.kern2.y</key>
-      <integer>30</integer>
+      <integer>35</integer>
       <key>public.kern2.y.alt</key>
       <integer>35</integer>
       <key>public.kern2.z</key>
-      <integer>55</integer>
+      <integer>25</integer>
     </dict>
     <key>public.kern1.z</key>
     <dict>
       <key>public.kern2.a</key>
-      <integer>45</integer>
-      <key>public.kern2.b</key>
-      <integer>10</integer>
-      <key>public.kern2.c</key>
       <integer>20</integer>
       <key>public.kern2.d</key>
       <integer>15</integer>
-      <key>public.kern2.e</key>
-      <integer>20</integer>
-      <key>public.kern2.g</key>
-      <integer>25</integer>
-      <key>public.kern2.h</key>
-      <integer>10</integer>
+      <key>public.kern2.f</key>
+      <integer>30</integer>
       <key>public.kern2.i</key>
-      <integer>30</integer>
-      <key>public.kern2.j</key>
-      <integer>30</integer>
-      <key>public.kern2.k</key>
-      <integer>10</integer>
-      <key>public.kern2.l</key>
-      <integer>10</integer>
-      <key>public.kern2.longs</key>
       <integer>35</integer>
+      <key>public.kern2.j</key>
+      <integer>35</integer>
+      <key>public.kern2.longs</key>
+      <integer>45</integer>
       <key>public.kern2.m</key>
-      <integer>30</integer>
+      <integer>35</integer>
       <key>public.kern2.n</key>
-      <integer>30</integer>
-      <key>public.kern2.o</key>
-      <integer>25</integer>
+      <integer>35</integer>
       <key>public.kern2.p</key>
-      <integer>25</integer>
-      <key>public.kern2.q</key>
-      <integer>20</integer>
+      <integer>15</integer>
       <key>public.kern2.r</key>
-      <integer>30</integer>
+      <integer>35</integer>
       <key>public.kern2.s</key>
-      <integer>25</integer>
+      <integer>10</integer>
       <key>public.kern2.t</key>
       <integer>10</integer>
       <key>public.kern2.u</key>
-      <integer>30</integer>
+      <integer>35</integer>
       <key>public.kern2.v</key>
       <integer>30</integer>
       <key>public.kern2.w</key>
-      <integer>30</integer>
+      <integer>35</integer>
       <key>public.kern2.x</key>
-      <integer>30</integer>
+      <integer>45</integer>
+      <key>public.kern2.x.archaic</key>
+      <integer>35</integer>
       <key>public.kern2.y</key>
-      <integer>30</integer>
+      <integer>35</integer>
       <key>public.kern2.y.alt</key>
-      <integer>60</integer>
+      <integer>30</integer>
       <key>public.kern2.z</key>
-      <integer>55</integer>
+      <integer>15</integer>
     </dict>
   </dict>
 </plist>

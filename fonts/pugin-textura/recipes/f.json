@@ -2,7 +2,7 @@
  "glyph": "f",
  "unicode": "U+0066",
  "construction": "textura_letters.py: f",
- "description": "As the long s, with a crossbar at the x-height. Pugin's f loops over at the top and its tail\nruns on into a swash; plain, the arm ends in a point and the tail stops where it turns.",
+ "description": "As the long s, with a crossbar at the x-height. Pugin's f loops over at the top and its tail\nruns on into a swash; plain, the arm ends in a point and the tail stops where it turns.\nJosh has since drawn it himself over the built one (references/hand-drawn-f.svg; decision\n0014): the stem and tail as built, the top folding over and coming down on the right in a long\narm, a narrow slot open below it, and the crossbar lower and shorter on the left.",
  "measured": {
   "stem_x": 792.0,
   "stroke": {
@@ -53,14 +53,14 @@
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/f.png",
-  "when": "2026-10-29T21:42:40"
+  "when": "2026-10-30T10:04:05"
  },
  "fit": {
-  "mean_px": 31.25,
-  "p95_px": 112.7,
+  "mean_px": 35.45,
+  "p95_px": 127.17,
   "max_px": 172.58,
   "mean_px_fitted_alone": 30.74,
-  "segments": 47,
+  "segments": 44,
   "outline_checks_pass": true,
   "at_bounds": [
    "f:stroke.arm_end.x",

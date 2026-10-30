@@ -1,0 +1,9 @@
+{
+ "glyph": "z",
+ "scale": 0.9572,
+ "offset": [
+  1419.052,
+  3312.536
+ ],
+ "note": "hand-drawn-z.svg, Josh's own z (Josh: \"Also export the z, which I will hand-draw\", then \"the hand-drawn z is ready to go\"), drawn over references/export-z.svg and saved trimmed to the drawing. That export is in the letter's own frame, at the font's full height, with Pugin's z (drawn squeezed on the plate's second line) stretched up to it by the built z's fit (second_line). He redrew the whole letter, so no point of it stands where the built z's did: it was placed at one unit to the pixel where it overlaps that stretched z best (91%; offset 1418.718, 3302.445). So its peak stood 44 units above the other letters' heads; Josh: \"We actually need to scale it down - fix the bottom in place, and scale it down to the point it should be lowered to - we're slightly oversized.\" So it is scaled by 0.9572 about its lowest point, the tail's point, held at (1426.527, 3538.241), until its peak stands as far above the heads as Pugin's z stands above his y's heads on his line (6.5 px on a line 72% the height of the first: 9.0 px, about 21 units). A point (u, v) of it is (offset + scale * (u, v)), in the letter's frame; second_line maps it onto Pugin's z on the plate."
+}

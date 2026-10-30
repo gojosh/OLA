@@ -419,10 +419,10 @@
    "ink_area_px": 11823.3,
    "body_area_px": 13375
   },
-  "x": {
+  "x.archaic": {
    "char": "x",
-   "coverage": "references/x.png",
-   "body": "references/x.body.png",
+   "coverage": "references/x.archaic.png",
+   "body": "references/x.archaic.body.png",
    "box_flat_px": [
     2579,
     3303,

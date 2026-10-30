@@ -72,8 +72,6 @@
     <string>space.glif</string>
     <key>t</key>
     <string>t.glif</string>
-    <key>t.nospur</key>
-    <string>t.nospur.glif</string>
     <key>u</key>
     <string>u.glif</string>
     <key>u.nospur</key>
@@ -84,6 +82,10 @@
     <string>w.glif</string>
     <key>x</key>
     <string>x.glif</string>
+    <key>x.archaic</key>
+    <string>x.archaic.glif</string>
+    <key>x.nospur</key>
+    <string>x.nospur.glif</string>
     <key>y</key>
     <string>y.glif</string>
     <key>y.alt</key>

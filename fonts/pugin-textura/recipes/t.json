@@ -2,7 +2,7 @@
  "glyph": "t",
  "unicode": "U+0074",
  "construction": "textura_letters.py: t",
- "description": "A stem rising a little above the x-height, cut to a point by the nib, turning out at the foot,\nwith a short crossbar at the x-height.",
+ "description": "A stem rising a little above the x-height, cut to a point by the nib, turning out at the foot,\nwith a short crossbar at the x-height.\nJosh has since drawn it himself over the built one (references/hand-drawn-t.svg; decision\n0014): the stem and foot with its spur as built, and the crossbar ending on the right in a small\ncurled flag, as Pugin's does, and on the left in a short point.",
  "measured": {
   "stem_x": 2479.872,
   "bar": {
@@ -19,14 +19,14 @@
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/t.png",
-  "when": "2026-10-29T21:42:40"
+  "when": "2026-10-30T10:04:05"
  },
  "fit": {
-  "mean_px": 1.51,
-  "p95_px": 4.58,
-  "max_px": 9.36,
+  "mean_px": 1.14,
+  "p95_px": 3.02,
+  "max_px": 5.0,
   "mean_px_fitted_alone": 1.36,
-  "segments": 25,
+  "segments": 33,
   "outline_checks_pass": true,
   "at_bounds": []
  }

@@ -596,7 +596,12 @@ def r(p):
 
 def t(p):
     """A stem rising a little above the x-height, cut to a point by the nib, turning out at the foot,
-    with a short crossbar at the x-height."""
+    with a short crossbar at the x-height.
+    Josh has since drawn it himself over the built one (references/hand-drawn-t.svg; decision
+    0014): the stem and foot with its spur as built, and the crossbar ending on the right in a small
+    curled flag, as Pugin's does, and on the left in a short point."""
+    if OUTLINES.get("t"):               # drawn by Josh, outline and all
+        return {"strokes": drawn(OUTLINES["t"]), "baseline": baseline(p)}
     x, tp = p.x("stem_x", 2482, 12), p.fam("top")
     bar = path(p, "bar", [("left", x - 25, tp + 14, None), ("right", x + 30, tp + 2, None)])
     return {"strokes": [minim(p, x, head=0, top=p.x("stem_top", 3285, 20)), bar], "baseline": baseline(p)}
@@ -702,7 +707,12 @@ def longs(p):
 
 def f(p):
     """As the long s, with a crossbar at the x-height. Pugin's f loops over at the top and its tail
-    runs on into a swash; plain, the arm ends in a point and the tail stops where it turns."""
+    runs on into a swash; plain, the arm ends in a point and the tail stops where it turns.
+    Josh has since drawn it himself over the built one (references/hand-drawn-f.svg; decision
+    0014): the stem and tail as built, the top folding over and coming down on the right in a long
+    arm, a narrow slot open below it, and the crossbar lower and shorter on the left."""
+    if OUTLINES.get("f"):               # drawn by Josh, outline and all
+        return {"strokes": drawn(OUTLINES["f"]), "baseline": baseline(p)}
     x = p.x("stem_x", 792, 12)
     stroke = path(p, "stroke", [("arm_end", 858, 3262, 200), ("arm_top", 818, 3246, 180), ("stem_top", x, 3282, 90),
                                 ("stem_low", x - 6, 3556, 95), ("tail", 742, 3604, 160)], span=18)
@@ -794,7 +804,13 @@ def x(p):
     """A stem with its own head running down past the baseline and turning left at the descender
     line, a short flag to the right at the top, and a short stroke down to the right from the
     middle of the stem to the baseline. Pugin's tail ends in a ball and his strokes in hairlines;
-    plain, they stop with the nib's cut."""
+    plain, they stop with the nib's cut. It is the archaic form, x.archaic, reached through ss04;
+    the x is the modern one (x_modern; decision 0015).
+    Josh has since drawn it himself over Pugin's (references/hand-drawn-x.svg; decision 0014): the
+    head and upper stem as built, the flag curling down into a ball, the stroke down to the right
+    from the middle ending in a spur, and the tail curling round into a ball, as Pugin's do."""
+    if OUTLINES.get("x.archaic"):       # drawn by Josh, outline and all
+        return {"strokes": drawn(OUTLINES["x.archaic"]), "baseline": baseline(p)}
     xs = p.x("stem_x", 2677, 12)
     stem = path(p, "stem", [("top", xs, 3360, 90), ("low", xs - 8, 3570, 95), ("tail", 2630, 3622, 165)], span=15)
     head = minim(p, xs, foot=False, end=3362)
@@ -1112,7 +1128,13 @@ def z(p):
     """The textura z: a bar along the top rising to the right, a diagonal down to the left, and a
     lower stroke turning back along the baseline and away to the left. Pugin's tail is a hairline
     swash; plain, it stops. Pugin drew it on the plate's second line, squeezed; the plain z stands
-    at the full x-height."""
+    at the full x-height.
+    Josh has since drawn it himself (references/hand-drawn-z.svg; decision 0014), over Pugin's z
+    stretched to full height: the upper stroke rising to a peak at the left and sweeping over to
+    the right, the diagonal, and the lower bowl turning back along the baseline into a tail that
+    sweeps away down to the left. It is still compared with Pugin's through second_line."""
+    if OUTLINES.get("z"):               # drawn by Josh, outline and all
+        return {"strokes": drawn(OUTLINES["z"]), "baseline": baseline(p), "fit_affine": second_line(p)}
     tp, bt = p.fam("top"), p.fam("bottom")
     top = path(p, "top", [("left", 1442, tp + 14, None), ("right", 1512, tp + 6, None)])
     diag = path(p, "diagonal", [("from", 1510, tp + 14, None), ("to", 1460, tp + 96, None)])
@@ -1122,7 +1144,8 @@ def z(p):
 
 # ── Letters Pugin didn't draw ─────────────────────────────────────────────────
 # Proposals in his idiom (decision 0008), built from the fitted measurements of the letter each is
-# modelled on (DERIVED), not fitted to anything of his.
+# modelled on (DERIVED), not fitted to anything of his; and forms he didn't draw of letters he did
+# (DERIVED_FORM: the modern x).
 
 def u(p):
     """n turned over: two minims, the first's foot running on to end against the second's stem, so
@@ -1153,7 +1176,48 @@ def j(p):
     return {"strokes": light_head(p, stem) + [tail], "marks": [i_stroke(p, x0)], "baseline": baseline(p)}
 
 
+def x_modern(p):
+    """The modern x, the font's x; Pugin's is the archaic form, reached through ss04 (Josh: "export
+    the archaic x, and also create a modern x? Something along these lines, but of course matching
+    all of our style, widths, etc.", with a textura x as the example; then, asked which should be
+    the default, "Yes, modern default"; decision 0015). Two strokes crossing between where n's two stems stand:
+    - the thick one, n's first head, then straight down to the right to n's second foot, which
+      turns out into its spur;
+    - the thin one, a head at the upper right, then straight down to the left to a foot at the lower
+      left. Its ends stand 15 px out past the stems (thin.out), so it runs nearer the nib's own edge
+      and the pen makes it lighter, with no change of pressure; its head and foot stand near the
+      letter's corners, level with the thick stroke's. Its foot has no spur, as the example's
+      hasn't. Of the first trials (15 to 30 px), Josh liked 20 ("I like this one better"), then,
+      seeing it in words, 15: "I think we need to the slightly more compact version".
+    Modelled on n, whose stems set the width."""
+    x1, x2 = p.x("stem_1", 1689, 15), p.x("stem_2", 1754, 15)
+    top, bot = p.fam("top"), p.fam("bottom")
+    ha, fa, h, f = p.fam("head_angle"), p.fam("foot_angle"), p.fam("head"), p.fam("foot")
+    down, out = np.array([1, np.tan(np.radians(ha))]), np.array([1, np.tan(np.radians(fa))])   # a head's and a foot's diagonals
+    # the thick stroke, from n's first head to its second foot: the corners where the head and the
+    # foot meet it, as a minim's meet its stem, and the pen settling out of and into them along it
+    A = np.array([x1 - h, top])
+    K1 = A + h * down
+    D = np.array([x2 + f, bot])
+    K2 = D - f * out
+    th = np.degrees(np.arctan2(*(K2 - K1)[::-1]))
+    B, C = K1 + p.fam("head_turn") * hd(th), K2 - p.fam("foot_turn") * hd(th)
+    thick = [cubic(A, ha, B, th, 1.0, 1.0), line(B, C), cubic(C, th, D, fa, 1.0, 1.0)] + spur_from(p, D)
+    # the thin stroke: a head, the hairline, a foot, meeting at corners
+    spread = p.length("thin.out", 15.0, 0.0, 40.0)
+    A2 = np.array([x2 + spread - h, top])
+    K3 = A2 + h * down
+    K4 = np.array([x1 - spread + f, bot]) - f * out
+    thin = [line(A2, K3), line(K3, K4), line(K4, K4 + f * out)]
+    return {"strokes": [thick, thin], "baseline": baseline(p)}
+
+
 LETTERS = {"i": i, "n": n, "m": m, "l": l, "o": o, "v": v, "c": c, "e": e, "r": r, "t": t, "b": b, "d": d, "h": h, "k": k,
-           "longs": longs, "f": f, "p": p_, "q": q, "g": g, "y": y, "x": x, "a": a, "s": s, "z": z,
-           "u": u, "w": w, "j": j}
-DERIVED = {"u": "n", "w": "v", "j": "i"}      # a letter Pugin didn't draw: the letter whose fitted measurements it takes
+           "longs": longs, "f": f, "p": p_, "q": q, "g": g, "y": y, "x.archaic": x, "a": a, "s": s, "z": z,
+           "u": u, "w": w, "j": j, "x": x_modern}
+DERIVED = {"u": "n", "w": "v", "j": "i", "x": "n"}      # a letter Pugin didn't draw: the letter whose fitted measurements it takes
+DERIVED_FORM = {"x": "modern x"}    # of those, a letter he drew in another form: what to call this one
+# Letters built here (fitted to Pugin's or not) that stand beside another rather than for it: an
+# alternate, reached through its own stylistic set as Josh's drawn y is (ALTERNATES), spaced and
+# kerned in its own right. Pugin's x is the archaic form; the modern x is the font's x (decision 0015).
+BUILT_ALTERNATES = {"x.archaic": {"feature": "ss04", "name": "Archaic x"}}

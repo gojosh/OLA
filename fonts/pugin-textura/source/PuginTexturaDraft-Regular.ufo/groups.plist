@@ -97,7 +97,6 @@
     <key>public.kern1.t</key>
     <array>
       <string>t</string>
-      <string>t.nospur</string>
     </array>
     <key>public.kern1.u</key>
     <array>
@@ -115,6 +114,11 @@
     <key>public.kern1.x</key>
     <array>
       <string>x</string>
+      <string>x.nospur</string>
+    </array>
+    <key>public.kern1.x.archaic</key>
+    <array>
+      <string>x.archaic</string>
     </array>
     <key>public.kern1.y</key>
     <array>
@@ -223,7 +227,6 @@
     <key>public.kern2.t</key>
     <array>
       <string>t</string>
-      <string>t.nospur</string>
     </array>
     <key>public.kern2.u</key>
     <array>
@@ -241,6 +244,11 @@
     <key>public.kern2.x</key>
     <array>
       <string>x</string>
+      <string>x.nospur</string>
+    </array>
+    <key>public.kern2.x.archaic</key>
+    <array>
+      <string>x.archaic</string>
     </array>
     <key>public.kern2.y</key>
     <array>

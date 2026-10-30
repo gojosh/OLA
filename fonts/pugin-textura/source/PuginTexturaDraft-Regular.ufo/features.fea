@@ -6,13 +6,13 @@ feature ss01 {
     sub l by l.nospur;
     sub c by c.nospur;
     sub e by e.nospur;
-    sub t by t.nospur;
     sub d by d.nospur;
     sub h by h.nospur;
     sub k by k.nospur;
     sub a by a.nospur;
     sub u by u.nospur;
     sub j by j.nospur;
+    sub x by x.nospur;
 } ss01;
 feature ss02 {
     featureNames { name "Without stems and pips"; };
@@ -22,3 +22,8 @@ feature ss03 {
     featureNames { name "Alternate y"; };
     sub y by y.alt;
 } ss03;
+feature ss04 {
+    featureNames { name "Archaic x"; };
+    sub x by x.archaic;
+    sub x.nospur by x.archaic;
+} ss04;

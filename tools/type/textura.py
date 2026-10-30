@@ -290,7 +290,7 @@ def _load_drawn(d):
     """The letters Josh has drawn by hand, for the constructions to draw from: whole outlines drawn
     in a drawing program (references/hand-drawn-<g>.svg, placed on the plate by the .json beside it;
     textura_letters.OUTLINES; or, if the .json says "alternate", beside its letter rather than for it,
-    textura_letters.ALTERNATES), and strokes drawn point by point in the pen editor (a recipe's
+    textura_letters.ALTERNATES, with the alternates built as letters are, BUILT_ALTERNATES), and strokes drawn point by point in the pen editor (a recipe's
     "drawn" points; textura_letters.DRAWN)."""
     import textura_letters as TL
     TL.DRAWN.clear()
@@ -315,6 +315,9 @@ def _load_drawn(d):
             TL.ALTERNATES[m["glyph"]] = {**m["alternate"], "of": m["glyph"].split(".")[0], "description": m.get("description", "")}
         if m.get("on_plate"):
             TL.OUTLINE_ON_PLATE[m["glyph"]] = tuple(m["on_plate"])
+    # letters built as the others are that stand beside another (Pugin's archaic x)
+    for a, alt in TL.BUILT_ALTERNATES.items():
+        TL.ALTERNATES[a] = {**alt, "of": a.split(".")[0], "description": (TL.LETTERS[a].__doc__ or "").strip()}
 
 
 class Workbench:
@@ -759,7 +762,7 @@ def cmd_build(fam: str, fit_only: list[str] | None = None):
     glyphs, units_all = {}, {}
     # letters Pugin didn't draw take the fitted measurements of the letter each is modelled on
     derived = {g: m for g, m in TL.DERIVED.items() if m in refined}
-    chars = {g: refs_meta[g]["char"] if g in refs_meta else g for g in [*names, *derived]}
+    chars = {g: refs_meta[g]["char"] if g in refs_meta else g.split(".")[0] for g in [*names, *derived]}
     spur = {k: float(v) for k, v in src["spur"].items() if not k.endswith("note")}
     plain_units = {}
     nopip_units = {}        # letters with their fine stems and pips left off (ss02)
@@ -795,7 +798,7 @@ def cmd_build(fam: str, fit_only: list[str] | None = None):
         if g in derived:
             dev = dev_alone = None
             r["derived_from"] = derived[g]
-            r["proposal"] = "Pugin drew no " + g + ": drafted in his idiom for Josh's judgment (decision 0008), not fitted to the plate."
+            r["proposal"] = "Pugin drew no " + TL.DERIVED_FORM.get(g, g) + ": drafted in his idiom for Josh's judgment (decision 0008), not fitted to the plate."
             r["measured"] = {**K._nest(mine), "units": "plate pixels, y down; angles in degrees",
                              "from": f"{derived[g]}'s fitted measurements; the rest are the construction's own", "when": when}
             r["fit"] = {"segments": chk_u["segments"], "outline_checks_pass": chk_u["ok"]}
@@ -813,6 +816,7 @@ def cmd_build(fam: str, fit_only: list[str] | None = None):
         (rec_dir / f"{g}.json").write_text(json.dumps(r, indent=1, ensure_ascii=False) + "\n")
         report = {"glyph": g, "char": chars[g], "description": r["description"], "measured": mine, "family": shared,
                   "derived_from": derived.get(g), "deviation": dev, "deviation_alone": dev_alone, "checks_px": chk, "checks_units": chk_u,
+                  **({"alternate_of": TL.ALTERNATES[g]["of"], "feature": TL.ALTERNATES[g]["feature"]} if g in TL.ALTERNATES else {}),
                   "fit_affine": list(b["fit_affine"]) if b.get("fit_affine") else None,
                   "contours_px": [[q.tolist() for q in c] for c in cs], "strokes_px": [[q.tolist() for q in s] for s in b["strokes"] + b.get("marks", [])],
                   "units": {"scale_per_px": scale, "baseline_px": b["baseline"], "origin_px": origin, "outline": [[q.tolist() for q in c] for c in units]}}
@@ -844,11 +848,13 @@ def cmd_build(fam: str, fit_only: list[str] | None = None):
             right = lambda us: max(float(np.asarray(q)[:, 0].max()) for c in us for q in c)
             space_units[g] = [[np.asarray(q, float) + [right(units) - right(su), 0] for q in c] for c in su]
         print(f"  {g}: {chk_u['segments']} segments in {chk_u['contours']} contour(s); checks {'pass' if chk_u['ok'] else 'FAIL ' + json.dumps(chk_u)}; "
-              + (f"built from {derived[g]}'s measurements; Pugin drew no {g}" if g in derived else
+              + (f"built from {derived[g]}'s measurements; Pugin drew no {TL.DERIVED_FORM.get(g, g)}" if g in derived else
                  f"Pugin's body edge from it: mean {dev['mean_px']} px (alone {dev_alone['mean_px']}), 95% within {dev['p95_px']} px")
               + (f"; at bounds: {at_bounds}" if at_bounds else ""))
     # Josh's drawings that stand beside their letters (y.alt): drawn as they stand, in their letter's frame
     for a, alt in TL.ALTERNATES.items():
+        if a in TL.LETTERS:             # built above, as letters are (Pugin's archaic x)
+            continue
         g = alt["of"]
         cs, b = _outline(TL.hand_drawn(a), params(g, refined[g][0], True), marks=True)
         built = {"contours": [[(q, "stroke", f"stroke: node {k}") for k, q in enumerate(c)] for c in cs], "baseline": b["baseline"]}
@@ -897,7 +903,8 @@ def write_font(d, src, units_all, chars, pitch_units=None, plain_units=None, spa
     letter in space_units is spaced and kerned as drawn there (without the top spur that leads into
     its first head, a hairline that tucks into the white before it), and set as units_all has it.
     An alternate (a glyph in alternates, which says its letter and the stylistic set that reaches
-    it) is spaced after the letters, which keep their side bearings, and kerned in its own right."""
+    it) is spaced after the letters, which keep their side bearings, each alternate on its own, and
+    kerned in its own right."""
     import construct as K
     import spacing as SP
     import ufo2ft
@@ -917,8 +924,10 @@ def write_font(d, src, units_all, chars, pitch_units=None, plain_units=None, spa
         xs = np.concatenate([G.sample(c, 40)[:, 0] for c in contours["i"]])
         target = pitch_units - (xs.max() - xs.min()) + SP.pair_white(profiles["i"], profiles["i"], sp["depth"])[0]
     lsb, rsb, target, white = SP.fit(profiles, letters, set(), sp.get("mean_side_bearings", 0), sp["depth"], target=target)
-    if alternates:
-        lsb, rsb, white = SP.fit_more(profiles, letters, lsb, rsb, list(alternates), sp["depth"], target)
+    if alternates:              # each against the letters and itself, so one alternate's spacing doesn't move another's
+        for a in alternates:
+            lsb, rsb, _ = SP.fit_more(profiles, letters, lsb, rsb, [a], sp["depth"], target)
+        white = {(a, b): SP.pair_white(profiles[a], profiles[b], sp["depth"]) for a in names for b in names}
     glyphs, table, spaced = {}, {}, {}
     dxs = {}
     for g in names:
@@ -1008,7 +1017,7 @@ def write_font(d, src, units_all, chars, pitch_units=None, plain_units=None, spa
     fea = ""
     if plain_units:
         fea = ("feature ss01 {\n    featureNames { name \"Without spurs\"; };\n"
-               + "".join(f"    sub {g} by {g}.nospur;\n" for g in plain_units) + "} ss01;\n")
+               + "".join(f"    sub {g} by {g}.nospur;\n" for g in plain_units if g not in alternates) + "} ss01;\n")
     # the letters without their fine stems and pips (the s): likewise in the same place and width,
     # reached through ss02, kerned as their letters are
     nopip_units = nopip_units or {}
@@ -1025,6 +1034,11 @@ def write_font(d, src, units_all, chars, pitch_units=None, plain_units=None, spa
         fea += (f"feature {alt['feature']} {{\n    featureNames {{ name \"{alt['name']}\"; }};\n"
                 + "".join(f"    sub {h} by {a};\n" for h in [g] + ([f"{g}.nospur"] if g in plain_units else []) + ([f"{g}.nopips"] if g in nopip_units else []))
                 + f"}} {alt['feature']};\n")
+    # an alternate with spurs of its own drops them under ss01 too: after the alternates' sets,
+    # whose lookups come first, so it does whichever sets are on
+    spurred = [a for a in alternates if a in plain_units]
+    if spurred:
+        fea += "feature ss01 {\n" + "".join(f"    sub {a} by {a}.nospur;\n" for a in spurred) + "} ss01;\n"
     groups = {}
     for g in names:
         members = [g] + ([f"{g}.nospur"] if g in plain_units else []) + ([f"{g}.nopips"] if g in nopip_units else [])
@@ -1093,7 +1107,7 @@ def cmd_proof(fam: str):
                 cv2.polylines(img, [pts], False, (170, 50, 20), 2, cv2.LINE_AA)
                 cv2.circle(img, tuple(int(v) for v in (_affine(aff, q[:1])[0] - o + .5) * z), 3, (40, 130, 40), -1)
         dv, ck = b["deviation"], b["checks_units"]
-        fit = (f"<b>A proposal:</b> Pugin drew no {H.escape(b['char'])}; built from {H.escape(b['derived_from'])}'s fitted measurements." if b.get("derived_from")
+        fit = (f"<b>A proposal:</b> Pugin drew no {H.escape(TL.DERIVED_FORM.get(b['glyph'], b['char']))}; built from {H.escape(b['derived_from'])}'s fitted measurements." if b.get("derived_from")
                else f"<b>An alternate</b> (<code>{H.escape(b['glyph'])}</code>, under <code>{H.escape(b['feature'])}</code>). Pugin's body edge from the outline: mean {dv['mean_px']} px, 95% within {dv['p95_px']} px." if b.get("alternate_of")
                else f"Pugin's body edge from the outline: mean {dv['mean_px']} px (fitted alone {b['deviation_alone']['mean_px']}), 95% within {dv['p95_px']} px.")
         edit = "" if b.get("derived_from") or b.get("alternate_of") or g in TL.DRAWN or g in TL.OUTLINES else f' <button class="edit" data-edit="{H.escape(g)}">Edit strokes</button>'
@@ -1109,10 +1123,26 @@ def cmd_proof(fam: str):
                if set(w[1:].replace(" ", "")) <= have]
     lines = " ".join(f'<span><span class="init">{w[0]}</span>{w[1:]}</span>' for w in phrases[:9])
     plain = " ".join(w.lower() for w in phrases[:9])
+    xwords = "gloria in excelsis deo pax rex lux crux exsultet"
     fam_rows = "".join(f"<tr><th>{H.escape(fam_j['meaning'][k])}</th><td>{v}</td></tr>" for k, v in fam_j["shared"].items())
     plate = cv2.imread(str(ROOT / src["image"]))
     zx0, zy0, zx1, zy1 = src["zone_flat_px"]
     row = cv2.resize(plate[zy0:zy1, zx0:zx1], None, fx=0.45, fy=0.45, interpolation=cv2.INTER_AREA)
+    # our letters where his stand, at the same scale, to set under his (Josh: "put our alphabet below the
+    # image of pugin's alphabet, in such a way that we can compare"). Those on his first line are in his
+    # plate's own pixels already; y and z, which he squeezed onto the second line, stand at full height
+    # with their heads level with his there, as Josh's y was first placed. His x is the archaic one.
+    on_plate = [b for b in built if b["glyph"] in refs]
+    top1 = min(q[1] for b in built if b["glyph"] == "n" for c in b["contours_px"] for s_ in c for q in s_)
+    drop = refs["y"]["ink_box_flat_px"][1] - top1 if "y" in refs else 0.0
+    place = [(b, drop if b.get("fit_affine") else 0.0) for b in on_plate]
+    low = max(q[1] + dy for b, dy in place for c in b["contours_px"] for s_ in c for q in s_)
+    cover = np.zeros((max(zy1, int(math.ceil(low)) + 12) - zy0, zx1 - zx0), np.float32)
+    for b, dy in place:
+        cover = np.maximum(cover, G.rasterize([[np.array(q) - [zx0, zy0 - dy] for q in c] for c in b["contours_px"]], cover.shape))
+    paper, ink = np.array([231, 241, 246], np.float32), np.array([34, 38, 42], np.float32)     # the page's paper and ink (BGR)
+    ours = (paper + cover[..., None] * (ink - paper)).astype(np.uint8)
+    ours = cv2.resize(ours, (row.shape[1], int(round(ours.shape[0] * row.shape[1] / ours.shape[1]))), interpolation=cv2.INTER_AREA)
     page = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Pugin Textura · proof</title><style>
 {font_face('Textura', otf)}
@@ -1130,7 +1160,7 @@ main p{{margin:0 0 1.4em}} .lede{{max-width:62em}}
 .cards{{display:flex;flex-wrap:wrap;gap:16px}} .card{{margin:0;background:#fff;border:1px solid var(--rule);padding:8px;max-width:520px}}
 .card img{{max-width:100%;height:auto;display:block}} figcaption{{font-size:14px;margin-top:6px}}
 table{{border-collapse:collapse}} th,td{{text-align:left;padding:3px 10px;border-bottom:1px solid var(--rule);font-weight:normal}} td{{font-variant-numeric:tabular-nums}}
-img.plate{{max-width:100%;height:auto}}
+img.plate{{max-width:100%;height:auto;display:block}} img.plate.ours{{margin-top:10px}}
 button.edit{{display:none;margin-left:6px;font:inherit;font-size:13px}} .has-api button.edit{{display:inline}}
 #se{{position:fixed;inset:0;background:var(--paper);z-index:10;display:flex;flex-direction:column}} #se[hidden]{{display:none}}
 body.se-open{{overflow:hidden}}
@@ -1180,7 +1210,7 @@ body.se-open{{overflow:hidden}}
 <h1>Pugin Textura <small>(working name)</small></h1>
 <p class="lede">The small alphabet of plate 9, which Pugin dates to the latter part of the fifteenth century, written again with a simulated broad nib
 (decisions 0008 and 0011). Each letter is the strokes of one pen, fitted to his. These are the <b>plain forms</b>, the defaults; his flourished forms will be
-alternates on the same strokes. Built so far: <b>{H.escape(' '.join(sorted(b["char"] for b in built)))}</b> (u, w and j are proposals: Pugin drew none). Capitals are Lombardic initials for now.</p>
+alternates on the same strokes. Built so far: <b>{H.escape(' '.join(sorted({b["char"] for b in built})))}</b> (u, w, j and the modern x are proposals: Pugin drew none of them). Capitals are Lombardic initials for now.</p>
 <p class="set">{lines}</p>
 <p class="set small">{plain}</p>
 <p class="lede">Free feet carry on into a <b>spur</b>, a short hairline up and to the right, as Pugin's do. They are on by default; the stylistic set
@@ -1192,8 +1222,16 @@ width and kerning. The same words with <code>ss02</code>:</p>
 <p class="lede">Josh's own y, drawn by hand, stands beside the y built from Pugin's: the stylistic set <code>ss03</code> ("Alternate y")
 sets it, spaced and kerned in its own right. The same words with <code>ss03</code>:</p>
 <p class="set small" style="font-feature-settings:'ss03'">{plain}</p>
+<p class="lede">The x is a modern x, a proposal in Pugin's idiom (decision 0015). The x he drew is the archaic form, here as Josh drew it over his:
+the stylistic set <code>ss04</code> ("Archaic x") sets it, spaced and kerned in its own right. Some words with an x, as they are and with <code>ss04</code>:</p>
+<p class="set small">{xwords}</p>
+<p class="set small" style="font-feature-settings:'ss04'">{xwords}</p>
 <h2>Pugin's alphabet</h2>
 <img class="plate" src="{T._png_uri(row, '.jpg', 82)}" alt="The textura minuscule on plate 9">
+<img class="plate ours" src="{T._png_uri(ours, '.png')}" alt="The textura as built, each letter under Pugin's">
+<p class="lede">Above, the plate; below, ours, each letter where his stands, at the same scale. On the first line they are in his plate's own
+pixels; y and z, which he squeezed onto the second line, stand at full height, their heads level with his. Under his x is ours of his form
+(<code>x.archaic</code>); the modern x, u, w and j, which he didn't draw, are set in the text above, and his ampersand isn't built yet.</p>
 <h2>The pen</h2>
 <p class="lede">Measured from the references: x-height {meas['x_height_px']} px; ascenders {meas['ascender_px']} px above the baseline, descenders {meas['descender_px']} px below;
 upright stems {meas['stem_px']} px; the nib's edge at {meas['nib_angle_deg']}°, so the nib is about {meas['nib_width_px']} px wide; hairlines {meas['hairline_px']} px.

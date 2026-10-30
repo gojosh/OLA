@@ -1,4 +1,4 @@
-# 2026-10-29 — Pugin Textura: the baseline
+# 2026-10-29 — Pugin Textura: the baseline; Josh's f and t
 
 **Agent/tool:** Claude Code (Opus 5.5)
 
@@ -24,13 +24,31 @@
   - The page now has 120 px of padding at the top, 56 at the sides and 128 at the bottom (at phone width, 56, 16 and 80).
   - Paragraphs are 1.4 em apart, the set lines have 32 px above and below, and headings have 72 px above them.
 - **A stale description fixed.** The pen table on the proof called `bottom` "the baseline". It now says it is where a minim's foot stroke ends, with the baseline below it at the points of the feet.
+- **f, a and t exported for Josh to draw over** (Josh: "Export the f a t, so I can fix them up as well."). `references/export-f.svg`, `export-a.svg` and `export-t.svg` are made as the g's, p's and r's were: the built outline over Pugin's letter, in plate pixels.
+  - Their guides now mark the baseline where it stands since the fix, at the points of the feet, in place of the line the foot strokes end on.
+  - The f's canvas is wide (561 px): it takes in Pugin's f, whose loop and swash reach far past the plain one.
+- **Josh's f** (brief `2026-10-29-textura-f.md`; decision 0014, amended). Josh: "t is ready", then "sorry - f, not t".
+  - **What he changed.** He kept the stem below the crossbar and the tail. The top folds over and comes down on the right in a long arm, with a narrow slot open below it. The crossbar is lower and shorter on the left. One shape.
+  - **Placed** at one unit to the pixel, at (706.968, 3228.210). The tail's lowest and leftmost points lie the same distance apart in both, to a thousandth of a pixel; the stem's edges below the crossbar then fall on the built stem's to a pixel.
+  - **Built as it stands** (`f()` uses `OUTLINES`). It is 35.5 px from Pugin's f, against the construction's 31.3; neither has his loop and swash.
+  - **Spacing.** The pairs after f close up, since the construction's arm reached far over the next letter: "fb", "fh", "fk", "fl" 125 → 40 units, "fi" 70 → 45, "ft" 70 → 30. f's right side bearing went from -122 to -44.
+    - The closest any letter after f now comes is 10 units ("fi", "ff").
+    - The other letters' side bearings moved by up to 3 units through the joint fit; 120 kerning pairs changed.
+    - In words ("of fifty after", "soft left half") the f sits in the rhythm.
+- **Josh's t** (brief `2026-10-29-textura-t.md`; decision 0014, amended). Josh: "t is ready".
+  - **What he changed.** He kept the stem and the foot with its spur. The crossbar now ends on the right in a small curled flag, as Pugin's does, and on the left in a short point. The top has a small notch on its left.
+  - **Placed** at one unit to the pixel, at (2448.241, 3255.923). The foot's point and the end of its spur lie the same distance apart in both, to a thousandth of a pixel, and the stem's edges then fall on the built stem's row by row.
+  - **Built as it stands** (`t()` uses `OUTLINES`). It is 1.14 px from Pugin's t, against the construction's 1.51; it overlaps his ink 93%.
+  - **Spurs.** Its spur is part of the drawing, so there is no `t.nospur`: 12 letters now have spurs under `ss01`.
+  - **Spacing.** t's side bearings moved by up to 4 units and the others' by a unit at most; 42 kerning pairs changed, most by 5. The crossbar's new left point meets the c's top and the r's flag, so the clearance check opened "ct" 40 → 60 and "rt" 30 → 55. In words, "act" and "art" sit a little more open than before.
 
 ## What changed
-- **Created:** `docs/brief/2026-10-29-textura-baseline.md`, this log
+- **Created:** `docs/brief/2026-10-29-textura-baseline.md`, `docs/brief/2026-10-29-textura-f.md`, `fonts/pugin-textura/references/hand-drawn-f.json`, `docs/brief/2026-10-29-textura-t.md`, `fonts/pugin-textura/references/hand-drawn-t.json`, this log, `fonts/pugin-textura/references/export-f.svg`, `export-a.svg`, `export-t.svg`
 - **Edited:**
-  - `tools/type/textura_letters.py`: `baseline`; every construction returns it; `bottom`'s description
+  - `tools/type/textura_letters.py`: `baseline`; every construction returns it; `bottom`'s description; f and t drawn from Josh's outlines
+  - `docs/decisions/0014-textura-drawn-outlines.md` and the decisions index, `docs/roadmap.md`: the f and the t
   - `tools/type/textura.py`: the editor's check uses it; `write_font` spaces over the band from the foot strokes' line (`band_from`); the proof's line height, padding and spacing
-  - `fonts/pugin-textura/`: the README (the baseline); the rebuilt UFO, OTF, recipes (time stamps), spacing and proof
+  - `fonts/pugin-textura/`: the README (the baseline; the f and t rows; spurs); the rebuilt UFO, OTF, recipes (time stamps), spacing and proof
 
 ## Open threads
 - The fonts' declared heights carry empty space above the letters: the textura's 950 against its tallest 724, the Lombardic's 1000 against 722. Fitting them to the letters would tighten their default line height wherever CSS leaves it to the font. Plate 10's capitals may need some of it.

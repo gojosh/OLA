@@ -21,7 +21,8 @@ Only Josh can accept a decision. An agent may draft a record with status `propos
 | [0011](0011-textura-capitals.md) | The plate 9 textura: minuscule first, then plate 10's capitals | Accepted |
 | [0012](0012-textura-stroke-editor.md) | The textura's adjustments by hand: held stroke measurements, set in a stroke editor | Accepted |
 | [0013](0013-textura-drawn-strokes.md) | The textura's s drawn by hand, point by point, with the pen's angle and pressure | Accepted |
-| [0014](0014-textura-drawn-outlines.md) | The textura's s, g, r and p are Josh's own outlines, drawn in a drawing program over Pugin's | Accepted |
+| [0014](0014-textura-drawn-outlines.md) | The textura's s, g, r, p, f, t, archaic x and z are Josh's own outlines, drawn in a drawing program over Pugin's | Accepted |
+| [0015](0015-textura-modern-x.md) | The textura's x is a modern x; Pugin's archaic x is an alternate | Accepted |
 
 ## Template
 

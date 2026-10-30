@@ -1,0 +1,9 @@
+{
+ "glyph": "f",
+ "scale": 1.0,
+ "offset": [
+  706.968,
+  3228.21
+ ],
+ "note": "hand-drawn-f.svg, Josh's own f (Josh: \"Export the f a t, so I can fix them up as well.\", then \"f\" is ready), drawn over references/export-f.svg (the built f over Pugin's, one unit to the plate's pixel) and saved trimmed to the drawing. At one unit to the pixel, where the parts he kept from the built f stand where they did: the tail's end (its lowest and its leftmost points) gives this offset to a thousandth of a pixel, and the stem's edges below the crossbar then fall on the built stem's to a pixel. A point (u, v) of it is (offset + scale * (u, v))."
+}

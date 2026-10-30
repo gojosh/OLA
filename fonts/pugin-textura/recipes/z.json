@@ -2,7 +2,7 @@
  "glyph": "z",
  "unicode": "U+007A",
  "construction": "textura_letters.py: z",
- "description": "The textura z: a bar along the top rising to the right, a diagonal down to the left, and a\nlower stroke turning back along the baseline and away to the left. Pugin's tail is a hairline\nswash; plain, it stops. Pugin drew it on the plate's second line, squeezed; the plain z stands\nat the full x-height.",
+ "description": "The textura z: a bar along the top rising to the right, a diagonal down to the left, and a\nlower stroke turning back along the baseline and away to the left. Pugin's tail is a hairline\nswash; plain, it stops. Pugin drew it on the plate's second line, squeezed; the plain z stands\nat the full x-height.\nJosh has since drawn it himself (references/hand-drawn-z.svg; decision 0014), over Pugin's z\nstretched to full height: the upper stroke rising to a peak at the left and sweeping over to\nthe right, the diagonal, and the lower bowl turning back along the baseline into a tail that\nsweeps away down to the left. It is still compared with Pugin's through second_line.",
  "measured": {
   "top": {
    "left": {
@@ -59,14 +59,14 @@
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/z.png",
-  "when": "2026-10-29T21:42:40"
+  "when": "2026-10-30T10:04:05"
  },
  "fit": {
-  "mean_px": 8.73,
-  "p95_px": 24.94,
-  "max_px": 34.53,
+  "mean_px": 3.66,
+  "p95_px": 7.99,
+  "max_px": 34.52,
   "mean_px_fitted_alone": 8.64,
-  "segments": 33,
+  "segments": 27,
   "outline_checks_pass": true,
   "at_bounds": []
  }

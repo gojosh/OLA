@@ -1,0 +1,75 @@
+{
+ "glyph": "x.archaic",
+ "unicode": "U+0078",
+ "construction": "textura_letters.py: x",
+ "description": "A stem with its own head running down past the baseline and turning left at the descender\nline, a short flag to the right at the top, and a short stroke down to the right from the\nmiddle of the stem to the baseline. Pugin's tail ends in a ball and his strokes in hairlines;\nplain, they stop with the nib's cut. It is the archaic form, x.archaic, reached through ss04;\nthe x is the modern one (x_modern; decision 0015).\nJosh has since drawn it himself over Pugin's (references/hand-drawn-x.svg; decision 0014): the\nhead and upper stem as built, the flag curling down into a ball, the stroke down to the right\nfrom the middle ending in a spur, and the tail curling round into a ball, as Pugin's do.",
+ "measured": {
+  "stem_x": 2675.024,
+  "stem": {
+   "top": {
+    "x": 2676.092,
+    "y": 3374.995,
+    "heading": 87.964,
+    "t1": 0.999,
+    "t2": 0.995
+   },
+   "low": {
+    "x": 2659.467,
+    "y": 3576.57,
+    "heading": 111.325,
+    "t1": 0.988,
+    "t2": 0.99
+   },
+   "tail": {
+    "x": 2624.204,
+    "y": 3613.969,
+    "heading": 189.225
+   }
+  },
+  "flag": {
+   "from": {
+    "x": 2702.0,
+    "y": 3350.12
+   },
+   "to": {
+    "x": 2745.16,
+    "y": 3359.0
+   }
+  },
+  "leg": {
+   "from": {
+    "x": 2674.099,
+    "y": 3476.903,
+    "heading": 74.968,
+    "t1": 1.0,
+    "t2": 0.999
+   },
+   "to": {
+    "x": 2714.427,
+    "y": 3516.371,
+    "heading": 20.201
+   }
+  },
+  "units": "plate pixels, y down; angles in degrees",
+  "family": "shared with the other letters: see family.json",
+  "from": "references/x.archaic.png",
+  "when": "2026-10-30T10:04:05"
+ },
+ "fit": {
+  "mean_px": 1.78,
+  "p95_px": 4.9,
+  "max_px": 8.54,
+  "mean_px_fitted_alone": 4.15,
+  "segments": 47,
+  "outline_checks_pass": true,
+  "at_bounds": [
+   "x.archaic:stem.top.y",
+   "x.archaic:stem.top.t1",
+   "x.archaic:flag.from.x",
+   "x.archaic:flag.to.y",
+   "x.archaic:leg.from.heading",
+   "x.archaic:leg.from.t1",
+   "x.archaic:leg.from.t2"
+  ]
+ }
+}

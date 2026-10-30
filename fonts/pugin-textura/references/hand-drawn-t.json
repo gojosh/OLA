@@ -1,0 +1,9 @@
+{
+ "glyph": "t",
+ "scale": 1.0,
+ "offset": [
+  2448.241,
+  3255.923
+ ],
+ "note": "hand-drawn-t.svg, Josh's own t (Josh: \"Export the f a t, so I can fix them up as well.\", then \"t is ready\"), drawn over references/export-t.svg (the built t over Pugin's, one unit to the plate's pixel) and saved trimmed to the drawing. At one unit to the pixel, where the parts he kept from the built t stand where they did: the foot's point and the end of its spur give this offset to a thousandth of a pixel, and the stem's edges then fall on the built stem's row by row. A point (u, v) of it is (offset + scale * (u, v))."
+}

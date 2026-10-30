@@ -1,4 +1,4 @@
-# 0014 — The textura's s, g, r and p are Josh's own outlines, drawn in a drawing program over Pugin's
+# 0014 — The textura's s, g, r, p, f, t, archaic x and z are Josh's own outlines, drawn in a drawing program over Pugin's
 
 - **Status:** accepted
 - **Date:** 2026-10-29
@@ -47,6 +47,43 @@ Josh: "Ok - hand-drawn p is in..." ([brief](../brief/2026-10-29-textura-p-drawn.
 - **Holes.** It is the first drawing with a hole. Its four paths are filled as his drawing program fills them, even-odd: a path lying inside another (by most of its points) is a hole cut from it, here the bowl's counter (`textura_letters.drawn`, `nib.Shape`'s `holes`). The two curls only touch the stem (0.6 px² of overlap, and none), so they are shapes of their own, joined to it. The s, g and r, with no holes, are built exactly as before.
 - **It is the p.** It measures 20.9 px from Pugin's p, most of that his swash (the construction, 23.5). Its split no longer moves with the split's settings, so the panel for them (decision 0012) leaves it out.
 - **The white before it.** The curls take space on its left: the p's advance grew from 308 to 331 units, and the pairs before it opened ("ap" 20 → 60, "ip" 20 → 55, "gp" 35 → 80). In words the white before p is wider than the rest of the rhythm. Asked whether to space the p without its curls, letting them tuck into the white before it, Josh: "Leave it as is" (Q41).
+
+## The f, drawn over the built one
+Josh: "Export the f a t, so I can fix them up as well." Then, of the f: "t is ready", "sorry - f, not t" ([brief](../brief/2026-10-29-textura-f.md)).
+
+- **What he changed.** He kept the stem below the crossbar and the tail. The top now folds over and comes down on the right in a long arm, with a narrow slot open below it, nearer the way Pugin's f turns over before its loop. The crossbar is lower and shorter on the left. One shape.
+- **Placed** at one unit to the pixel, where the tail's end stands where it did (its lowest and leftmost points give the offset to a thousandth of a pixel; `hand-drawn-f.json`). The stem's edges below the crossbar then fall on the built stem's to a pixel.
+- **It is the f.** It measures 35.5 px from Pugin's f (the construction, 31.3). Neither has his loop or swash, which is most of the distance.
+- **Spacing.** The construction's arm reached far out over the next letter, so the pairs after f were opened wide ("fb", "fh", "fk", "fl" 125 units). Josh's arm comes down within the letter, so they close up: "fb", "fh", "fk", "fl" 40, "fi" 70 → 45, "ft" 70 → 30. f's right side bearing went from -122 to -44 units.
+  - The closest any letter after f now comes is 10 units ("fi", "ff").
+  - Through the joint fit, the other letters' side bearings moved by up to 3 units, and 120 kerning pairs changed in all.
+
+## The t, drawn over the built one
+Josh: "t is ready" ([brief](../brief/2026-10-29-textura-t.md)), drawn over `export-t.svg`.
+
+- **What he changed.** He kept the stem and the foot with its spur. The crossbar now ends on the right in a small curled flag, as Pugin's does, and on the left in a short point. The top has a small notch on its left. One shape.
+- **Placed** at one unit to the pixel, where the foot stands where it did: the foot's point and the end of its spur give the offset to a thousandth of a pixel (`hand-drawn-t.json`). The stem's edges then fall on the built stem's row by row.
+- **It is the t.** It measures 1.14 px from Pugin's t (the construction, 1.51), and overlaps his ink 93% (89%).
+- **Spurs.** Its foot's spur is part of the drawing, so `ss01` leaves it as it is, as the r.
+- **Spacing.** t's side bearings moved by up to 4 units and the others' by a unit at most; 42 kerning pairs changed, most by 5 units. The crossbar's new left point meets the c's top and the r's flag, so the clearance check opened "ct" (40 → 60 units) and "rt" (30 → 55).
+
+## The archaic x, drawn over the built one
+Josh: "My hand-drawn x is ready for import" ([brief](../brief/2026-10-30-textura-x-default.md)), drawn over `export-x.svg`. It is Pugin's x, the archaic form, which is now `x.archaic` under `ss04`; the x is a modern one (decision 0015).
+
+- **What he changed.** He kept the head and the upper stem. The flag curls down into a ball, the stroke down to the right from the middle ends in a spur, and the tail curls round into a ball, as Pugin's do. One shape.
+- **Placed** at one unit to the pixel, where the head stands where it did: 19 of the drawing's nodes fall on the built outline's at one offset, to half a thousandth of a pixel (`hand-drawn-x.json`).
+- **Pugin's x.** It measures 1.78 px from his x (the construction, 4.66), and overlaps his ink 85% (72%).
+- **Spurs.** Its spur is part of the drawing, so `ss01` leaves it as it is.
+
+## The z, drawn over Pugin's stretched to full height
+Josh: "Also export the z, which I will hand-draw" ([brief](../brief/2026-10-30-textura-x-z.md)), then "the hand-drawn z is ready to go" and "It's there now" ([brief](../brief/2026-10-30-textura-z.md)). Pugin drew the z on the plate's second line, squeezed; the export put the built z at the font's full height over his z stretched up to it by the built z's fit (`second_line`), with his z as it stands beside it.
+
+- **What he drew.** A new z, nothing kept from the built one: the upper stroke rising to a peak at the left and sweeping over to the right, the diagonal, and the lower bowl turning back along the baseline into a tail sweeping away down to the left. One shape.
+- **Placed** at one unit to the pixel where it overlaps the stretched z best: 91% (free to scale, it stays at 0.997). Since none of its points stand where the built z's did, that overlap is the only measure of where he drew it (`hand-drawn-z.json`).
+- **Its height.** So placed, its peak stood 44 units above the other letters' heads (522 against 478). On the plate Pugin's z rises only a little above his y's heads: 6.5 px on a line about 72% the height of the first, so 9.0 px, about 21 units, at ours. The stretch in the export, from the built z's fit, made his look taller, and the drawing followed it.
+- **Scaled down.** Josh: "We actually need to scale it down - fix the bottom in place, and scale it down to the point it should be lowered to - we're slightly oversized." ([brief](../brief/2026-10-30-textura-z-scale.md)) It is scaled by 0.957 about its lowest point, the tail's point, which stays where it was, until its peak stands 21 units above the heads (499). Its lower bowl stands 8 units below the baseline, its tail's point 18.
+- **Pugin's z.** Still compared with his through `second_line`: 3.66 px from his body's edge (as traced, 1.12; the construction, 8.73). The fit that maps it onto his makes his taller than he drew it, so the smaller z lies further off.
+- **Spacing.** It is 263 units wide (the construction, 218). Pairs before it close, since the built z's lower stroke reached under the letter before ("cz" 100 → 30, "ez" 85 → 20); "zf" opens 0 → 30, where its peak meets the f's arm. The other letters moved by up to 2 units through the joint fit.
 
 - The s's shape is Josh's. It measures 0.96 px from Pugin's whole letter, 95% within 2.25 px, nearer than any construction came.
 - The s has no measurements, spurs or construction in play while its drawing exists; to change it, Josh changes the SVG. The construction (one stroke of a turning pen with twisted ends) stays in the code, unused.

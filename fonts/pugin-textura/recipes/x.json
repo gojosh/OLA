@@ -2,74 +2,18 @@
  "glyph": "x",
  "unicode": "U+0078",
  "construction": "textura_letters.py: x",
- "description": "A stem with its own head running down past the baseline and turning left at the descender\nline, a short flag to the right at the top, and a short stroke down to the right from the\nmiddle of the stem to the baseline. Pugin's tail ends in a ball and his strokes in hairlines;\nplain, they stop with the nib's cut.",
+ "description": "The modern x, the font's x; Pugin's is the archaic form, reached through ss04 (Josh: \"export\nthe archaic x, and also create a modern x? Something along these lines, but of course matching\nall of our style, widths, etc.\", with a textura x as the example; then, asked which should be\nthe default, \"Yes, modern default\"; decision 0015). Two strokes crossing between where n's two stems stand:\n- the thick one, n's first head, then straight down to the right to n's second foot, which\n  turns out into its spur;\n- the thin one, a head at the upper right, then straight down to the left to a foot at the lower\n  left. Its ends stand 15 px out past the stems (thin.out), so it runs nearer the nib's own edge\n  and the pen makes it lighter, with no change of pressure; its head and foot stand near the\n  letter's corners, level with the thick stroke's. Its foot has no spur, as the example's\n  hasn't. Of the first trials (15 to 30 px), Josh liked 20 (\"I like this one better\"), then,\n  seeing it in words, 15: \"I think we need to the slightly more compact version\".\nModelled on n, whose stems set the width.",
+ "derived_from": "n",
+ "proposal": "Pugin drew no modern x: drafted in his idiom for Josh's judgment (decision 0008), not fitted to the plate.",
  "measured": {
-  "stem_x": 2675.024,
-  "stem": {
-   "top": {
-    "x": 2676.092,
-    "y": 3374.995,
-    "heading": 87.964,
-    "t1": 0.999,
-    "t2": 0.995
-   },
-   "low": {
-    "x": 2659.467,
-    "y": 3576.57,
-    "heading": 111.325,
-    "t1": 0.988,
-    "t2": 0.99
-   },
-   "tail": {
-    "x": 2624.204,
-    "y": 3613.969,
-    "heading": 189.225
-   }
-  },
-  "flag": {
-   "from": {
-    "x": 2702.0,
-    "y": 3350.12
-   },
-   "to": {
-    "x": 2745.16,
-    "y": 3359.0
-   }
-  },
-  "leg": {
-   "from": {
-    "x": 2674.099,
-    "y": 3476.903,
-    "heading": 74.968,
-    "t1": 1.0,
-    "t2": 0.999
-   },
-   "to": {
-    "x": 2714.427,
-    "y": 3516.371,
-    "heading": 20.201
-   }
-  },
+  "stem_1": 1689.307,
+  "stem_2": 1753.208,
   "units": "plate pixels, y down; angles in degrees",
-  "family": "shared with the other letters: see family.json",
-  "from": "references/x.png",
-  "when": "2026-10-29T21:42:40"
+  "from": "n's fitted measurements; the rest are the construction's own",
+  "when": "2026-10-30T10:04:05"
  },
  "fit": {
-  "mean_px": 4.66,
-  "p95_px": 14.8,
-  "max_px": 33.11,
-  "mean_px_fitted_alone": 4.15,
-  "segments": 51,
-  "outline_checks_pass": true,
-  "at_bounds": [
-   "x:stem.top.y",
-   "x:stem.top.t1",
-   "x:flag.from.x",
-   "x:flag.to.y",
-   "x:leg.from.heading",
-   "x:leg.from.t1",
-   "x:leg.from.t2"
-  ]
+  "segments": 48,
+  "outline_checks_pass": true
  }
 }
