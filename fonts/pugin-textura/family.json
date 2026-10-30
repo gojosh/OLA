@@ -30,7 +30,7 @@
   "nib_thickness": "the nib's thickness: the width of a hairline (px)",
   "nib_light": "the nib's width in a stroke written with less pressure, as a share of its full width (c's top, e's arm, a's top bowl)",
   "top_leave": "the angle at which the concave top of c, d, e, g and s leaves the stem's top corner, rising to the right, before it steepens to the nib's own angle at the peak (degrees)",
-  "fork_notch": "the split top of b, d, h, k and l, and the split bottom of p and q, turned upside down: how deep its notch runs below the tips' tops (px)",
+  "fork_notch": "the split top of b, d, h, k and l, and the split bottom of q, turned upside down (and of p, until Josh drew it): how deep its notch runs below the tips' tops (px)",
   "fork_flare": "the split top: how far below the tips' tops the stem begins to widen into it (px)",
   "fork_out": "the split top: how far each tip stands out beyond the stem's edge (px)",
   "fork_tip": "the split top: the radius of each horn's rounded tip (px)",

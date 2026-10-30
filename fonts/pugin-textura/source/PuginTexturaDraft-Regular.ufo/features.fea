@@ -6,7 +6,6 @@ feature ss01 {
     sub l by l.nospur;
     sub c by c.nospur;
     sub e by e.nospur;
-    sub r by r.nospur;
     sub t by t.nospur;
     sub d by d.nospur;
     sub h by h.nospur;

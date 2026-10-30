@@ -9,7 +9,7 @@
 // be let go back to the fit. Save and rebuild also rebuilds the font and this page.
 //
 // A group of the family's settings shared by several letters (the split top of b, d, h, k and l,
-// and the split bottom of p and q) opens the same way: its settings with sliders, and all its
+// and the split bottom of q) opens the same way: its settings with sliders, and all its
 // letters drawn side by side as they move. Saving holds them in source.json.
 (function () {
   const API = '/api/pugin-textura';
@@ -94,7 +94,7 @@
       w.shape.setAttribute('d', d.contours.map(pathD).join(''));
       if (d.affine) { const [a, b, c, dd, e, f] = d.affine; w.con.setAttribute('transform', `matrix(${a},${dd},${b},${e},${c},${f})`); }
       if (!w.framed) {                               // the same window on every letter, at the same scale: its split top, and the stem below it
-        const A = d.affine || [1, 0, 0, 0, 1, 0];      // (or, on p and q, the split bottom, and the stem above it)
+        const A = d.affine || [1, 0, 0, 0, 1, 0];      // (or, on q, the split bottom, and the stem above it)
         const pts = [];
         for (const c of d.contours) for (const q of c) for (const [x, y] of q) pts.push([A[0] * x + A[1] * y + A[2], A[3] * x + A[4] * y + A[5]]);
         const below = (L.below || []).includes(g);

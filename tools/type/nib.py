@@ -237,7 +237,8 @@ def tip_region(path, radius) -> pathops.Path:
 
 class Shape(list):
     """A filled shape: a closed path of cubics that the outline takes as it is, rather than as ground
-    a nib covers. It is listed and drawn like any stroke."""
+    a nib covers. It is listed and drawn like any stroke. It may have holes (`holes`: closed paths
+    cut from it, such as the counter of a letter Josh has drawn)."""
 
 
 class Dot(Shape):
@@ -532,6 +533,10 @@ def outline(strokes, nib, tol=0.6, edges=()):
             if isinstance(path, Shape):
                 sp = pathops.Path()
                 _add(sp, qs)
+                for h in getattr(path, "holes", ()):
+                    hp = pathops.Path()
+                    _add(hp, [move(np.asarray(q, float)) for q in h])
+                    sp = pathops.op(sp, hp, pathops.PathOp.DIFFERENCE, fix_winding=True)
             elif getattr(path, "tip", None):
                 sp = pathops.simplify(tip_region(qs, path.tip), fix_winding=True)
             elif ramped(path):

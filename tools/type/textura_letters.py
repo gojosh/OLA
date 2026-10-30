@@ -35,8 +35,8 @@ FAMILY = {  # name: (start, low, high, meaning)
                                  "e's arm, a's top bowl)"),
     "top_leave": (13.0, 0.0, 40.0, "the angle at which the concave top of c, d, e, g and s leaves the stem's top corner, rising to the "
                                    "right, before it steepens to the nib's own angle at the peak (degrees)"),
-    "fork_notch": (13.0, 4.0, 30.0, "the split top of b, d, h, k and l, and the split bottom of p and q, turned upside "
-                                     "down: how deep its notch runs below the tips' tops (px)"),
+    "fork_notch": (13.0, 4.0, 30.0, "the split top of b, d, h, k and l, and the split bottom of q, turned upside down "
+                                     "(and of p, until Josh drew it): how deep its notch runs below the tips' tops (px)"),
     "fork_flare": (26.0, 8.0, 100.0, "the split top: how far below the tips' tops the stem begins to widen into it (px)"),
     "fork_out": (4.0, 0.0, 24.0, "the split top: how far each tip stands out beyond the stem's edge (px)"),
     "fork_tip": (3.0, 1.0, 8.0, "the split top: the radius of each horn's rounded tip (px)"),
@@ -283,7 +283,7 @@ def split_top(p, x):
 
 
 def split_bottom(p, x):
-    """The split bottom of a descender, the same on p and q: the split top (split_top) turned upside
+    """The split bottom of a descender, on q (and p, until Josh drew it): the split top (split_top) turned upside
     down at the descender line, with the same five settings, so the stem widens down into two horns
     pointing down, with a notch between them (Josh: "lets do splits on the bottom of p and q, in the
     same manner we did split tops on b, d, h, k, and l"). It is as wide as the pen makes the stem
@@ -572,7 +572,11 @@ def e(p):
 def r(p):
     """A minim, the top spur leading into its head (entered), and off the top right of its head a
     small flag, set apart from the head by a notch, as Pugin's is. Pugin's r hangs a hairline and a
-    ball from the flag; that is left to the flourished form."""
+    ball from the flag; that is left to the flourished form.
+    Josh has since drawn it himself over the built one (references/hand-drawn-r.svg; decision 0014),
+    one shape with its spurs, and the flag with a ball curling under it."""
+    if OUTLINES.get("r"):               # drawn by Josh, outline and all
+        return {"strokes": drawn(OUTLINES["r"]), "baseline": p.fam("bottom")}
     x, t = p.x("stem_x", 2224, 12), p.fam("top")
     f0 = np.array([x + p.length("flag.from", 38, 32, 50), t + p.length("flag.from_dy", -4, -16, 8)])
     f1 = f0 + [p.length("flag.run", 10, 4, 20), p.length("flag.fall", 10, 2, 22)]
@@ -695,17 +699,44 @@ def f(p):
     return {"strokes": [stroke, bar], "baseline": p.fam("bottom")}
 
 
+def foot_from(p, x, run=None):
+    """A foot leaving a stem at x that runs on past the baseline: the turn out of a minim's foot
+    (minim), on its own, starting where a minim's would on the stem, so its first cut lies inside
+    the stem. p's bowl is closed by one, as b's is by its stem's foot. run: the foot stroke's
+    length, if not the family's."""
+    fd, fa = p.fam("foot") if run is None else run, p.fam("foot_angle")
+    D = np.array([x + fd, p.fam("bottom")])
+    C = np.array([x, p.fam("bottom") - fd * np.tan(np.radians(fa)) - p.fam("foot_turn")])
+    return [cubic(C, S, D, fa, 1.0, 1.0)]
+
+
 def p_(p):
     """A stem with its own head running down past the baseline to the split bottom at the descender
-    line (split_bottom), and a bowl on its right: a stroke with a head, coming down and turning back
-    in to the stem at the baseline. Pugin's bowl sweeps on across the stem into a curl, and the
-    descender into a long swash; plain, neither does. Until 2026-10-29 the descender turned out at
-    the descender line as a minim's foot does."""
+    line (split_bottom), and a bowl on its right. At the top the bowl's head is joined to the stem
+    by a hairline, as the n's second minim is (Josh: "The top of the bowl needs the spur to connect
+    it, like other contexts"). At the bottom it is closed as b's is: a stroke with its
+    own head that stops with the nib's cut, and a foot leaving the stem at the baseline (foot_from),
+    the two meeting in one straight edge (edge_below), as Pugin's are on the plate. The bowl is
+    wider than b's, so the foot runs on further than the family's, as d's and q's do (its length
+    fitted to his). His foot comes into the stem from a curl on its left, and the descender runs
+    on into a long swash; plain, neither does.
+    - Until 2026-10-29 the descender turned out at the descender line as a minim's foot does.
+    - Until then too the bowl was closed by a long diagonal from the right stroke's foot back to the
+      stem, whose first cut stood out past the bowl (Josh: "fix the bottom of the bowl - it's pretty
+      standard - not sure why it has this weird diagonal stroke for the bottom of the bowl"; "you
+      don't need to add the extra flourish on the left side of the p").
+    Josh has since drawn it himself over the repaired one (references/hand-drawn-p.svg; decision
+    0014), with Pugin's flourishes on the left: a curl off the head, and the bowl's foot sweeping
+    across the stem into a curl. Its split bottom is the built one's, as it was when he drew it; it
+    no longer moves with the split's settings."""
+    if OUTLINES.get("p"):               # drawn by Josh, outline and all
+        return {"strokes": drawn(OUTLINES["p"]), "baseline": p.fam("bottom")}
     x1, x2 = p.x("stem_x", 1957, 12), p.x("right.x", 2028, 12)
     split, end = split_bottom(p, x1)
-    right = minim(p, x2, foot=False, end=p.x("right.end", 3470, 15))
-    close = path(p, "bowl_foot", [("from", x2, 3468, 120), ("to", x1 + 10, 3508, 165)])
-    return {"strokes": [minim(p, x1, foot=False, end=end), split, right, close], "baseline": p.fam("bottom")}
+    right = minim(p, x2, foot=False, end=p.x("right.end", 3480, 25), after=x1)
+    foot = foot_from(p, x1, p.length("foot.run", 27, 20, 60))
+    return {"strokes": [minim(p, x1, foot=False, end=end), split, right, foot], "edges": [edge_below(p, foot, right)],
+            "baseline": p.fam("bottom")}
 
 
 def q(p):
@@ -728,8 +759,7 @@ def g(p):
     left stroke with the arm and ear, and the right stroke with the tail, two shapes kept apart by
     the hairlines of white Pugin leaves where they meet."""
     if OUTLINES.get("g"):               # drawn by Josh, outline and all
-        import nib as NB
-        return {"strokes": [NB.Shape(c) for c in OUTLINES["g"]], "baseline": p.fam("bottom")}
+        return {"strokes": drawn(OUTLINES["g"]), "baseline": p.fam("bottom")}
     x1, x2 = p.x("left.x", 900, 12), p.x("right.x", 973, 12)
     left, right = bowl_pair(p, x1, x2, p.x("left.top", 3352, 15), 3520, meet=True)
     tail = path(p, "tail", [("from", x2, 3518, 90), ("turn", x2 + 10, 3568, 120), ("end", 900, 3592, 185)], span=18)
@@ -870,11 +900,38 @@ OUTLINE_ON_PLATE = {}
 ALTERNATES = {}
 
 
+def _inside(pt, poly):
+    """Whether a point lies inside a polygon (an array of its points), by the even-odd rule."""
+    xs, ys = poly[:, 0], poly[:, 1]
+    x2, y2 = np.roll(xs, -1), np.roll(ys, -1)
+    cross = (ys > pt[1]) != (y2 > pt[1])
+    xi = xs + (pt[1] - ys) * (x2 - xs) / np.where(y2 == ys, 1e-12, y2 - ys)
+    return bool(np.sum(cross & (pt[0] < xi)) % 2)
+
+
+def drawn(contours):
+    """Josh's drawing (OUTLINES[g]) as filled shapes, filled as his drawing program fills it
+    (even-odd): a path lying inside another is a hole in it, cut from the shape round it (nib.Shape's
+    `holes`): a bowl's counter. A path inside a hole is a shape again. A path only touching another,
+    as the p's curls touch its stem, is a shape of its own, joined to it: inside is by most of a
+    path's points, not one of them."""
+    import nib as NB
+    pts = [G.sample([np.asarray(q, float) for q in c], 12) for c in contours]
+    within = lambda i, j: i != j and np.mean([_inside(q, pts[j]) for q in pts[i]]) > 0.5
+    depth = [sum(within(i, j) for j in range(len(contours))) for i in range(len(contours))]
+    shapes = []
+    for i, c in enumerate(contours):
+        if depth[i] % 2 == 0:
+            s = NB.Shape(c)
+            s.holes = [contours[j] for j in range(len(contours)) if depth[j] == depth[i] + 1 and within(j, i)]
+            shapes.append(s)
+    return shapes
+
+
 def hand_drawn(name):
     """The letter drawn from Josh's outline as it stands (OUTLINES[name])."""
     def letter(p):
-        import nib as NB
-        return {"strokes": [NB.Shape(c) for c in OUTLINES[name]], "baseline": p.fam("bottom"), "fit_affine": OUTLINE_ON_PLATE.get(name)}
+        return {"strokes": drawn(OUTLINES[name]), "baseline": p.fam("bottom"), "fit_affine": OUTLINE_ON_PLATE.get(name)}
     letter.__doc__ = ALTERNATES.get(name, {}).get("description")
     return letter
 

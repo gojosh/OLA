@@ -2,38 +2,27 @@
  "glyph": "p",
  "unicode": "U+0070",
  "construction": "textura_letters.py: p",
- "description": "A stem with its own head running down past the baseline to the split bottom at the descender\nline (split_bottom), and a bowl on its right: a stroke with a head, coming down and turning back\nin to the stem at the baseline. Pugin's bowl sweeps on across the stem into a curl, and the\ndescender into a long swash; plain, neither does. Until 2026-10-29 the descender turned out at\nthe descender line as a minim's foot does.",
+ "description": "A stem with its own head running down past the baseline to the split bottom at the descender\nline (split_bottom), and a bowl on its right. At the top the bowl's head is joined to the stem\nby a hairline, as the n's second minim is (Josh: \"The top of the bowl needs the spur to connect\nit, like other contexts\"). At the bottom it is closed as b's is: a stroke with its\nown head that stops with the nib's cut, and a foot leaving the stem at the baseline (foot_from),\nthe two meeting in one straight edge (edge_below), as Pugin's are on the plate. The bowl is\nwider than b's, so the foot runs on further than the family's, as d's and q's do (its length\nfitted to his). His foot comes into the stem from a curl on its left, and the descender runs\non into a long swash; plain, neither does.\n- Until 2026-10-29 the descender turned out at the descender line as a minim's foot does.\n- Until then too the bowl was closed by a long diagonal from the right stroke's foot back to the\n  stem, whose first cut stood out past the bowl (Josh: \"fix the bottom of the bowl - it's pretty\n  standard - not sure why it has this weird diagonal stroke for the bottom of the bowl\"; \"you\n  don't need to add the extra flourish on the left side of the p\").\nJosh has since drawn it himself over the repaired one (references/hand-drawn-p.svg; decision\n0014), with Pugin's flourishes on the left: a curl off the head, and the bowl's foot sweeping\nacross the stem into a curl. Its split bottom is the built one's, as it was when he drew it; it\nno longer moves with the split's settings.",
  "measured": {
   "stem_x": 1951.356,
   "right": {
    "x": 2027.338,
-   "end": 3480.876
+   "end": 3504.158
   },
-  "bowl_foot": {
-   "from": {
-    "x": 2040.585,
-    "y": 3479.489,
-    "heading": 110.263,
-    "t1": 0.967,
-    "t2": 0.269
-   },
-   "to": {
-    "x": 1964.779,
-    "y": 3517.99,
-    "heading": 162.837
-   }
+  "foot": {
+   "run": 41.092
   },
   "units": "plate pixels, y down; angles in degrees",
   "family": "shared with the other letters: see family.json",
   "from": "references/p.png",
-  "when": "2026-10-29T19:15:57"
+  "when": "2026-10-29T20:46:37"
  },
  "fit": {
-  "mean_px": 23.72,
+  "mean_px": 20.91,
   "p95_px": 126.13,
-  "max_px": 169.85,
+  "max_px": 160.27,
   "mean_px_fitted_alone": 24.91,
-  "segments": 52,
+  "segments": 62,
   "outline_checks_pass": true,
   "at_bounds": []
  }

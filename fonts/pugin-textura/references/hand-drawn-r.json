@@ -1,0 +1,9 @@
+{
+ "glyph": "r",
+ "scale": 1.0,
+ "offset": [
+  2172.146,
+  3321.565
+ ],
+ "note": "hand-drawn-r.svg, Josh's own r (Josh: \"export p and r for me to manually improve\", then \"Yes, place the r\"), drawn over references/export-r.svg (the built r over Pugin's, one unit to the plate's pixel) and saved trimmed to the drawing. At one unit to the pixel, its top left (the top spur's end, and the head's peak) on the built r's, so its head stands on the other letters' heads and its foot on their feet (3321.6 and 3530.2 px). Placed where it overlaps Pugin's ink best, it would stand 1.6 px lower (80% against 79% here). A point (u, v) of it is (offset + scale * (u, v))."
+}

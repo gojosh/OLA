@@ -1,0 +1,9 @@
+{
+ "glyph": "p",
+ "scale": 1.0,
+ "offset": [
+  1891.983,
+  3321.564
+ ],
+ "note": "hand-drawn-p.svg, Josh's own p (Josh: \"export p and r for me to manually improve\", then, after the bowl was repaired, \"Ok - hand-drawn p is in...\"), drawn over references/export-p.svg (the repaired p over Pugin's, one unit to the plate's pixel) and saved trimmed to the drawing. At one unit to the pixel, where the parts he kept from the built p stand where they did: the head's peak, the split bottom's lowest point and both its tips all give this offset to a thousandth of a pixel. Four paths, filled even-odd as drawn: the letter, and three holes in it (the bowl's counter, and the white inside each curl). A point (u, v) of it is (offset + scale * (u, v))."
+}

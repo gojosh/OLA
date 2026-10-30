@@ -462,8 +462,8 @@ class Workbench:
                 "held": sorted(k[len(g) + 1:] for k in held if k in spec), "by_hand": sorted(r.get("held_by_hand", [])),
                 "nodes": nodes, "description": (TL.LETTERS[g].__doc__ or "").strip()}
 
-    GROUPS = {"split_top": {"title": "the split top and bottom", "prefix": "fork_", "letters": ["b", "d", "h", "k", "l", "p", "q"],
-                            "below": ["p", "q"]}}     # the letters whose split stands at the bottom, turned upside down
+    GROUPS = {"split_top": {"title": "the split top and bottom", "prefix": "fork_", "letters": ["b", "d", "h", "k", "l", "q"],
+                            "below": ["q"]}}     # the letters whose split stands at the bottom, turned upside down
 
     def outline(self, g, values, family=None):
         """The letter drawn from these measurements (its own, by name; the family's as they stand, or
@@ -1196,7 +1196,7 @@ leaves out his hairlines, which the plain forms don't have.</p>
 <p class="lede">With the local proof server running (<code>font-proofs</code>: <code>tools/type/type.py serve</code>), each letter Pugin drew has
 <b>Edit strokes</b>: drag a stroke's nodes, or set its settings, and the letter is drawn again as you go. Saving holds what you changed in the letter's
 recipe, so every build keeps it (decision 0012). <button class="edit" data-edit-group="split_top">Edit the split top</button> tunes the
-split top that b, d, h, k and l share, and the split bottom of p and q, which is the same turned upside down, on all seven at once.</p>
+split top that b, d, h, k and l share, and the split bottom of q, which is the same turned upside down, on all six at once (p's is Josh's drawing).</p>
 <div class="cards">{''.join(cards)}</div>
 </main>
 <div id="se" hidden>

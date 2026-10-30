@@ -88,7 +88,6 @@
     <key>public.kern1.r</key>
     <array>
       <string>r</string>
-      <string>r.nospur</string>
     </array>
     <key>public.kern1.s</key>
     <array>
@@ -215,7 +214,6 @@
     <key>public.kern2.r</key>
     <array>
       <string>r</string>
-      <string>r.nospur</string>
     </array>
     <key>public.kern2.s</key>
     <array>
